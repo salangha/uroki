@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Новогодняя фабрика гирлянд — урок по заданию 11 ВПР (закономерности)</title>
-<meta property="og:title" content="Новогодняя фабрика гирлянд — задача №11 ВПР">
+<meta property="og:title" content="Новогодняя фабрика гирлянд — задача ВПР">
 <meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
 <meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
 <meta property="og:type" content="website">
@@ -209,7 +209,7 @@
     <h3>🧑‍🏫 Шпаргалка учителя</h3>
     <p><b>Как вести урок:</b> ребёнок читает вопрос на экране сам и отвечает вслух. Вы нажимаете кнопку с его ответом (или клавиши 1–3). «Дальше» — клавиша Enter. За ответ с первой попытки — 2 звезды, со второй — 1.</p>
     <p><b>Кнопки ◀ и ▶</b> в верхней панели листают шаги без ответов — удобно вернуться и показать снова.</p>
-    <p><b>Сборка гирлянды (заказы 1 и 2):</b> кликайте по блокам на складе слева — они встают в свои колонки строго по порядку. «Убрать последний» и «Собрать заново» — если перебрали. Как только собрано ровно нужное число — появится вопрос. Лампочки нужного цвета ребёнок считает глазами и вслух (подсказка появится после двух проб).</p>
+    <p><b>Сборка гирлянды (заказы 1 и 2):</b> блоки со склада <b>перетаскиваются мышкой</b> в колонку своего цвета — красный блок к красным, синий к синим. В чужую колонку блок не примется — встряхнётся и останется на складе. Подсвеченный блок — следующий по порядку. Клик по блоку в колонке убирает его обратно на склад; «Убрать последний» и «Собрать заново» — на всякий случай. Как только собрано ровно нужное число — появится вопрос. Лампочки нужного цвета ребёнок считает по блокам в колонке и вслух (подсказка появится после двух проб).</p>
     <h3>Если он устал</h3>
     <p>Можно честно остановиться после любого заказа — каждый из них самостоятельный урок. Заказ № 5 (платье Снегурочки) — самый хитрый: белая полоска живёт на 7-м месте витка, а в хвостике из 6 полосок её нет.</p>
     <h3>Суть метода (для мамы)</h3>
@@ -283,8 +283,8 @@ var S = [
   { kind: "table", c:"o1", need:21,
     colors: { a:{label:"🔴 КРАСНЫЕ", emoji:"🔴"}, b:{label:"🔵 СИНИЕ", emoji:"🔵"} },
     blocks: [1,2,3,4,5,6], blockCols: ["a","b","a","b","a","b"],
-    lead: ["Собери гирлянду: выкладывай блоки <b>по порядку</b> — кликай по блокам на складе слева.",
-           "Каждый блок встанет в свою колонку. Собери ровно <b>21</b> лампочку!"],
+    lead: ["Собери гирлянду: <b>перетаскивай блоки мышкой</b> со склада в колонку своего цвета — красный блок к красным, синий к синим.",
+           "Блоки остаются лежать в колонках. Собери ровно <b>21</b> лампочку!"],
     q: "Сколько КРАСНЫХ лампочек в гирлянде?",
     answer: 9,
     qhint: "Посчитай 🔴 в левой колонке. Можно вслух, по одной!",
@@ -308,7 +308,7 @@ var S = [
     colors: { a:{label:"🟡 ЖЁЛТЫЕ", emoji:"🟡"}, b:{label:"🟢 ЗЕЛЁНЫЕ", emoji:"🟢"} },
     blocks: [1,2,3,4,5,6,7], blockCols: ["a","b","a","b","a","b","a"],
     lead: ["Собери вторую гирлянду: 1 жёлтая, 2 зелёных, 3 жёлтых… — <b>семь блоков</b>.",
-           "Собери ровно <b>28</b> лампочек!"],
+           "Перетаскивай жёлтые блоки к жёлтым, зелёные — к зелёным. Собери ровно <b>28</b>!"],
     q: "Сколько ЗЕЛЁНЫХ лампочек в гирлянде?",
     answer: 12,
     qhint: "Посчитай 🟢 в правой колонке. Спокойно, по одной!",
@@ -597,48 +597,105 @@ function showTable(s) {
     return out;
   }
 
-  function lampSpans(col, n) {
-    var e = s.colors[col].emoji, out = "";
-    for (var j = 0; j < n; j++) out += '<span class="lamp">' + e + '</span> ';
-    return out;
+  function nextIdx() {
+    for (var k = 0; k < s.blocks.length; k++) if (st.placed.indexOf(k) === -1) return k;
+    return -1;
   }
 
-  function blockHTML(idx) {
-    var cls = "blockcard " + (idx === st.placed ? "active" : "locked");
-    return '<div class="' + cls + '" data-i="' + idx + '">' +
+  function blockHTML(idx, mini) {
+    var cls = "blockcard";
+    var drag = "";
+    if (mini) {
+      cls += " mini";
+    } else if (idx === nextIdx() && !st.locked) {
+      cls += " active draggable";
+      drag = ' draggable="true"';
+    } else {
+      cls += " locked";
+    }
+    return '<div class="' + cls + '" data-i="' + idx + '"' + drag + '>' +
            '<div class="bnum">Блок № ' + (idx + 1) + '</div>' +
            '<div class="blamps">' + lampStr(s.blockCols[idx], s.blocks[idx]) + '</div></div>';
   }
 
   function upd() {
-    var total = 0, a = "", b = "", j;
-    for (j = 0; j < st.placed; j++) {
-      total += s.blocks[j];
-      if (s.blockCols[j] === "a") a += lampSpans("a", s.blocks[j]);
-      else b += lampSpans("b", s.blocks[j]);
+    var total = 0, j;
+    for (j = 0; j < st.placed.length; j++) total += s.blocks[st.placed[j]];
+
+    var htmlA = "", htmlB = "";
+    for (j = 0; j < s.blocks.length; j++) {
+      if (st.placed.indexOf(j) === -1) continue;
+      if (s.blockCols[j] === "a") htmlA += blockHTML(j, true);
+      else htmlB += blockHTML(j, true);
     }
-    colA.innerHTML = a || '<span class="hintdrop">положи сюда</span>';
-    colB.innerHTML = b || '<span class="hintdrop">положи сюда</span>';
+    colA.innerHTML = htmlA || '<span class="hintdrop">перетащи блок сюда</span>';
+    colB.innerHTML = htmlB || '<span class="hintdrop">перетащи блок сюда</span>';
 
     var got = document.getElementById("got");
     got.classList.remove("win", "over");
     got.textContent = total;
-    if (total === NEED && st.placed > 0) { got.classList.add("win"); got.textContent += " ✓"; }
+    if (total === NEED && st.placed.length > 0) { got.classList.add("win"); got.textContent += " ✓"; }
     if (total > NEED) { got.classList.add("over"); got.textContent += " — перебор!"; }
 
     stack.innerHTML = "";
-    for (var k = 0; k < s.blocks.length; k++) stack.insertAdjacentHTML("beforeend", blockHTML(k));
-    var active = stack.querySelector(".blockcard.active");
-    if (active) active.onclick = function() { if (!st.locked) { st.placed++; upd(); } };
+    for (var k = 0; k < s.blocks.length; k++) {
+      if (st.placed.indexOf(k) === -1) stack.insertAdjacentHTML("beforeend", blockHTML(k, false));
+    }
+    if (!stack.children.length) stack.insertAdjacentHTML("beforeend", '<div class="alldone">Все блоки собраны! 🎄</div>');
 
+    bindAll();
     checkReady(total);
   }
 
+  function bindAll() {
+    stack.querySelectorAll(".blockcard.draggable").forEach(function(card) {
+      var idx = parseInt(card.getAttribute("data-i"), 10);
+      card.addEventListener("dragstart", function(e) {
+        e.dataTransfer.setData("text/plain", String(idx));
+        e.dataTransfer.effectAllowed = "move";
+      });
+    });
+    [colA, colB].forEach(function(col) {
+      col.querySelectorAll(".blockcard.mini").forEach(function(card) {
+        card.addEventListener("click", function() {
+          if (st.locked) return;
+          var idx = parseInt(card.getAttribute("data-i"), 10);
+          var p = st.placed.indexOf(idx);
+          if (p !== -1) { st.placed.splice(p, 1); upd(); }
+        });
+      });
+    });
+  }
+
+  [["a", dzA], ["b", dzB]].forEach(function(pair) {
+    var colKey = pair[0], dz = pair[1];
+    dz.addEventListener("dragover", function(e) {
+      if (st.locked) return;
+      e.preventDefault();
+      dz.classList.add("over");
+    });
+    dz.addEventListener("dragleave", function() { dz.classList.remove("over"); });
+    dz.addEventListener("drop", function(e) {
+      e.preventDefault();
+      dz.classList.remove("over");
+      if (st.locked) return;
+      var idx = parseInt(e.dataTransfer.getData("text/plain"), 10);
+      if (isNaN(idx) || st.placed.indexOf(idx) !== -1) return;
+      if (s.blockCols[idx] !== colKey) {
+        var card = stack.querySelector('.blockcard[data-i="' + idx + '"]');
+        if (card) { card.classList.remove("wrong"); void card.offsetWidth; card.classList.add("wrong"); }
+        return;
+      }
+      st.placed.push(idx);
+      upd();
+    });
+  });
+
   document.getElementById("undoBtn").onclick = function() {
-    if (!st.locked && st.placed > 0) { st.placed--; upd(); }
+    if (!st.locked && st.placed.length > 0) { st.placed.pop(); upd(); }
   };
   document.getElementById("resetBtn").onclick = function() {
-    if (!st.locked) { st.placed = 0; upd(); }
+    if (!st.locked) { st.placed = []; upd(); }
   };
 
   function askOpts(containerId, values, correct, onRight, hintId) {

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Клуб рекордов и коллекций — урок по заданию 11 ВПР (каждый следующий больше)</title>
+<meta property="og:title" content="Клуб рекордов и коллекций — задача ВПР">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", "Arial", sans-serif;
+    background: #eef7f4;
+    color: #2b2b2b;
+    font-size: 24px;
+    line-height: 1.45;
+    padding: 0 0 60px 0;
+  }
+  #topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: #0e7490; color: #fff;
+    padding: 10px 18px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  #progressWrap { flex: 1; background: rgba(255,255,255,.25); border-radius: 99px; height: 16px; overflow: hidden; }
+  #progressBar { height: 100%; width: 0%; background: #ffb703; border-radius: 99px; transition: width .3s; }
+  #stepLabel { white-space: nowrap; font-size: 18px; }
+  #starBox { white-space: nowrap; font-size: 22px; font-weight: bold; color: #ffd60a; }
+  #topbar button {
+    background: transparent; border: 2px solid rgba(255,255,255,.6); color: #fff;
+    border-radius: 10px; font-size: 18px; padding: 4px 10px; cursor: pointer;
+    min-width: 38px;
+  }
+  #topbar button:hover { background: rgba(255,255,255,.15); }
+  .casebar {
+    background: #b45309; color: #fff;
+    padding: 10px 18px; font-size: 20px; font-weight: bold;
+    text-align: center; letter-spacing: .3px;
+    border-bottom: 4px solid #78350f;
+  }
+  #stage { max-width: 1000px; margin: 0 auto; padding: 26px 20px 40px; }
+  .card {
+    background: #fff; border-radius: 24px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.10);
+    padding: 30px 34px; margin-bottom: 22px;
+  }
+  .casecard { border: 4px solid #b45309; background: #fff8f0; }
+  .casecard h2 { color: #b45309; font-size: 25px; margin-bottom: 10px; }
+  .lead p { margin: 8px 0; }
+  .big { font-size: 30px; }
+  .question {
+    font-size: 31px; font-weight: bold; color: #134e4a;
+    margin: 18px 0 22px;
+  }
+  .proof-flag {
+    display: inline-block; background: #0e7490; color: #fff;
+    border-radius: 12px; padding: 4px 16px; font-size: 20px;
+    font-weight: bold; margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .kw { color: #d00000; text-decoration: underline; }
+  .stepbadge {
+    display: inline-block; background: #0e7490; color: #fff;
+    font-size: 26px; font-weight: 900; border-radius: 14px;
+    padding: 8px 22px; margin: 4px 0 10px;
+  }
+  .opts { display: flex; flex-direction: column; gap: 14px; }
+  .opt {
+    font-size: 28px; font-weight: bold;
+    padding: 18px 24px; min-height: 72px;
+    background: #fff; color: #134e4a;
+    border: 3px solid #0e7490; border-radius: 18px;
+    cursor: pointer; transition: transform .1s, background .15s;
+    text-align: left;
+  }
+  .opt:hover { background: #ecfeff; transform: scale(1.01); }
+  .opt:disabled { cursor: default; }
+  .opt.ok {
+    background: #2a9d3f; color: #fff; border-color: #1b6e2a;
+    animation: pop .3s;
+  }
+  .opt.wrong { animation: shake .35s; background: #ffe3e3; border-color: #e63946; color: #a4161a; }
+  .opt.reveal { animation: pulse 1s infinite; border-color: #ffb703; background: #fff3cd; }
+  .opt.dim { opacity: .45; }
+  @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,183,3,.7); } 50% { box-shadow: 0 0 0 14px rgba(255,183,3,0); } }
+  .feedback { border-radius: 18px; padding: 18px 22px; font-size: 26px; margin-top: 20px; display: none; }
+  .hintbox { background: #fff3cd; border: 3px dashed #ffb703; }
+  .whybox { background: #dcfce7; border: 3px solid #2a9d3f; font-weight: bold; }
+  .nextbtn {
+    display: none; margin-top: 24px; width: 100%;
+    font-size: 30px; font-weight: bold; min-height: 76px;
+    background: #ffb703; color: #4a3200; border: none; border-radius: 18px; cursor: pointer;
+  }
+  .nextbtn:hover { background: #ffc300; }
+  .chipsrow { text-align: center; font-size: 34px; font-weight: 900; color: #134e4a; letter-spacing: 10px; margin: 14px 0; }
+  .rowname { font-size: 20px; color: #6b705c; text-align: center; }
+  .start-title { font-size: 42px; font-weight: 900; color: #0e7490; text-align: center; margin-bottom: 8px; }
+  .start-sub { text-align: center; font-size: 24px; color: #6b705c; margin-bottom: 18px; }
+  .rules { font-size: 26px; margin: 12px 0 24px; }
+  .rules li { margin: 10px 0 10px 30px; }
+  .startbtn {
+    display: block; width: 100%; min-height: 90px;
+    font-size: 36px; font-weight: 900;
+    background: #b45309; color: #fff; border: none; border-radius: 22px; cursor: pointer;
+  }
+  .startbtn:hover { background: #d97706; }
+  .party { text-align: center; font-size: 56px; }
+  .party-title { text-align: center; font-size: 38px; font-weight: 900; color: #1b6e2a; margin-bottom: 10px; }
+  .cert { text-align: center; border: 4px double #ffb703; border-radius: 18px; padding: 22px; background: #fffdf2; }
+  .cert .t { font-size: 32px; font-weight: 900; color: #b26a00; }
+  .algo { background: #ecfeff; border-radius: 18px; padding: 20px 24px; }
+  .algo h3 { color: #134e4a; margin-bottom: 10px; font-size: 26px; }
+  .algo ol { margin-left: 30px; }
+  .algo li { margin: 8px 0; }
+  .confetti { position: fixed; top: -40px; font-size: 30px; z-index: 100; pointer-events: none; animation: fall 1.6s linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(340deg); opacity: .7; } }
+  /* лента чисел */
+  .tgrid { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start; margin: 16px 0 8px; }
+  .blockstack { border: 3px dashed #99d5c9; border-radius: 14px; padding: 10px 8px; background: #fffdf5; }
+  .blockstack h4 { font-size: 15px; color: #6b705c; text-align: center; margin-bottom: 10px; font-weight: 600; }
+  .numchip {
+    border: 3px solid #0e7490; border-radius: 14px; background: #fff;
+    padding: 8px 6px; margin: 0 0 10px 0; text-align: center;
+    font-size: 28px; font-weight: 900; color: #134e4a;
+    transition: transform .1s;
+  }
+  .numchip.draggable { cursor: grab; }
+  .numchip.draggable:hover { transform: scale(1.05); background: #ecfeff; }
+  .numchip.wrong { animation: shake .35s; }
+  .numchip.mini {
+    padding: 2px 12px; margin: 0; font-size: 24px; border-width: 3px;
+    cursor: pointer; animation: pop .25s;
+  }
+  .numchip.mini:hover { background: #ecfeff; transform: scale(1.05); }
+  .chainrow { display: flex; gap: 10px; justify-content: center; align-items: stretch; margin: 14px 0 4px; flex-wrap: wrap; }
+  .chaincell { text-align: center; }
+  .celllabel { font-size: 17px; color: #6b705c; font-weight: 700; margin-bottom: 6px; }
+  .slot {
+    min-width: 96px; min-height: 64px;
+    border: 3px dashed #99d5c9; border-radius: 14px; background: #fffdf5;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .slot.active { border-color: #ffb703; background: #fffbe6; animation: pulse 1.2s infinite; }
+  .slot.over { background: #fff3cd; border-color: #ffb703; }
+  .hintdrop { color: #b9c2cf; font-size: 18px; }
+  .alldone { font-size: 15px; color: #6b705c; text-align: center; padding: 8px 4px; }
+  .igoal { background: #d9f2ec !important; font-size: 21px; color: #134e4a; padding: 10px !important; }
+  .igoal .need { color: #b45309; font-weight: 900; font-size: 24px; }
+  .igoal .gots { font-weight: bold; color: #134e4a; }
+  .igoal .gots.win { color: #1b6e2a; }
+  .itable { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .itable td { border: 3px solid #ecfeff; background: #fff; text-align: center; vertical-align: middle; padding: 8px 6px; }
+  .ctrlrow { display: flex; gap: 10px; margin-top: 10px; justify-content: center; flex-wrap: wrap; }
+  .resetbtn { font-size: 17px; padding: 6px 14px; border-radius: 10px; border: 2px solid #b9c2cf; background: #fff; color: #6b705c; cursor: pointer; }
+  .resetbtn:hover { background: #ecfeff; }
+  #qbox { display: none; }
+  #teacherBtn {
+    position: fixed; right: 14px; bottom: 14px; z-index: 90;
+    background: #0e7490; color: #fff; border: none; border-radius: 14px;
+    padding: 10px 16px; font-size: 18px; cursor: pointer; opacity: .85;
+  }
+  #teacherOverlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 120;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #teacherOverlay .panel {
+    background: #fff; border-radius: 20px; max-width: 720px; width: 100%;
+    max-height: 86vh; overflow: auto; padding: 26px 30px; font-size: 19px; line-height: 1.5;
+  }
+  #teacherOverlay h3 { color: #0e7490; margin: 14px 0 6px; font-size: 22px; }
+  #teacherOverlay .closeBtn { margin-top: 16px; font-size: 20px; padding: 10px 18px; border-radius: 12px; border: 2px solid #0e7490; background: #ecfeff; cursor: pointer; }
+  #teacherOverlay table { border-collapse: collapse; width: 100%; }
+  #teacherOverlay td { border-bottom: 1px solid #e5e5e5; padding: 4px 8px; }
+  .kbrd { font-size: 16px; color: #9a8f80; text-align: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <button id="restartBtn" title="Начать урок заново">⟲</button>
+  <button id="prevBtn" title="Предыдущий шаг (можно без ответа)">◀</button>
+  <button id="nextBtn" title="Следующий шаг (можно без ответа)">▶</button>
+  <span id="stepLabel">Шаг 1</span>
+  <div id="progressWrap"><div id="progressBar"></div></div>
+  <div id="starBox">⭐ 0</div>
+</div>
+<div id="casebar" class="casebar" style="display:none;"></div>
+
+<div id="stage"></div>
+
+<button id="teacherBtn">🧑‍🏫 для учителя</button>
+
+<div id="teacherOverlay">
+  <div class="panel">
+    <h3>🧑‍🏫 Шпаргалка учителя</h3>
+    <p><b>Как вести урок:</b> ребёнок читает вопрос на экране сам и отвечает вслух. Вы нажимаете кнопку с его ответом (или клавиши 1–3). «Дальше» — клавиша Enter. За ответ с первой попытки — 2 звезды, со второй — 1.</p>
+    <p><b>Кнопки ◀ и ▶</b> в верхней панели листают шаги без ответов — удобно вернуться и показать снова.</p>
+    <p><b>Лента чисел (задания 1 и 2):</b> перед сборкой ребёнок отдельно находит в задаче, <b>с какого по какой возраст</b> считаем (слово «включительно» — крайние годы тоже!) и значение <b>шага</b> — оно показано на странице ленты крупной плашкой. Числа на складе лежат по порядку — их <b>перетаскивают мышкой</b> в подсвеченную ячейку, слева направо. Клик по числу в ленте убирает его обратно на склад; «Убрать последнее» и «Собрать заново» — на всякий случай. Когда лента полная — появится вопрос «сколько всего», ребёнок складывает числа ленты вслух.</p>
+    <h3>Если он устал</h3>
+    <p>Остановиться можно после любого задания — каждое самостоятельное. Задание № 5 (отжимания) — с подвохом: первый день в счёт не идёт, «со второго по пятый».</p>
+    <h3>Суть метода (для мамы)</h3>
+    <p>Задачи ВПР «каждый следующий на N больше» = <b>первое число + шаг + нужные звенья</b>. Находим первое число, находим шаг, строим цепочку (каждое следующее = предыдущее + шаг), отбираем нужные звенья (важно «включительно» — крайние считаются!) и складываем. Доказательство — обратная проверка сложением. Это задание 11 ВПР «логика».</p>
+    <h3>Продолжение серии — такие же задачи из тест.pdf</h3>
+    <table id="taskTable"></table>
+    <p style="margin-top:10px;">№ 49, 82, 31, 88, 76 разобраны в этом уроке; № 55 и 80 (подтягивания по очереди) — соседний тип из прошлого урока «гирлянды».</p>
+    <h3>Что дальше (следующие типы из тест.pdf)</h3>
+    <p>«Расписание и планы» — № 2, 8, 35, 36, 45, 52, 54, 62, 65, 66, 70, 74, 75, 77, 78, 81, 84.<br>
+    «Пакетики с конфетами» — № 29, 33, 34, 37, 40, 41, 42, 44, 47, 50, 51, 58, 67, 72, 83, 87.<br>
+    «Трое собирали/покупали» — № 9–18, 24–28, 38, 64.<br>
+    «Шеренги и пароли» — № 5, 7, 32, 43, 61, 63, 73, 86.<br>
+    «Закономерности-циклы» — прошлый урок: № 1, 3, 4, 6, 30, 39, 46, 48, 53, 56, 60, 79, 80, 85.</p>
+    <button class="closeBtn" onclick="closeTeacher()">Закрыть (клавиша T)</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- данные ---------- */
+
+var ORDERS = {
+  t1: { bar: "📋 ЗАДАНИЕ № 1 · Наклейки Юли · дни рождения 12–16 лет",
+        full: ["На 11-летие родители подарили Юле <b>3 наклейки</b> с принцессами.",
+               "И пообещали на каждый следующий день рождения дарить <b>на 2 наклейки больше</b>, чем на предыдущий.",
+               "<b>Сколько всего наклеек</b> подарят родители на дни рождения <b>с 12 до 16 лет (включительно)</b>?"] },
+  t2: { bar: "📋 ЗАДАНИЕ № 2 · Открытки Васи · дни рождения 11–14 лет",
+        full: ["На 10-летие Васе подарили <b>одну открытку</b> с футболистами.",
+               "И пообещали на каждый следующий день рождения дарить <b>на 3 открытки больше</b>, чем на предыдущий.",
+               "<b>Сколько всего открыток</b> подарят на дни рождения <b>с 11 до 14 лет (включительно)</b>?"] },
+  t3: { bar: "📋 ЗАДАНИЕ № 3 · Пазлы Ксюши · 6 пазлов",
+        full: ["Ксюша собрала <b>шесть пазлов</b>.",
+               "Первый пазл состоял из <b>400 деталей</b>, а в каждом следующем было <b>на 100 деталей больше</b>, чем в предыдущем.",
+               "<b>Сколько всего деталей</b> во всех шести пазлах?"] },
+  t4: { bar: "📋 ЗАДАНИЕ № 4 · Пазлы Вани · 5 пазлов · решай сам!",
+        full: ["Ваня тоже собирает пазлы — <b>пять штук</b>.",
+               "Первый пазл — из <b>300 деталей</b>, а в каждом следующем было <b>на 200 деталей больше</b>, чем в предыдущем.",
+               "<b>Сколько всего деталей</b> установил Ваня? Этот подсчёт счётовод делает <b>сам</b>!"] },
+  t5: { bar: "📋 ЗАДАНИЕ № 5 ⭐ · Отжимания Кирилла · рекорд недели",
+        full: ["⭐ Задание с подвохом!",
+               "Кирилл готовит рекорд клуба: в первый день он отжался <b>10 раз</b>, а каждый следующий день — <b>на 3 раза больше</b>, чем в предыдущий.",
+               "<b>Сколько всего раз</b> Кирилл отожмётся <b>со второго по пятый день</b> занятий?"] }
+};
+
+var S = [
+
+  { kind: "start" },
+
+  { lead: ["Разминка! Вот растущая цепочка клуба:"],
+    chipsrow: "3 → 5 → 7 → 9 → ?",
+    q: "Какое число будет следующим?",
+    opts: [{t:"10"},{t:"11",ok:1},{t:"12"}],
+    hint: "Каждый следующий — на 2 больше. 9 + ?",
+    why: "9 + 2 = 11.<br>Правило цепочки: каждое следующее число больше предыдущего на одно и то же значение." },
+
+  { lead: ["А вот другая цепочка:"],
+    chipsrow: "4 → 8 → 12 → 16",
+    q: "На сколько каждое следующее число в цепочке больше предыдущего?",
+    opts: [{t:"на 3"},{t:"на 4",ok:1},{t:"на 5"}],
+    hint: "Посчитай: 8 − 4 = ? А 12 − 8 = ?",
+    why: "8 − 4 = 4 и 12 − 8 = 4.<br>Число 4 называется <span class=\"kw\">шагом</span> цепочки." },
+
+  { lead: ["Умеем строить цепочку, умеем и считать её:"],
+    chipsrow: "3 + 5 + 7 = ?",
+    q: "Сколько получится в сумме?",
+    opts: [{t:"14"},{t:"15",ok:1},{t:"16"}],
+    hint: "Складывай по очереди: 3 + 5 = 8, а 8 + 7 = ?",
+    why: "3 + 5 = 8, 8 + 7 = 15.<br>Цепочку можно подсчитать после каждого шага." },
+
+  { c:"t1", full:true,
+    q: "Сколько наклеек подарят Юле на 12-летие?",
+    opts: [{t:"4"},{t:"5",ok:1},{t:"6"}],
+    hint: "На 11-летие было 3. А 12-летие — следующий день рождения: +2.",
+    why: "3 + 2 = 5 наклеек.<br>И каждый год Юля будет получать на 2 наклейки больше, чем в предыдущем." },
+
+  { c:"t1", full:true,
+    q: "На дни рождения с какого по какой возраст считаем наклейки?",
+    opts: [{t:"с 11 до 16 лет"},{t:"с 12 до 16 лет (включительно)",ok:1},{t:"с 12 до 15 лет"}],
+    hint: "Найди в задаче слова про возраст. Важное слово — «включительно»!",
+    why: "В задаче: с 12 до 16 лет <b>включительно</b> — значит, в ленте будет 5 ячеек: 12, 13, 14, 15 и 16 лет.<br>Шаг ленты — +2: каждый следующий год на 2 наклейки больше." },
+
+  { kind: "chain", c:"t1", full:true, badge:"+2",
+    labels: ["12 лет","13 лет","14 лет","15 лет","16 лет"],
+    expect: [5,7,9,11,13],
+    chips: [5,7,9,11,13],
+    ruleText: "+2 за каждый день рождения",
+    lead: ["Собери ленту подарков Юли: <b>перетаскивай числа мышкой</b> со склада в подсвеченную ячейку — по порядку, слева направо.",
+           "Заполни все <b>5</b> ячеек."],
+    q: "Сколько всего наклеек подарят за эти пять дней рождения? Сложи числа ленты!",
+    answer: 45,
+    qhint: "Каждое следующее число — на 2 больше предыдущего. Складывай по порядку: 5 + 7 = 12…",
+    checkLead: "5 + 7 + 9 + 11 + 13" },
+
+  { c:"t1", party:true, partyTitle:"🎉 ЗАДАНИЕ № 1 ЗАСЧИТАНО!",
+    lead: ["Ответ: <b>45 наклеек</b> — это 5, 7, 9, 11 и 13."],
+    q: "Кто ведёт счёт наклейкам в клубе?",
+    opts: [{t:"Я, счётовод клуба!",ok:1}],
+    hint: "Конечно, ты!",
+    why: "Наклейки посчитаны без ошибки! ⭐" },
+
+  { c:"t2", full:true,
+    q: "Сколько открыток подарят Васе на 11-летие?",
+    opts: [{t:"3"},{t:"4",ok:1},{t:"5"}],
+    hint: "На 10-летие была 1. Следующий день рождения: +3.",
+    why: "1 + 3 = 4 открытки.<br>И каждый год Вася будет получать на 3 открытки больше, чем в предыдущем." },
+
+  { c:"t2", full:true,
+    q: "На дни рождения с какого по какой возраст считаем открытки?",
+    opts: [{t:"с 10 до 14 лет"},{t:"с 11 до 14 лет (включительно)",ok:1},{t:"с 11 до 13 лет"}],
+    hint: "Найди в задаче слова про возраст. Важное слово — «включительно»!",
+    why: "В задаче: с 11 до 14 лет <b>включительно</b> — значит, в ленте будет 4 ячейки: 11, 12, 13 и 14 лет.<br>Шаг ленты — +3: каждый следующий год на 3 открытки больше." },
+
+  { kind: "chain", c:"t2", full:true, badge:"+3",
+    labels: ["11 лет","12 лет","13 лет","14 лет"],
+    expect: [4,7,10,13],
+    chips: [4,7,10,13],
+    ruleText: "+3 за каждый день рождения",
+    lead: ["Собери ленту открыток Васи: <b>перетаскивай числа</b> в подсвеченную ячейку по порядку.",
+           "Заполни все <b>4</b> ячейки."],
+    q: "Сколько всего открыток подарят за эти четыре дня рождения?",
+    answer: 34,
+    qhint: "Каждое следующее число — на 3 больше предыдущего. Складывай: 4 + 7 = 11…",
+    checkLead: "4 + 7 + 10 + 13" },
+
+  { c:"t2", party:true, partyTitle:"🎉 ЗАДАНИЕ № 2 ЗАСЧИТАНО!",
+    lead: ["Ответ: <b>34 открытки</b> — это 4, 7, 10 и 13."],
+    q: "Кто ведёт счёт открыткам в клубе?",
+    opts: [{t:"Я!",ok:1}],
+    hint: "Ну конечно!",
+    why: "Две коллекции — два точных подсчёта! 🏅" },
+
+  { c:"t3", full:true,
+    q: "Сколько деталей во втором пазле Ксюши?",
+    opts: [{t:"300"},{t:"500",ok:1},{t:"600"}],
+    hint: "В первом — 400, во втором — на 100 больше.",
+    why: "400 + 100 = 500 деталей.<br>И каждый следующий пазл Ксюши — на 100 деталей больше предыдущего." },
+
+  { c:"t3", full:true,
+    q: "А сколько деталей в шестом пазле?",
+    opts: [{t:"800"},{t:"850"},{t:"900",ok:1}],
+    hint: "Вся цепочка: 400, 500, 600, 700, 800, …",
+    why: "Цепочка: 400, 500, 600, 700, 800 и 900.<br>Шестой пазл — 900 деталей." },
+
+  { c:"t3", full:true,
+    q: "Пазлы с какого по какой номер считает задача?",
+    opts: [{t:"с 1-го по 5-й"},{t:"с 1-го по 6-й",ok:1},{t:"со 2-го по 6-й"}],
+    hint: "Сколько всего пазлов собрала Ксюша? С какого номера она начала?",
+    why: "Ксюша собрала все шесть пазлов: считаем с 1-го по 6-й, то есть все: 400, 500, 600, 700, 800 и 900." },
+
+  { c:"t3", full:true,
+    q: "Сколько всего деталей во всех шести пазлах?",
+    opts: [{t:"3800"},{t:"3900",ok:1},{t:"4000"}],
+    hint: "Складывай по порядку: 400+500=900, +600=1500, +700=2200…",
+    why: "400+500+600+700+800+900 = 3900 деталей. Целая гора пазлов!" },
+
+  { c:"t4", full:true,
+    q: "С какого по какой пазл считаем детали?",
+    opts: [{t:"с 1-го по 4-й"},{t:"с 1-го по 5-й",ok:1},{t:"со 2-го по 5-й"}],
+    hint: "Сколько пазлов собрал Ваня? С какого номера он начал?",
+    why: "Ваня собрал пять пазлов: считаем с 1-го по 5-й, все пять.<br>А теперь посчитай детали сам!" },
+
+  { c:"t4", full:true,
+    q: "Сколько всего деталей в пяти пазлах Вани? Считай сам!",
+    opts: [{t:"3400"},{t:"3500",ok:1},{t:"3600"}],
+    hint: "Первый пазл — 300, каждый следующий на 200 больше. Складывай по очереди: 300+500=800, +700=1500…",
+    why: "300+500+700+900+1100 = 3500 деталей. Самостоятельный подсчёт — высший класс!" },
+
+  { c:"t5", full:true,
+    q: "Сколько раз Кирилл отжался во второй день?",
+    opts: [{t:"12"},{t:"13",ok:1},{t:"14"}],
+    hint: "В первый день — 10, во второй — на 3 больше.",
+    why: "10 + 3 = 13 отжиманий.<br>И каждый следующий день Кирилл будет отжиматься на 3 раза больше предыдущего." },
+
+  { c:"t5", full:true,
+    q: "А в пятый день?",
+    opts: [{t:"19"},{t:"21"},{t:"22",ok:1}],
+    hint: "Цепочка дней: 10, 13, 16, 19, …",
+    why: "Цепочка дней: 10, 13, 16, 19 и 22.<br>В пятый день — 22 отжимания!" },
+
+  { c:"t5", full:true,
+    q: "Дни с какого по какой нужно сложить по вопросу задачи?",
+    opts: [{t:"с первого по пятый"},{t:"со второго по пятый",ok:1},{t:"со второго по четвёртый"}],
+    hint: "Перечитай вопрос задачи внимательно!",
+    why: "В вопросе задачи: со второго по пятый день.<br>Значит, первый день (10 раз) в сумму не входит: 13 + 16 + 19 + 22." },
+
+  { c:"t5", full:true,
+    q: "Сколько всего раз отжался Кирилл со второго по пятый день?",
+    opts: [{t:"69"},{t:"70",ok:1},{t:"80"}],
+    hint: "Складывай только дни 2, 3, 4 и 5: 13 + 16 + 19 + 22. Первый день не считаем!",
+    why: "13+16+19+22 = 70. Подвох пойман: первый день (10 раз) в счёт не идёт!" },
+
+  { c:"t5", party:true, partyTitle:"🎉 ЗАДАНИЕ № 5 ЗАСЧИТАНО!",
+    lead: ["Ответ: <b>70 отжиманий</b> со второго по пятый день."],
+    q: "Кто главный счётовод клуба?",
+    opts: [{t:"Я!",ok:1}],
+    hint: "А то!",
+    why: "Наклейки, открытки, пазлы и рекорд — всё посчитано! 🏅" },
+
+  { kind: "final" }
+];
+
+var TASK_LIST = [
+  ["№ 71 · Карина печатает тексты: 200, +50, всего 6 текстов","1950 символов"],
+  ["№ 57 ⭐ · гитара Кристины: 40 мин, −5 мин, после 4-го дня разворот +5","235 минут"],
+  ["№ 68 · английский Маши: 40 мин, −5 мин до 15, дальше +5 (№ 69 — дубль)","185 минут"],
+  ["№ 49, 82, 31, 88, 76","разобраны в этом уроке"]
+];
+
+/* ---------- движок ---------- */
+
+var i = 0, stars = 0, attempts = 0, solved = false;
+var stage = document.getElementById("stage");
+var casebar = document.getElementById("casebar");
+var stepLabel = document.getElementById("stepLabel");
+var progressBar = document.getElementById("progressBar");
+var starBox = document.getElementById("starBox");
+
+function updateTopbar() {
+  stepLabel.textContent = "Шаг " + (i + 1) + " из " + S.length;
+  progressBar.style.width = Math.round(100 * i / S.length) + "%";
+  starBox.textContent = "⭐ " + stars;
+}
+
+function addStars(n) { stars += n; starBox.textContent = "⭐ " + stars; }
+
+function confetti() {
+  var emo = ["⭐","✨","🎉","🏆"];
+  for (var k = 0; k < 14; k++) {
+    var d = document.createElement("span");
+    d.className = "confetti";
+    d.textContent = emo[Math.floor(Math.random() * emo.length)];
+    d.style.left = (Math.random() * 96) + "vw";
+    d.style.animationDelay = (Math.random() * 0.4) + "s";
+    document.body.appendChild(d);
+    setTimeout(function(el) { return function() { el.remove(); }; }(d), 2200);
+  }
+}
+
+function showStart() {
+  casebar.style.display = "none";
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="start-title">🏆 Клуб рекордов и коллекций</div>' +
+      '<div class="start-title" style="color:#b45309; font-size:32px;">КАЖДЫЙ СЛЕДУЮЩИЙ — БОЛЬШЕ!</div>' +
+      '<div class="start-sub">Клуб нанимает главного счётовода!</div>' +
+      '<ol class="rules">' +
+        '<li>📖 Читай задание <b>сам</b>.</li>' +
+        '<li>🗣️ Скажи ответ вслух.</li>' +
+        '<li>👉 Твой напарник нажмёт кнопку.</li>' +
+        '<li>⚖️ Докажи ответ — и рекорд зачтён!</li>' +
+      '</ol>' +
+      '<button class="startbtn" id="go">▶ Вступить в клуб</button>' +
+      '<div class="kbrd">Правило звёзд: с первой попытки — 2 ⭐, со второй — 1 ⭐</div>' +
+    '</div>';
+  document.getElementById("go").onclick = function() { i = 1; render(); };
+}
+
+function render() {
+  solved = false; attempts = 0;
+  updateTopbar();
+  var s = S[i];
+
+  if (s.kind === "start") { showStart(); return; }
+  if (s.kind === "final") { showFinal(); return; }
+  if (s.kind === "chain") { showChain(s); return; }
+
+  if (s.c && !s.full) {
+    casebar.textContent = ORDERS[s.c].bar;
+    casebar.style.display = "block";
+  } else {
+    casebar.style.display = "none";
+  }
+
+  var html = '<div class="card">';
+
+  if (s.party) html += '<div class="party">🎉</div><div class="party-title">' + s.partyTitle + '</div>';
+  if (s.full) {
+    html += '<div class="card casecard"><h2>' + ORDERS[s.c].bar + '</h2>' +
+            ORDERS[s.c].full.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>';
+  }
+  if (s.lead) html += '<div class="lead">' + s.lead.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>';
+  if (s.chipsrow) html += '<div class="chipsrow">' + s.chipsrow + '</div>';
+  if (s.q) html += '<div class="question">' + s.q + '</div>';
+
+  html += '<div class="opts">' + s.opts.map(function(o, k) {
+    return '<button class="opt" data-k="' + k + '">' + o.t + '</button>';
+  }).join("") + '</div>';
+
+  html += '<div class="feedback hintbox" id="hint">💡 ' + (s.hint || "") + '</div>';
+  html += '<div class="feedback whybox" id="why" aria-live="polite">✅ ' + s.why + '</div>';
+  html += '<button class="nextbtn" id="next">' + (i === S.length - 1 ? "🏁 Финиш" : "Дальше ▶") + '</button>';
+  html += '</div>';
+
+  stage.innerHTML = html;
+
+  var btns = stage.querySelectorAll(".opt");
+  btns.forEach(function(b) {
+    b.onclick = function() { pick(parseInt(b.getAttribute("data-k"), 10), b, btns, s); };
+  });
+  document.getElementById("next").onclick = function() { i++; render(); };
+}
+
+function pick(k, btn, btns, s) {
+  if (solved) return;
+  var o = s.opts[k];
+  if (o.ok) {
+    solved = true;
+    addStars(attempts === 0 ? 2 : 1);
+    btn.classList.add("ok");
+    btns.forEach(function(b) { b.disabled = true; if (b !== btn) b.classList.add("dim"); });
+    document.getElementById("why").style.display = "block";
+    document.getElementById("next").style.display = "block";
+    confetti();
+    document.getElementById("next").focus();
+  } else {
+    attempts++;
+    btn.classList.remove("wrong");
+    void btn.offsetWidth;
+    btn.classList.add("wrong");
+    document.getElementById("hint").style.display = "block";
+    if (attempts >= 2) {
+      btns.forEach(function(b) {
+        if (s.opts[parseInt(b.getAttribute("data-k"), 10)].ok) b.classList.add("reveal");
+      });
+    }
+  }
+}
+
+/* ---------- интерактивная лента чисел ---------- */
+
+function showChain(s) {
+  if (s.full) {
+    casebar.style.display = "none";
+  } else {
+    casebar.textContent = ORDERS[s.c].bar;
+    casebar.style.display = "block";
+  }
+  var N = s.expect.length;
+  var st = {
+    slots: [],
+    used: [],
+    order: [],
+    locked: false
+  };
+  for (var k = 0; k < s.chips.length; k++) st.order.push(k);
+
+  stage.innerHTML =
+    '<div class="card">' +
+      (s.full
+        ? '<div class="card casecard"><h2>' + ORDERS[s.c].bar + '</h2>' +
+          ORDERS[s.c].full.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>'
+        : '') +
+      '<div class="stepbadge">Шаг ленты: ' + s.badge + '</div>' +
+      '<div class="lead">' + s.lead.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>' +
+      '<div class="rowname">Правило ленты: <b>' + s.ruleText + '</b></div>' +
+      '<div class="tgrid">' +
+        '<div class="blockstack"><h4>СКЛАД ЧИСЕЛ</h4><div id="chips"></div></div>' +
+        '<div>' +
+          '<table class="itable">' +
+            '<tr><td class="igoal">Звеньев в ленте: <span class="gots" id="got">0</span> из <span class="need">' + N + '</span></td></tr>' +
+          '</table>' +
+          '<div class="chainrow" id="chainrow"></div>' +
+          '<div class="ctrlrow" id="ctrls">' +
+            '<button class="resetbtn" id="undoBtn">↩ Убрать последнее число</button>' +
+            '<button class="resetbtn" id="resetBtn">⟲ Собрать заново</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="qbox">' +
+        '<div class="question">' + s.q + '</div>' +
+        '<div class="opts" id="qopts"></div>' +
+        '<div class="feedback hintbox" id="qhint">💡 ' + s.qhint + '</div>' +
+        '<div id="q2" style="display:none;">' +
+          '<span class="proof-flag">⚖️ ДОКАЗАТЕЛЬСТВО</span>' +
+          '<div class="question">' + s.checkLead + ' = ?</div>' +
+          '<div class="opts" id="popts"></div>' +
+        '</div>' +
+        '<div class="feedback whybox" id="tblWhy" aria-live="polite"></div>' +
+        '<button class="nextbtn" id="tblNext">Рекорд зачтён! Дальше ▶</button>' +
+      '</div>' +
+    '</div>';
+
+  var chipsBox = document.getElementById("chips");
+  var chainRow = document.getElementById("chainrow");
+
+  function activeSlot() {
+    for (var k = 0; k < N; k++) if (st.slots[k] === null || st.slots[k] === undefined) return k;
+    return -1;
+  }
+
+  function chipHTML(idx, mini) {
+    var v = s.chips[idx];
+    var cls = "numchip";
+    if (mini) cls += " mini";
+    else cls += " draggable";
+    return '<div class="' + cls + '" data-i="' + idx + '"' + (mini ? '' : ' draggable="true"') + '>' + v + '</div> ';
+  }
+
+  function upd() {
+    var act = st.locked ? -1 : activeSlot();
+    var filled = 0, j;
+    for (j = 0; j < N; j++) if (st.slots[j] !== null && st.slots[j] !== undefined) filled++;
+
+    var html = "";
+    for (j = 0; j < N; j++) {
+      var slotCls = "slot" + (j === act ? " active" : "");
+      var inner = (st.slots[j] === null || st.slots[j] === undefined)
+        ? '<span class="hintdrop">?</span>'
+        : chipHTML(st.slots[j], true);
+      html += '<div class="chaincell"><div class="celllabel">' + s.labels[j] + '</div>' +
+              '<div class="' + slotCls + '" data-cell="' + j + '">' + inner + '</div></div>';
+    }
+    chainRow.innerHTML = html;
+
+    var got = document.getElementById("got");
+    got.classList.remove("win");
+    got.textContent = filled;
+    if (filled === N) { got.classList.add("win"); got.textContent += " ✓"; }
+
+    chipsBox.innerHTML = "";
+    for (var k2 = 0; k2 < st.order.length; k2++) {
+      var idx = st.order[k2];
+      if (st.used.indexOf(idx) === -1) chipsBox.insertAdjacentHTML("beforeend", chipHTML(idx, false));
+    }
+    if (!chipsBox.children.length) chipsBox.insertAdjacentHTML("beforeend", '<div class="alldone">Все числа в ленте! 🏆</div>');
+
+    bindAll();
+    checkReady(filled);
+  }
+
+  function bindAll() {
+    chipsBox.querySelectorAll(".numchip.draggable").forEach(function(chip) {
+      var idx = parseInt(chip.getAttribute("data-i"), 10);
+      chip.addEventListener("dragstart", function(e) {
+        e.dataTransfer.setData("text/plain", String(idx));
+        e.dataTransfer.effectAllowed = "move";
+      });
+    });
+    chainRow.querySelectorAll(".numchip.mini").forEach(function(chip) {
+      chip.addEventListener("click", function(e) {
+        if (st.locked) return;
+        var idx = parseInt(chip.getAttribute("data-i"), 10);
+        var p = st.used.indexOf(idx);
+        if (p !== -1) {
+          st.used.splice(p, 1);
+          for (var k = 0; k < N; k++) if (st.slots[k] === idx) st.slots[k] = null;
+          upd();
+        }
+      });
+    });
+    chainRow.querySelectorAll(".slot").forEach(function(slot) {
+      slot.addEventListener("dragover", function(e) {
+        if (st.locked) return;
+        e.preventDefault();
+        slot.classList.add("over");
+      });
+      slot.addEventListener("dragleave", function() { slot.classList.remove("over"); });
+      slot.addEventListener("drop", function(e) {
+        e.preventDefault();
+        slot.classList.remove("over");
+        if (st.locked) return;
+        var idx = parseInt(e.dataTransfer.getData("text/plain"), 10);
+        if (isNaN(idx) || st.used.indexOf(idx) !== -1) return;
+        var act = activeSlot();
+        var cell = parseInt(slot.getAttribute("data-cell"), 10);
+        if (cell !== act) return;
+        if (s.chips[idx] !== s.expect[act]) {
+          var card = chipsBox.querySelector('.numchip[data-i="' + idx + '"]');
+          if (card) { card.classList.remove("wrong"); void card.offsetWidth; card.classList.add("wrong"); }
+          var hb = document.getElementById("qhint");
+          if (hb) hb.style.display = "block";
+          return;
+        }
+        st.slots[act] = idx;
+        st.used.push(idx);
+        upd();
+      });
+    });
+  }
+
+  document.getElementById("undoBtn").onclick = function() {
+    if (st.locked) return;
+    for (var k = N - 1; k >= 0; k--) {
+      if (st.slots[k] !== null && st.slots[k] !== undefined) {
+        var p = st.used.indexOf(st.slots[k]);
+        if (p !== -1) st.used.splice(p, 1);
+        st.slots[k] = null;
+        upd();
+        return;
+      }
+    }
+  };
+  document.getElementById("resetBtn").onclick = function() {
+    if (st.locked) return;
+    st.slots = []; st.used = [];
+    document.getElementById("qbox").style.display = "none";
+    document.getElementById("tblWhy").style.display = "none";
+    document.getElementById("tblNext").style.display = "none";
+    upd();
+  };
+
+  function askOpts(containerId, values, correct, onRight, hintId) {
+    var box = document.getElementById(containerId);
+    box.innerHTML = values.map(function(v) {
+      return '<button class="opt" data-v="' + v + '">' + v + '</button>';
+    }).join("");
+    var btns = box.querySelectorAll(".opt");
+    var tries = 0;
+    btns.forEach(function(b) {
+      b.onclick = function() {
+        var v = parseInt(b.getAttribute("data-v"), 10);
+        if (v === correct) {
+          addStars(tries === 0 ? 2 : 1);
+          b.classList.add("ok");
+          btns.forEach(function(x) { x.disabled = true; if (x !== b) x.classList.add("dim"); });
+          confetti();
+          onRight();
+        } else {
+          tries++;
+          b.classList.remove("wrong");
+          void b.offsetWidth;
+          b.classList.add("wrong");
+          if (tries >= 2) {
+            var hb = hintId ? document.getElementById(hintId) : null;
+            if (hb) hb.style.display = "block";
+            btns.forEach(function(x) {
+              if (parseInt(x.getAttribute("data-v"), 10) === correct) x.classList.add("reveal");
+            });
+          }
+        }
+      };
+    });
+  }
+
+  function checkReady(filled) {
+    if (filled === N && !st.locked) {
+      st.locked = true;
+      document.getElementById("ctrls").style.display = "none";
+      document.getElementById("qbox").style.display = "block";
+      askOpts("qopts", [s.answer - 1, s.answer, s.answer + 1], s.answer, function() {
+        document.getElementById("q2").style.display = "block";
+        askOpts("popts", [s.answer - 1, s.answer, s.answer + 1], s.answer, function() {
+          var w = document.getElementById("tblWhy");
+          w.innerHTML = "✅ " + s.checkLead + " = " + s.answer + " — ровно по ленте! РЕКОРД ЗАСЧИТАН. ⚖️";
+          w.style.display = "block";
+          var nx = document.getElementById("tblNext");
+          nx.style.display = "block";
+          nx.onclick = function() { i++; render(); };
+          nx.focus();
+        }, null);
+      }, "qhint");
+    }
+  }
+
+  upd();
+}
+
+function showFinal() {
+  casebar.style.display = "none";
+  updateTopbar();
+  progressBar.style.width = "100%";
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="party">🏆🎉</div>' +
+      '<div class="party-title">ПОЗДРАВЛЯЕМ, ГЛАВНЫЙ СЧЁТОВОД РОБЕРТ!</div>' +
+      '<p class="big" style="text-align:center;">Теперь ты умеешь решать задачи, где<br>КАЖДЫЙ СЛЕДУЮЩИЙ — БОЛЬШЕ: строить цепочку и выбирать нужные звенья!</p>' +
+      '<p class="big" style="text-align:center; margin-top:12px;">Но что ещё круче —<br><b>ты умеешь ДОКАЗЫВАТЬ ответ.</b> ⚖️</p>' +
+      '<p style="text-align:center; margin-top:16px; font-size:26px;">Ты зачёл <b>5 заданий</b> и заработал <b>' + stars + ' ⭐</b></p>' +
+    '</div>' +
+    '<div class="card cert"><div class="t">СЕРТИФИКАТ</div>' +
+      '<p style="margin-top:8px;">Главный счётовод клуба рекордов и коллекций<br><b>Счётовод</b><br>умеет: находить первое число и шаг, строить цепочку «каждый следующий больше», суммировать нужные звенья и доказывать ответ</p>' +
+    '</div>' +
+    '<div class="card algo"><h3>🤖 АЛГОРИТМ СЧЁТОВОДА (для любой такой задачи)</h3><ol>' +
+      '<li>Найди <b>ПЕРВОЕ число</b> и <b>ШАГ</b> (на сколько каждый следующий больше).</li>' +
+      '<li>Построй цепочку: каждое следующее = предыдущее + шаг.</li>' +
+      '<li>Отбери нужные звенья: С какого по какое? Слово «включительно» — крайние тоже считаем!</li>' +
+      '<li>Сложи звенья и ДОКАЖИ: перечитай цепочку вслух.</li>' +
+    '</ol></div>' +
+    '<button class="startbtn" onclick="location.reload()">🔁 Играть снова</button>';
+  window.scrollTo(0, 0);
+}
+
+/* ---------- учитель ---------- */
+
+function openTeacher() { document.getElementById("teacherOverlay").style.display = "flex"; }
+function closeTeacher() { document.getElementById("teacherOverlay").style.display = "none"; }
+document.getElementById("teacherBtn").onclick = openTeacher;
+document.getElementById("teacherOverlay").onclick = function(e) { if (e.target === this) closeTeacher(); };
+document.getElementById("taskTable").innerHTML = TASK_LIST.map(function(r) {
+  return "<tr><td>" + r[0] + "</td><td><b>" + r[1] + "</b></td></tr>";
+}).join("");
+
+document.getElementById("restartBtn").onclick = function() {
+  i = 0; stars = 0; render();
+};
+document.getElementById("prevBtn").onclick = function() {
+  if (i > 0) { i--; render(); }
+};
+document.getElementById("nextBtn").onclick = function() {
+  if (i < S.length - 1) { i++; render(); }
+};
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "t" || e.key === "T" || e.key === "е" || e.key === "Е") {
+    if (document.getElementById("teacherOverlay").style.display === "flex") closeTeacher(); else openTeacher();
+    return;
+  }
+  if (document.getElementById("teacherOverlay").style.display === "flex") return;
+  var nextBtn = document.getElementById("next") || document.getElementById("tblNext");
+  if ((e.key === "Enter" || e.key === " ") && nextBtn && nextBtn.style.display === "block") {
+    e.preventDefault(); nextBtn.click(); return;
+  }
+  var n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 4) {
+    var bs = Array.prototype.slice.call(stage.querySelectorAll(".opt")).filter(function(b) { return !b.disabled; });
+    if (bs[n - 1]) bs[n - 1].click();
+  }
+});
+
+/* старт */
+render();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>
