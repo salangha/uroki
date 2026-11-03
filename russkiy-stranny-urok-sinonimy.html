@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Очень странный урок · Соня · Синонимы и Антонимы</title>
+<meta property="og:title" content="Очень странный урок · Синонимы и антонимы">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0b0d15;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(40, 100, 180, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(180, 50, 180, 0.15) 0%, transparent 45%),
+                repeating-linear-gradient(45deg, rgba(100, 70, 255, 0.02) 0px, rgba(100, 70, 255, 0.02) 2px, transparent 2px, transparent 10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto Mono', monospace;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .game-card {
+            max-width: 880px;
+            width: 100%;
+            background: #14181c;
+            background: linear-gradient(145deg, #1a1f25 0%, #0f1217 100%);
+            border: 2px solid #6a4c9e;
+            border-radius: 32px;
+            padding: 24px 28px 34px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.8),
+                0 0 0 2px #2a1a4a inset,
+                0 0 0 4px #1a1030 inset,
+                0 0 30px #6a4c9e80;
+            position: relative;
+        }
+
+        .game-card::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: 20%;
+            width: 60%;
+            height: 6px;
+            background: #7a5cb0;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 0 15px #8a6cc0;
+        }
+
+        .stranger-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2.4rem;
+            letter-spacing: 4px;
+            text-align: center;
+            color: #e6d7b8;
+            text-shadow: 3px 3px 0 #2a1a4a, 6px 6px 0 #1a1030, 0 0 20px #7a5cb0;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .stranger-title span {
+            background: #1a1430;
+            padding: 0 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-family: 'Roboto Mono', monospace;
+            color: #d9c8a8;
+            border: 1px solid #6a4c9e;
+            text-shadow: none;
+        }
+
+        .hero-dialogue {
+            background: #14101f;
+            padding: 16px 20px;
+            border-radius: 40px 40px 20px 20px;
+            border: 1px solid #5a3c8e;
+            margin: 8px 0 20px;
+            box-shadow: inset 0 0 20px #0a0515;
+        }
+
+        .hero-chat {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .hero-avatar {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 10px #8a6cc0);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .hero-speech {
+            background: #0f0c16;
+            padding: 10px 22px;
+            border-radius: 30px 30px 30px 6px;
+            border-left: 4px solid #8a6cc0;
+            color: #d6c09d;
+            font-size: 0.95rem;
+            flex: 1;
+            box-shadow: inset 0 0 10px #00000066;
+            min-width: 200px;
+        }
+
+        .hero-speech strong {
+            color: #d4b8f0;
+        }
+
+        .hero-speech .highlight {
+            color: #b8a0e0;
+            font-weight: 700;
+        }
+
+        .hero-speech .word-highlight {
+            color: #f0d060;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .game-area {
+            background: #0f1319;
+            border-radius: 24px;
+            padding: 22px 20px 20px;
+            margin: 12px 0 20px;
+            border: 1px solid #3a2a5a;
+            box-shadow: inset 0 0 30px #030405;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px dashed #5a3c8e;
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+
+        .game-header .badge {
+            background: #1a1430;
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #c8b0e8;
+            border: 1px solid #6a4c9e;
+            font-weight: 700;
+        }
+
+        .word-display {
+            text-align: center;
+            padding: 16px 0;
+        }
+
+        .word-display .part-of-speech {
+            color: #a080c0;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .word-display .main-word {
+            font-family: 'Bangers', cursive;
+            font-size: 4.5rem;
+            color: #f2dfc2;
+            text-shadow: 0 0 20px #7a5cb0, 0 4px 0 #2a1a4a;
+            letter-spacing: 6px;
+            margin: 4px 0 8px;
+        }
+
+        .round-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: #a080b0;
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
+
+        .round-info span {
+            background: #12101f;
+            padding: 2px 16px;
+            border-radius: 30px;
+            border: 1px solid #3a2a5a;
+        }
+
+        .round-info .active {
+            color: #d4b8f0;
+            border-color: #8a6cc0;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0 16px;
+        }
+
+        .option-btn {
+            background: #14101f;
+            border: 2px solid #3a2a5a;
+            color: #d6c09d;
+            padding: 14px 10px;
+            border-radius: 16px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 0 #0a0515;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #1f1835;
+            border-color: #7a5cb0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #0a0515;
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #0a0515;
+        }
+
+        .option-btn.correct {
+            background: #1a4a30;
+            border-color: #50c080;
+            color: #a0e0c0;
+            box-shadow: 0 0 20px #50c08055;
+        }
+
+        .option-btn.wrong {
+            background: #4a1a20;
+            border-color: #c05060;
+            color: #e0a0a0;
+            box-shadow: 0 0 20px #c0506055;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .option-btn .hint {
+            font-size: 0.65rem;
+            color: #806090;
+            display: block;
+            margin-top: 2px;
+            font-weight: 400;
+            text-transform: none;
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            background: #1a1430;
+            border: 2px solid #5a3c8e;
+            color: #d4c0e8;
+            padding: 10px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-family: 'Roboto Mono', monospace;
+            letter-spacing: 1.5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 0 #0a0515;
+        }
+
+        .btn:hover {
+            background: #221a3a;
+            border-color: #8a6cc0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #0a0515;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #0a0515;
+        }
+
+        .btn-primary {
+            background: #4a2a7a;
+            border-color: #8a6cc0;
+            color: #f0e8ff;
+            box-shadow: 0 4px 0 #2a1a4a;
+        }
+
+        .btn-primary:hover {
+            background: #5a3a8a;
+        }
+
+        .feedback-bar {
+            background: #0c0a16;
+            padding: 10px 20px;
+            border-radius: 40px;
+            border-left: 6px solid #8a6cc0;
+            color: #c8b0d8;
+            font-size: 0.9rem;
+            min-height: 3.4rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .feedback-bar .emoji-big {
+            font-size: 1.8rem;
+        }
+
+        .footnote {
+            margin-top: 20px;
+            color: #5a4a6a;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #2a1a4a;
+            padding-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 650px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .word-display .main-word {
+                font-size: 3rem;
+            }
+            .game-card {
+                padding: 16px;
+            }
+            .stranger-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-card">
+
+    <div class="stranger-title">
+        ⚡ ОЧЕНЬ СТРАННЫЙ УРОК ⚡
+        <span>Соня · Часть 2</span>
+    </div>
+
+    <!-- Робин -->
+    <div class="hero-dialogue">
+        <div class="hero-chat">
+            <div class="hero-avatar">👩🏻</div>
+            <div class="hero-speech" id="robinSpeech">
+                <strong>Робин:</strong> «Привет, Соня! Я обожаю слова! Давай поиграем: я даю слово, а ты <span class="highlight">найди его синоним</span>, а потом <span class="highlight">антоним</span>. Готов? Поехали!»
+            </div>
+        </div>
+    </div>
+
+    <!-- Игровая зона -->
+    <div class="game-area">
+        <div class="game-header">
+            <span class="badge">📖 СИНОНИМЫ &amp; АНТОНИМЫ</span>
+            <span class="badge" id="roundDisplay">Раунд 1</span>
+        </div>
+
+        <div class="word-display">
+            <div class="part-of-speech" id="partOfSpeech">СУЩЕСТВИТЕЛЬНОЕ</div>
+            <div class="main-word" id="mainWord">ДРУГ</div>
+            <div class="round-info">
+                <span id="taskType" class="active">🔍 НАЙДИ СИНОНИМ</span>
+                <span id="scoreDisplay">⭐ 0 / 0</span>
+            </div>
+        </div>
+
+        <!-- Варианты ответов -->
+        <div class="options-grid" id="optionsGrid">
+            <button class="option-btn" data-index="0">ТОВАРИЩ</button>
+            <button class="option-btn" data-index="1">ВРАГ</button>
+            <button class="option-btn" data-index="2">ЧЕЛОВЕК</button>
+            <button class="option-btn" data-index="3">МАЛЬЧИК</button>
+        </div>
+
+        <!-- Управление -->
+        <div class="action-row">
+            <div class="feedback-bar" id="feedbackBar">
+                <span class="emoji-big">🎯</span>
+                <span id="feedbackText">Выбери правильный вариант!</span>
+            </div>
+            <button class="btn btn-primary" id="nextBtn">➡ СЛЕДУЮЩЕЕ СЛОВО</button>
+        </div>
+    </div>
+
+    <!-- Стив (появляется после успехов) -->
+    <div class="hero-dialogue" id="steveDialogue" style="border-color: #c08040; background: #1a1410; margin-top: 6px; display: none;">
+        <div class="hero-chat">
+            <div class="hero-avatar">🧑🏻</div>
+            <div class="hero-speech" style="border-left-color: #c08040;">
+                <strong>Стив:</strong> <span id="steveText">«Эй, Соня! Робин сказала, ты круто разбираешься в словах. Давай, покажи класс!»</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footnote">
+        <span><i>🎬</i> Хоукинс · Сезон 3</span>
+        <span>👾 для Софии · от Робин и Стива</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ========== БАЗА СЛОВ ==========
+        const wordsDB = [
+            // Существительные
+            { word: 'ДРУГ', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'ТОВАРИЩ', antonym: 'ВРАГ' },
+            { word: 'РАДОСТЬ', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'ВЕСЕЛЬЕ', antonym: 'ГРУСТЬ' },
+            { word: 'СВЕТ', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'СИЯНИЕ', antonym: 'ТЬМА' },
+            { word: 'ДОБРО', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'БЛАГО', antonym: 'ЗЛО' },
+            { word: 'БИТВА', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'СРАЖЕНИЕ', antonym: 'МИР' },
+            { word: 'ЗДОРОВЬЕ', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'КРЕПОСТЬ', antonym: 'БОЛЕЗНЬ' },
+            { word: 'БОГАТЫРЬ', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'СИЛАЧ', antonym: 'СЛАБАК' },
+            { word: 'ВОЙНА', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'БИТВА', antonym: 'МИР' },
+            { word: 'ПРАВДА', pos: 'СУЩЕСТВИТЕЛЬНОЕ', synonym: 'ИСТИНА', antonym: 'ЛОЖЬ' },
+            // Прилагательные
+            { word: 'СМЕЛЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'ХРАБРЫЙ', antonym: 'ТРУСЛИВЫЙ' },
+            { word: 'ВЕСЁЛЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'РАДОСТНЫЙ', antonym: 'ГРУСТНЫЙ' },
+            { word: 'БОЛЬШОЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'ОГРОМНЫЙ', antonym: 'МАЛЕНЬКИЙ' },
+            { word: 'ВЫСОКИЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'ДЛИННЫЙ', antonym: 'НИЗКИЙ' },
+            { word: 'ДОБРЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'МИЛОСЕРДНЫЙ', antonym: 'ЗЛОЙ' },
+            { word: 'ХРАБРЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'ОТВАЖНЫЙ', antonym: 'ТРУСЛИВЫЙ' },
+            { word: 'СИЛЬНЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'МОГУЧИЙ', antonym: 'СЛАБЫЙ' },
+            { word: 'ГРУСТНЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'ПЕЧАЛЬНЫЙ', antonym: 'ВЕСЁЛЫЙ' },
+            { word: 'УМНЫЙ', pos: 'ПРИЛАГАТЕЛЬНОЕ', synonym: 'МУДРЫЙ', antonym: 'ГЛУПЫЙ' },
+            // Глаголы
+            { word: 'БЕЖАТЬ', pos: 'ГЛАГОЛ', synonym: 'МЧАТЬСЯ', antonym: 'СТОЯТЬ' },
+            { word: 'ГОВОРИТЬ', pos: 'ГЛАГОЛ', synonym: 'РАЗГОВАРИВАТЬ', antonym: 'МОЛЧАТЬ' },
+            { word: 'СМЕЯТЬСЯ', pos: 'ГЛАГОЛ', synonym: 'ХОХОТАТЬ', antonym: 'ПЛАКАТЬ' },
+            { word: 'БЕРЕЧЬ', pos: 'ГЛАГОЛ', synonym: 'ОХРАНЯТЬ', antonym: 'РАЗРУШАТЬ' },
+            { word: 'БОЯТЬСЯ', pos: 'ГЛАГОЛ', synonym: 'ПУГАТЬСЯ', antonym: 'СМЕЛЕТЬ' },
+            { word: 'ШАЛИТЬ', pos: 'ГЛАГОЛ', synonym: 'БАЛОВАТЬСЯ', antonym: 'СЛУШАТЬСЯ' },
+            { word: 'ДЕЛАТЬ', pos: 'ГЛАГОЛ', synonym: 'ТРУДИТЬСЯ', antonym: 'БЕЗДЕЛЬНИЧАТЬ' },
+            { word: 'ПЛАКАТЬ', pos: 'ГЛАГОЛ', synonym: 'РЫДАТЬ', antonym: 'СМЕЯТЬСЯ' },
+            { word: 'МОЛЧАТЬ', pos: 'ГЛАГОЛ', synonym: 'БЕЗМОЛВСТВОВАТЬ', antonym: 'ГОВОРИТЬ' }
+        ];
+
+        // ========== СОСТОЯНИЕ ==========
+        let currentWords = [];
+        let currentRound = 0;
+        let currentTask = 'synonym';
+        let score = { correct: 0, total: 0 };
+        let isAnswered = false;
+        let usedWordsIndices = [];
+
+        // DOM-элементы
+        const mainWord = document.getElementById('mainWord');
+        const partOfSpeech = document.getElementById('partOfSpeech');
+        const taskType = document.getElementById('taskType');
+        const optionsGrid = document.getElementById('optionsGrid');
+        const feedbackText = document.getElementById('feedbackText');
+        const feedbackBar = document.getElementById('feedbackBar');
+        const roundDisplay = document.getElementById('roundDisplay');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const nextBtn = document.getElementById('nextBtn');
+        const steveDialogue = document.getElementById('steveDialogue');
+        const steveText = document.getElementById('steveText');
+        const robinSpeech = document.getElementById('robinSpeech');
+
+        // ========== ВСПОМОГАТЕЛЬНЫЕ ==========
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function getRandomWords() {
+            const nouns = wordsDB.filter(w => w.pos === 'СУЩЕСТВИТЕЛЬНОЕ');
+            const adj = wordsDB.filter(w => w.pos === 'ПРИЛАГАТЕЛЬНОЕ');
+            const verbs = wordsDB.filter(w => w.pos === 'ГЛАГОЛ');
+
+            const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+            let selected = [pick(nouns), pick(adj), pick(verbs)];
+            
+            // Убедимся, что все разные
+            let attempts = 0;
+            while ((selected[0].word === selected[1].word || 
+                    selected[0].word === selected[2].word || 
+                    selected[1].word === selected[2].word) && attempts < 50) {
+                selected = [pick(nouns), pick(adj), pick(verbs)];
+                attempts++;
+            }
+            return selected;
+        }
+
+        function generateOptions(wordObj, task) {
+            const correct = task === 'synonym' ? wordObj.synonym : wordObj.antonym;
+            
+            // Собираем дистракторы — только слова той же части речи
+            const samePos = wordsDB.filter(w => w.pos === wordObj.pos && w.word !== wordObj.word);
+            const candidates = samePos.map(w => task === 'synonym' ? w.synonym : w.antonym);
+            
+            // Убираем правильный ответ и дубли
+            const uniqueCandidates = [...new Set(candidates)].filter(w => w !== correct);
+            
+            // Берём 3 случайных
+            const shuffled = shuffle(uniqueCandidates);
+            let distractors = shuffled.slice(0, 3);
+            
+            // Если не хватает, добиваем из всех слов
+            if (distractors.length < 3) {
+                const allWords = wordsDB
+                    .map(w => task === 'synonym' ? w.synonym : w.antonym)
+                    .filter(w => w !== correct && !distractors.includes(w));
+                const extra = shuffle(allWords);
+                while (distractors.length < 3 && extra.length > 0) {
+                    distractors.push(extra.pop());
+                }
+            }
+
+            const options = shuffle([correct, ...distractors]);
+            return options;
+        }
+
+        // ========== ОБНОВЛЕНИЕ UI ==========
+        function updateGame() {
+            if (currentWords.length === 0) {
+                currentWords = getRandomWords();
+                currentRound = 0;
+            }
+
+            const wordObj = currentWords[currentRound];
+            if (!wordObj) {
+                currentWords = getRandomWords();
+                currentRound = 0;
+                updateGame();
+                return;
+            }
+
+            const task = currentTask;
+            const taskLabel = task === 'synonym' ? '🔍 НАЙДИ СИНОНИМ' : '🔍 НАЙДИ АНТОНИМ';
+            taskType.textContent = taskLabel;
+
+            mainWord.textContent = wordObj.word;
+            partOfSpeech.textContent = wordObj.pos;
+
+            const options = generateOptions(wordObj, task);
+            const optionBtns = optionsGrid.querySelectorAll('.option-btn');
+            const correctAnswer = task === 'synonym' ? wordObj.synonym : wordObj.antonym;
+            
+            optionBtns.forEach((btn, idx) => {
+                btn.textContent = options[idx] || '—';
+                btn.dataset.correct = (options[idx] === correctAnswer) ? 'true' : 'false';
+                btn.className = 'option-btn';
+                btn.disabled = false;
+            });
+
+            feedbackText.textContent = 'Выбери правильный вариант!';
+            feedbackBar.querySelector('.emoji-big').textContent = '🎯';
+            isAnswered = false;
+
+            roundDisplay.textContent = `Слово ${currentRound + 1} из 3`;
+            scoreDisplay.textContent = `⭐ ${score.correct} / ${score.total}`;
+
+            const taskWord = task === 'synonym' ? 'синоним' : 'антоним';
+            robinSpeech.innerHTML = `<strong>Робин:</strong> «Найди <span class="highlight">${taskWord}</span> для слова <span class="word-highlight">${wordObj.word}</span>! Я верю в тебя!»`;
+
+            if (score.total < 2) {
+                steveDialogue.style.display = 'none';
+            }
+        }
+
+        // ========== ОБРАБОТЧИКИ ОТВЕТОВ ==========
+        function handleOptionClick(e) {
+            const btn = e.currentTarget;
+            if (btn.disabled || isAnswered) return;
+
+            const isCorrect = btn.dataset.correct === 'true';
+            const wordObj = currentWords[currentRound];
+            const task = currentTask;
+            const correctAnswer = task === 'synonym' ? wordObj.synonym : wordObj.antonym;
+
+            const allBtns = optionsGrid.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.disabled = true);
+            btn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+            if (!isCorrect) {
+                allBtns.forEach(b => {
+                    if (b.dataset.correct === 'true') {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+
+            score.total++;
+            if (isCorrect) score.correct++;
+            scoreDisplay.textContent = `⭐ ${score.correct} / ${score.total}`;
+
+            const emoji = isCorrect ? '🎉' : '😅';
+            const msg = isCorrect 
+                ? `Верно! «${correctAnswer}» — отличный ${task === 'synonym' ? 'синоним' : 'антоним'}!` 
+                : `Не совсем. Правильный ${task === 'synonym' ? 'синоним' : 'антоним'} — «${correctAnswer}».`;
+            feedbackText.textContent = msg;
+            feedbackBar.querySelector('.emoji-big').textContent = emoji;
+
+            isAnswered = true;
+
+            // Активация Стива
+            if (score.correct >= 2) {
+                steveDialogue.style.display = 'block';
+                const msgs = [
+                    '«Класс! Соня, ты реально шаришь!»',
+                    '«Ого, да ты словарь! Продолжай в том же духе!»',
+                    '«Робин, она нас переигрывает! Так держать, Соня!»',
+                    '«Ух ты! Я даже не знал, что это так просто!»'
+                ];
+                steveText.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+            }
+        }
+
+        // ========== СЛЕДУЮЩЕЕ СЛОВО ==========
+        function nextWord() {
+            if (!isAnswered) {
+                feedbackText.textContent = 'Сначала ответь на вопрос!';
+                feedbackBar.querySelector('.emoji-big').textContent = '⚠️';
+                return;
+            }
+
+            if (currentTask === 'synonym') {
+                currentTask = 'antonym';
+                updateGame();
+                return;
+            }
+
+            currentTask = 'synonym';
+            currentRound++;
+            
+            if (currentRound >= currentWords.length) {
+                currentWords = getRandomWords();
+                currentRound = 0;
+                feedbackText.textContent = 'Новый набор слов! Поехали!';
+                feedbackBar.querySelector('.emoji-big').textContent = '🚀';
+            }
+
+            updateGame();
+        }
+
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        function init() {
+            currentWords = getRandomWords();
+            currentRound = 0;
+            currentTask = 'synonym';
+            score = { correct: 0, total: 0 };
+            isAnswered = false;
+
+            const optionBtns = optionsGrid.querySelectorAll('.option-btn');
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', handleOptionClick);
+            });
+
+            nextBtn.addEventListener('click', nextWord);
+            updateGame();
+        }
+
+        init();
+    })();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Миссия 06 — Теплица «Рассвета»</title>
+<meta property="og:title" content="Миссия 06 — Теплица «Рассвета»">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --paper:#f4eee1; --card:#fbf7ee; --ink:#2b3a48; --muted:#6b7a86;
+    --blue:#5c7a99; --ochre:#c9a227; --red:#a63d2f; --green:#4a7a4f;
+    --line:#d8cdb8; --board:#efe7d5;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:24px 14px 48px;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(201,162,39,.10), transparent 30%),
+      radial-gradient(circle at 82% 8%, rgba(92,122,153,.12), transparent 32%),
+      var(--paper);
+    color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+  }
+  .sheet{
+    max-width:880px; margin:0 auto; background:var(--card);
+    border:1px solid var(--line); border-radius:8px;
+    box-shadow:0 14px 34px rgba(43,58,72,.14);
+    padding:26px 30px 34px;
+  }
+  .agency-line{
+    display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    font-size:.78rem; letter-spacing:.16em; color:var(--muted);
+    border-bottom:2px solid var(--ink); padding-bottom:8px;
+  }
+  .agency-line .stamp-mini{
+    color:var(--red); border:1.5px solid var(--red); padding:2px 8px;
+    border-radius:3px; transform:rotate(-2deg); white-space:nowrap; letter-spacing:.12em;
+  }
+  .mission-line{
+    margin-top:10px; font-size:.86rem; letter-spacing:.14em; color:var(--ink);
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+  }
+  .progress{display:flex; gap:6px}
+  .dot{width:12px; height:12px; border-radius:50%; border:1.5px solid var(--blue); background:transparent}
+  .dot.active{background:var(--ochre); border-color:var(--ochre)}
+  .dot.done{background:var(--green); border-color:var(--green)}
+  .scene{margin:18px 0 4px}
+  .scene-img{
+    width:100%; max-height:260px; object-fit:cover; display:block;
+    border:1px solid var(--line); border-radius:6px; filter:sepia(.08);
+  }
+  .scene-caption{font-size:.82rem; color:var(--muted); margin-top:6px; font-style:italic}
+  .task-head{display:flex; align-items:center; gap:12px; margin-top:22px}
+  .tag{
+    font-size:.68rem; letter-spacing:.14em; color:var(--card); background:var(--blue);
+    padding:3px 8px; border-radius:3px; white-space:nowrap;
+  }
+  h1{font-size:1.5rem; margin:0; letter-spacing:.3px}
+  #taskText{font-size:1.08rem; line-height:1.65; margin:14px 0 6px}
+  .question{font-size:1.05rem; font-weight:bold; margin:12px 0 0; color:var(--ink)}
+  .note{
+    margin:16px 0 0; padding:10px 14px; background:#f2ecdc; border-left:4px solid var(--ochre);
+    font-size:.95rem; border-radius:0 6px 6px 0;
+  }
+  .choice{margin-top:22px; text-align:center}
+  .choice-q{font-style:italic; color:var(--muted); margin:0 0 12px}
+  .choice-btns{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    font-family:inherit; font-size:1rem; padding:11px 22px; cursor:pointer;
+    border-radius:5px; letter-spacing:.04em; transition:transform .08s, box-shadow .08s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--blue); color:#fff; border:2px solid #46617c; font-weight:bold}
+  .btn.primary:hover{box-shadow:0 4px 12px rgba(92,122,153,.4)}
+  .btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--ink)}
+  .btn.ghost:hover{background:rgba(92,122,153,.08)}
+  .btn:disabled{opacity:.45; cursor:default}
+  .hints{margin-top:20px}
+  .speech{display:flex; gap:14px; align-items:flex-start}
+  .avatar{
+    width:76px; height:76px; border-radius:50%; object-fit:cover;
+    border:2px solid var(--line); flex:0 0 auto; filter:sepia(.05);
+  }
+  .bubble{
+    background:#f6f1e4; border:1px solid var(--line); border-left:4px solid var(--blue);
+    border-radius:0 8px 8px 8px; padding:12px 16px; flex:1;
+  }
+  .who{font-size:.78rem; letter-spacing:.1em; color:var(--blue); text-transform:uppercase; margin-bottom:6px}
+  .hint-count{color:var(--muted); text-transform:none; letter-spacing:0; margin-left:8px}
+  #hintText{margin:0; font-size:1.02rem; line-height:1.55}
+  .hint-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px; flex-wrap:wrap}
+  /* схема ряда в подсказке */
+  .dia{
+    display:flex; align-items:center; gap:3px; flex-wrap:wrap;
+    margin-top:10px; padding-top:8px; border-top:1px dashed var(--line);
+  }
+  .dia .d-lot{
+    width:30px; height:22px; border:2px solid var(--blue); border-radius:4px;
+    background:#eef2f6; color:var(--blue); font-size:.68rem; font-weight:bold;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dia .d-sensor{
+    width:20px; height:20px; border-radius:50%; border:2px solid #8a6d14;
+    background:#f7edd2; color:#8a6d14; font-size:.62rem; font-weight:bold;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dia .d-cap{
+    width:9px; height:9px; border-radius:50%; background:var(--red); flex:0 0 auto;
+  }
+  .dia .d-label{flex-basis:100%; font-size:.78rem; color:var(--muted); margin-top:6px}
+  .answer{margin-top:20px; padding:16px; background:#f6f1e4; border:1px dashed var(--line); border-radius:6px}
+  .answer label{display:block; font-size:.85rem; color:var(--muted); margin-bottom:8px; letter-spacing:.08em}
+  .answer-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  #ans{
+    font-family:inherit; font-size:1.25rem; width:120px; padding:8px 12px;
+    border:2px solid var(--ink); border-radius:5px; background:#fff; color:var(--ink);
+  }
+  #ans:focus{outline:none; border-color:var(--blue)}
+  .unit{color:var(--muted); font-style:italic}
+  .answer-actions{margin-top:12px}
+  .feedback{margin-top:12px; font-size:1rem; line-height:1.5; min-height:1.2em}
+  .feedback.bad{color:var(--red)}
+  .feedback.ok{color:var(--green); font-weight:bold}
+  .shake{animation:shake .35s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)}
+    50%{transform:translateX(6px)} 75%{transform:translateX(-4px)}
+  }
+  .next{margin-top:24px; text-align:center; padding:22px; border:2px solid var(--green); border-radius:8px; background:#f0f4ee}
+  .stamp{
+    display:inline-block; padding:10px 22px; border:3px double var(--green); color:var(--green);
+    font-size:1.4rem; letter-spacing:.22em; transform:rotate(-5deg); margin-bottom:12px;
+    border-radius:6px; background:rgba(74,122,79,.06);
+  }
+  .final{margin-top:24px; text-align:center; padding:26px; border:2px solid var(--ochre); border-radius:8px; background:#faf5e6}
+  .final .stamp{border-color:var(--ochre); color:#8a6d14; background:rgba(201,162,39,.08)}
+  .final p{margin:8px 0}
+  .final .stats{color:var(--muted); font-style:italic; font-size:.95rem}
+  .soon{color:var(--muted); font-size:.85rem; margin-top:14px; letter-spacing:.06em}
+  footer{margin-top:26px; font-size:.75rem; color:var(--muted); text-align:center; letter-spacing:.1em}
+  @media (max-width:640px){
+    .sheet{padding:20px 14px 26px}
+    .avatar{width:58px; height:58px}
+    h1{font-size:1.25rem}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="agency-line">
+      <span>МЕЖПЛАНЕТНОЕ АГЕНТСТВО «ЗАРЯ»</span>
+      <span class="stamp-mini">АТТЕСТАЦИЯ СТАЖЁРА</span>
+    </div>
+    <div class="mission-line">
+      <span>МИССИЯ 06 · АСТЕРОИД «РАССВЕТ» · ТЕПЛИЦА · ЗАДАЧА <span id="taskNum">1</span> ИЗ 2</span>
+      <span class="progress"><i class="dot active" id="dot1"></i><i class="dot" id="dot2"></i></span>
+    </div>
+  </header>
+
+  <section class="scene">
+    <img class="scene-img" src="assets/fitobio.jpg" alt="Фитобиореактор с хлореллой в теплице «Рассвета»">
+    <div class="scene-caption">Теплица «Рассвета». Фитобиореактор с хлореллой — сердце станции: он даёт кислород.</div>
+  </section>
+
+  <section class="task">
+    <div class="task-head"><span class="tag">ТЕПЛИЦА «РАССВЕТА»</span><h1 id="taskTitle"></h1></div>
+    <p id="taskText"></p>
+    <p class="question" id="taskQuestion"></p>
+    <p class="note" id="noHintsNote" hidden>Теперь — <b>сам, без подсказок</b>: на настоящем туре подсказывать будет некому. Это тренировка именно такого режима.</p>
+  </section>
+
+  <section class="choice" id="choice">
+    <p class="choice-q">Как поступим, стажёр?</p>
+    <div class="choice-btns">
+      <button class="btn primary" id="btnAnswer">Отвечу сразу</button>
+      <button class="btn ghost" id="btnHint">Подскажи, Богдан</button>
+    </div>
+  </section>
+
+  <section class="hints" id="hints" hidden>
+    <div class="speech">
+      <img class="avatar" src="assets/bogdan.jpg" alt="Богдан, инженер лаборатории «Рассвет»">
+      <div class="bubble">
+        <div class="who">Богдан · инженер «Рассвета» <span class="hint-count" id="hintCount"></span></div>
+        <p id="hintText"></p>
+        <div class="dia" id="hintDia" hidden></div>
+      </div>
+    </div>
+    <div class="hint-actions">
+      <button class="btn ghost" id="btnMoreHint">Ещё подсказку</button>
+      <button class="btn ghost" id="btnStopHint">Понятно, отвечу</button>
+    </div>
+  </section>
+
+  <section class="answer" id="answer" hidden>
+    <label for="ans">ТВОЙ ОТВЕТ</label>
+    <div class="answer-row">
+      <input id="ans" type="text" inputmode="numeric" autocomplete="off" placeholder="число">
+      <span class="unit" id="unit">лотков</span>
+    </div>
+    <div class="answer-actions">
+      <button class="btn primary" id="btnCheck">Проверить</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  </section>
+
+  <section class="next" id="nextBlock" hidden>
+    <div class="stamp">ЗАЧЁТ</div>
+    <p id="nextText"></p>
+    <button class="btn primary" id="btnNext">Дальше →</button>
+  </section>
+
+  <section class="final" id="final" hidden>
+    <div class="stamp">МИССИЯ ВЫПОЛНЕНА</div>
+    <p><b>Оба стеллажа в порядке — теплица снова дышит.</b></p>
+    <p class="stats" id="finalStats"></p>
+    <p>Третью полку Богдан оставил на бумагу: на ней <b>14 капсул</b>. Метод тот же — решишь на ближайшем занятии.</p>
+    <p>Правило теплицы: капсул вдвое больше, чем пар лотков, а лотков всегда на один больше, чем пар.</p>
+    <p>Следующая миссия — <b>КБ «Вега»</b>: Григорий раскладывает треугольники.</p>
+    <div class="hint-actions" style="justify-content:center">
+      <button class="btn ghost" id="btnRestart">Пройти заново</button>
+    </div>
+    <p class="soon">Продолжение аттестации — в следующей миссии.</p>
+  </section>
+
+  <footer>МИР: ЭКСПЕДИЦИЯ «ЗАРЯ» · ПОДСКАЗОК В МИССИИ: НЕ БОЛЬШЕ ТРЁХ · РЕЖИМ ОФЛАЙН</footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var tasks = [
+    {
+      title: 'Северный стеллаж',
+      text: 'Пока Богдан чинил зонд, теплица жила своей жизнью. На северном стеллаже в ряд выстроены лотки с хлореллой. ' +
+            'Между каждыми двумя соседними лотками робот-садовник поставил датчик влажности. ' +
+            'А дрон-агроном закопал капсулу с питательным гелем между <b>каждыми соседними объектами</b> на стеллаже — ' +
+            'то есть и между лотком и датчиком, и между датчиком и лотком. ' +
+            'Богдан насчитал на стеллаже <b>10 капсул</b> с гелем.',
+      question: 'Сколько лотков с хлореллой на стеллаже?',
+      answer: 6,
+      unit: 'лотков',
+      hints: [
+        { text: 'Так, стажёр, у меня всё сразу — и у нас получится. Начни с малого: нарисуй стеллаж из <b>трёх</b> лотков. Между ними робот поставил датчики — сколько их? А теперь посчитай капсулы: они лежат в каждом промежутке между соседними объектами.', dia: 1 },
+        { text: 'Видишь систему? Между двумя соседними лотками — <b>один датчик и два промежутка</b> возле него. Значит, на каждую пару лотков приходится по две капсулы. Капсул десять — сколько тогда пар лотков?', dia: 2 },
+        { text: 'Пар — пять, а лотков на один больше, чем пар: пять плюс один. Проверь обратным счётом: шесть лотков — пять датчиков — и в каждом промежутке по капсуле. Должно выйти ровно десять.', dia: 3 }
+      ],
+      wrongSpecial: {
+        5: 'Пять? Это число датчиков, а не лотков. Лотков всегда на один больше, чем датчиков.',
+        10: 'Десять? Это же капсулы. Лотков меньше: между ними ещё и датчики стоят.',
+        20: 'Двадцать? Капсулы — это промежутки, а лотков должно быть меньше, а не больше.'
+      },
+      wrongGeneric: 'Не сходится. Вспомни счёт: на каждую пару лотков — две капсулы. Десять капсул — это сколько пар?',
+      success: 'Шесть! Шесть лотков, пять датчиков, десять промежутков. Теплица приняла расчёт — печать в бортжурнал.'
+    },
+    {
+      title: 'Южный стеллаж',
+      text: 'Второй стеллаж — у южной стены теплицы. Всё как на первом: лотки с хлореллой, между ними датчики, ' +
+            'а между каждыми соседними объектами — капсула с гелем. Здесь Богдан насчитал <b>12 капсул</b>.',
+      question: 'Сколько лотков на южном стеллаже?',
+      answer: 7,
+      unit: 'лотков',
+      hints: null,
+      wrongSpecial: {
+        6: 'Шесть? Это для десяти капсул. У нас двенадцать — пар больше.',
+        12: 'Двенадцать? Это капсулы. Лотков меньше: двенадцать капсул — это шесть пар.',
+        13: 'Тринадцать? Столько было бы, если бы на каждую пару приходилась одна капсула. А их две.'
+      },
+      wrongGeneric: 'Не сходится. Капсул вдвое больше, чем пар лотков, а лотков на один больше, чем пар. Пересчитай.',
+      success: 'Семь! Двенадцать капсул — шесть пар — семь лотков. И без единой подсказки — принято!'
+    }
+  ];
+
+  var state = { i: 0, hints: 0, wrong: 0, savedHints: 0, savedWrong: 0 };
+  var el = function(id){ return document.getElementById(id); };
+
+  function show(node){ node.hidden = false; }
+  function hide(node){ node.hidden = true; }
+
+  function render(){
+    var t = tasks[state.i];
+    state.hints = 0; state.wrong = 0;
+
+    el('taskNum').textContent = String(state.i + 1);
+    el('dot1').className = 'dot' + (state.i === 0 ? ' active' : ' done');
+    el('dot2').className = 'dot' + (state.i === 1 ? ' active' : '');
+
+    el('taskTitle').textContent = t.title;
+    el('taskText').innerHTML = t.text;
+    el('taskQuestion').textContent = t.question;
+    el('unit').textContent = t.unit;
+    el('ans').value = '';
+    el('ans').disabled = false;
+    el('btnCheck').disabled = false;
+    setFeedback('', '');
+    hide(el('hints')); hide(el('nextBlock')); hide(el('final'));
+
+    var withHints = !!t.hints;
+    hide(el('noHintsNote'));
+    if (withHints){
+      show(el('choice'));
+      hide(el('answer'));
+    } else {
+      hide(el('choice'));
+      show(el('noHintsNote'));
+      show(el('answer'));
+    }
+    el('btnHint').hidden = !withHints;
+  }
+
+  function setFeedback(text, cls){
+    var f = el('feedback');
+    f.innerHTML = text;
+    f.className = 'feedback' + (cls ? ' ' + cls : '');
+    if (cls === 'bad'){
+      f.classList.remove('shake');
+      void f.offsetWidth;
+      f.classList.add('shake');
+    }
+  }
+
+  el('btnAnswer').addEventListener('click', function(){
+    hide(el('choice'));
+    show(el('answer'));
+    el('ans').focus();
+  });
+
+  el('btnHint').addEventListener('click', function(){
+    hide(el('choice'));
+    show(el('answer'));
+    giveHint();
+  });
+
+  function plural(n, forms){
+    var a = Math.abs(n) % 100, b = a % 10;
+    if (a > 10 && a < 20) return forms[2];
+    if (b > 1 && b < 5) return forms[1];
+    if (b === 1) return forms[0];
+    return forms[2];
+  }
+
+  function buildHintDia(kind){
+    var host = el('hintDia');
+    host.innerHTML = '';
+    var lots = kind === 1 ? 3 : (kind === 2 ? 2 : 6);
+    function item(cls, txt){
+      var d = document.createElement('span');
+      d.className = cls;
+      if (txt) d.textContent = txt;
+      return d;
+    }
+    for (var i = 0; i < lots; i++){
+      host.appendChild(item('d-lot', 'л'));
+      if (i < lots - 1){
+        host.appendChild(item('d-cap'));
+        host.appendChild(item('d-sensor', 'д'));
+        host.appendChild(item('d-cap'));
+      }
+    }
+    var sensors = lots - 1, caps = sensors * 2;
+    var label = document.createElement('div');
+    label.className = 'd-label';
+    label.textContent = lots + ' ' + plural(lots, ['лоток', 'лотка', 'лотков']) + ' · ' +
+      sensors + ' ' + plural(sensors, ['датчик', 'датчика', 'датчиков']) + ' · ' +
+      caps + ' ' + plural(caps, ['капсула', 'капсулы', 'капсул']);
+    host.appendChild(label);
+    show(host);
+  }
+
+  function giveHint(){
+    var t = tasks[state.i];
+    if (!t.hints || state.hints >= t.hints.length) return;
+    state.hints++;
+    show(el('hints'));
+    var h = t.hints[state.hints - 1];
+    var text = (typeof h === 'string') ? h : h.text;
+    el('hintText').innerHTML = text;
+    if (h && typeof h === 'object' && h.dia){
+      buildHintDia(h.dia);
+    } else {
+      var host0 = el('hintDia');
+      host0.innerHTML = '';
+      hide(host0);
+    }
+    el('hintCount').textContent = '· подсказка ' + state.hints + ' из ' + t.hints.length;
+    el('btnMoreHint').hidden = (state.hints >= t.hints.length);
+    el('ans').focus();
+  }
+
+  el('btnMoreHint').addEventListener('click', giveHint);
+
+  el('btnStopHint').addEventListener('click', function(){
+    hide(el('hints'));
+    show(el('answer'));
+    el('ans').focus();
+  });
+
+  function check(){
+    var t = tasks[state.i];
+    var raw = el('ans').value.trim();
+    if (raw === ''){
+      setFeedback('Напиши число — теплица ждёт расчёта.', 'bad');
+      return;
+    }
+    var v = parseInt(raw.replace(/[^\d\-]/g, ''), 10);
+    if (isNaN(v)){
+      setFeedback('Напиши число — теплица ждёт расчёта.', 'bad');
+      return;
+    }
+    if (v === t.answer){
+      solved();
+      return;
+    }
+    state.wrong++;
+    var msg = t.wrongSpecial[v] || t.wrongGeneric;
+    if (t.hints && state.wrong >= 3 && state.hints < t.hints.length){
+      giveHint();
+      msg += ' Держи ещё подсказку — мне всё равно нужно успеть до заката.';
+    }
+    setFeedback(msg, 'bad');
+  }
+
+  el('btnCheck').addEventListener('click', check);
+  el('ans').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') check();
+  });
+
+  function solved(){
+    var t = tasks[state.i];
+    setFeedback(t.success, 'ok');
+    el('ans').disabled = true;
+    el('btnCheck').disabled = true;
+    if (state.i === 0){
+      el('dot1').className = 'dot done';
+      state.savedHints = state.hints;
+      state.savedWrong = state.wrong;
+      el('nextText').innerHTML = 'Северный стеллаж закрыт. Теперь <b>южный</b> — тот же метод, другие числа. ' +
+        'И без подсказок: проверим, что метод твой.';
+      show(el('nextBlock'));
+    } else {
+      finish();
+    }
+  }
+
+  el('btnNext').addEventListener('click', function(){
+    state.i = 1;
+    render();
+  });
+
+  function finish(){
+    hide(el('answer')); hide(el('hints')); hide(el('choice')); hide(el('nextBlock'));
+    el('dot2').className = 'dot done';
+    var hintsTotal = (Number(state.savedHints) || 0) + (Number(state.hints) || 0);
+    var wrongTotal = (Number(state.savedWrong) || 0) + (Number(state.wrong) || 0);
+    if (isNaN(hintsTotal)) hintsTotal = 0;
+    if (isNaN(wrongTotal)) wrongTotal = 0;
+    el('finalStats').textContent = 'Подсказок использовано: ' + hintsTotal + ' из 3. ' +
+      'Ошибок по пути: ' + (wrongTotal > 0 ? wrongTotal : 'ни одной') + '.';
+    show(el('final'));
+    try {
+      localStorage.setItem('zarya_mission06', JSON.stringify({
+        date: new Date().toISOString().slice(0, 10), hints: hintsTotal
+      }));
+    } catch(e){}
+  }
+
+  el('btnRestart').addEventListener('click', function(){
+    state.i = 0;
+    render();
+  });
+
+  render();
+})();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>Вычитание по частям</title>
+<meta property="og:title" content="Вычитание по частям">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<!--
+Урок: вычитание двузначных по частям (вычитаемое раскладываем на разрядные слагаемые).
+85 − 47 → 47 = 40 и 7 → 85 − 40 = 45 → 45 − 7 = 38.
+Если единиц в остатке не хватает — доводим до круглого: 45 − 7 → 45 − 5 = 40 → 40 − 2 = 38.
+Вкладки: 1) ➖ Минус по частям  2) 🎨 Домик-рисовашка (цвета палитры Зума)  3) 🏁 Проверка
+-->
+<style>
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{height:100%}
+body{margin:0;font-family:Verdana,"Segoe UI",Arial,sans-serif;background:#f0f6ff;color:#16222f;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-bottom:3px solid #d5e2f2;flex-wrap:wrap}
+#tabs{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+#tabs button{font-size:19px;font-weight:bold;padding:9px 16px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+#tabs button.active{background:#2f6fd6;border-color:#2f6fd6;color:#fff}
+#stars{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:bold;background:#fff8e1;border:2px solid #f1d27a;border-radius:12px;padding:6px 10px}
+#stars button{font-size:18px;font-weight:bold;border:none;border-radius:8px;padding:6px 12px;cursor:pointer}
+#addStar{background:#f5b301;color:#fff}
+#resetStars{background:#ececec;color:#666}
+#stars.pop{animation:starpop .4s}
+@keyframes starpop{50%{transform:scale(1.25)}}
+main{flex:1;min-height:0}
+main>section{display:none;height:100%;overflow:auto;padding:14px 18px}
+main>section.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;text-align:center}
+h2{margin:0;font-size:26px;color:#2456a8}
+.lead{font-size:19px;color:#41546b;margin:0;max-width:900px}
+.example{font-size:clamp(40px,7vw,72px);font-weight:bold;background:#fff;border:4px solid #a9c4e8;border-radius:20px;padding:8px 36px;box-shadow:0 6px 0 rgba(0,0,0,.06);min-width:280px}
+.step{background:#fff;border:3px solid #c9d9ec;border-radius:18px;padding:12px 20px;max-width:880px;width:100%;box-shadow:0 5px 0 rgba(0,0,0,.05)}
+.step .q{font-size:clamp(22px,3vw,32px);font-weight:bold;margin-bottom:10px}
+.opts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.opts button{font-family:inherit;font-size:25px;font-weight:bold;color:#fff;border:none;border-radius:14px;padding:13px 26px;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.18);transition:transform .12s}
+.opts button:hover{transform:translateY(-2px)}
+.opts button.shake{animation:shk .35s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.msg{font-size:clamp(20px,2.6vw,28px);font-weight:bold;min-height:36px}
+.msg.ok{color:#15803d}
+.msg.err{color:#dc2626}
+.navrow{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.bigbtn{font-size:23px;padding:13px 30px;border-radius:14px;border:none;background:#2f6fd6;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+.bigbtn:disabled{background:#aec3dd;cursor:default;box-shadow:none}
+.cnt{font-size:20px;color:#41546b;font-weight:bold}
+/* рисовашка */
+.stage{display:flex;gap:16px;justify-content:center;align-items:flex-start;flex-wrap:wrap;width:100%}
+.picbox{background:#fff;border:4px solid #a9c4e8;border-radius:22px;padding:8px;max-width:560px;flex:1 1 440px}
+svg{width:100%;height:auto;display:block}
+.zone{fill:#fff;stroke:#37475a;stroke-width:3;cursor:pointer;transition:fill .5s}
+.zone.sel{stroke:#e84393;stroke-width:5;stroke-dasharray:10 7;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-34}}
+.zone.done{cursor:default}
+.panel{background:#fff;border:4px solid #a9c4e8;border-radius:22px;padding:16px;max-width:400px;min-width:310px}
+.panel h3{margin:0 0 6px;font-size:21px;color:#2456a8}
+.zlegend{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.zlegend span{width:30px;height:30px;border-radius:8px;border:2px solid #37475a}
+.zlegend .nm{width:auto;height:auto;border:none;font-size:12px;color:#41546b;align-self:center}
+.stepslog{min-height:28px;font-size:16px;color:#c2410c;font-weight:bold;margin-bottom:6px}
+#finale{position:fixed;inset:0;background:rgba(22,34,47,.8);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+#finale.show{display:flex}
+.finCard{background:#fff;border-radius:28px;padding:36px 40px;text-align:center;max-width:520px;animation:fpop .5s}
+@keyframes fpop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+.finCard .e{font-size:70px}
+.finCard .t{font-size:25px;color:#16222f;margin:12px 0 6px;font-weight:bold}
+.finCard .d{font-size:19px;color:#41546b;margin-bottom:18px}
+</style>
+</head>
+<body>
+<header>
+  <div id="tabs">
+    <button data-tab="t1" class="active">1 ➖ Минус по частям</button>
+    <button data-tab="t2">2 🎨 Домик-рисовашка</button>
+    <button data-tab="t3">3 🏁 Проверка</button>
+  </div>
+  <div id="stars">⭐ <span id="starCount">0</span><button id="addStar">+1</button><button id="resetStars" title="Сбросить">⟲</button></div>
+</header>
+<main>
+
+<!-- ================= 1. МИНУС ПО ЧАСТЯМ ================= -->
+<section id="t1" class="active">
+  <h2>➖ Раскладываем вычитаемое — и вычитаем по частям</h2>
+  <p class="lead">Например: <b>85 − 47</b>. Раскладываем: <b>47 = 40 и 7</b>. Сначала вычитаем десятки: <b>85 − 40 = 45</b>. Потом единицы: <b>45 − 7 = 38</b>. Если единиц не хватает — сначала доводим до круглого!</p>
+  <div class="example" id="mEx"></div>
+  <div id="mSteps"></div>
+  <div class="msg" id="mMsg"></div>
+  <div class="navrow">
+    <button class="bigbtn" id="mNext" disabled>Следующий пример →</button>
+    <span class="cnt" id="mCnt"></span>
+  </div>
+</section>
+
+<!-- ================= 2. РИСОВАШКА ================= -->
+<section id="t2">
+  <h2>🎨 Домик — раскраска цветами Зума</h2>
+  <p class="lead">Выбери часть картинки, реши пример по частям — и она окрасится цветом из палитры Зума!</p>
+  <div class="stage">
+    <div class="picbox">
+      <svg viewBox="0 0 480 430">
+        <!-- небо -->
+        <rect class="zone" data-z="sky" x="2" y="2" width="476" height="426" rx="18"/>
+        <!-- трава -->
+        <rect class="zone" data-z="grass" x="2" y="320" width="476" height="108" rx="18"/>
+        <!-- солнце -->
+        <circle class="zone" data-z="sun" cx="405" cy="70" r="34"/>
+        <!-- стена -->
+        <rect class="zone" data-z="wall" x="150" y="170" width="180" height="150"/>
+        <!-- крыша -->
+        <path class="zone" data-z="roof" d="M120 170 L360 170 L240 70 Z"/>
+        <!-- дверь -->
+        <path class="zone" data-z="door" d="M215 320 L215 243 Q215 235 223 235 L259 235 Q267 235 267 243 L267 320 Z"/>
+        <!-- окно -->
+        <rect class="zone" data-z="window" x="170" y="195" width="55" height="55"/>
+        <!-- котик -->
+        <path class="zone" data-z="cat" d="M345 355 C318 352 316 328 336 323 C330 340 346 346 358 340 L358 366 C344 372 348 358 345 355 Z"/>
+        <ellipse class="zone" data-z="cat" cx="388" cy="352" rx="42" ry="26"/>
+        <circle class="zone" data-z="cat" cx="418" cy="316" r="20"/>
+        <path class="zone" data-z="cat" d="M404 304 L409 286 L419 300 Z"/>
+        <path class="zone" data-z="cat" d="M423 300 L433 286 L437 304 Z"/>
+        <!-- фиксированные украшения -->
+        <g class="fixed">
+          <ellipse cx="105" cy="78" rx="46" ry="17" fill="#ffffff" stroke="#37475a" stroke-width="2.5"/>
+          <circle cx="88" cy="68" r="15" fill="#ffffff" stroke="#37475a" stroke-width="2.5"/>
+          <line x1="197" y1="195" x2="197" y2="250" stroke="#8aa5c4" stroke-width="3"/>
+          <line x1="170" y1="222" x2="225" y2="222" stroke="#8aa5c4" stroke-width="3"/>
+          <circle cx="225" cy="280" r="3.5" fill="#16222f"/>
+          <circle cx="411" cy="314" r="2.5" fill="#ffd60a"/>
+          <circle cx="425" cy="314" r="2.5" fill="#ffd60a"/>
+          <circle cx="60" cy="345" r="4" fill="#ffffff"/>
+          <circle cx="95" cy="382" r="4" fill="#ffffff"/>
+          <circle cx="290" cy="360" r="4" fill="#ffffff"/>
+          <circle cx="330" cy="400" r="4" fill="#ffffff"/>
+        </g>
+      </svg>
+    </div>
+    <div class="panel">
+      <h3 id="panelTitle">✏️ Выбери часть картинки</h3>
+      <div class="zlegend" title="Цвета палитры Зума">
+        <span style="background:#ff5252"></span><span style="background:#ffd60a"></span>
+        <span style="background:#34c759"></span><span style="background:#2f7cf6"></span>
+        <span style="background:#222222"></span><span style="background:#ffffff"></span>
+        <span class="nm">— палитра Зума</span>
+      </div>
+      <div class="stepslog" id="panelLog"></div>
+      <div id="panelBody"><p style="font-size:17px;color:#41546b">Нажми на картинку — появится пример. Раскладываем вычитаемое и вычитаем по частям!</p></div>
+      <div class="msg ok" id="panelDone" style="min-height:26px"></div>
+      <div class="cnt" id="picCnt" style="margin-top:8px">Раскрашено: 0 / 8</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. ПРОВЕРКА ================= -->
+<section id="t3">
+  <h2>🏁 Проверка: считаем сразу!</h2>
+  <p class="lead">Без подсказок: разложила — вычла десятки — вычла единицы. Держи темп!</p>
+  <div class="example" id="qEx"></div>
+  <div class="opts" id="qOpts" style="margin-top:10px"></div>
+  <div class="msg" id="qMsg"></div>
+  <div class="navrow"><span class="cnt" id="qCnt"></span></div>
+</section>
+
+</main>
+
+<div id="finale">
+  <div class="finCard">
+    <div class="e">🎉🏠⭐</div>
+    <div class="t">Вычитание по частям — покорено!</div>
+    <div class="d">Раскладываем — вычитаем десятки — вычитаем единицы. Всё получилось!</div>
+    <button class="bigbtn" onclick="document.getElementById('finale').classList.remove('show')">Ура!</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function el(id){return document.getElementById(id);}
+
+/* ---------- звёзды ---------- */
+var stars=0;
+try{stars=parseInt(localStorage.getItem('sashaStars')||'0',10)||0;}catch(e){}
+function drawStars(){el('starCount').textContent=stars;}
+function addStar(){stars++;try{localStorage.setItem('sashaStars',String(stars));}catch(e){}
+  drawStars();var w=el('stars');w.classList.remove('pop');void w.offsetWidth;w.classList.add('pop');}
+el('addStar').onclick=function(){addStar();};
+el('resetStars').onclick=function(){stars=0;try{localStorage.setItem('sashaStars','0');}catch(e){}drawStars();};
+drawStars();
+
+/* ---------- вкладки ---------- */
+var tabBtns=document.querySelectorAll('#tabs button');
+for(var tb=0;tb<tabBtns.length;tb++){
+  (function(b){b.onclick=function(){
+    for(var k=0;k<tabBtns.length;k++)tabBtns[k].className=(tabBtns[k]===b)?'active':'';
+    var secs=document.querySelectorAll('main>section');
+    for(var m=0;m<secs.length;m++)secs[m].className=(secs[m].id===b.getAttribute('data-tab'))?'active':'';
+  };})(tabBtns[tb]);
+}
+function confetti(n){
+  for(var i=0;i<(n||70);i++){
+    var d=document.createElement('div');
+    d.textContent=['🎉','⭐','✨','💖','🏠','🌟'][i%6];
+    d.style.cssText='position:fixed;top:-40px;left:'+(Math.random()*100)+'vw;font-size:'+(16+Math.random()*22)+'px;z-index:99;pointer-events:none;transition:transform 2.8s ease-in,opacity 2.8s;';
+    document.body.appendChild(d);
+    (function(dd){requestAnimationFrame(function(){requestAnimationFrame(function(){
+      dd.style.transform='translateY('+(window.innerHeight+80)+'px) rotate('+(Math.random()*720-360)+'deg)';dd.style.opacity='0';});});})(d);
+    setTimeout(function(){d.remove();},3300);
+  }
+}
+function ding(f,dur){try{var c=new (window.AudioContext||window.webkitAudioContext)();
+  var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);
+  o.frequency.value=f;g.gain.setValueAtTime(.18,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,c.currentTime+(dur||.2));
+  o.start();o.stop(c.currentTime+(dur||.2));}catch(e){}}
+
+/* ---------- генератор шагов: вычитание по частям ---------- */
+function partsSteps(a,b){
+  var bd=b-b%10, bu=b%10, r=a-bd, fin=a-b, steps=[];
+  steps.push({t:'Шаг 1. Раскладываем вычитаемое: '+b+' = ?', ans:bd+' и '+bu,
+    opts:[bd+' и '+bu, (bd/10)+' и '+bu, (bd+10)+' и '+(10-bu)]});
+  steps.push({t:'Шаг 2. Вычитаем десятки: '+a+' − '+bd+' = ?', ans:r, opts:[r-10,r,r+10]});
+  var ru=r%10;
+  if(ru>=bu || ru===0){
+    steps.push({t:'Шаг 3. Вычитаем единицы: '+r+' − '+bu+' = ?', ans:fin, opts:[fin-1,fin,fin+1]});
+  } else {
+    var su=ru, R10=r-su, rest=bu-su;
+    steps.push({t:'Шаг 3. '+bu+' — это '+su+' и '+rest+'. Сначала до круглого: '+r+' − '+su+' = ?', ans:R10, opts:[R10-10,R10,R10+10]});
+    steps.push({t:'Шаг 4. Осталось: '+R10+' − '+rest+' = ?', ans:fin, opts:[fin-1,fin,fin+1]});
+  }
+  return {title:a+' − '+b+' = ?', steps:steps, fin:fin};
+}
+
+/* ---------- пошаговая машина ---------- */
+function runMachine(exs,prefix){
+  var i=0,step=0,cur=null;
+  var msgEl=el(prefix+'Msg'),stepsEl=el(prefix+'Steps'),nextBtn=el(prefix+'Next'),cntEl=el(prefix+'Cnt');
+  function load(){
+    cur=exs[i];step=0;
+    el(prefix+'Ex').textContent=cur.title;
+    msgEl.textContent='';msgEl.className='msg';
+    nextBtn.disabled=true;
+    nextBtn.textContent=(i===exs.length-1)?'Ещё раз 🔄':'Следующий пример →';
+    cntEl.textContent='Пример '+(i+1)+' из '+exs.length;
+    render();
+  }
+  function render(){
+    stepsEl.innerHTML='';
+    for(var s=0;s<cur.steps.length;s++){
+      if(s<step){
+        var done=document.createElement('div');
+        done.className='step';done.style.opacity='.55';
+        done.innerHTML='<div class="q" style="color:#15803d">'+cur.steps[s].t.replace('= ?','= <b>'+cur.steps[s].ans+'</b>')+'</div>';
+        stepsEl.appendChild(done);
+      }
+      if(s===step){
+        var st=cur.steps[s];
+        var box=document.createElement('div');
+        box.className='step';
+        box.innerHTML='<div class="q">'+st.t+'</div>';
+        var opts=document.createElement('div');opts.className='opts';
+        shuffle(st.opts).forEach(function(v){
+          var b=document.createElement('button');
+          b.style.background='#2f6fd6';b.textContent=v;
+          b.onclick=function(){
+            if(v===st.ans){
+              ding(1000);
+              step++;
+              if(step>=cur.steps.length){
+                msgEl.textContent='✅ '+cur.title.replace(' = ?','')+' = '+cur.fin+'. Расложила — и вычла по частям!';
+                msgEl.className='msg ok';
+                nextBtn.disabled=false;
+                addStar();
+                if(i===exs.length-1)confetti(50);
+              }else render();
+            }else{
+              ding(220,.12);
+              msgEl.textContent=(typeof st.ans==='string')
+                ?'Это не разрядные слагаемые — проверь десятки и единицы 🙂'
+                :'Пересчитай: вычитаем по частям, шаг за шагом 🙂';
+              msgEl.className='msg err';
+              b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
+            }
+          };
+          opts.appendChild(b);
+        });
+        box.appendChild(opts);
+        stepsEl.appendChild(box);
+        break;
+      }
+    }
+  }
+  nextBtn.onclick=function(){i++;if(i>exs.length-1){i=0;}load();};
+  load();
+}
+
+var MINUS=[
+  {a:85,b:47},{a:92,b:56},{a:74,b:39},{a:76,b:43},{a:51,b:35},{a:46,b:18}
+].map(function(x){return partsSteps(x.a,x.b);});
+runMachine(MINUS,'m');
+
+/* ---------- 2. домовик-рисовашка ---------- */
+var ZOOM={red:'#ff5252',yellow:'#ffd60a',green:'#34c759',blue:'#2f7cf6',black:'#222222',white:'#ffffff'};
+var PIC=[
+  {id:'sky',    name:'Небо',   a:76,b:43, c:ZOOM.blue},
+  {id:'sun',    name:'Солнце', a:95,b:58, c:ZOOM.yellow},
+  {id:'roof',   name:'Крыша',  a:83,b:47, c:ZOOM.red},
+  {id:'wall',   name:'Стена',  a:61,b:24, c:ZOOM.yellow},
+  {id:'door',   name:'Дверь',  a:72,b:45, c:ZOOM.blue},
+  {id:'window', name:'Окно',   a:60,b:32, c:ZOOM.white},
+  {id:'grass',  name:'Трава',  a:87,b:29, c:ZOOM.green},
+  {id:'cat',    name:'Котик',  a:95,b:67, c:ZOOM.black}
+];
+PIC.forEach(function(z){z.steps=partsSteps(z.a,z.b).steps;});
+var picSel=null,picDone=0,picStep=0;
+var panelTitle=el('panelTitle'),panelBody=el('panelBody'),panelLog=el('panelLog');
+document.querySelectorAll('.zone').forEach(function(zn){
+  zn.addEventListener('click',function(){
+    if(zn.classList.contains('done'))return;
+    picSel=zn;picStep=0;
+    document.querySelectorAll('.zone').forEach(function(x){x.classList.toggle('sel',x===zn);});
+    var z=PIC.find(function(x){return x.id===zn.dataset.z;});
+    panelTitle.textContent='✏️ '+z.name+': '+z.a+' − '+z.b;
+    panelLog.textContent='';
+    el('panelDone').textContent='';
+    renderPic();
+  });
+});
+function renderPic(){
+  var z=PIC.find(function(x){return x.id===picSel.dataset.z;});
+  var st=z.steps[picStep];
+  panelBody.innerHTML='';
+  var q=document.createElement('div');q.className='q';
+  q.style.fontSize='clamp(21px,2.6vw,29px)';q.style.fontWeight='bold';q.style.marginBottom='10px';
+  q.textContent=st.t;
+  panelBody.appendChild(q);
+  var opts=document.createElement('div');opts.className='opts';
+  shuffle(st.opts).forEach(function(v){
+    var b=document.createElement('button');b.style.background='#2f6fd6';b.textContent=v;
+    b.onclick=function(){
+      if(v===st.ans){
+        ding(1000);picStep++;
+        if(picStep>=z.steps.length){
+          picSel.style.fill=z.c;picSel.classList.remove('sel');picSel.classList.add('done');
+          picSel=null;picDone++;
+          el('picCnt').textContent='Раскрашено: '+picDone+' / '+PIC.length;
+          panelTitle.textContent='✏️ Раскрашено!';
+          panelBody.innerHTML='<p style="font-size:18px;color:#15803d;font-weight:bold">🎉 Готово! Выбирай следующую часть.</p>';
+          panelLog.textContent='';
+          addStar();
+          if(picDone===PIC.length){confetti(90);}
+        }else renderPic();
+      }else{
+        ding(220,.12);
+        panelLog.textContent=(typeof st.ans==='string')
+          ?'Это не разрядные слагаемые 🙂'
+          :'По частям: сначала десятки, потом единицы 🙂';
+        b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
+      }
+    };
+    opts.appendChild(b);
+  });
+  panelBody.appendChild(opts);
+}
+
+/* ---------- 3. проверка ---------- */
+var QUICK=[
+  {t:'65 − 28 = ?',ans:37,opts:[27,37,47]},
+  {t:'93 − 46 = ?',ans:47,opts:[37,47,57]},
+  {t:'52 − 17 = ?',ans:35,opts:[25,35,45]},
+  {t:'80 − 35 = ?',ans:45,opts:[35,45,55]},
+  {t:'42 − 15 = ?',ans:27,opts:[17,27,37]},
+  {t:'97 − 69 = ?',ans:28,opts:[18,28,38]}
+];
+var qi=0;
+function renderQuick(){
+  var q=QUICK[qi];
+  el('qEx').textContent=q.t;
+  el('qMsg').textContent='';el('qMsg').className='msg';
+  el('qCnt').textContent='Пример '+(qi+1)+' из '+QUICK.length;
+  var o=el('qOpts');o.innerHTML='';
+  shuffle(q.opts).forEach(function(v,j){
+    var b=document.createElement('button');
+    b.style.background=['#2f6fd6','#00b894','#e17055'][j%3];b.textContent=v;
+    b.onclick=function(){
+      if(v===q.ans){
+        ding(1100);addStar();
+        el('qMsg').textContent='✅ Верно!';el('qMsg').className='msg ok';
+        qi++;
+        if(qi>=QUICK.length){
+          el('qEx').textContent='🏆';
+          o.innerHTML='';
+          el('qCnt').textContent='Все примеры решены!';
+          el('qMsg').textContent='Вычитание по частям — твоё!';
+          confetti(90);
+          setTimeout(function(){el('finale').classList.add('show');},900);
+        }else setTimeout(renderQuick,600);
+      }else{
+        ding(220,.12);
+        el('qMsg').textContent='По частям: десятки, потом единицы 🙂';
+        el('qMsg').className='msg err';
+        b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
+      }
+    };
+    o.appendChild(b);
+  });
+}
+renderQuick();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

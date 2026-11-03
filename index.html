@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Репетитор Иванова — интерактивные уроки и игры</title>
+<meta name="description" content="Интерактивные уроки-игры по математике, русскому языку, чтению и английскому. Открываются прямо в браузере — с телефона или компьютера.">
+<meta property="og:title" content="Репетитор Иванова — интерактивные уроки и игры">
+<meta property="og:description" content="Математика, русский, чтение и английский: уроки-квесты и тренажёры. Открываются прямо в браузере — с телефона или компьютера.">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Verdana,Arial,sans-serif;background:#f0f4fa;color:#1c2a3a;line-height:1.5}
+.hero{background:linear-gradient(135deg,#7c3aed,#3b82f6 60%,#16a34a);color:#fff;padding:38px 18px 30px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,44px);letter-spacing:.5px;text-shadow:0 2px 8px rgba(0,0,0,.25)}
+.hero p{margin-top:10px;font-size:clamp(15px,2.4vw,19px);opacity:.95}
+.hero .note{margin-top:6px;font-size:14px;opacity:.85}
+nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+nav a{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:8px 14px;border-radius:999px;transition:background .15s}
+nav a:hover{background:rgba(255,255,255,.32)}
+.wrap{max-width:1080px;margin:0 auto;padding:10px 16px 40px}
+section{margin-top:30px}
+.sec-head{display:flex;align-items:center;gap:10px;font-size:clamp(20px,3.4vw,26px);font-weight:bold;color:#243b55;margin-bottom:14px;padding-left:12px;border-left:6px solid #7c3aed}
+.sec-math{border-color:#3b82f6}.sec-ru{border-color:#ef4444}.sec-read{border-color:#16a34a}
+.sec-en{border-color:#f59e0b}.sec-print{border-color:#64748b}.sec-emo{border-color:#ec4899}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:#fff;border-radius:16px;padding:16px;text-decoration:none;color:#1c2a3a;box-shadow:0 2px 10px rgba(20,40,80,.08);border:1px solid #e4ebf5;transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column;gap:6px}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(20,40,80,.16)}
+.card .em{font-size:34px;line-height:1.2}
+.card h3{font-size:17px;line-height:1.3}
+.card p{font-size:13.5px;color:#5a6b80}
+.card .go{margin-top:auto;font-size:13px;font-weight:bold;color:#7c3aed}
+.wide{grid-column:1/-1}
+.series{background:#fff;border:1px solid #e4ebf5;border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(20,40,80,.08)}
+.series h3{font-size:17px;margin-bottom:4px}
+.series p{font-size:13.5px;color:#5a6b80;margin-bottom:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips a{font-size:14px;font-weight:600;color:#243b55;text-decoration:none;background:#eef3fb;border:1.5px solid #d3e0f2;border-radius:999px;padding:7px 13px;transition:all .15s}
+.chips a:hover{background:#7c3aed;border-color:#7c3aed;color:#fff}
+footer{text-align:center;color:#7a8aa0;font-size:14px;padding:26px 16px 40px}
+footer b{color:#7c3aed}
+@media (max-width:560px){.grid{grid-template-columns:1fr 1fr}.card{padding:12px}.card .em{font-size:28px}.card p{font-size:12.5px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>📚 Репетитор Иванова</h1>
+  <p>Интерактивные уроки и игры для школьников</p>
+  <div class="note">Нажми на урок — он откроется прямо в браузере, с телефона или компьютера</div>
+  <nav>
+    <a href="#math">📐 Математика</a>
+    <a href="#ru">✍️ Русский</a>
+    <a href="#read">📖 Чтение</a>
+    <a href="#en">🇬🇧 Английский</a>
+    <a href="#print">📋 Для печати</a>
+    <a href="#emo">🧠 Эмоции</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<section id="math">
+  <div class="sec-head sec-math">📐 Математика</div>
+  <div class="grid">
+    <a class="card" href="matematika-desyatki-i-edinicy.html"><div class="em">🔢</div><h3>Десятки и единицы</h3><p>Складываем двузначные числа по разрядам: единицы, десятки и новый десяток</p><div class="go">Открыть →</div></a>
+    <a class="card" href="matematika-vychitanie-po-chastyam.html"><div class="em">🧮</div><h3>Вычитание по частям</h3><p>Раскладываем вычитание на удобные шаги</p><div class="go">Открыть →</div></a>
+    <a class="card" href="matematika-perehod-cherez-desyatok.html"><div class="em">➕</div><h3>Переход через десяток</h3><p>Сложение с переходом: связываем новый десяток</p><div class="go">Открыть →</div></a>
+    <a class="card" href="matematika-detektiv-vershin.html"><div class="em">🕵️</div><h3>Детектив вершин</h3><p>Расследуем многоугольники: задача №11 ВПР</p><div class="go">Открыть →</div></a>
+    <a class="card" href="matematika-fabrika-girlyand.html"><div class="em">🎄</div><h3>Новогодняя фабрика гирлянд</h3><p>Закономерности и повторяющиеся узоры: задача №11 ВПР</p><div class="go">Открыть →</div></a>
+  </div>
+  <div class="series" style="margin-top:14px">
+    <h3>🚀 Космический курс: 6 миссий</h3>
+    <p>Математика в форме космического приключения — проходи миссии по порядку</p>
+    <div class="chips">
+      <a href="kosmos/m01.html">01 · Станция «Селена»</a>
+      <a href="kosmos/m02.html">02 · Астероид «Рассвет»</a>
+      <a href="kosmos/m03.html">03 · ЦУП</a>
+      <a href="kosmos/m04.html">04 · Архив «Селены»</a>
+      <a href="kosmos/m05.html">05 · КБ «Вега»</a>
+      <a href="kosmos/m06.html">06 · Теплица «Рассвета»</a>
+    </div>
+  </div>
+</section>
+
+<section id="ru">
+  <div class="sec-head sec-ru">✍️ Русский язык</div>
+  <div class="grid">
+    <a class="card" href="russkiy-skloneniya-minecraft.html"><div class="em">⛏</div><h3>Склонения существительных</h3><p>Minecraft: разложи блоки по трём сундукам склонений. Мышкой или на телефоне</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-prilagatelnoe-minecraft.html"><div class="em">🎨</div><h3>Прилагательное</h3><p>Minecraft, этап 2: текстуры и характеристики предметов</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-standoff/index.html"><div class="em">🎯</div><h3>Имя существительное</h3><p>Тренировка «Миссия выполнима»</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-chasti-rechi-minecraft.html"><div class="em">⛏</div><h3>Части речи</h3><p>Minecraft Edition: определяем части речи</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-chasti-rechi-2klass.html"><div class="em">📚</div><h3>Части речи · 2 класс</h3><p>Расширенный урок-тренажёр</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-slovarnye-slova-slogi.html"><div class="em">🧩</div><h3>Собери слово из слогов</h3><p>Словарные слова: собери слово, слушая слоги</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-chk-chn.html"><div class="em">👻</div><h3>«Оно» · чк-чн</h3><p>Правописание сочетаний в стиле «Очень странных дел»</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-stranny-urok-zvuk-bukva.html"><div class="em">⚡</div><h3>Странный урок · 1</h3><p>Звукобуквенный анализ</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-stranny-urok-sinonimy.html"><div class="em">⚡</div><h3>Странный урок · 2</h3><p>Синонимы и антонимы</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-stranny-urok-razbor.html"><div class="em">⚡</div><h3>Странный урок · 3</h3><p>Разбор слова по составу</p><div class="go">Открыть →</div></a>
+    <a class="card" href="russkiy-stranny-urok-morfologiya.html"><div class="em">⚡</div><h3>Странный урок · 4</h3><p>Морфология</p><div class="go">Открыть →</div></a>
+  </div>
+</section>
+
+<section id="read">
+  <div class="sec-head sec-read">📖 Чтение и литература</div>
+  <div class="grid">
+    <a class="card" href="chtenie-skazka-alenushka.html"><div class="em">🐐</div><h3>Алёнушка и Иванушка</h3><p>Сказка-квест: читаем, отвечаем, спасаем сестрицу</p><div class="go">Открыть →</div></a>
+    <a class="card" href="chtenie-zhaba-i-roza.html"><div class="em">🐸</div><h3>Жаба и роза</h3><p>Квест по рассказу Гаршина</p><div class="go">Открыть →</div></a>
+    <a class="card" href="chtenie-ivan-carevich.html"><div class="em">🐺</div><h3>Иван-царевич и серый волк</h3><p>Сказка-квест с боссом и судом над сказкой</p><div class="go">Открыть →</div></a>
+    <a class="card" href="chtenie-vpr-folklor.html"><div class="em">🛡</div><h3>Фольклор · тест-квест</h3><p>Подготовка к ВПР по литературному чтению</p><div class="go">Открыть →</div></a>
+    <a class="card" href="chtenie-knizhnye-miry.html"><div class="em">🌍</div><h3>Книжные Миры</h3><p>Игра по произведениям школьной программы 1–4 класса</p><div class="go">Открыть →</div></a>
+    <a class="card" href="spisok-proizvedeniy-1-4.html"><div class="em">📋</div><h3>Что читаем в начальной школе</h3><p>Список произведений · Школа России, 1–4 класс</p><div class="go">Открыть →</div></a>
+    <a class="card" href="chtenie-misarenko-1.html"><div class="em">🗒</div><h3>Урок чтения №1</h3><p>По системе Мисаренко: таблица, слоги, буквы</p><div class="go">Открыть →</div></a>
+    <a class="card" href="chtenie-misarenko-2.html"><div class="em">🗒</div><h3>Урок чтения №2</h3><p>По системе Мисаренко: продолжение</p><div class="go">Открыть →</div></a>
+    <a class="card" href="literatura-vpr7-podgotovka.html"><div class="em">🏛</div><h3>ВПР-7 · Литература</h3><p>Подготовка: полный тест</p><div class="go">Открыть →</div></a>
+    <a class="card" href="literatura-vpr7-razmery.html"><div class="em">🎼</div><h3>ВПР-7 · Стихотворные размеры</h3><p>Учимся ямбу, хорею и другим размерам</p><div class="go">Открыть →</div></a>
+    <a class="card" href="literatura-vpr7-trenazher.html"><div class="em">🏋</div><h3>ВПР-7 · Тренажёр терминов</h3><p>Литературные термины до автоматизма</p><div class="go">Открыть →</div></a>
+  </div>
+  <div class="series" style="margin-top:14px">
+    <h3>📅 Серия «Урок чтения»: октябрь — ноябрь</h3>
+    <p>Регулярные уроки-тренажёры: слоги, слова, эхо-чтение и картинки</p>
+    <div class="chips">
+      <a href="chtenie-urok-2026-10-30.html">30 октября</a>
+      <a href="chtenie-urok-2026-11-02.html">2 ноября</a>
+      <a href="chtenie-urok-2026-11-04.html">4 ноября</a>
+      <a href="chtenie-urok-2026-11-06.html">6 ноября</a>
+      <a href="chtenie-urok-2026-11-09.html">9 ноября</a>
+      <a href="chtenie-urok-2026-11-11.html">11 ноября</a>
+      <a href="chtenie-urok-2026-11-13.html">13 ноября</a>
+      <a href="chtenie-urok-2026-11-16.html">16 ноября</a>
+      <a href="chtenie-urok-2026-11-18.html">18 ноября</a>
+      <a href="chtenie-urok-2026-11-20.html">20 ноября</a>
+      <a href="chtenie-urok-2026-11-23.html">23 ноября</a>
+      <a href="chtenie-urok-2026-11-25.html">25 ноября</a>
+      <a href="chtenie-urok-2026-11-27.html">27 ноября</a>
+      <a href="chtenie-urok-2026-11-30.html">30 ноября</a>
+    </div>
+  </div>
+</section>
+
+<section id="en">
+  <div class="sec-head sec-en">🇬🇧 Английский</div>
+  <div class="grid">
+    <a class="card" href="english-roblox-avatar.html"><div class="em">🎮</div><h3>My Roblox Avatar</h3><p>Урок английского: описываем своего персонажа</p><div class="go">Открыть →</div></a>
+    <a class="card" href="english-roblox-vremena/index.html"><div class="em">⚡</div><h3>Roblox English · времена</h3><p>Времена глагола и неправильные глаголы</p><div class="go">Открыть →</div></a>
+    <a class="card" href="english-tablitsa-vremen.html"><div class="em">🌐</div><h3>Таблица времён</h3><p>Все времена английского по методу «Полиглот»</p><div class="go">Открыть →</div></a>
+    <a class="card" href="english-present-simple.html"><div class="em">✏️</div><h3>Present Simple · местоимения</h3><p>Тренажёр: местоимения и формы глагола</p><div class="go">Открыть →</div></a>
+    <a class="card" href="english-present-simple-slova.html"><div class="em">✏️</div><h3>Present Simple · слова</h3><p>Тренажёр по словам и фразам</p><div class="go">Открыть →</div></a>
+  </div>
+</section>
+
+<section id="print">
+  <div class="sec-head sec-print">📋 Диагностические таблицы (для печати)</div>
+  <div class="grid">
+    <a class="card" href="tabel-matematika-1-4.html"><div class="em">📊</div><h3>Математика · 1–4</h3><p>Проверка навыков по разделам</p><div class="go">Открыть →</div></a>
+    <a class="card" href="tabel-russkiy-1-4.html"><div class="em">📖</div><h3>Русский язык · 1–4</h3><p>Проверка навыков по разделам</p><div class="go">Открыть →</div></a>
+    <a class="card" href="tabel-chtenie-1-4.html"><div class="em">📚</div><h3>Литературное чтение · 1–4</h3><p>Проверка навыков по разделам</p><div class="go">Открыть →</div></a>
+    <a class="card" href="tabel-okruzhayuschiy-mir-1-4.html"><div class="em">🌍</div><h3>Окружающий мир · 1–4</h3><p>Проверка знаний по темам</p><div class="go">Открыть →</div></a>
+    <a class="card" href="tabel-angliyskiy-2-4.html"><div class="em">🇬🇧</div><h3>Английский · 2–4</h3><p>Диагностическая таблица</p><div class="go">Открыть →</div></a>
+  </div>
+</section>
+
+<section id="emo">
+  <div class="sec-head sec-emo">🧠 Эмоции</div>
+  <div class="grid">
+    <a class="card" href="koleso-emotsiy.html"><div class="em">🧠</div><h3>Колесо эмоций</h3><p>Учимся называть и различать чувства — дошкольникам и младшим школьникам</p><div class="go">Открыть →</div></a>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Все уроки открываются прямо в браузере — на телефоне, планшете и компьютере.<br>
+  <b>📚 Репетитор Иванова</b> · математика · русский · чтение · английский
+</footer>
+
+</body>
+</html>

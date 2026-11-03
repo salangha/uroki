@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ВПР-7 · Литература · Стихотворные размеры</title>
+<meta property="og:title" content="ВПР-7 · Литература · Стихотворные размеры">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#eef2f7; --card:#fff; --ink:#1c2733; --muted:#5b6b7b;
+    --accent:#2b5cad; --accent-dark:#1e4382;
+    --ok:#1e8e4e; --ok-bg:#e2f5ea; --bad:#c63434; --bad-bg:#fbe7e7;
+    --stress:#d62828;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:17px; line-height:1.5;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:12px 12px 40px;}
+  .card{background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:0 2px 10px rgba(30,50,80,.08); margin-top:12px;}
+  h1{font-size:22px; margin:6px 0 4px;}
+  .subtitle{color:var(--muted); font-size:15px; margin:0 0 6px;}
+  .btn{
+    display:block; width:100%; border:0; border-radius:12px; cursor:pointer;
+    font-size:17px; font-family:inherit; padding:14px 16px; margin-top:12px;
+    background:var(--accent); color:#fff; font-weight:700; text-align:center;
+    touch-action:manipulation;
+  }
+  .btn.secondary{background:#dde5ef; color:var(--accent-dark);}
+  .topbar{display:flex; align-items:center; gap:8px; margin-top:2px;}
+  .topbar .task{font-weight:700; font-size:15px; color:var(--muted); white-space:nowrap;}
+  .bar{height:6px; border-radius:3px; background:#d9e1ec; margin-top:8px; overflow:hidden;}
+  .bar > div{height:100%; background:var(--accent); width:0%; transition:width .3s;}
+  .instruction{font-size:14px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; margin:12px 2px 0;}
+  .prose{font-size:16.5px; line-height:1.55;}
+  .prose p{margin:10px 0 0;}
+  .prose b.red{color:var(--stress);}
+  .lessonCard{margin-top:12px;}
+  /* Стихотворная строка */
+  .poem{text-align:center; padding:10px 0 4px;}
+  .pline{font-size:20px; line-height:1.9;}
+  .pline.small{font-size:15px;}
+  .word{display:inline-block; white-space:nowrap;}
+  .st{color:var(--stress); font-size:1.28em; font-weight:800;}
+  .hyph{color:#9fb0c1;}
+  .author{text-align:center; color:var(--muted); font-size:14px; font-style:italic; margin-top:6px;}
+  /* Стопы-шажки */
+  .feetwrap{text-align:center; padding:10px 0 2px;}
+  .foot{
+    display:inline-block; border:2px solid #dbe6f2; background:#f4f8fd; border-radius:9px;
+    padding:3px 6px; margin:3px 2px; font-size:14px; line-height:1.6; white-space:nowrap;
+  }
+  .footlabel{text-align:center; color:var(--accent-dark); font-size:14.5px; font-weight:700; margin-top:8px;}
+  /* Схемы-кружочки */
+  .dot{display:inline-block; width:13px; height:13px; border-radius:50%; border:2px solid #9fb0c1; margin:0 2.5px; vertical-align:middle;}
+  .dot.on{background:var(--stress); border-color:var(--stress);}
+  .scheme{margin:6px 0 2px;}
+  /* Карточка размера */
+  .bro{border:2px solid #dbe6f2; border-radius:12px; background:#fbfcfe; padding:12px 14px; margin-top:10px;}
+  .bro .bname{font-size:20px; font-weight:800;}
+  .bro .bmeta{color:var(--muted); font-size:14px; margin:2px 0 2px;}
+  /* Шпаргалка */
+  .cheat{border-top:1px solid #e4e9f1; padding:10px 0 6px;}
+  .cheat:first-of-type{border-top:0; padding-top:2px;}
+  .cheat .crow{display:flex; align-items:center; gap:10px;}
+  .cheat .cname{font-weight:800; font-size:16.5px; flex:0 0 118px;}
+  .cheat .cline{font-size:14px; line-height:1.7; text-align:right; flex:1;}
+  .cheat .cline .st{font-size:1.2em;}
+  /* Задания */
+  .opt{
+    display:block; width:100%; text-align:left; border:2px solid #d5dce6; border-radius:12px;
+    background:#fbfcfe; padding:12px 14px; margin-top:10px; cursor:pointer;
+    font-size:16.5px; line-height:1.4; font-family:inherit; color:var(--ink); touch-action:manipulation;
+  }
+  .opt:disabled{cursor:default;}
+  .opt.correct{border-color:var(--ok); background:var(--ok-bg); font-weight:600;}
+  .opt.wrong{border-color:var(--bad); background:var(--bad-bg);}
+  .opt.faded{opacity:.55;}
+  .feedback{border-radius:12px; padding:13px 15px; margin-top:14px; font-size:16px; display:none;}
+  .feedback.good{background:var(--ok-bg); border:2px solid var(--ok);}
+  .feedback.bad{background:var(--bad-bg); border:2px solid var(--bad);}
+  .feedback .verdict{font-weight:700; margin-bottom:6px;}
+  .feedback .verdict.good{color:var(--ok);}
+  .feedback .verdict.bad{color:var(--bad);}
+  .hintbox{margin-top:14px; font-size:14.5px; color:var(--muted);}
+  .hintbox summary{cursor:pointer; font-weight:700; color:var(--accent-dark);}
+  .navrow{display:flex; gap:10px;}
+  .navrow .btn{flex:1;}
+  #backBtn{max-width:130px;}
+  #nextBtn{display:none;}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- СТАРТ -->
+  <div id="screenStart">
+    <div class="card">
+      <h1>Учимся стихотворным размерам</h1>
+      <p class="subtitle">Подготовка к ВПР · Литература · 7 класс</p>
+      <p class="subtitle">Что такое стопа? Чем ямб отличается от хорея? Где живёт амфибрахий?
+      Ты узнаешь это, просто глядя на <b style="color:var(--stress);">красные слоги</b>, — без скучных определений.</p>
+      <button class="btn" id="startBtn">Начать урок</button>
+    </div>
+  </div>
+
+  <!-- УРОК -->
+  <div id="screenLesson" class="hidden">
+    <div class="topbar">
+      <div class="task" id="stepCounter"></div>
+    </div>
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="instruction" id="instr"></div>
+    <div class="card lessonCard">
+      <div id="slideBody"></div>
+      <div class="feedback" id="feedback">
+        <div class="verdict" id="verdict"></div>
+        <div class="expl" id="explText"></div>
+      </div>
+      <div class="navrow">
+        <button class="btn secondary" id="backBtn">Назад</button>
+        <button class="btn" id="nextBtn">Дальше</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+"use strict";
+
+/* ==== ДАННЫЕ: строчки (ударный слог помечен звёздочкой перед ним) ==== */
+var L = {
+  tanya:  "*НА-ша *ТА-ня *ГРОМ-ко *ПЛА-чет",
+  lyublu: "лю-*БЛЮ гро-*ЗУ в-на-*ЧА-ле *МА-ю",
+  tuchki: "*ТУЧ-ки не-*БЕС-ны-е, *ВЕЧ-ны-е *СТРАН-ни-ки",
+  odnazhdy: "Од-*НАЖ-ды в-сту-*ДЁ-ну-ю *ЗИМ-ню-ю *ПО-ру",
+  doroga: "Что ты *ЖАД-но гля-*ДИШЬ на до-*РО-гу",
+  burya:  "*БУ-ря мгло-*ю *НЕ-бо *КРО-ет",
+  dyadya: "Мой дя-*дя *СА-мых *ЧЕСТ-ных *ПРА-вил",
+  osen1:  "*СЛАВ-на-я! Здо-*РО-вый, яд-*РЁ-ный",
+  osen2:  "*ВОЗ-дух у-*СТА-лы-е *СИ-лы бо-*ДРИТ",
+  veter:  "не *ВЕ-тер бу-*ШУ-ет над *БО-ром"
+};
+
+/* Схема: 1 — красный (ударный) кружок, 0 — чёрный */
+var SIZES = [
+  {name:"Хорей",      dots:[1,0],   line:L.tanya,  author:"А. Барто"},
+  {name:"Ямб",        dots:[0,1],   line:L.lyublu, author:"Ф. Тютчев, «Весенняя гроза»"},
+  {name:"Дактиль",    dots:[1,0,0], line:L.tuchki, author:"М. Лермонтов"},
+  {name:"Амфибрахий", dots:[0,1,0], line:L.odnazhdy, author:"Н. Некрасов, «Крестьянские дети»"},
+  {name:"Анапест",    dots:[0,0,1], line:L.doroga, author:"Н. Некрасов, «Тройка»"}
+];
+
+/* Задания: угадай размер по строчке */
+var PRACTICE = [
+  {lines:[L.tanya], author:"А. Барто", name:"Хорей",
+   expl:"Между красными — по <b>одному</b> чёрному слогу, значит шажок из <b>двух</b> слогов. Красный стоит на <b>1-м</b> месте шажка. Два слога + 1-е место = <b>хорей</b>."},
+  {lines:[L.dyadya], author:"А. Пушкин, «Евгений Онегин»", name:"Ямб",
+   expl:"Между красными — по <b>одному</b> чёрному слогу, значит шажок из <b>двух</b> слогов. Красный стоит на <b>2-м</b> месте. Два слога + 2-е место = <b>ямб</b>."},
+  {lines:[L.osen1, L.osen2], author:"Н. Некрасов, «Железная дорога»", name:"Дактиль",
+   expl:"Между красными — по <b>два</b> чёрных слога, значит шажок из <b>трёх</b> слогов. Красный стоит на <b>1-м</b> месте. Три слога + 1-е место = <b>дактиль</b>."},
+  {lines:[L.veter], author:"Н. Некрасов, «Мороз, Красный нос»", name:"Амфибрахий",
+   expl:"Между красными — по <b>два</b> чёрных слога, значит шажок из <b>трёх</b> слогов. Красный стоит на <b>2-м</b> (среднем) месте. Три слога + 2-е место = <b>амфибрахий</b>."},
+  {lines:[L.doroga], author:"Н. Некрасов, «Тройка»", name:"Анапест",
+   expl:"Между красными — по <b>два</b> чёрных слога, значит шажок из <b>трёх</b> слогов. Красный стоит на <b>3-м</b> (последнем) месте. Три слога + 3-е место = <b>анапест</b>."}
+];
+
+/* ==== Рендер строчек ==== */
+function lineHTML(str){
+  return str.split(" ").map(function(word){
+    var parts = word.split("-").map(function(s){
+      var stressed = s.charAt(0) === "*";
+      var text = stressed ? s.slice(1) : s;
+      return {stressed: stressed, text: text};
+    });
+    var html = parts.map(function(p, i){
+      var hyph = i ? '<span class="hyph">-</span>' : "";
+      return hyph + (p.stressed ? '<span class="st">' + p.text + "</span>" : '<span class="un">' + p.text + "</span>");
+    }).join("");
+    return '<span class="word">' + html + "</span>";
+  }).join(" ");
+}
+
+function poemHTML(lines, small){
+  return lines.map(function(s){ return '<div class="pline' + (small ? " small" : "") + '">' + lineHTML(s) + "</div>"; }).join("");
+}
+
+function schemeHTML(dots){
+  return dots.map(function(d){ return '<span class="dot' + (d ? " on" : "") + '"></span>'; }).join("");
+}
+
+/* Шажки-стопы для строки (группами по n слогов) */
+function feetHTML(str, n){
+  var all = [];
+  str.split(" ").forEach(function(word){
+    word.split("-").forEach(function(s){
+      all.push({stressed: s.charAt(0) === "*", text: s.charAt(0) === "*" ? s.slice(1) : s});
+    });
+  });
+  var out = "";
+  for (var i = 0; i < all.length; i += n){
+    var foot = all.slice(i, i + n).map(function(p, j){
+      var hyph = j ? '<span class="hyph">-</span>' : "";
+      return hyph + (p.stressed ? '<span class="st">' + p.text + "</span>" : '<span class="un">' + p.text + "</span>");
+    }).join("");
+    out += '<span class="foot">' + foot + "</span>";
+  }
+  return out;
+}
+
+/* ==== Экраны урока ==== */
+var SLIDES = [
+
+  {instr:"Шаг 1 · Смотри, как стихи шагают", build:function(box){
+    box.innerHTML =
+      '<div class="prose">' +
+      '<p>Прочитай строчку и посмотри на <b class="red">красные</b> слоги. Красные — это <b>ударные</b>: они звучат громче и сильнее остальных.</p>' +
+      '</div>' +
+      '<div class="poem">' + poemHTML([L.tanya]) +
+      '<div class="author">А. Барто</div></div>' +
+      '<div class="prose">' +
+      '<p>Заметь: красные слоги идут <b>через один чёрный</b> — красный-чёрный, красный-чёрный. Это не случайность. Это <b>ритм</b> — как стук колёс поезда: тук-тук, тук-тук.</p>' +
+      '<p>Стихотворение «шагает» одинаковыми кусочками.</p>' +
+      '</div>';
+  }},
+
+  {instr:"Шаг 2 · Что такое стопа", build:function(box){
+    box.innerHTML =
+      '<div class="feetwrap">' + feetHTML(L.tanya, 2) + "</div>" +
+      '<div class="footlabel">↑ один такой шажок называется СТОПА</div>' +
+      '<div class="prose">' +
+      '<p>Каждая рамочка на картинке — кусочек ритма <b>от красного слога до следующего красного</b>. Он и называется <b>стопа</b>.</p>' +
+      '<p>Слово честное: «стопа» — это буквально <b>«нога»</b> (англичане называют её словом <i>foot</i> — тоже «нога»). Стихотворение шагает стопами, как ты шагаешь ногами.</p>' +
+      '<p>А «двусложная стопа» значит просто <b>«шажок из двух слогов»</b>, «трёхсложная» — <b>«из трёх»</b>. Два + слог = двусложная, три + слога = трёхсложная.</p>' +
+      "</div>";
+  }},
+
+  {instr:"Шаг 3 · Метод: три коротких вопроса", build:function(box){
+    box.innerHTML =
+      '<div class="prose">' +
+      "<p>Как узнать размер любой строчки? Задай себе три вопроса:</p>" +
+      "<p><b>1. Сколько чёрных слогов между красными?</b><br>" +
+      "Один → шажок из <b>2</b> слогов. Два → шажок из <b>3</b> слогов.</p>" +
+      "<p><b>2. На каком месте красный внутри своего шажка?</b><br>" +
+      "Первое, второе или третье.</p>" +
+      "<p><b>3. Назови имя.</b> Имен всего пять:<br>" +
+      "• шажок из 2 слогов: красный на 1-м месте — <b>хорей</b>, на 2-м — <b>ямб</b>;<br>" +
+      "• шажок из 3 слогов: 1-е место — <b>дактиль</b>, 2-е — <b>амфибрахий</b>, 3-е — <b>анапест</b>.</p>" +
+      "<p>Всё. Больше ничего запоминать не нужно.</p>" +
+      "</div>";
+  }},
+
+  {instr:"Шаг 4 · Два брата: шажок из 2 слогов", build:function(box){
+    box.innerHTML =
+      '<div class="bro"><div class="bname">Хорей</div>' +
+      '<div class="bmeta">в шажке 2 слога, красный на 1-м месте</div>' +
+      '<div class="scheme">' + schemeHTML([1,0]) + "</div>" +
+      '<div class="poem" style="padding:4px 0 0;">' + poemHTML([L.tanya], true) + '</div>' +
+      '<div class="author">А. Барто</div></div>' +
+      '<div class="bro"><div class="bname">Ямб</div>' +
+      '<div class="bmeta">в шажке 2 слога, красный на 2-м месте</div>' +
+      '<div class="scheme">' + schemeHTML([0,1]) + "</div>" +
+      '<div class="poem" style="padding:4px 0 0;">' + poemHTML([L.lyublu], true) + '</div>' +
+      '<div class="author">Ф. Тютчев, «Весенняя гроза»</div></div>' +
+      '<div class="prose"><p>Братья одинаковые — в шажке по 2 слога. Разница ровно одна: <b>куда переселился красный слог</b>.</p></div>';
+  }},
+
+  {instr:"Шаг 5 · Три брата: шажок из 3 слогов", build:function(box){
+    box.innerHTML =
+      '<div class="bro"><div class="bname">Дактиль</div>' +
+      '<div class="bmeta">в шажке 3 слога, красный на 1-м месте</div>' +
+      '<div class="scheme">' + schemeHTML([1,0,0]) + "</div>" +
+      '<div class="poem" style="padding:4px 0 0;">' + poemHTML([L.tuchki], true) + '</div>' +
+      '<div class="author">М. Лермонтов</div></div>' +
+      '<div class="bro"><div class="bname">Амфибрахий</div>' +
+      '<div class="bmeta">в шажке 3 слога, красный посередине</div>' +
+      '<div class="scheme">' + schemeHTML([0,1,0]) + "</div>" +
+      '<div class="poem" style="padding:4px 0 0;">' + poemHTML([L.odnazhdy], true) + '</div>' +
+      '<div class="author">Н. Некрасов, «Крестьянские дети»</div></div>' +
+      '<div class="bro"><div class="bname">Анапест</div>' +
+      '<div class="bmeta">в шажке 3 слога, красный на 3-м (последнем) месте</div>' +
+      '<div class="scheme">' + schemeHTML([0,0,1]) + "</div>" +
+      '<div class="poem" style="padding:4px 0 0;">' + poemHTML([L.doroga], true) + '</div>' +
+      '<div class="author">Н. Некрасов, «Тройка»</div></div>' +
+      '<div class="prose"><p>Красный слог гуляет по трём местам: <b>первый</b> — дактиль, <b>посередине</b> — амфибрахий, <b>последний</b> — анапест.</p></div>';
+  }},
+
+  {instr:"Шпаргалка · держи под рукой", build:function(box){
+    var rows = SIZES.map(function(s){
+      return '<div class="cheat"><div class="crow">' +
+        '<div class="cname">' + s.name + "</div>" +
+        '<div class="scheme">' + schemeHTML(s.dots) + "</div>" +
+        "</div>" +
+        '<div class="cline">' + poemHTML([s.line], true) +
+        ' <span class="author" style="display:inline; margin-left:6px;">— ' + s.author + "</span></div>" +
+        "</div>";
+    }).join("");
+    box.innerHTML = rows +
+      '<div class="prose"><p>Сфотографируй этот экран или возвращайся к нему, пока тренируешься. Дальше — задания.</p></div>';
+  }},
+
+  /* Задания */
+  {instr:"Задание 1 из 5 · разминка", practice:0},
+  {instr:"Задание 2 из 5", practice:1},
+  {instr:"Задание 3 из 5", practice:2},
+  {instr:"Задание 4 из 5", practice:3},
+  {instr:"Задание 5 из 5", practice:4},
+
+  {instr:"Готово!", build:function(box){
+    var rows = SIZES.map(function(s){
+      return '<div class="cheat"><div class="crow">' +
+        '<div class="cname">' + s.name + "</div>" +
+        '<div class="scheme">' + schemeHTML(s.dots) + "</div>" +
+        "</div></div>";
+    }).join("");
+    box.innerHTML =
+      '<div class="prose">' +
+      "<p><b>Теперь ты умеешь узнавать размер любой строчки.</b> Три вопроса: сколько чёрных между красными → на каком месте красный → назови имя.</p>" +
+      "</div>" + rows +
+      '<button class="btn" id="restartBtn">Пройти урок ещё раз</button>';
+    box.querySelector("#restartBtn").addEventListener("click", function(){ renderSlide(0); });
+  }}
+];
+
+/* ==== Движок ==== */
+var cur = 0;
+
+function el(id){ return document.getElementById(id); }
+
+function renderSlide(i){
+  cur = i;
+  var slide = SLIDES[i];
+  el("instr").textContent = slide.instr;
+  el("stepCounter").textContent = "Шаг " + (i + 1) + " из " + SLIDES.length;
+  el("barFill").style.width = Math.round(100 * (i + 1) / SLIDES.length) + "%";
+  el("feedback").style.display = "none";
+  var nb = el("nextBtn");
+  if (slide.practice !== undefined){
+    nb.style.display = "none";
+    renderPractice(slide.practice);
+  } else {
+    nb.style.display = (i === SLIDES.length - 1) ? "none" : "block";
+    nb.textContent = "Дальше";
+    el("slideBody").style.display = "";
+    slide.build(el("slideBody"));
+  }
+  el("backBtn").style.visibility = i > 0 ? "visible" : "hidden";
+  window.scrollTo(0, 0);
+}
+
+function renderPractice(pi){
+  var item = PRACTICE[pi];
+  var box = el("slideBody");
+  box.style.display = "";
+  var opts = ["Хорей", "Ямб", "Дактиль", "Амфибрахий", "Анапест"].slice();
+  for (var i = opts.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = opts[i]; opts[i] = opts[j]; opts[j] = t;
+  }
+  box.innerHTML =
+    '<div class="poem">' + poemHTML(item.lines) +
+    '<div class="author">' + item.author + "</div></div>" +
+    '<div class="prose"><p><b>Как называется размер этой строчки?</b></p></div>' +
+    '<div id="opts"></div>' +
+    '<details class="hintbox"><summary>Подсказка: три вопроса</summary>' +
+    "Сколько чёрных слогов между красными? На каком месте красный в своём шажке? Назови имя.</details>";
+  var optsBox = box.querySelector("#opts");
+  opts.forEach(function(name){
+    var b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = name;
+    b.addEventListener("click", function(){
+      var btns = optsBox.querySelectorAll(".opt");
+      for (var k = 0; k < btns.length; k++){
+        btns[k].disabled = true;
+        if (btns[k].textContent === item.name) btns[k].classList.add("correct");
+        else if (btns[k] !== b) btns[k].classList.add("faded");
+      }
+      var fb = el("feedback"), v = el("verdict");
+      if (name === item.name){
+        fb.className = "feedback good"; v.className = "verdict good";
+        v.textContent = "Верно!";
+        el("explText").innerHTML = item.expl;
+      } else {
+        b.classList.add("wrong"); b.classList.remove("faded");
+        fb.className = "feedback bad"; v.className = "verdict bad";
+        v.textContent = "Почти! Правильный ответ: " + item.name;
+        el("explText").innerHTML = item.expl;
+      }
+      fb.style.display = "block";
+      el("nextBtn").style.display = "block";
+      el("nextBtn").textContent = (cur === SLIDES.length - 2) ? "Завершить урок" : "Дальше";
+    });
+    optsBox.appendChild(b);
+  });
+}
+
+function show(screen){
+  el("screenStart").classList.toggle("hidden", screen !== "start");
+  el("screenLesson").classList.toggle("hidden", screen !== "lesson");
+}
+
+el("startBtn").addEventListener("click", function(){ show("lesson"); renderSlide(0); });
+el("backBtn").addEventListener("click", function(){ if (cur > 0) renderSlide(cur - 1); });
+el("nextBtn").addEventListener("click", function(){ if (cur < SLIDES.length - 1) renderSlide(cur + 1); });
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

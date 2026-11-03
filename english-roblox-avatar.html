@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 My Roblox Avatar - Урок английского</title>
+<meta property="og:title" content="My Roblox Avatar — урок английского">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        .stage {
+            padding: 30px;
+            border-bottom: 3px dashed #e0e0e0;
+        }
+        .stage:last-child {
+            border-bottom: none;
+        }
+        .stage-number {
+            display: inline-block;
+            background: #4ecdc4;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-right: 15px;
+        }
+        .stage-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .avatar-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+            border: 4px solid #fdcb6e;
+        }
+        .avatar-image {
+            font-size: 8em;
+            margin: 20px 0;
+            display: block;
+        }
+        .question-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: 1.2em;
+        }
+        .question-box strong {
+            color: #1565c0;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .card {
+            background: white;
+            border: 3px solid #4ecdc4;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
+        }
+        .card .emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .card .word {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .card .translation {
+            font-size: 1em;
+            color: #7f8c8d;
+        }
+        .grammar-box {
+            background: #f8f9fa;
+            border: 3px solid #95a5a6;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .grammar-box h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .grammar-rule {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+            font-size: 1.2em;
+        }
+        .grammar-rule .example {
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+        }
+        .text-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border: 3px solid #ffc107;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+        .text-box p {
+            margin-bottom: 15px;
+        }
+        .text-box .highlight {
+            background: #fff59d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .quiz {
+            background: #f3e5f5;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .quiz-question {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #9c27b0;
+            font-size: 1.15em;
+        }
+        .quiz-question strong {
+            color: #6a1b9a;
+        }
+        .answer-space {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fafafa;
+            border: 2px dashed #bdbdbd;
+            border-radius: 6px;
+            min-height: 40px;
+            color: #757575;
+            font-style: italic;
+        }
+        .frame-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .frame {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 1.3em;
+            border-left: 4px solid #4caf50;
+        }
+        .frame .blank {
+            display: inline-block;
+            min-width: 150px;
+            border-bottom: 2px solid #4caf50;
+            margin: 0 5px;
+            padding: 2px 8px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .reflection {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .reflection h3 {
+            color: #c2185b;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .next-lesson {
+            background: #fff3e0;
+            border: 2px dashed #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .next-lesson strong {
+            color: #e65100;
+        }
+        .emoji-big {
+            font-size: 2em;
+            margin: 0 5px;
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 2px solid #333;
+        }
+        .instruction {
+            background: #fff8e1;
+            border-left: 5px solid #ffa000;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-style: italic;
+            color: #5d4037;
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .cards { grid-template-columns: repeat(2, 1fr); }
+            .stage { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 My Roblox Avatar 🎮</h1>
+            <p>Мой аватар в Роблокс</p>
+            <p style="margin-top: 10px; font-size: 1em;">Урок английского языка • 5 минут</p>
+        </div>
+
+        <!-- ЭТАП 1: МОТИВАЦИЯ -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">1</span>
+                Let's talk! 🗣️
+            </div>
+            
+            <div class="avatar-box">
+                <p style="font-size: 1.3em; margin-bottom: 10px;">Посмотри на аватар 👇</p>
+                <span class="avatar-image">🧍‍♂️</span>
+                <p style="font-size: 1.2em;">Это аватар из Roblox!</p>
+            </div>
+
+            <div class="question-box">
+                <strong>🤔 Вопрос 1:</strong> Как зовут твоего персонажа в Roblox?
+                <div class="answer-space">Ответ: _________________________</div>
+            </div>
+
+            <div class="question-box">
+                <strong>🤔 Вопрос 2:</strong> Какой он? (высокий, низкий, крутой, сильный)
+                <div class="answer-space">Ответ: _________________________</div>
+            </div>
+        </div>
+
+        <!-- ЭТАП 2: СЛОВА -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">2</span>
+                New words! 📚
+            </div>
+
+            <p style="font-size: 1.2em; margin-bottom: 15px;">Повтори за мной каждое слово 2 раза 👇</p>
+
+            <h3 style="color: #e74c3c; margin: 20px 0 10px 0;">👤 Внешность (Appearance):</h3>
+            <div class="cards">
+                <div class="card">
+                    <div class="emoji">📏</div>
+                    <div class="word">tall</div>
+                    <div class="translation">высокий</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">📐</div>
+                    <div class="word">short</div>
+                    <div class="translation">низкий</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">👀</div>
+                    <div class="word">big eyes</div>
+                    <div class="translation">большие глаза</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">💪</div>
+                    <div class="word">strong</div>
+                    <div class="translation">сильный</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">😎</div>
+                    <div class="word">cool</div>
+                    <div class="translation">крутой</div>
+                </div>
+            </div>
+
+            <h3 style="color: #3498db; margin: 20px 0 10px 0;">👕 Одежда (Clothes):</h3>
+            <div class="cards">
+                <div class="card">
+                    <div class="emoji">👕</div>
+                    <div class="word">T-shirt</div>
+                    <div class="translation">футболка</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">👖</div>
+                    <div class="word">jeans</div>
+                    <div class="translation">джинсы</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">👟</div>
+                    <div class="word">shoes</div>
+                    <div class="translation">обувь</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">🧢</div>
+                    <div class="word">hat</div>
+                    <div class="translation">шапка</div>
+                </div>
+                <div class="card">
+                    <div class="emoji">🎭</div>
+                    <div class="word">mask</div>
+                    <div class="translation">маска</div>
+                </div>
+            </div>
+
+            <h3 style="color: #9c27b0; margin: 20px 0 10px 0;">🎨 Цвета (Colours):</h3>
+            <div class="cards">
+                <div class="card">
+                    <div class="emoji"><span class="color-swatch" style="background: red;"></span></div>
+                    <div class="word">red</div>
+                    <div class="translation">красный</div>
+                </div>
+                <div class="card">
+                    <div class="emoji"><span class="color-swatch" style="background: blue;"></span></div>
+                    <div class="word">blue</div>
+                    <div class="translation">синий</div>
+                </div>
+                <div class="card">
+                    <div class="emoji"><span class="color-swatch" style="background: black;"></span></div>
+                    <div class="word">black</div>
+                    <div class="translation">чёрный</div>
+                </div>
+                <div class="card">
+                    <div class="emoji"><span class="color-swatch" style="background: white;"></span></div>
+                    <div class="word">white</div>
+                    <div class="translation">белый</div>
+                </div>
+                <div class="card">
+                    <div class="emoji"><span class="color-swatch" style="background: green;"></span></div>
+                    <div class="word">green</div>
+                    <div class="translation">зелёный</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭТАП 3: ГРАММАТИКА -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">3</span>
+                Grammar time! 📝
+            </div>
+
+            <div class="grammar-box">
+                <h3>🔵 Глагол <span style="color: #3498db;">IS</span> (есть, является)</h3>
+                <p>Используем, чтобы описать, <strong>какой</strong> аватар:</p>
+                <div class="grammar-rule">
+                    My avatar <strong>is</strong> tall.
+                    <span class="example">Мой аватар высокий.</span>
+                </div>
+                <div class="grammar-rule">
+                    He <strong>is</strong> cool.
+                    <span class="example">Он крутой.</span>
+                </div>
+                <div class="grammar-rule">
+                    He <strong>is</strong> strong.
+                    <span class="example">Он сильный.</span>
+                </div>
+            </div>
+
+            <div class="grammar-box">
+                <h3>🟢 Конструкция <span style="color: #27ae60;">HAS GOT</span> (имеет)</h3>
+                <p>Используем, чтобы рассказать, что <strong>есть у</strong> аватара:</p>
+                <div class="grammar-rule">
+                    He <strong>has got</strong> big eyes.
+                    <span class="example">У него большие глаза.</span>
+                </div>
+                <div class="grammar-rule">
+                    He <strong>has got</strong> a red T-shirt.
+                    <span class="example">У него красная футболка.</span>
+                </div>
+                <div class="grammar-rule">
+                    He <strong>has got</strong> black jeans.
+                    <span class="example">У него чёрные джинсы.</span>
+                </div>
+            </div>
+
+            <div class="instruction">
+                💡 <strong>Запомни:</strong><br>
+                • <strong>IS</strong> → какой он? (высокий, крутой, сильный)<br>
+                • <strong>HAS GOT</strong> → что у него есть? (глаза, футболка, джинсы)
+            </div>
+        </div>
+
+        <!-- ЭТАП 4: ТЕКСТ -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">4</span>
+                Read the text! 📖
+            </div>
+
+            <p style="font-size: 1.2em; margin-bottom: 15px;">Прочитай текст вслух 👇</p>
+
+            <div class="text-box">
+                <p>My avatar <span class="highlight">is</span> cool.</p>
+                <p>He <span class="highlight">is</span> tall and strong.</p>
+                <p>He <span class="highlight">has got</span> short hair and big eyes.</p>
+                <p>He <span class="highlight">has got</span> a red T-shirt, black jeans and white shoes.</p>
+                <p>I like my avatar!</p>
+            </div>
+
+            <div class="instruction">
+                💡 <strong>Подсказка:</strong> Обрати внимание на выделенные слова. <span style="color: #3498db; font-weight: bold;">IS</span> — какой он. <span style="color: #27ae60; font-weight: bold;">HAS GOT</span> — что у него есть.
+            </div>
+        </div>
+
+        <!-- ЭТАП 5: ВОПРОСЫ -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">5</span>
+                Answer the questions! ❓
+            </div>
+
+            <div class="quiz">
+                <p style="font-size: 1.2em; margin-bottom: 15px;">Ответь на вопросы по тексту 👇</p>
+
+                <div class="quiz-question">
+                    <strong>Вопрос 1:</strong> Is the avatar tall or short?
+                    <div class="answer-space">Ответ: The avatar is _________.</div>
+                </div>
+
+                <div class="quiz-question">
+                    <strong>Вопрос 2:</strong> What colour is his T-shirt?
+                    <div class="answer-space">Ответ: His T-shirt is _________.</div>
+                </div>
+
+                <div class="quiz-question">
+                    <strong>Вопрос 3:</strong> Has he got a hat?
+                    <div class="answer-space">Ответ: _________, he _________.</div>
+                </div>
+
+                <div class="quiz-question">
+                    <strong>Вопрос 4:</strong> What colour are his jeans?
+                    <div class="answer-space">Ответ: His jeans are _________.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭТАП 6: СОБСТВЕННЫЙ МОНОЛОГ -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">6</span>
+                Tell me about YOUR avatar! 🎤
+            </div>
+
+            <p style="font-size: 1.2em; margin-bottom: 15px;">Составь рассказ о своём аватаре, используя рамки 👇</p>
+
+            <div class="frame-box">
+                <h3 style="color: #2e7d32; margin-bottom: 15px;">📝 Мой рассказ:</h3>
+
+                <div class="frame">
+                    My avatar <span class="blank">is ...</span> and <span class="blank">...</span>.
+                    <div style="font-size: 0.8em; color: #757575; margin-top: 5px;">(выбери 2 прилагательных: tall, short, cool, strong)</div>
+                </div>
+
+                <div class="frame">
+                    He <span class="blank">has got ...</span> hair and <span class="blank">...</span> eyes.
+                    <div style="font-size: 0.8em; color: #757575; margin-top: 5px;">(short/long + big/small)</div>
+                </div>
+
+                <div class="frame">
+                    He <span class="blank">has got</span> a <span class="blank">colour</span> <span class="blank">T-shirt</span>,
+                    <div style="font-size: 0.8em; color: #757575; margin-top: 5px;">(выбери цвет и предмет одежды)</div>
+                </div>
+
+                <div class="frame">
+                    <span class="blank">colour</span> <span class="blank">jeans</span> and <span class="blank">colour</span> <span class="blank">shoes</span>.
+                    <div style="font-size: 0.8em; color: #757575; margin-top: 5px;">(дополни одежду)</div>
+                </div>
+
+                <div class="frame">
+                    I <span class="blank">like</span> my avatar!
+                </div>
+            </div>
+
+            <div class="instruction">
+                💡 <strong>Пример ответа:</strong><br>
+                «My avatar is tall and cool. He has got short hair and big eyes. He has got a blue T-shirt, black jeans and white shoes. I like my avatar!»
+            </div>
+        </div>
+
+        <!-- ЭТАП 7: РЕФЛЕКСИЯ -->
+        <div class="stage">
+            <div class="stage-title">
+                <span class="stage-number">7</span>
+                Well done! 🎉
+            </div>
+
+            <div class="reflection">
+                <h3>🌟 Ты молодец! 🌟</h3>
+                <p style="font-size: 1.3em; margin: 15px 0;">Ты научился:</p>
+                <p style="font-size: 1.2em; margin: 10px 0;">✅ Описывать внешность по-английски</p>
+                <p style="font-size: 1.2em; margin: 10px 0;">✅ Рассказывать об одежде</p>
+                <p style="font-size: 1.2em; margin: 10px 0;">✅ Использовать <strong>is</strong> и <strong>has got</strong></p>
+                <p style="font-size: 1.2em; margin: 10px 0;">✅ Составлять рассказ из 4-5 фраз</p>
+            </div>
+
+            <div class="next-lesson">
+                <p><strong>🚀 Вопрос на засыпку:</strong></p>
+                <p style="font-size: 1.2em; margin: 15px 0;">Что твой аватар <strong>делает</strong> в игре?</p>
+                <p style="font-size: 1.1em;">Завтра мы расскажем, во что он играет и что умеет делать!</p>
+                <p style="font-size: 1.3em; margin-top: 15px;">
+                    Как по-английски:<br>
+                    🏃 <strong>бегать</strong> — ?<br>
+                    🦘 <strong>прыгать</strong> — ?<br>
+                    🏗️ <strong>строить</strong> — ?
+                </p>
+            </div>
+        </div>
+
+    </div>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

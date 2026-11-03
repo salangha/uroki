@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Simple</title>
+<meta property="og:title" content="Present Simple · слова">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            color: #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ff6b35;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .section {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            color: #ff6b35;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .section h3 {
+            color: #ffcc00;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Таблица спряжения */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 10px;
+        }
+
+        th {
+            padding: 15px;
+            background: rgba(255, 107, 53, 0.15);
+            border-radius: 12px;
+            color: #ffcc80;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 18px 15px;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 1.1rem;
+        }
+
+        .pronoun {
+            background: rgba(255,255,255,0.08);
+            color: #c0c0e0;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .verb-form {
+            background: rgba(255, 107, 53, 0.12);
+            color: #fff;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .verb-form strong {
+            color: #ffcc00;
+            font-size: 1.3rem;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: #1a1a2e;
+            font-weight: 700;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 0 25px rgba(255, 107, 53, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .highlight strong {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 107, 53, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 40px rgba(255, 107, 53, 0.6); }
+        }
+
+        /* Сетки глаголов */
+        .verbs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .verb-card {
+            background: rgba(78, 205, 196, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        .verb-card .base-form {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .verb-card .third-person {
+            font-size: 1.2rem;
+            color: #4ecdc4;
+            font-weight: 700;
+        }
+
+        .verb-card .translation {
+            font-size: 0.85rem;
+            color: #8080a0;
+            margin-top: 5px;
+        }
+
+        /* Особые блоки */
+        .es-block {
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            background: rgba(255, 204, 0, 0.05);
+        }
+
+        .es-block h2 {
+            color: #ffcc00;
+        }
+
+        .es-block .verb-card {
+            border-color: rgba(255, 204, 0, 0.3);
+            background: rgba(255, 204, 0, 0.08);
+        }
+
+        .es-block .third-person {
+            color: #ffcc00;
+        }
+
+        .ies-block {
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .ies-block h2 {
+            color: #667eea;
+        }
+
+        .ies-block .verb-card {
+            border-color: rgba(102, 126, 234, 0.3);
+            background: rgba(102, 126, 234, 0.08);
+        }
+
+        .ies-block .third-person {
+            color: #667eea;
+        }
+
+        .rule-note {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            color: #a0a0c0;
+            font-size: 0.95rem;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #606080;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Present Simple</h1>
+    <p class="subtitle">Простое настоящее время</p>
+
+    <!-- ТАБЛИЦА СПРЯЖЕНИЯ -->
+    <div class="section">
+        <h2>Таблица спряжения</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Местоимение</th>
+                    <th>Форма глагола</th>
+                    <th>Пример: play</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="pronoun">I</td>
+                    <td class="verb-form">V</td>
+                    <td class="verb-form"><strong>I play</strong></td>
+                </tr>
+                <tr>
+                    <td class="pronoun">you</td>
+                    <td class="verb-form">V</td>
+                    <td class="verb-form"><strong>You play</strong></td>
+                </tr>
+                <tr>
+                    <td class="pronoun">we</td>
+                    <td class="verb-form">V</td>
+                    <td class="verb-form"><strong>We play</strong></td>
+                </tr>
+                <tr>
+                    <td class="pronoun">they</td>
+                    <td class="verb-form">V</td>
+                    <td class="verb-form"><strong>They play</strong></td>
+                </tr>
+                <tr>
+                    <td class="pronoun">he</td>
+                    <td class="verb-form highlight">V + s / es / ies</td>
+                    <td class="highlight"><strong>He plays</strong></td>
+                </tr>
+                <tr>
+                    <td class="pronoun">she</td>
+                    <td class="verb-form highlight">V + s / es / ies</td>
+                    <td class="highlight"><strong>She plays</strong></td>
+                </tr>
+                <tr>
+                    <td class="pronoun">it</td>
+                    <td class="verb-form highlight">V + s / es / ies</td>
+                    <td class="highlight"><strong>It plays</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="rule-note">
+            I, you, we, they — глагол без изменений. He, she, it — добавляем окончание.
+        </div>
+    </div>
+
+    <!-- ГЛАГОЛЫ С -S -->
+    <div class="section">
+        <h2>Глаголы с окончанием -s</h2>
+        <div class="verbs-grid">
+            <div class="verb-card">
+                <div class="base-form">play</div>
+                <div class="third-person">plays</div>
+                <div class="translation">играть</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">work</div>
+                <div class="third-person">works</div>
+                <div class="translation">работать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">live</div>
+                <div class="third-person">lives</div>
+                <div class="translation">жить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">like</div>
+                <div class="third-person">likes</div>
+                <div class="translation">нравиться</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">love</div>
+                <div class="third-person">loves</div>
+                <div class="translation">любить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">read</div>
+                <div class="third-person">reads</div>
+                <div class="translation">читать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">speak</div>
+                <div class="third-person">speaks</div>
+                <div class="translation">говорить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">walk</div>
+                <div class="third-person">walks</div>
+                <div class="translation">гулять</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">clean</div>
+                <div class="third-person">cleans</div>
+                <div class="translation">убирать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">cook</div>
+                <div class="third-person">cooks</div>
+                <div class="translation">готовить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">paint</div>
+                <div class="third-person">paints</div>
+                <div class="translation">рисовать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">skate</div>
+                <div class="third-person">skates</div>
+                <div class="translation">кататься на коньках</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">ski</div>
+                <div class="third-person">skis</div>
+                <div class="translation">кататься на лыжах</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">dance</div>
+                <div class="third-person">dances</div>
+                <div class="translation">танцевать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">climb</div>
+                <div class="third-person">climbs</div>
+                <div class="translation">лазить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">jump</div>
+                <div class="third-person">jumps</div>
+                <div class="translation">прыгать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">visit</div>
+                <div class="third-person">visits</div>
+                <div class="translation">посещать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">help</div>
+                <div class="third-person">helps</div>
+                <div class="translation">помогать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">want</div>
+                <div class="third-person">wants</div>
+                <div class="translation">хотеть</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">eat</div>
+                <div class="third-person">eats</div>
+                <div class="translation">есть</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">drink</div>
+                <div class="third-person">drinks</div>
+                <div class="translation">пить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">sleep</div>
+                <div class="third-person">sleeps</div>
+                <div class="translation">спать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">buy</div>
+                <div class="third-person">buys</div>
+                <div class="translation">покупать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">travel</div>
+                <div class="third-person">travels</div>
+                <div class="translation">путешествовать</div>
+            </div>
+        </div>
+        <div class="rule-note">
+            Большинство глаголов. Просто добавляем -s.
+        </div>
+    </div>
+
+    <!-- ГЛАГОЛЫ С -ES -->
+    <div class="section es-block">
+        <h2>Глаголы с окончанием -es</h2>
+        <div class="verbs-grid">
+            <div class="verb-card">
+                <div class="base-form">watch</div>
+                <div class="third-person">watches</div>
+                <div class="translation">смотреть</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">go</div>
+                <div class="third-person">goes</div>
+                <div class="translation">идти, ездить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">do</div>
+                <div class="third-person">does</div>
+                <div class="translation">делать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">wash</div>
+                <div class="third-person">washes</div>
+                <div class="translation">мыть</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">pass</div>
+                <div class="third-person">passes</div>
+                <div class="translation">передавать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">fix</div>
+                <div class="third-person">fixes</div>
+                <div class="translation">чинить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">buzz</div>
+                <div class="third-person">buzzes</div>
+                <div class="translation">жужжать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">catch</div>
+                <div class="third-person">catches</div>
+                <div class="translation">ловить</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">teach</div>
+                <div class="third-person">teaches</div>
+                <div class="translation">учить</div>
+            </div>
+        </div>
+        <div class="rule-note">
+            Оканчиваются на -s, -ss, -x, -z, -ch, -sh, -o. Добавляем -es.
+        </div>
+    </div>
+
+    <!-- ГЛАГОЛЫ С -IES -->
+    <div class="section ies-block">
+        <h2>Глаголы с окончанием -ies</h2>
+        <div class="verbs-grid">
+            <div class="verb-card">
+                <div class="base-form">study</div>
+                <div class="third-person">studies</div>
+                <div class="translation">учиться</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">fly</div>
+                <div class="third-person">flies</div>
+                <div class="translation">летать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">cry</div>
+                <div class="third-person">cries</div>
+                <div class="translation">плакать</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">try</div>
+                <div class="third-person">tries</div>
+                <div class="translation">пытаться</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">carry</div>
+                <div class="third-person">carries</div>
+                <div class="translation">нести</div>
+            </div>
+            <div class="verb-card">
+                <div class="base-form">worry</div>
+                <div class="third-person">worries</div>
+                <div class="translation">беспокоиться</div>
+            </div>
+        </div>
+        <div class="rule-note">
+            Оканчиваются на согласный + y. Меняем y на i и добавляем -es.
+        </div>
+    </div>
+
+    <div class="footer">
+        Present Simple — утвердительные предложения
+    </div>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

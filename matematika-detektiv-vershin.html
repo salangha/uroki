@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Детектив вершин — урок по заданию 11 ВПР</title>
+<meta property="og:title" content="Детектив вершин — задача №11 ВПР">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", "Arial", sans-serif;
+    background: #fdf6e3;
+    color: #2b2b2b;
+    font-size: 24px;
+    line-height: 1.45;
+    padding: 0 0 60px 0;
+  }
+  #topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: #1e3a5f; color: #fff;
+    padding: 10px 18px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  #progressWrap { flex: 1; background: rgba(255,255,255,.25); border-radius: 99px; height: 16px; overflow: hidden; }
+  #progressBar { height: 100%; width: 0%; background: #ffb703; border-radius: 99px; transition: width .3s; }
+  #stepLabel { white-space: nowrap; font-size: 18px; }
+  #starBox { white-space: nowrap; font-size: 22px; font-weight: bold; color: #ffd60a; }
+  #topbar button {
+    background: transparent; border: 2px solid rgba(255,255,255,.6); color: #fff;
+    border-radius: 10px; font-size: 18px; padding: 4px 10px; cursor: pointer;
+    min-width: 38px;
+  }
+  #topbar button:hover { background: rgba(255,255,255,.15); }
+  .casebar {
+    background: #c1121f; color: #fff;
+    padding: 10px 18px; font-size: 20px; font-weight: bold;
+    text-align: center; letter-spacing: .3px;
+    border-bottom: 4px solid #780000;
+  }
+  #stage { max-width: 1000px; margin: 0 auto; padding: 26px 20px 40px; }
+  .card {
+    background: #fff; border-radius: 24px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.10);
+    padding: 30px 34px; margin-bottom: 22px;
+  }
+  .casecard { border: 4px solid #c1121f; background: #fff8f0; }
+  .casecard h2 { color: #c1121f; font-size: 26px; margin-bottom: 10px; }
+  .lead p { margin: 8px 0; }
+  .big { font-size: 30px; }
+  .question {
+    font-size: 32px; font-weight: bold; color: #1e3a5f;
+    margin: 18px 0 22px;
+  }
+  .proof-flag {
+    display: inline-block; background: #1e3a5f; color: #fff;
+    border-radius: 12px; padding: 4px 16px; font-size: 20px;
+    font-weight: bold; margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .opts { display: flex; flex-direction: column; gap: 14px; }
+  .opt {
+    font-size: 28px; font-weight: bold;
+    padding: 18px 24px; min-height: 72px;
+    background: #fff; color: #1e3a5f;
+    border: 3px solid #1e3a5f; border-radius: 18px;
+    cursor: pointer; transition: transform .1s, background .15s;
+    text-align: left;
+  }
+  .opt:hover { background: #eef4fb; transform: scale(1.01); }
+  .opt:disabled { cursor: default; }
+  .opt.ok {
+    background: #2a9d3f; color: #fff; border-color: #1b6e2a;
+    animation: pop .3s;
+  }
+  .opt.wrong { animation: shake .35s; background: #ffe3e3; border-color: #e63946; color: #a4161a; }
+  .opt.reveal { animation: pulse 1s infinite; border-color: #ffb703; background: #fff3cd; }
+  .opt.dim { opacity: .45; }
+  @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,183,3,.7); } 50% { box-shadow: 0 0 0 14px rgba(255,183,3,0); } }
+  .feedback { border-radius: 18px; padding: 18px 22px; font-size: 26px; margin-top: 20px; display: none; }
+  .hintbox { background: #fff3cd; border: 3px dashed #ffb703; }
+  .whybox { background: #dcfce7; border: 3px solid #2a9d3f; font-weight: bold; }
+  .nextbtn {
+    display: none; margin-top: 24px; width: 100%;
+    font-size: 30px; font-weight: bold; min-height: 76px;
+    background: #ffb703; color: #4a3200; border: none; border-radius: 18px; cursor: pointer;
+  }
+  .nextbtn:hover { background: #ffc300; }
+  .stamp {
+    display: none; text-align: center; font-size: 44px; font-weight: 900;
+    margin: 18px auto 4px; padding: 8px 28px; width: fit-content;
+    border: 6px solid; border-radius: 14px; transform: rotate(-6deg);
+    letter-spacing: 2px;
+  }
+  .stamp.fail { color: #c1121f; border-color: #c1121f; background: rgba(193,18,31,.07); }
+  .stamp.ok { color: #1b6e2a; border-color: #1b6e2a; background: rgba(42,157,63,.08); transform: rotate(4deg); }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .chip {
+    background: #eef4fb; border: 2px solid #b9cdf0; color: #1e3a5f;
+    border-radius: 12px; padding: 8px 16px; font-size: 24px; font-weight: bold;
+  }
+  .chip.hit { background: #dcfce7; border-color: #2a9d3f; animation: pop .4s; }
+  .rowname { font-size: 20px; color: #6b705c; }
+  svg.shape { display: block; margin: 10px auto 16px; }
+  svg.shape polygon { fill: #eef4fb; stroke: #1e3a5f; stroke-width: 4; }
+  svg.shape circle { fill: #e63946; }
+  svg.mshape { display: inline-block; margin: 0; }
+  svg.mshape polygon { fill: #eef4fb; stroke: #1e3a5f; stroke-width: 6; }
+  svg.mshape circle { fill: #e63946; }
+  /* интерактивная таблица дела */
+  .tablewrap { display: grid; grid-template-columns: 118px 1fr 118px; gap: 12px; align-items: stretch; margin: 18px 0 8px; }
+  .stack { border: 3px dashed #b9cdf0; border-radius: 14px; padding: 8px 6px; background: #fffdf5; text-align: center; }
+  .stack h4 { font-size: 16px; color: #6b705c; margin-bottom: 6px; font-weight: 600; }
+  .sfigs { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; align-content: flex-start; }
+  .sfig { cursor: pointer; }
+  .sfig:hover { background: #eef4fb; border-radius: 8px; }
+  .itable { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .itable td { border: 3px solid #eef4fb; background: #fff; text-align: center; vertical-align: middle; padding: 8px 6px; }
+  .igoal { background: #dce9f8 !important; font-size: 21px; color: #1e3a5f; padding: 10px !important; }
+  .igoal .need { color: #c1121f; font-weight: 900; font-size: 24px; }
+  .igoal .gots { font-weight: bold; color: #1e3a5f; }
+  .igoal .gots.win { color: #1b6e2a; }
+  .igoal .gots.over { color: #c1121f; }
+  .icol { font-weight: bold; font-size: 20px; color: #1e3a5f; background: #f4f8fd !important; }
+  .dropzone { min-height: 118px; }
+  .dropzone.over { background: #fff3cd; }
+  .figs { display: flex; gap: 6px; justify-content: center; align-content: center; flex-wrap: wrap; min-height: 96px; }
+  .fig { cursor: pointer; text-align: center; font-size: 14px; color: #1e3a5f; border-radius: 8px; padding: 2px; animation: pop .25s; }
+  .fig:hover { background: #fff3cd; }
+  .hintdrop { color: #b9c2cf; font-size: 18px; }
+  .sumcell { font-size: 28px; font-weight: 900; color: #1e3a5f; }
+  .sumlabel { font-size: 15px; color: #6b705c; display: block; font-weight: 400; }
+  .resetbtn { margin-top: 8px; font-size: 17px; padding: 6px 14px; border-radius: 10px; border: 2px solid #b9c2cf; background: #fff; color: #6b705c; cursor: pointer; }
+  .resetbtn:hover { background: #eef4fb; }
+  #qbox { display: none; }
+  .start-title { font-size: 42px; font-weight: 900; color: #1e3a5f; text-align: center; margin-bottom: 8px; }
+  .start-sub { text-align: center; font-size: 24px; color: #6b705c; margin-bottom: 18px; }
+  .rules { font-size: 26px; margin: 12px 0 24px; }
+  .rules li { margin: 10px 0 10px 30px; }
+  .startbtn {
+    display: block; width: 100%; min-height: 90px;
+    font-size: 36px; font-weight: 900;
+    background: #2a9d3f; color: #fff; border: none; border-radius: 22px; cursor: pointer;
+  }
+  .startbtn:hover { background: #33b34a; }
+  .party { text-align: center; font-size: 56px; }
+  .party-title { text-align: center; font-size: 38px; font-weight: 900; color: #1b6e2a; margin-bottom: 10px; }
+  .cert { text-align: center; border: 4px double #ffb703; border-radius: 18px; padding: 22px; background: #fffdf2; }
+  .cert .t { font-size: 32px; font-weight: 900; color: #b26a00; }
+  .algo { background: #eef4fb; border-radius: 18px; padding: 20px 24px; }
+  .algo h3 { color: #1e3a5f; margin-bottom: 10px; font-size: 26px; }
+  .algo ol { margin-left: 30px; }
+  .algo li { margin: 8px 0; }
+  .confetti { position: fixed; top: -40px; font-size: 30px; z-index: 100; pointer-events: none; animation: fall 1.6s linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(340deg); opacity: .7; } }
+  #teacherBtn {
+    position: fixed; right: 14px; bottom: 14px; z-index: 90;
+    background: #1e3a5f; color: #fff; border: none; border-radius: 14px;
+    padding: 10px 16px; font-size: 18px; cursor: pointer; opacity: .85;
+  }
+  #teacherOverlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 120;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #teacherOverlay .panel {
+    background: #fff; border-radius: 20px; max-width: 720px; width: 100%;
+    max-height: 86vh; overflow: auto; padding: 26px 30px; font-size: 19px; line-height: 1.5;
+  }
+  #teacherOverlay h3 { color: #1e3a5f; margin: 14px 0 6px; font-size: 22px; }
+  #teacherOverlay .closeBtn { margin-top: 16px; font-size: 20px; padding: 10px 18px; border-radius: 12px; border: 2px solid #1e3a5f; background: #eef4fb; cursor: pointer; }
+  #teacherOverlay table { border-collapse: collapse; width: 100%; }
+  #teacherOverlay td { border-bottom: 1px solid #e5e5e5; padding: 4px 8px; }
+  .kbrd { font-size: 16px; color: #9a8f80; text-align: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <button id="restartBtn" title="Начать урок заново">⟲</button>
+  <button id="prevBtn" title="Предыдущий шаг (можно без ответа)">◀</button>
+  <button id="nextBtn" title="Следующий шаг (можно без ответа)">▶</button>
+  <span id="stepLabel">Шаг 1</span>
+  <div id="progressWrap"><div id="progressBar"></div></div>
+  <div id="starBox">⭐ 0</div>
+</div>
+<div id="casebar" class="casebar" style="display:none;"></div>
+
+<div id="stage"></div>
+
+<button id="teacherBtn">🧑‍🏫 для учителя</button>
+
+<div id="teacherOverlay">
+  <div class="panel">
+    <h3>🧑‍🏫 Шпаргалка учителя</h3>
+    <p><b>Как вести урок:</b> ребёнок читает вопрос на экране сам и отвечает вслух. Вы нажимаете кнопку с его ответом (или клавиши 1–4). «Дальше» — клавиша Enter. За ответ с первой попытки — 2 звезды, со второй — 1.</p>
+    <p><b>Кнопки ◀ и ▶</b> в верхней панели листают шаги без ответов — удобно вернуться и показать снова.</p>
+    <p><b>Таблица в каждом деле:</b> перетаскивайте фигурки мышкой со складов в колонки (можно просто кликать по фигурке на складе — она сама ляжет в свою колонку; клик по фигурке в таблице возвращает её на склад). Соберите ровно нужное число вершин — «Собрано» считается автоматически. Если получилось больше — уберите фигурку.</p>
+    <h3>Если он устал</h3>
+    <p>Можно честно остановиться после любого дела — каждое из них самостоятельный урок. Дело № 989 со звёздочкой — самое хитрое: там семиугольники.</p>
+    <h3>Суть метода (для мамы)</h3>
+    <p>Метод перебора с таблицей: распределяем вершины по фигуркам, пока не соберём ровно нужное число. Доказательство — обратная проверка сложением. Это и есть задание 11 ВПР «логика и алгоритмы».</p>
+    <h3>Продолжение серии — такие же задачи (тип 11, «вершины»)</h3>
+    <table id="taskTable"></table>
+    <p style="margin-top:10px;">Все они решаются этим же алгоритмом — просто меняются числа. Страница задач: math4-vpr.sdamgia.ru → каталог → тип 11.</p>
+    <button class="closeBtn" onclick="closeTeacher()">Закрыть (клавиша T)</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- данные ---------- */
+
+var CASES = {
+  c877: { bar: "📌 ДЕЛО № 877 · Андрей · всего 27 вершин",
+          full: ["Андрей вырезал несколько пятиугольников и шестиугольников.",
+                 "Всего у фигурок <b>27 вершин</b>.",
+                 "<b>Сколько пятиугольников</b> вырезал Андрей?"] },
+  c891: { bar: "📌 ДЕЛО № 891 · Игорь · всего 28 вершин",
+          full: ["Игорь вырезал несколько пятиугольников и шестиугольников.",
+                 "Всего у фигурок <b>28 вершин</b>.",
+                 "<b>Сколько пятиугольников</b> вырезал Игорь?"] },
+  c989: { bar: "📌 ДЕЛО № 989 ⭐ · Антон · всего 29 вершин",
+          full: ["⭐ Дело со звёздочкой: новые фигуры! Но алгоритм тот же.",
+                 "Антон вырезал несколько пятиугольников и <b>семиугольников</b>.",
+                 "У семиугольника <b>7 вершин</b>. Ряд семёрок: 7, 14, 21, 28…",
+                 "Всего у фигурок <b>29 вершин</b>. <b>Сколько пятиугольников</b> вырезал Антон?"] }
+};
+
+var ROWS = {
+  fives:  { name: "Ряд пятёрок (вершины пятиугольников)", nums: [5,10,15,20,25] },
+  sixes:  { name: "Ряд шестёрок (вершины шестиугольников)", nums: [6,12,18,24,30] },
+  sevens: { name: "Ряд семёрок (вершины семиугольников)", nums: [7,14,21,28,35] }
+};
+
+var S = [
+
+  { kind: "start" },
+
+  { lead: ["Разминка! Вот фигура.", "Красные точки — это <b>вершины</b>."], svg:"p5",
+    q: "Сколько вершин у пятиугольника?",
+    opts: [{t:"4"},{t:"5",ok:1},{t:"6"}],
+    hint: "Считай красные точки по кругу.",
+    why: "5 вершин и 5 сторон. ПЯТИ-угольник!" },
+
+  { lead: ["А вот вторая фигура."], svg:"p6",
+    q: "Сколько вершин у шестиугольника?",
+    opts: [{t:"5"},{t:"6",ok:1},{t:"7"}],
+    hint: "Считай точки, не спеши.",
+    why: "6 вершин. ШЕСТИ-угольник!" },
+
+  { c:"c877", full:true,
+    q: "Сколько вершин у всех фигурок Андрея — главная улика?",
+    opts: [{t:"17"},{t:"27",ok:1},{t:"72"}],
+    hint: "Прочитай карточку дела. Найди число вершин.",
+    why: "Улика найдена: 27 вершин! Запомни её." },
+
+  { lead: ["Оружие детектива № 1 — ряд пятёрок.", "Сколько вершин у <b>двух</b> пятиугольников?"], rows:"fives", hl:10,
+    q: "2 пятиугольника — сколько вершин?",
+    opts: [{t:"5"},{t:"10",ok:1},{t:"15"}],
+    hint: "5 + 5. Смотри на ряд пятёрок.",
+    why: "5 + 5 = 10 — второе число в ряду пятёрок!" },
+
+  { lead: ["А у <b>трёх</b> пятиугольников?"], rows:"fives", hl:15,
+    q: "3 пятиугольника — сколько вершин?",
+    opts: [{t:"10"},{t:"15",ok:1},{t:"20"}],
+    hint: "Смотри на ряд пятёрок.",
+    why: "15 — третье число в ряду: 5, 10, 15…" },
+
+  { lead: ["Оружие № 2 — ряд шестёрок.", "Сколько вершин у <b>двух</b> шестиугольников?"], rows:"sixes", hl:12,
+    q: "2 шестиугольника — сколько вершин?",
+    opts: [{t:"6"},{t:"12",ok:1},{t:"18"}],
+    hint: "6 + 6. Смотри на ряд шестёрок.",
+    why: "6 + 6 = 12 — второе число в ряду шестёрок!" },
+
+  { lead: ["Проверка для настоящего детектива!"], 
+    q: "Сколько вершин у ТРЁХ четырёхугольников?",
+    opts: [{t:"4"},{t:"8"},{t:"12",ok:1}],
+    hint: "Подумай: сколько вершин у ОДНОГО четырёхугольника?",
+    why: "4 + 4 + 4 = 12. Отлично, детектив: теперь ты готов к главному делу!" },
+
+  { kind: "table", c:"c877", need:27, rightKind:"p6", rightName:"Шестиугольники",
+    lead: ["Итак, чтобы узнать, сколько многоугольников нарисовал Андрей,",
+           "нужно <b>распределить количество вершин по этим многоугольникам</b>.",
+           "Перетаскивай фигурки в таблицу и собери ровно <b>27</b> вершин!"] },
+
+  { c:"c877", party:true, partyTitle: "🎉 ДЕЛО № 877 ЗАКРЫТО!",
+    lead: ["Ответ: <b>3 пятиугольника</b> и <b>2 шестиугольника</b>."],
+    q: "Кто закрыл дело № 877?",
+    opts: [{t:"Я, детектив!",ok:1}],
+    hint: "Конечно, это ты!",
+    why: "Конечно, ты! ⭐" },
+
+  { c:"c891", full:true,
+    lead: ["Новое дело! Примчал курьер."],
+    q: "Сколько вершин у всех фигурок Игоря — главная улика?",
+    opts: [{t:"18"},{t:"28",ok:1},{t:"82"}],
+    hint: "Прочитай карточку дела. Найди число вершин.",
+    why: "Улика найдена: 28 вершин! Решаем тем же способом." },
+
+  { kind: "table", c:"c891", need:28, rightKind:"p6", rightName:"Шестиугольники",
+    lead: ["Итак, чтобы узнать, сколько многоугольников нарисовал Игорь,",
+           "нужно <b>распределить количество вершин по этим многоугольникам</b>.",
+           "Перетаскивай фигурки в таблицу и собери ровно <b>28</b> вершин!"] },
+
+  { c:"c891", party:true, partyTitle: "🎉 ДЕЛО № 891 ЗАКРЫТО!",
+    lead: ["Ответ: <b>2 пятиугольника</b> и <b>3 шестиугольника</b>."],
+    q: "Кто детектив года?",
+    opts: [{t:"Я!",ok:1}],
+    hint: "Ну конечно!",
+    why: "Ты! Официально! 🏅" },
+
+  { c:"c989", full:true,
+    lead: ["Последнее дело — и самое хитрое!"],
+    q: "Сколько вершин у всех фигурок Антона — главная улика?",
+    opts: [{t:"19"},{t:"29",ok:1},{t:"92"}],
+    hint: "Прочитай карточку дела. Найди число вершин.",
+    why: "Улика найдена: 29 вершин! Алгоритм тот же." },
+
+  { kind: "table", c:"c989", need:29, rightKind:"p7", rightName:"Семиугольники",
+    lead: ["Итак, чтобы узнать, сколько многоугольников нарисовал Антон,",
+           "нужно <b>распределить количество вершин по этим многоугольникам</b>.",
+           "Перетаскивай фигурки в таблицу и собери ровно <b>29</b> вершин!"] },
+
+  { c:"c989", party:true, partyTitle: "🎉 ДЕЛО № 989 ЗАКРЫТО!",
+    lead: ["Ответ: <b>3 пятиугольника</b> и <b>2 семиугольника</b>."],
+    q: "Кто лучший детектив агентства?",
+    opts: [{t:"Я!",ok:1}],
+    hint: "Ну конечно!",
+    why: "Ты! Три дела — три доказательства! 🏅" },
+
+  { kind: "final" }
+];
+
+var TASK_LIST = [
+  ["№ 877 · Андрей · 27 вершин · 5- и 6-угольники","3 пятиугольника"],
+  ["№ 891 · Игорь · 28 вершин · 5- и 6-угольники","2 пятиугольника"],
+  ["№ 905 · Паша · 32 вершины · 5- и 6-угольники","2 шестиугольника"],
+  ["№ 919 · Оля · 34 вершины · 5- и 6-угольники","4 шестиугольника"],
+  ["№ 933 · Аня · 37 вершин · 5- и 6-угольники","5 пятиугольников"],
+  ["№ 947 · Ира · 38 вершин · 5- и 6-угольники","4 пятиугольника"],
+  ["№ 961 · Ксюша · 39 вершин · 5- и 6-угольники","3 пятиугольника"],
+  ["№ 975 · Вера · 43 вершины · 5- и 6-угольники","3 шестиугольника"],
+  ["№ 989 · Антон · 29 вершин · 5- и 7-угольники","3 пятиугольника"],
+  ["№ 1003 · Люда · 31 вершина · 5- и 7-угольники","2 пятиугольника"],
+  ["№ 1017 · Мила · 34 вершины · 5- и 7-угольники","2 семиугольника"],
+  ["№ 1031 · Юля · 38 вершин · 5- и 7-угольники","4 семиугольника"],
+  ["№ 1045 · Юра · 41 вершина · 5- и 7-угольники","4 пятиугольника"],
+  ["№ 1059 · Лена · 39 вершин · 5- и 7-угольники","5 пятиугольников"],
+  ["№ 1073 · Рита · 43 вершины · 5- и 7-угольники","3 пятиугольника"],
+  ["№ 1087 · Ваня · 44 вершины · 5- и 7-угольники","6 пятиугольников"],
+  ["№ 1101 · Оля · 32 вершины · 6- и 7-угольники","2 семиугольника"],
+  ["№ 1115 · Лена · 33 вершины · 6- и 7-угольники","3 семиугольника"],
+  ["№ 1129 · Ваня · 38 вершин · 6- и 7-угольники","4 шестиугольника"],
+  ["№ 1143 · Коля · 40 вершин · 6- и 7-угольники","2 шестиугольника"]
+];
+
+/* ---------- фигуры (SVG) ---------- */
+
+var SHAPES = {
+  p5: { pts: "100,25 176,80 147,170 53,170 24,80", label: "пятиугольник", v: 5 },
+  p6: { pts: "100,20 169,60 169,140 100,180 31,140 31,60", label: "шестиугольник", v: 6 },
+  p7: { pts: "100,20 163,50 178,118 135,172 65,172 22,118 38,50", label: "семиугольник", v: 7 }
+};
+
+function shapeSVG(key, size, mini) {
+  var s = SHAPES[key];
+  var sz = size || 200;
+  var pts = s.pts.split(" ");
+  var dots = mini ? "" : pts.map(function(p) {
+    var xy = p.split(",");
+    return '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="7"/>';
+  }).join("");
+  return '<svg class="' + (mini ? "mshape" : "shape") + '" width="' + sz + '" height="' + sz + '" viewBox="0 0 200 200" role="img" aria-label="' + s.label + '">' +
+         '<polygon points="' + s.pts + '"/>' + dots + '</svg>';
+}
+
+/* ---------- движок ---------- */
+
+var i = 0, stars = 0, attempts = 0, solved = false;
+var stage = document.getElementById("stage");
+var casebar = document.getElementById("casebar");
+var stepLabel = document.getElementById("stepLabel");
+var progressBar = document.getElementById("progressBar");
+var starBox = document.getElementById("starBox");
+
+function updateTopbar() {
+  stepLabel.textContent = "Шаг " + (i + 1) + " из " + S.length;
+  progressBar.style.width = Math.round(100 * i / S.length) + "%";
+  starBox.textContent = "⭐ " + stars;
+}
+
+function addStars(n) { stars += n; starBox.textContent = "⭐ " + stars; }
+
+function confetti() {
+  var emo = ["⭐","✨","🎉","💛"];
+  for (var k = 0; k < 14; k++) {
+    var d = document.createElement("span");
+    d.className = "confetti";
+    d.textContent = emo[Math.floor(Math.random() * emo.length)];
+    d.style.left = (Math.random() * 96) + "vw";
+    d.style.animationDelay = (Math.random() * 0.4) + "s";
+    document.body.appendChild(d);
+    setTimeout(function(el) { return function() { el.remove(); }; }(d), 2200);
+  }
+}
+
+function showStart() {
+  casebar.style.display = "none";
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="start-title">🔍 Детективное агентство</div>' +
+      '<div class="start-title" style="color:#c1121f;">«ВЕРШИНЫ»</div>' +
+      '<div class="start-sub">Секретное задание для главного детектива</div>' +
+      '<ol class="rules">' +
+        '<li>📖 Читай вопрос <b>сам</b>.</li>' +
+        '<li>🗣️ Скажи ответ вслух.</li>' +
+        '<li>👉 Твой напарник нажмёт кнопку.</li>' +
+        '<li>⚖️ Докажи ответ — и дело закрыто!</li>' +
+      '</ol>' +
+      '<button class="startbtn" id="go">▶ Начать расследование</button>' +
+      '<div class="kbrd">Правило звёзд: с первой попытки — 2 ⭐, со второй — 1 ⭐</div>' +
+    '</div>';
+  document.getElementById("go").onclick = function() { i = 1; render(); };
+}
+
+function render() {
+  solved = false; attempts = 0;
+  updateTopbar();
+  var s = S[i];
+
+  if (s.kind === "start") { showStart(); return; }
+  if (s.kind === "final") { showFinal(); return; }
+  if (s.kind === "table") { showTable(s); return; }
+
+  if (s.c && !s.full) {
+    casebar.textContent = CASES[s.c].bar;
+    casebar.style.display = "block";
+  } else {
+    casebar.style.display = "none";
+  }
+
+  var html = '<div class="card">';
+
+  if (s.proof) html += '<span class="proof-flag">⚖️ ДОКАЗАТЕЛЬСТВО</span>';
+  if (s.party) html += '<div class="party">🎉</div><div class="party-title">' + s.partyTitle + '</div>';
+  if (s.full) {
+    html += '<div class="card casecard"><h2>' + CASES[s.c].bar + '</h2>' +
+            CASES[s.c].full.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>';
+  }
+  if (s.lead) html += '<div class="lead">' + s.lead.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>';
+  if (s.svg) html += shapeSVG(s.svg);
+  if (s.rows) {
+    var r = ROWS[s.rows];
+    html += '<div class="rowname">' + r.name + ':</div><div class="chips">' +
+      r.nums.map(function(n){ return '<span class="chip" data-num="' + n + '">' + n + '</span>'; }).join("") + '</div>';
+  }
+  if (s.q) html += '<div class="question">' + s.q + '</div>';
+
+  html += '<div class="opts">' + s.opts.map(function(o, k) {
+    return '<button class="opt" data-k="' + k + '">' + o.t + '</button>';
+  }).join("") + '</div>';
+
+  html += '<div class="stamp ' + (s.stamp === "fail" ? "fail" : "ok") + '" id="stamp">' +
+          (s.stamp === "fail" ? "ОТПАДАЕТ!" : "ПОДОШЁЛ!") + '</div>';
+  html += '<div class="feedback hintbox" id="hint">💡 ' + (s.hint || "") + '</div>';
+  html += '<div class="feedback whybox" id="why" aria-live="polite">✅ ' + s.why + '</div>';
+  html += '<button class="nextbtn" id="next">' + (i === S.length - 1 ? "🏁 Финиш" : "Дальше ▶") + '</button>';
+  html += '</div>';
+
+  stage.innerHTML = html;
+
+  var btns = stage.querySelectorAll(".opt");
+  btns.forEach(function(b) {
+    b.onclick = function() { pick(parseInt(b.getAttribute("data-k"), 10), b, btns, s); };
+  });
+  document.getElementById("next").onclick = function() { i++; render(); };
+}
+
+function pick(k, btn, btns, s) {
+  if (solved) return;
+  var o = s.opts[k];
+  if (o.ok) {
+    solved = true;
+    addStars(attempts === 0 ? 2 : 1);
+    btn.classList.add("ok");
+    btns.forEach(function(b) { b.disabled = true; if (b !== btn) b.classList.add("dim"); });
+    var why = document.getElementById("why");
+    why.style.display = "block";
+    var next = document.getElementById("next");
+    next.style.display = "block";
+    if (s.stamp) document.getElementById("stamp").style.display = "block";
+    if (s.rows && typeof s.hl === "number") {
+      stage.querySelectorAll(".chip").forEach(function(ch) {
+        if (parseInt(ch.getAttribute("data-num"), 10) === s.hl) ch.classList.add("hit");
+      });
+    }
+    confetti();
+    next.focus();
+  } else {
+    attempts++;
+    btn.classList.remove("wrong");
+    void btn.offsetWidth;
+    btn.classList.add("wrong");
+    var h = document.getElementById("hint");
+    h.style.display = "block";
+    if (attempts >= 2) {
+      btns.forEach(function(b) {
+        if (s.opts[parseInt(b.getAttribute("data-k"), 10)].ok) b.classList.add("reveal");
+      });
+    }
+  }
+}
+
+/* ---------- интерактивная таблица дела ---------- */
+
+function showTable(s) {
+  casebar.textContent = CASES[s.c].bar;
+  casebar.style.display = "block";
+  var NEED = s.need;
+  var RK = s.rightKind;            // "p6" | "p7"
+  var RN = s.rightName;            // "Шестиугольники" | "Семиугольники"
+  var RN_GEN = { "Шестиугольники": "шестиугольников", "Семиугольники": "семиугольников" }[RN];
+  var RV = SHAPES[RK].v;
+
+  var st = { pent: 0, right: 0, stackP: 6, stackR: 6, locked: false };
+
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="lead">' + s.lead.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>' +
+      '<div class="tablewrap">' +
+        '<div class="stack"><h4>Пятиугольники</h4><div class="sfigs" id="stackP"></div></div>' +
+        '<div>' +
+          '<table class="itable">' +
+            '<tr><td colspan="2" class="igoal">Нужно вершин: <span class="need">' + NEED + '</span> &nbsp;·&nbsp; Собрано: <span class="gots" id="got">0</span></td></tr>' +
+            '<tr><td class="icol">Пятиугольники</td><td class="icol">' + RN + '</td></tr>' +
+            '<tr><td class="dropzone" id="dzP"><div class="figs" id="colP"></div></td><td class="dropzone" id="dzR"><div class="figs" id="colR"></div></td></tr>' +
+            '<tr><td class="sumcell"><span class="sumlabel">вершины пятиугольников</span><span id="sumP">0</span></td><td class="sumcell"><span class="sumlabel">вершины ' + RN_GEN + '</span><span id="sumR">0</span></td></tr>' +
+          '</table>' +
+          '<div style="text-align:center;"><button class="resetbtn" id="resetBtn">⟲ Убрать все фигурки</button></div>' +
+        '</div>' +
+        '<div class="stack"><h4>' + RN + '</h4><div class="sfigs" id="stackR"></div></div>' +
+      '</div>' +
+      '<div id="qbox">' +
+        '<div class="question">Сколько ПЯТИУГОЛЬНИКОВ вырезал ' + CASES[s.c].bar.split(" · ")[1] + '?</div>' +
+        '<div class="opts" id="qopts"></div>' +
+        '<div id="q2" style="display:none;">' +
+          '<span class="proof-flag">⚖️ ДОКАЗАТЕЛЬСТВО</span>' +
+          '<div class="question" id="qproof"></div>' +
+          '<div class="opts" id="popts"></div>' +
+        '</div>' +
+        '<div class="feedback whybox" id="tblWhy" aria-live="polite"></div>' +
+        '<button class="nextbtn" id="tblNext">Дело закрыто! Дальше ▶</button>' +
+      '</div>' +
+    '</div>';
+
+  var colP = document.getElementById("colP");
+  var colR = document.getElementById("colR");
+  var stackP = document.getElementById("stackP");
+  var stackR = document.getElementById("stackR");
+
+  function figHTML(kind) {
+    return '<div class="fig" data-kind="' + kind + '" draggable="true">' +
+           shapeSVG(kind, 38, true) + '<div>' + SHAPES[kind].v + '</div></div>';
+  }
+
+  function upd() {
+    var sumP = st.pent * 5, sumR = st.right * RV, total = sumP + sumR;
+    var got = document.getElementById("got");
+    got.classList.remove("win", "over");
+    if (total === 0) { got.textContent = "0"; }
+    else if (st.pent === 0) { got.textContent = sumR; }
+    else if (st.right === 0) { got.textContent = sumP; }
+    else { got.textContent = sumP + " + " + sumR + " = " + total; }
+    if (total === NEED) { got.classList.add("win"); got.textContent += " ✓"; }
+    if (total > NEED) { got.classList.add("over"); got.textContent += " — перебор!"; }
+
+    document.getElementById("sumP").textContent = sumP;
+    document.getElementById("sumR").textContent = sumR;
+
+    colP.innerHTML = st.pent ? Array(st.pent + 1).join(figHTML("p5")) : '<span class="hintdrop">положи сюда</span>';
+    colR.innerHTML = st.right ? Array(st.right + 1).join(figHTML(RK)) : '<span class="hintdrop">положи сюда</span>';
+    stackP.innerHTML = "";
+    stackR.innerHTML = "";
+    for (var p = 0; p < st.stackP; p++) stackP.insertAdjacentHTML("beforeend", figHTML("p5"));
+    for (var h = 0; h < st.stackR; h++) stackR.insertAdjacentHTML("beforeend", figHTML(RK));
+
+    bindFigs();
+    checkReady(total);
+  }
+
+  function bindFigs() {
+    stage.querySelectorAll("#stackP .fig").forEach(function(f) {
+      f.addEventListener("dragstart", function(e) { e.dataTransfer.setData("text/plain", "p5"); });
+      f.addEventListener("click", function() { place("p5"); });
+    });
+    stage.querySelectorAll("#stackR .fig").forEach(function(f) {
+      f.addEventListener("dragstart", function(e) { e.dataTransfer.setData("text/plain", RK); });
+      f.addEventListener("click", function() { place(RK); });
+    });
+    stage.querySelectorAll("#colP .fig").forEach(function(f) {
+      f.addEventListener("dragstart", function(e) { e.dataTransfer.setData("text/plain", "back5"); });
+      f.addEventListener("click", function() { takeBack("p5"); });
+    });
+    stage.querySelectorAll("#colR .fig").forEach(function(f) {
+      f.addEventListener("dragstart", function(e) { e.dataTransfer.setData("text/plain", "backR"); });
+      f.addEventListener("click", function() { takeBack(RK); });
+    });
+  }
+
+  function place(kind) {
+    if (st.locked) return;
+    if (kind === "p5" && st.stackP > 0) { st.pent++; st.stackP--; upd(); }
+    else if (kind === RK && st.stackR > 0) { st.right++; st.stackR--; upd(); }
+  }
+
+  function takeBack(kind) {
+    if (st.locked) return;
+    if (kind === "p5" && st.pent > 0) { st.pent--; st.stackP++; upd(); }
+    else if (kind === RK && st.right > 0) { st.right--; st.stackR++; upd(); }
+  }
+
+  ["dzP", "dzR"].forEach(function(id) {
+    var dz = document.getElementById(id);
+    dz.addEventListener("dragover", function(e) { e.preventDefault(); dz.classList.add("over"); });
+    dz.addEventListener("dragleave", function() { dz.classList.remove("over"); });
+    dz.addEventListener("drop", function(e) {
+      e.preventDefault();
+      dz.classList.remove("over");
+      var k = e.dataTransfer.getData("text/plain");
+      if (k === "back5") takeBack("p5");
+      else if (k === "backR") takeBack(RK);
+      else if (k === "p5" || k === RK) place(k);
+    });
+  });
+
+  document.getElementById("resetBtn").onclick = function() {
+    st.stackP += st.pent; st.stackR += st.right;
+    st.pent = 0; st.right = 0; st.locked = false;
+    document.getElementById("qbox").style.display = "none";
+    document.getElementById("tblWhy").style.display = "none";
+    document.getElementById("tblNext").style.display = "none";
+    upd();
+  };
+
+  function askOpts(container, values, correct, onRight, hint) {
+    var box = document.getElementById(container);
+    box.innerHTML = values.map(function(v) {
+      return '<button class="opt" data-v="' + v + '">' + v + '</button>';
+    }).join("");
+    var btns = box.querySelectorAll(".opt");
+    var tries = 0;
+    btns.forEach(function(b) {
+      b.onclick = function() {
+        var v = parseInt(b.getAttribute("data-v"), 10);
+        if (v === correct) {
+          addStars(tries === 0 ? 2 : 1);
+          b.classList.add("ok");
+          btns.forEach(function(x) { x.disabled = true; if (x !== b) x.classList.add("dim"); });
+          confetti();
+          onRight();
+        } else {
+          tries++;
+          b.classList.remove("wrong");
+          void b.offsetWidth;
+          b.classList.add("wrong");
+          if (tries >= 2 && hint) {
+            var hb = document.getElementById("hint");
+            if (hb) { hb.style.display = "block"; }
+            btns.forEach(function(x) { if (parseInt(x.getAttribute("data-v"), 10) === correct) x.classList.add("reveal"); });
+          }
+        }
+      };
+    });
+  }
+
+  function checkReady(total) {
+    if (total === NEED && !st.locked) {
+      st.locked = true;
+      document.getElementById("qbox").style.display = "block";
+      var hero = CASES[s.c].bar.split(" · ")[1];
+      var sumP = st.pent * 5, sumR = st.right * RV;
+      askOpts("qopts", [st.pent - 1, st.pent, st.pent + 1], st.pent, function() {
+        document.getElementById("q2").style.display = "block";
+        document.getElementById("qproof").textContent = sumP + " + " + sumR + " = ?";
+        askOpts("popts", [sumP + sumR - 1, sumP + sumR, sumP + sumR + 1], sumP + sumR, function() {
+          var w = document.getElementById("tblWhy");
+          w.innerHTML = "✅ " + sumP + " + " + sumR + " = " + NEED + " — ровно как в деле! ОТВЕТ ДОКАЗАН. ⚖️";
+          w.style.display = "block";
+          var nx = document.getElementById("tblNext");
+          nx.style.display = "block";
+          nx.onclick = function() { i++; render(); };
+          nx.focus();
+        }, "Сложи вершины обеих колонок: " + sumP + " + " + sumR + ".");
+      }, "Посчитай фигурки в левой колонке таблицы!");
+    }
+  }
+
+  upd();
+}
+
+function showFinal() {
+  casebar.style.display = "none";
+  updateTopbar();
+  progressBar.style.width = "100%";
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="party">🏅🎉</div>' +
+      '<div class="party-title">ПОЗДРАВЛЯЕМ, ГЛАВНЫЙ ДЕТЕКТИВ!</div>' +
+      '<p class="big" style="text-align:center;">Теперь ты умеешь решать задачи<br>на распределение вершин многоугольников — и это очень круто!</p>' +
+      '<p class="big" style="text-align:center; margin-top:12px;">Но что ещё круче —<br><b>ты умеешь ДОКАЗЫВАТЬ ответ.</b> ⚖️</p>' +
+      '<p style="text-align:center; margin-top:16px; font-size:26px;">Ты закрыл <b>3 дела</b> и заработал <b>' + stars + ' ⭐</b></p>' +
+    '</div>' +
+    '<div class="card cert"><div class="t">СЕРТИФИКАТ</div>' +
+      '<p style="margin-top:8px;">Официальный детектив вершин<br>умеет: распределять вершины по фигуркам и <b>доказывать</b> ответ</p>' +
+    '</div>' +
+    '<div class="card algo"><h3>🤖 АЛГОРИТМ ДЕТЕКТИВА (для любой такой задачи)</h3><ol>' +
+      '<li>Распредели вершины по фигуркам: клади их в таблицу по одной.</li>' +
+      '<li>Собери ровно нужное число вершин (переберёшь — убери фигурку).</li>' +
+      '<li>Посмотри, сколько каких фигурок получилось.</li>' +
+      '<li>ДОКАЖИ: сложи вершины обеих колонок — должно получиться число из дела.</li>' +
+    '</ol></div>' +
+    '<button class="startbtn" onclick="location.reload()">🔁 Играть снова</button>';
+  window.scrollTo(0, 0);
+}
+
+/* ---------- учитель ---------- */
+
+function openTeacher() { document.getElementById("teacherOverlay").style.display = "flex"; }
+function closeTeacher() { document.getElementById("teacherOverlay").style.display = "none"; }
+document.getElementById("teacherBtn").onclick = openTeacher;
+document.getElementById("teacherOverlay").onclick = function(e) { if (e.target === this) closeTeacher(); };
+document.getElementById("taskTable").innerHTML = TASK_LIST.map(function(r) {
+  return "<tr><td>" + r[0] + "</td><td><b>" + r[1] + "</b></td></tr>";
+}).join("");
+
+document.getElementById("restartBtn").onclick = function() {
+  i = 0; stars = 0; render();
+};
+document.getElementById("prevBtn").onclick = function() {
+  if (i > 0) { i--; render(); }
+};
+document.getElementById("nextBtn").onclick = function() {
+  if (i < S.length - 1) { i++; render(); }
+};
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "t" || e.key === "T" || e.key === "е" || e.key === "Е") {
+    if (document.getElementById("teacherOverlay").style.display === "flex") closeTeacher(); else openTeacher();
+    return;
+  }
+  if (document.getElementById("teacherOverlay").style.display === "flex") return;
+  var nextBtn = document.getElementById("next") || document.getElementById("tblNext");
+  if ((e.key === "Enter" || e.key === " ") && nextBtn && nextBtn.style.display === "block") {
+    e.preventDefault(); nextBtn.click(); return;
+  }
+  var n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 4) {
+    var bs = Array.prototype.slice.call(stage.querySelectorAll(".opt")).filter(function(b) { return !b.disabled; });
+    if (bs[n - 1]) bs[n - 1].click();
+  }
+});
+
+/* старт */
+render();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

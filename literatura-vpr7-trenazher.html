@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ВПР-7 · Тренажёр терминов</title>
+<meta property="og:title" content="ВПР-7 · Тренажёр литературных терминов">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#eef2f7; --card:#fff; --ink:#1c2733; --muted:#5b6b7b;
+    --accent:#2b5cad; --accent-dark:#1e4382;
+    --ok:#1e8e4e; --ok-bg:#e2f5ea; --bad:#c63434; --bad-bg:#fbe7e7;
+    --warn:#b97a12; --warn-bg:#fdf3e0;
+    --tile:#eaf0f9; --tile-border:#c9d6e8;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:17px; line-height:1.5;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:12px 12px 40px;}
+  .card{background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:0 2px 10px rgba(30,50,80,.08); margin-top:12px;}
+  h1{font-size:22px; margin:6px 0 4px;}
+  .subtitle{color:var(--muted); font-size:15px; margin:0 0 6px;}
+  .btn{
+    display:block; width:100%; border:0; border-radius:12px; cursor:pointer;
+    font-size:17px; font-family:inherit; padding:14px 16px; margin-top:12px;
+    background:var(--accent); color:#fff; font-weight:700; text-align:center;
+    touch-action:manipulation;
+  }
+  .btn.secondary{background:#dde5ef; color:var(--accent-dark);}
+  .btn:disabled{opacity:.45;}
+  .topbar{display:flex; align-items:center; gap:8px; margin-top:2px;}
+  .topbar .task{font-weight:700; font-size:15px; color:var(--muted); white-space:nowrap;}
+  .topbar .pts{margin-left:auto; font-size:15px; color:var(--muted); white-space:nowrap;}
+  .bar{height:6px; border-radius:3px; background:#d9e1ec; margin-top:8px; overflow:hidden;}
+  .bar > div{height:100%; background:var(--accent); width:0%; transition:width .3s;}
+  .instruction{font-size:14px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; margin:12px 2px 0;}
+  .card-prompt{
+    font-size:19px; line-height:1.5; white-space:pre-line; font-weight:600;
+    background:#f4f8fd; border:2px solid #dbe6f2; border-radius:12px; padding:14px 16px;
+  }
+  .opt{
+    display:block; width:100%; text-align:left; border:2px solid #d5dce6; border-radius:12px;
+    background:#fbfcfe; padding:12px 14px; margin-top:10px; cursor:pointer;
+    font-size:16.5px; line-height:1.4; font-family:inherit; color:var(--ink); touch-action:manipulation;
+  }
+  .opt:disabled{cursor:default;}
+  .opt.correct{border-color:var(--ok); background:var(--ok-bg); font-weight:600;}
+  .opt.wrong{border-color:var(--bad); background:var(--bad-bg);}
+  .opt.faded{opacity:.55;}
+  .feedback{border-radius:12px; padding:13px 15px; margin-top:14px; font-size:16px; display:none;}
+  .feedback.good{background:var(--ok-bg); border:2px solid var(--ok);}
+  .feedback.bad{background:var(--bad-bg); border:2px solid var(--bad);}
+  .feedback.part{background:var(--warn-bg); border:2px solid var(--warn);}
+  .feedback .verdict{font-weight:700; margin-bottom:6px;}
+  .feedback .verdict.good{color:var(--ok);}
+  .feedback .verdict.bad{color:var(--bad);}
+  .feedback .verdict.part{color:var(--warn);}
+  .feedback .expl{white-space:pre-line;}
+  .etym{margin-top:9px; padding-top:9px; border-top:1px dashed rgba(0,0,0,.18); font-size:15px;}
+  #nextBtn{display:none;}
+  /* Matching exercise */
+  .match{display:flex; gap:10px; margin-top:12px;}
+  .match .col{flex:1; display:flex; flex-direction:column; gap:8px;}
+  .match .col.defs{flex:1.35;}
+  .match-item{
+    border:2px solid #d5dce6; background:#fbfcfe; border-radius:10px; padding:9px 10px;
+    font-size:14px; line-height:1.35; cursor:pointer; min-height:52px; font-family:inherit; color:var(--ink);
+    text-align:left; touch-action:manipulation;
+  }
+  .match-item.selected{border-color:var(--accent); background:#e8f0fc; font-weight:600;}
+  .match-item.done{border-color:var(--ok); background:var(--ok-bg); cursor:default; opacity:.75;}
+  .match-item.flashbad{border-color:var(--bad); background:var(--bad-bg);}
+  /* Word-building exercise */
+  .answer-zone{
+    min-height:92px; border:2px dashed #b9c8de; border-radius:12px; background:#f7fafd;
+    padding:9px; display:flex; flex-wrap:wrap; gap:8px; align-content:flex-start; margin-top:12px;
+  }
+  .answer-zone .hint{color:#93a1b3; font-size:14px; align-self:center; margin:0 auto;}
+  .bank{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .word{
+    border:2px solid var(--tile-border); background:var(--tile); border-radius:10px;
+    padding:9px 13px; font-size:16px; cursor:pointer; font-family:inherit; color:var(--ink);
+    touch-action:manipulation;
+  }
+  .word.used{opacity:.28; pointer-events:none;}
+  .checkBtn{margin-top:14px;}
+  .result-big{font-size:44px; font-weight:800; text-align:center; margin:6px 0 2px;}
+  .result-sub{text-align:center; color:var(--muted); margin-bottom:8px;}
+  .result-stars{font-size:38px; text-align:center; letter-spacing:6px; min-height:46px;}
+  .result-grade{font-size:20px; font-weight:800; text-align:center; margin:4px 0 6px;}
+  .review-item{border-top:1px solid #e4e9f1; padding:12px 2px 2px; margin-top:12px; font-size:15.5px;}
+  .review-item:first-of-type{border-top:0;}
+  .review-a{margin-top:6px; color:var(--ok); font-weight:700;}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- СТАРТ -->
+  <div id="screenStart">
+    <div class="card">
+      <h1>Подготовка к ВПР · Литература · 7 класс</h1>
+      <p class="subtitle">Ты начинаешь подготовку к Всероссийской проверочной работе по литературе за 7 класс.</p>
+      <p class="subtitle">Приложение дорабатывается: на сегодня готово к использованию
+      <span id="readyCount"></span></p>
+      <button class="btn" id="startBtn">Начать урок</button>
+    </div>
+  </div>
+
+  <!-- УРОК -->
+  <div id="screenQuiz" class="hidden">
+    <div class="topbar">
+      <div class="task" id="counter"></div>
+      <div class="pts" id="ptsLive"></div>
+    </div>
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="instruction" id="instr"></div>
+    <div class="card">
+      <div class="card-prompt" id="prompt"></div>
+      <div id="exercise"></div>
+      <div class="feedback" id="feedback">
+        <div class="verdict" id="verdict"></div>
+        <div class="expl" id="explText"></div>
+      </div>
+      <button class="btn" id="nextBtn">Дальше</button>
+    </div>
+  </div>
+
+  <!-- РЕЗУЛЬТАТ -->
+  <div id="screenResult" class="hidden">
+    <div class="card">
+      <div class="result-stars" id="resultStars"></div>
+      <div class="result-big" id="resultPoints"></div>
+      <div class="result-sub" id="resultPct"></div>
+      <div class="result-sub" id="resultWord"></div>
+      <button class="btn" id="againBtn">Ещё урок</button>
+    </div>
+    <div class="card hidden" id="reviewCard">
+      <h1 style="font-size:18px;">Разбор ошибок</h1>
+      <div id="reviewList"></div>
+    </div>
+  </div>
+
+</div>
+<script>
+"use strict";
+
+/* ==== ДАННЫЕ: 21 термин ==== */
+var TERMS = [
+  {t:"сюжет",           d:"Ряд событий, описанных в художественном произведении",
+   e:"от французского sujet — «предмет, содержание»: буквально «то, что лежит в основе» рассказа"},
+  {t:"портрет",         d:"Изображение внешности героя: лица, одежды",
+   e:"от французского portrait, от porter — «изображать, воссоздавать» облик человека"},
+  {t:"проблема",        d:"Главный вопрос, который автор исследует в произведении",
+   e:"от греческого próblēma — «задача», буквально «нечто, брошенное вперёд» (pro — «вперёд», bállō — «бросаю»)"},
+  {t:"повесть",         d:"Прозаический жанр среднего объёма — между романом и рассказом",
+   e:"от древнерусского «повѣдь» — «рассказ, весть»: то, что поведано, рассказано"},
+  {t:"роман",           d:"Большое произведение со многими героями и сюжетом",
+   e:"от французского roman: так называли повести на народном (романском) языке — в отличие от книг на латыни"},
+  {t:"тема",            d:"Жизненный материал, лежащий в основе произведения",
+   e:"от греческого téma — «то, что предложено, положено в основу»"},
+  {t:"пейзаж",          d:"Описание природы в художественном произведении",
+   e:"от французского paysage, от pays — «страна, местность»: буквально «изображение местности»"},
+  {t:"лирика",          d:"Род литературы, передающий чувства и переживания автора",
+   e:"от греческого lýra — «лира»: стихи пели под аккомпанемент лиры"},
+  {t:"эпос",            d:"Род литературы — повествование о событиях и героях",
+   e:"от греческого épos — «слово, рассказ»"},
+  {t:"дактиль",         d:"Трёхсложный стихотворный размер с ударением на первом слоге",
+   e:"от греческого dáktylos — «палец»: стопа похожа на палец — один длинный сустав и два коротких"},
+  {t:"драма",           d:"Род литературы для постановки на сцене",
+   e:"от греческого drâma — «действие» (drán — «делать»): пьеса живёт действием на сцене"},
+  {t:"идея",            d:"Главная мысль, ради которой написано произведение",
+   e:"от греческого idéa — «вид, облик»: то, что «видно» не глазами, а умом"},
+  {t:"романтизм",       d:"Направление, противопоставляющее реальный мир миру идеальному",
+   e:"от французского romantique — «романный»: выросло из рыцарских романов с их мечтой и чудом"},
+  {t:"интерьер",        d:"Описание внутренней обстановки помещения",
+   e:"от французского intérieur — «внутренний»"},
+  {t:"эпиграф",         d:"Короткое изречение перед текстом, поясняющее замысел",
+   e:"от греческого epigraphḗ — «надпись» (epí — «на», gráphō — «пишу»): «надпись над произведением»"},
+  {t:"сатира",          d:"Жанр, беспощадно высмеивающий пороки и недостатки",
+   e:"от латинского sātira — «смесь, всякая всячина»: так звали блюдо из всего сразу, а потом и стихи-«смеси» с насмешкой"},
+  {t:"поэма",           d:"Крупное стихотворное произведение, сочетающее эпос и лирику",
+   e:"от греческого poíēma — «творение» (poiéō — «делаю, творю»)"},
+  {t:"героический",     d:"Пафос, выражающий восхищение подвигами героев",
+   e:"от греческого hḗrōs — «герой, богатырь»: под стать героям древних сказаний"},
+  {t:"пафос",           d:"Основной эмоциональный настрой произведения",
+   e:"от греческого páthos — «чувство, страсть»"},
+  {t:"лирический герой",d:"Герой стихотворения, чьи чувства описаны в тексте",
+   e:"«лирический» — от лиры, как и «лирика»; а сам термин предложил поэт Юрий Тынянов в 1920-е годы"},
+  {t:"стихотворение",   d:"Небольшое произведение, написанное стихами",
+   e:"греческое stíchos — «строка»: слово построено как «творение строк» (калька с греческого)"},
+  {t:"рифма",           d:"Созвучие окончаний стихотворных строк",
+   e:"от греческого rhythmos — «соразмерность, ритм»"},
+  {t:"хорей",           d:"Двусложная стопа с ударением на первом слоге",
+   e:"от греческого choros — «хор»: хореем пели в хоре; звучит как «ТА-та»"},
+  {t:"ямб",             d:"Двусложная стопа с ударением на втором слоге",
+   e:"от греческого iambos — так называли насмешливые песни; звучит как «та-ТИ»"},
+  {t:"анапест",         d:"Трёхсложная стопа с ударением на третьем слоге",
+   e:"от греческого anápaistos — «обращённый назад»: стопа, «перевёрнутый» дактиль — «та-та-ТИ»"},
+  {t:"амфибрахий",      d:"Трёхсложная стопа с ударением на втором слоге",
+   e:"от греческого amphíbrachys — «короткий с обеих сторон»: ударный слог окружён безударными — «та-ТИ-та»"},
+  {t:"завязка",         d:"События, с которых начинается конфликт в произведении",
+   e:"русское слово от «завязывать»: конфликт завязывается, как узел"},
+  {t:"кульминация",     d:"Высшая точка напряжения в развитии конфликта",
+   e:"от латинского culmen — «вершина, пик»: самая высокая точка сюжета"},
+  {t:"развязка",        d:"Завершение конфликта, итог сюжета произведения",
+   e:"русское слово от «развязывать»: узел конфликта развязан — действие завершено"},
+  {t:"экспозиция",      d:"Знакомство с героями и обстановкой до начала действия",
+   e:"от латинского expositio — «изложение, выставление напоказ»"},
+  {t:"композиция",      d:"Структура художественного произведения, его построение",
+   e:"от латинского compositio — «составление, сложение»: как «сложено» произведение"},
+  {t:"художественная деталь", d:"Мелкая подробность, помогающая ярко представить образ",
+   e:"«деталь» — от французского détail — «подробность»: маленький штрих рисует большую картину"},
+  {t:"сказка",          d:"Фольклорный жанр с вымышленными, чудесными событиями",
+   e:"от «сказ» — то, что сказывается, рассказывается вслух"},
+  {t:"рассказ",         d:"Короткое прозаическое произведение об одном событии",
+   e:"от «рассказывать»: самая короткая прозаическая форма"}
+];
+
+/* Близкие термины: не давать вместе в одном упражнении */
+var GROUPS = [["пафос","героический"],["поэма","стихотворение"]];
+
+/* Лишние слова для сборки (косвенные формы — грамматически «не встают») */
+var EXTRA_WORDS = ["стихами","героем","строки","страсти","сценой","словом","весны","тропинкой"];
+
+var LESSON_LEN = 10;
+var INSTRUCTIONS = {
+  A: "Выбери термин, подходящий к определению",
+  B: "Выбери определение к термину",
+  C: "Соедини термины с определениями: жми термин, потом определение",
+  D: "Собери определение из слов"
+};
+var TYPE_KEYS = ["A", "B", "C", "D"];
+var LESSON_PASS_SCORE = 80;   /* зачёт урока */
+var LESSONS_FOR_LEVEL = 2;    /* зачтённых уроков для открытия следующего уровня */
+
+/* ==== Прогресс (localStorage) ==== */
+var STORE_KEY = "vpr7trainer";
+var store = {terms: {}, passed: 0};
+try {
+  var saved = localStorage.getItem(STORE_KEY);
+  if (saved) store = JSON.parse(saved);
+} catch(e){}
+function saveStore(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch(e){} }
+function termRec(t){
+  if (!store.terms[t]) store.terms[t] = {types: [], wrong: 0};
+  return store.terms[t];
+}
+
+var session = [], cur = 0, points = 0, mistakes = [];
+var matchErrors = 0, matchDone = 0, matchTotal = 4;
+
+function el(id){ return document.getElementById(id); }
+function shuffle(a){
+  for (var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function pick(arr, n){ return shuffle(arr.slice()).slice(0, n); }
+function isForbidden(t, cand){
+  for (var g = 0; g < GROUPS.length; g++){
+    if (GROUPS[g].indexOf(t) !== -1 && GROUPS[g].indexOf(cand) !== -1) return true;
+  }
+  return false;
+}
+function distractorTerms(idx, n){
+  var pool = [];
+  for (var i = 0; i < TERMS.length; i++){
+    if (i !== idx && !isForbidden(TERMS[idx].t, TERMS[i].t)) pool.push(i);
+  }
+  return pick(pool, n);
+}
+function distractorDefs(idx, n){
+  var pool = [];
+  for (var i = 0; i < TERMS.length; i++){
+    if (i !== idx && !isForbidden(TERMS[idx].t, TERMS[i].t)) pool.push(i);
+  }
+  return pick(pool, n);
+}
+
+function show(screen){
+  ["screenStart","screenQuiz","screenResult"].forEach(function(s){
+    el(s).classList.toggle("hidden", s !== screen);
+  });
+}
+
+function startLesson(){
+  /* Приоритет: термины с ошибками, затем наименее покрытые типами */
+  var all = shuffle(TERMS.map(function(_, i){ return i; }));
+  var withWrong = all.filter(function(i){ return termRec(TERMS[i].t).wrong > 0; });
+  var rest = all.filter(function(i){ return termRec(TERMS[i].t).wrong === 0; })
+    .sort(function(a, b){ return termRec(TERMS[a].t).types.length - termRec(TERMS[b].t).types.length; });
+  var chosen = withWrong.concat(rest).slice(0, LESSON_LEN);
+  var types = chosen.map(function(ti){
+    var covered = termRec(TERMS[ti].t).types;
+    var fresh = TYPE_KEYS.filter(function(t){ return covered.indexOf(t) === -1; });
+    return fresh.length
+      ? fresh[Math.floor(Math.random() * fresh.length)]
+      : TYPE_KEYS[Math.floor(Math.random() * TYPE_KEYS.length)];
+  });
+  session = chosen.map(function(ti, k){ return {type: types[k], ti: ti}; });
+  cur = 0; points = 0; mistakes = [];
+  show("screenQuiz");
+  renderExercise();
+}
+
+function updateTop(){
+  el("counter").textContent = "Упражнение " + (cur + 1) + " из " + session.length;
+  el("ptsLive").textContent = "⭐ " + points;
+  el("barFill").style.width = (100 * cur / session.length) + "%";
+}
+
+function finishFeedback(kind, verdictText, explHtml, earned, mistake){
+  var fb = el("feedback"), v = el("verdict");
+  fb.style.display = "block";
+  fb.className = "feedback " + kind;
+  v.className = "verdict " + kind;
+  v.textContent = verdictText;
+  el("explText").innerHTML = explHtml;
+  points += earned;
+  el("ptsLive").textContent = "⭐ " + points;
+  if (mistake) mistakes.push(mistake);
+  /* прогресс по термину: верное упражнение закрывает тип, ошибка — флаг повторения */
+  var it = session[cur];
+  if (it){
+    var rec = termRec(TERMS[it.ti].t);
+    if (kind === "good" || kind === "part"){
+      if (rec.types.indexOf(it.type) === -1) rec.types.push(it.type);
+    } else {
+      rec.wrong++;
+    }
+    saveStore();
+  }
+  var nb = el("nextBtn");
+  nb.style.display = "block";
+  nb.textContent = (cur === session.length - 1) ? "Показать результат" : "Дальше";
+}
+
+function etymLine(term){
+  return '<div class="etym">📖 <b>Почему такое название:</b> ' + term.e + '</div>';
+}
+
+/* ==== УПРАЖНЕНИЕ A: определение → 4 термина ==== */
+function renderA(item){
+  var term = TERMS[item.ti];
+  var others = distractorTerms(item.ti, 3);
+  var opts = shuffle([item.ti].concat(others));
+  var box = el("exercise");
+  box.innerHTML = "";
+  opts.forEach(function(ti){
+    var b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = TERMS[ti].t;
+    b.addEventListener("click", function(){
+      var btns = box.querySelectorAll(".opt");
+      for (var i = 0; i < btns.length; i++){
+        btns[i].disabled = true;
+        var isRight = (parseInt(btns[i].getAttribute("data-ti"), 10) === item.ti);
+        if (isRight) btns[i].classList.add("correct");
+        else if (btns[i] !== b) btns[i].classList.add("faded");
+      }
+      b.setAttribute("data-ti", ti);
+      if (ti === item.ti){
+        finishFeedback("good", "Верно! +10 баллов", "", 10, null);
+      } else {
+        b.classList.add("wrong"); b.classList.remove("faded");
+        finishFeedback("bad",
+          "Неверно. Правильный ответ: " + term.t,
+          "Выбрано «" + TERMS[ti].t + "» — это другое понятие. " +
+          "<b>" + term.t + "</b> — это " + term.d.toLowerCase() + "." + etymLine(term),
+          0, {term: term.t, def: term.d});
+      }
+    });
+    b.setAttribute("data-ti", ti);
+    box.appendChild(b);
+  });
+}
+
+/* ==== УПРАЖНЕНИЕ B: термин → 4 определения ==== */
+function renderB(item){
+  var term = TERMS[item.ti];
+  var others = distractorDefs(item.ti, 3);
+  var opts = shuffle([item.ti].concat(others));
+  var box = el("exercise");
+  box.innerHTML = "";
+  opts.forEach(function(ti){
+    var b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = TERMS[ti].d;
+    b.setAttribute("data-ti", ti);
+    b.addEventListener("click", function(){
+      var btns = box.querySelectorAll(".opt");
+      for (var i = 0; i < btns.length; i++){
+        btns[i].disabled = true;
+        if (parseInt(btns[i].getAttribute("data-ti"), 10) === item.ti) btns[i].classList.add("correct");
+        else if (btns[i] !== b) btns[i].classList.add("faded");
+      }
+      if (ti === item.ti){
+        finishFeedback("good", "Верно! +10 баллов", "", 10, null);
+      } else {
+        b.classList.add("wrong"); b.classList.remove("faded");
+        finishFeedback("bad",
+          "Неверно. Правильный ответ: " + term.t,
+          "Это определение термина «" + TERMS[ti].t + "». " +
+          "<b>" + term.t + "</b> — это " + term.d.toLowerCase() + "." + etymLine(term),
+          0, {term: term.t, def: term.d});
+      }
+    });
+    box.appendChild(b);
+  });
+}
+
+/* ==== УПРАЖНЕНИЕ C: соединить пары ==== */
+function renderC(item){
+  var chosen = [item.ti];
+  shuffle(TERMS.map(function(_, i){ return i; }).filter(function(i){ return i !== item.ti; }))
+    .forEach(function(i){
+      if (chosen.length < 4 && chosen.every(function(c){ return !isForbidden(TERMS[c].t, TERMS[i].t); })){
+        chosen.push(i);
+      }
+    });
+  var idxs = shuffle(chosen);
+  matchErrors = 0; matchDone = 0; matchTotal = idxs.length;
+  var box = el("exercise");
+  box.innerHTML = "";
+  var wrap = document.createElement("div");
+  wrap.className = "match";
+  var colT = document.createElement("div"); colT.className = "col";
+  var colD = document.createElement("div"); colD.className = "col defs";
+  idxs.forEach(function(ti){
+    var b = document.createElement("button");
+    b.className = "match-item"; b.textContent = TERMS[ti].t;
+    b.setAttribute("data-ti", ti); b.setAttribute("data-side", "t");
+    colT.appendChild(b);
+  });
+  shuffle(idxs).forEach(function(ti){
+    var b = document.createElement("button");
+    b.className = "match-item"; b.textContent = TERMS[ti].d;
+    b.setAttribute("data-ti", ti); b.setAttribute("data-side", "d");
+    colD.appendChild(b);
+  });
+  wrap.appendChild(colT); wrap.appendChild(colD);
+  box.appendChild(wrap);
+  var selected = null;
+
+  wrap.addEventListener("click", function(ev){
+    var btn = ev.target.closest(".match-item");
+    if (!btn || btn.classList.contains("done") || el("nextBtn").style.display === "block") return;
+    var side = btn.getAttribute("data-side");
+    if (side === "t"){
+      var wasSel = wrap.querySelector(".match-item.selected[data-side='t']");
+      if (wasSel === btn){ btn.classList.remove("selected"); selected = null; return; }
+      if (wasSel) wasSel.classList.remove("selected");
+      btn.classList.add("selected"); selected = btn;
+      return;
+    }
+    if (!selected) return;
+    var tTi = parseInt(selected.getAttribute("data-ti"), 10);
+    var dTi = parseInt(btn.getAttribute("data-ti"), 10);
+    if (tTi === dTi){
+      selected.classList.remove("selected");
+      selected.classList.add("done"); selected.disabled = true;
+      btn.classList.add("done"); btn.disabled = true;
+      matchDone++;
+      if (matchDone === matchTotal){
+        var term = TERMS[item.ti];
+        if (matchErrors === 0){
+          finishFeedback("good", "Верно! +10 баллов", "", 10, null);
+        } else {
+          var pairsText = idxs.map(function(ti){
+            return "• <b>" + TERMS[ti].t + "</b> — " + TERMS[ti].d.toLowerCase();
+          }).join("<br>");
+          finishFeedback("part", "Есть ошибки (+5 баллов)",
+            "Правильные пары:<br>" + pairsText, 5,
+            {term: term.t, def: term.d});
+        }
+      }
+    } else {
+      matchErrors++;
+      btn.classList.add("flashbad");
+      setTimeout(function(){ btn.classList.remove("flashbad"); }, 450);
+    }
+    selected = null;
+  });
+}
+
+/* ==== УПРАЖНЕНИЕ D: собрать определение из слов ==== */
+function renderD(item){
+  var term = TERMS[item.ti];
+  var target = term.d
+    .replace(/[«»".,:;!?()—–-]/g, " ")
+    .replace(/\s+/g, " ").trim().toLowerCase().split(" ");
+  var extras = pick(EXTRA_WORDS.filter(function(w){ return target.indexOf(w) === -1; }), 2);
+  var tiles = shuffle(target.concat(extras));
+  var box = el("exercise");
+  box.innerHTML = "";
+  var zone = document.createElement("div");
+  zone.className = "answer-zone";
+  zone.innerHTML = '<div class="hint">Нажимай слова ниже — соберутся сюда</div>';
+  var bank = document.createElement("div");
+  bank.className = "bank";
+  var used = [];
+  tiles.forEach(function(w){
+    var b = document.createElement("button");
+    b.className = "word"; b.textContent = w;
+    b.addEventListener("click", function(){
+      if (b.classList.contains("used")) return;
+      b.classList.add("used");
+      used.push(w);
+      var chip = document.createElement("button");
+      chip.className = "word"; chip.textContent = w;
+      chip.addEventListener("click", function(){
+        used.splice(used.indexOf(w), 1);
+        b.classList.remove("used");
+        chip.remove();
+        refreshCheck();
+        if (!used.length) zone.innerHTML = '<div class="hint">Нажимай слова ниже — соберутся сюда</div>';
+      });
+      var hint = zone.querySelector(".hint");
+      if (hint) hint.remove();
+      zone.appendChild(chip);
+      refreshCheck();
+    });
+    bank.appendChild(b);
+  });
+  box.appendChild(zone); box.appendChild(bank);
+  var check = document.createElement("button");
+  check.className = "btn secondary checkBtn";
+  check.textContent = "Проверить";
+  check.disabled = true;
+  function refreshCheck(){ check.disabled = !used.length; }
+  check.addEventListener("click", function(){
+    var ok = used.length === target.length && used.every(function(w, i){ return w === target[i]; });
+    check.disabled = true;
+    bank.querySelectorAll(".word").forEach(function(b){ b.disabled = true; });
+    if (ok){
+      finishFeedback("good", "Верно! +10 баллов", "", 10, null);
+    } else {
+      finishFeedback("bad",
+        "Неверно. Правильный ответ: " + term.t,
+        "Правильная сборка: <b>" + term.d.toLowerCase() + "</b>." +
+        (used.length ? " У тебя: " + used.join(" ") + "." : "") + etymLine(term),
+        0, {term: term.t, def: term.d});
+    }
+  });
+  box.appendChild(check);
+}
+
+function renderExercise(){
+  var item = session[cur];
+  updateTop();
+  el("feedback").style.display = "none";
+  el("nextBtn").style.display = "none";
+  el("instr").textContent = INSTRUCTIONS[item.type];
+  if (item.type === "A"){ el("prompt").textContent = TERMS[item.ti].d; renderA(item); }
+  if (item.type === "B"){ el("prompt").textContent = TERMS[item.ti].t; renderB(item); }
+  if (item.type === "C"){ el("prompt").textContent = "4 термина — 4 определения"; renderC(item); }
+  if (item.type === "D"){ el("prompt").textContent = TERMS[item.ti].t; renderD(item); }
+}
+
+function next(){
+  cur++;
+  if (cur < session.length) renderExercise();
+  else showResult();
+}
+
+function showResult(){
+  show("screenResult");
+  var max = session.length * 10;
+  var pct = Math.round(100 * points / max);
+  el("resultStars").textContent = pct >= 90 ? "⭐⭐⭐" : (pct >= 70 ? "⭐⭐" : (pct >= 50 ? "⭐" : ""));
+  el("resultPoints").textContent = points + " баллов";
+  el("resultPct").textContent = "из " + max + " возможных (" + pct + "%)";
+  var passed = points >= LESSON_PASS_SCORE;
+  var levelNote;
+  if (passed){
+    store.passed++;
+    if (store.passed >= LESSONS_FOR_LEVEL){
+      try { localStorage.setItem("vpr7unlocked", "1"); } catch(e){}
+      levelNote = "🎓 Урок зачтён " + store.passed + "-й — СЛЕДУЮЩИЙ УРОВЕНЬ ОТКРЫТ!";
+    } else {
+      levelNote = "✅ Урок зачтён: " + store.passed + " из " + LESSONS_FOR_LEVEL +
+        " для открытия следующего уровня.";
+    }
+    saveStore();
+  } else {
+    levelNote = "Урок не зачтён: для зачёта нужно " + LESSON_PASS_SCORE + " баллов (" +
+      store.passed + " зачтено).";
+  }
+  var word = pct >= 90 ? "Отличный урок! Так держать! " + levelNote
+           : pct >= 70 ? "Хорошо! Ещё чуть-чуть до отличного. " + levelNote
+           : pct >= 50 ? "Неплохо, но термины стоит повторить. " + levelNote
+           : "Сложный урок — попробуй ещё раз, вопросы будут другие. " + levelNote;
+  el("resultWord").textContent = word;
+  var rc = el("reviewCard"), list = el("reviewList");
+  if (!mistakes.length){ rc.classList.add("hidden"); }
+  else {
+    rc.classList.remove("hidden");
+    list.innerHTML = "";
+    mistakes.forEach(function(m){
+      var div = document.createElement("div");
+      div.className = "review-item";
+      var a = document.createElement("div");
+      a.className = "review-a";
+      a.textContent = m.term + " — " + m.def;
+      div.appendChild(a);
+      list.appendChild(div);
+    });
+  }
+}
+
+el("startBtn").addEventListener("click", startLesson);
+el("againBtn").addEventListener("click", startLesson);
+el("nextBtn").addEventListener("click", next);
+
+(function initProgressNote(){
+  el("readyCount").textContent = TERMS.length + " терминов (раздел 1 из 2). " +
+    "Урок зачтён — от " + LESSON_PASS_SCORE + " баллов; " + LESSONS_FOR_LEVEL +
+    " зачтённых урока открывают следующий уровень.";
+})();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

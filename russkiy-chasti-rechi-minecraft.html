@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Части речи · Minecraft Edition</title>
+<meta property="og:title" content="Части речи — Minecraft Edition">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mc-bg: #1e1e1e;
+            --mc-ui-bg: #c6c6c6;
+            --mc-ui-border-light: #ffffff;
+            --mc-ui-border-dark: #555555;
+            --mc-text: #3f3f3f;
+            --mc-btn-hover: #dcdcdc;
+            --mc-green: #5fb14b;
+            --mc-red: #b93a3a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            background-color: #121212;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMmUyZTJlIi8+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMzYzNjM2Ii8+PHJlY3QgeD0iMzIiIHk9IjMyIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9IiMzNjM2MzYiLz48L3N2Zz4=');
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            font-size: 20px;
+        }
+
+        .lesson-card {
+            max-width: 1100px;
+            width: 100%;
+            background: var(--mc-ui-bg);
+            border: 4px solid black;
+            box-shadow: inset 4px 4px 0 var(--mc-ui-border-light), inset -4px -4px 0 var(--mc-ui-border-dark);
+            padding: 20px;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 4px 4px 0 #3f3f3f;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #ffff55;
+            text-shadow: 2px 2px 0 #3f3f3f;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+
+        .exercise-container {
+            background: #8b8b8b;
+            border: 4px solid black;
+            box-shadow: inset 4px 4px 0 #a8a8a8, inset -4px -4px 0 #5e5e5e;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #5e5e5e;
+            padding-bottom: 10px;
+        }
+
+        .exercise-title {
+            color: white;
+            text-shadow: 2px 2px 0 #3f3f3f;
+            font-size: 1.8rem;
+        }
+
+        .instruction {
+            color: #ffff55;
+            text-shadow: 1px 1px 0 #3f3f3f;
+            font-size: 1.2rem;
+        }
+
+        /* Word Bank Styles */
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: #373737;
+            padding: 15px;
+            border: 2px solid black;
+            box-shadow: inset 2px 2px 0 #1e1e1e;
+            margin-bottom: 25px;
+            min-height: 100px;
+        }
+
+        .mc-btn {
+            background: var(--mc-ui-bg);
+            border: 2px solid black;
+            box-shadow: inset 2px 2px 0 var(--mc-ui-border-light), inset -2px -2px 0 var(--mc-ui-border-dark);
+            color: var(--mc-text);
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: none;
+            text-transform: uppercase;
+        }
+
+        .mc-btn:hover:not(:disabled) {
+            background: var(--mc-btn-hover);
+        }
+
+        .mc-btn:active:not(:disabled) {
+            box-shadow: inset 2px 2px 0 var(--mc-ui-border-dark), inset -2px -2px 0 var(--mc-ui-border-light);
+            transform: translateY(2px);
+        }
+
+        .mc-btn.selected {
+            background: #a0a0ff;
+            border-color: #3c44aa;
+            box-shadow: inset 2px 2px 0 #fff, inset -2px -2px 0 #3c44aa;
+        }
+
+        .mc-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(100%);
+        }
+
+        /* Drop Zones Grid */
+        .drop-zone-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .drop-zone-row-2 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            /* Center the 3 items in the second row if we had 6 total, but here we just stack grids */
+        }
+        
+        /* Wrapper for all zones to handle spacing nicely */
+        .zones-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .drop-zone {
+            background: #8b8b8b;
+            border: 4px solid black;
+            box-shadow: inset 4px 4px 0 #a8a8a8, inset -4px -4px 0 #5e5e5e;
+            padding: 15px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .drop-zone:hover {
+            background: #9c9c9c;
+        }
+
+        .drop-zone h4 {
+            background: #373737;
+            color: white;
+            padding: 5px 10px;
+            border: 2px solid black;
+            box-shadow: inset 2px 2px 0 #5e5e5e, inset -2px -2px 0 #1e1e1e;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 0 black;
+            width: 100%;
+            text-align: center;
+        }
+
+        .placed-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .placed-word-tag {
+            background: #373737;
+            color: #ffff55;
+            border: 2px solid black;
+            padding: 4px 8px;
+            font-size: 1.1rem;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+
+        /* Controls & Feedback */
+        .controls-area {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .reset-btn {
+            background: #b93a3a;
+            color: white;
+            text-shadow: 2px 2px 0 #3f3f3f;
+            border: 2px solid black;
+            box-shadow: inset 2px 2px 0 #d66, inset -2px -2px 0 #722;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .reset-btn:hover {
+            background: #d64a4a;
+        }
+
+        .feedback {
+            font-size: 1.3rem;
+            color: white;
+            text-shadow: 2px 2px 0 #3f3f3f;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 4px;
+            flex-grow: 1;
+            text-align: center;
+            margin-left: 10px;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            text-align: center;
+            color: #aaaaaa;
+            font-size: 1rem;
+            border-top: 2px dashed #555;
+            padding-top: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .drop-zone-grid, .drop-zone-row-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .drop-zone-grid, .drop-zone-row-2 {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 1.8rem; }
+            .mc-btn { font-size: 1.1rem; padding: 6px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="lesson-card">
+    <h1>ЧАСТИ РЕЧИ</h1>
+    <div class="subhead">Уровень 2: Расширенный крафт</div>
+
+    <div class="exercise-container" id="exerciseBlock">
+        <div class="exercise-header">
+            <div class="exercise-title">Инвентарь слов</div>
+            <div class="instruction">Кликни слово -> Кликни сундук</div>
+        </div>
+
+        <!-- Банк слов -->
+        <div class="word-bank" id="wordBank">
+            <!-- Существительные -->
+            <button class="mc-btn" data-word="лиса">лиса</button>
+            <button class="mc-btn" data-word="море">море</button>
+            <button class="mc-btn" data-word="ночь">ночь</button>
+            <button class="mc-btn" data-word="рыба">рыба</button>
+            <button class="mc-btn" data-word="дуб">дуб</button>
+            <button class="mc-btn" data-word="корзина">корзина</button>
+            
+            <!-- Прилагательные -->
+            <button class="mc-btn" data-word="красивый">красивый</button>
+            <button class="mc-btn" data-word="зелёный">зелёный</button>
+            <button class="mc-btn" data-word="голубое">голубое</button>
+            <button class="mc-btn" data-word="яркий">яркий</button>
+            <button class="mc-btn" data-word="свежий">свежий</button>
+            <button class="mc-btn" data-word="ясный">ясный</button>
+            
+            <!-- Глаголы -->
+            <button class="mc-btn" data-word="бежать">бежать</button>
+            <button class="mc-btn" data-word="петь">петь</button>
+            <button class="mc-btn" data-word="сверкать">сверкать</button>
+            <button class="mc-btn" data-word="читать">читать</button>
+            <button class="mc-btn" data-word="расти">расти</button>
+            <button class="mc-btn" data-word="лететь">лететь</button>
+            
+            <!-- Предлоги -->
+            <button class="mc-btn" data-word="в">в</button>
+            <button class="mc-btn" data-word="на">на</button>
+            <button class="mc-btn" data-word="под">под</button>
+            <button class="mc-btn" data-word="около">около</button>
+            <button class="mc-btn" data-word="из">из</button>
+            <button class="mc-btn" data-word="за">за</button>
+            
+            <!-- Наречия -->
+            <button class="mc-btn" data-word="весело">весело</button>
+            <button class="mc-btn" data-word="вчера">вчера</button>
+            <button class="mc-btn" data-word="громко">громко</button>
+            <button class="mc-btn" data-word="дома">дома</button>
+            <button class="mc-btn" data-word="быстро">быстро</button>
+            <button class="mc-btn" data-word="тихо">тихо</button>
+            
+            <!-- Союзы -->
+            <button class="mc-btn" data-word="и">и</button>
+            <button class="mc-btn" data-word="а">а</button>
+            <button class="mc-btn" data-word="но">но</button>
+            <button class="mc-btn" data-word="чтобы">чтобы</button>
+            <button class="mc-btn" data-word="потому что">потому что</button>
+            <button class="mc-btn" data-word="или">или</button>
+        </div>
+
+        <!-- Зоны (Сундуки) -->
+        <div class="zones-wrapper">
+            <!-- Row 1 -->
+            <div class="drop-zone-grid">
+                <div class="drop-zone" data-zone="noun">
+                    <h4>СУЩЕСТВИТЕЛЬНОЕ</h4>
+                    <div class="placed-words" id="zoneNoun"></div>
+                </div>
+                <div class="drop-zone" data-zone="adjective">
+                    <h4>ПРИЛАГАТЕЛЬНОЕ</h4>
+                    <div class="placed-words" id="zoneAdj"></div>
+                </div>
+                <div class="drop-zone" data-zone="verb">
+                    <h4>ГЛАГОЛ</h4>
+                    <div class="placed-words" id="zoneVerb"></div>
+                </div>
+            </div>
+            
+            <!-- Row 2 -->
+            <div class="drop-zone-row-2">
+                <div class="drop-zone" data-zone="preposition">
+                    <h4>ПРЕДЛОГ</h4>
+                    <div class="placed-words" id="zonePrep"></div>
+                </div>
+                <div class="drop-zone" data-zone="adverb">
+                    <h4>НАРЕЧИЕ</h4>
+                    <div class="placed-words" id="zoneAdv"></div>
+                </div>
+                <div class="drop-zone" data-zone="conjunction">
+                    <h4>СОЮЗ</h4>
+                    <div class="placed-words" id="zoneConj"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-area">
+            <button class="reset-btn" id="resetGameBtn">СБРОСИТЬ МИР</button>
+            <div class="feedback" id="feedbackMessage">Выбери ресурс для обработки...</div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Режим выживания: Грамматика v3.0 | Всего блоков: 36
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Словарь: слово -> часть речи
+        const wordMap = {
+            // Существительные
+            'лиса': 'noun', 'море': 'noun', 'ночь': 'noun', 'рыба': 'noun',
+            'дуб': 'noun', 'корзина': 'noun',
+            // Прилагательные
+            'красивый': 'adjective', 'зелёный': 'adjective', 'голубое': 'adjective',
+            'яркий': 'adjective', 'свежий': 'adjective', 'ясный': 'adjective',
+            // Глаголы
+            'бежать': 'verb', 'петь': 'verb', 'сверкать': 'verb', 'читать': 'verb',
+            'расти': 'verb', 'лететь': 'verb',
+            // Предлоги
+            'в': 'preposition', 'на': 'preposition', 'под': 'preposition',
+            'около': 'preposition', 'из': 'preposition', 'за': 'preposition',
+            // Наречия
+            'весело': 'adverb', 'вчера': 'adverb', 'громко': 'adverb',
+            'дома': 'adverb', 'быстро': 'adverb', 'тихо': 'adverb',
+            // Союзы
+            'и': 'conjunction', 'а': 'conjunction', 'но': 'conjunction',
+            'чтобы': 'conjunction', 'потому что': 'conjunction', 'или': 'conjunction'
+        };
+
+        let wordPlacement = {};
+        for (let w in wordMap) {
+            wordPlacement[w] = null;
+        }
+
+        const zoneNoun = document.getElementById('zoneNoun');
+        const zoneAdj = document.getElementById('zoneAdj');
+        const zoneVerb = document.getElementById('zoneVerb');
+        const zonePrep = document.getElementById('zonePrep');
+        const zoneAdv = document.getElementById('zoneAdv');
+        const zoneConj = document.getElementById('zoneConj');
+        
+        const wordBank = document.getElementById('wordBank');
+        const feedback = document.getElementById('feedbackMessage');
+        const resetBtn = document.getElementById('resetGameBtn');
+
+        let selectedWord = null;
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function renderWordButtons() {
+            const buttons = Array.from(document.querySelectorAll('#wordBank button'));
+            const buttonData = buttons.map(btn => ({
+                word: btn.getAttribute('data-word'),
+                text: btn.innerText
+            }));
+
+            shuffleArray(buttonData);
+            wordBank.innerHTML = '';
+
+            buttonData.forEach(data => {
+                const newBtn = document.createElement('button');
+                newBtn.className = 'mc-btn';
+                newBtn.setAttribute('data-word', data.word);
+                newBtn.innerText = data.text;
+                wordBank.appendChild(newBtn);
+            });
+
+            attachButtonListeners();
+        }
+
+        function attachButtonListeners() {
+            const buttons = document.querySelectorAll('#wordBank button');
+            buttons.forEach(btn => {
+                btn.removeEventListener('click', handleButtonClick);
+                btn.addEventListener('click', handleButtonClick);
+            });
+        }
+
+        function handleButtonClick() {
+            const word = this.getAttribute('data-word');
+            if (this.disabled) return;
+
+            if (selectedWord === word) {
+                selectedWord = null;
+                this.classList.remove('selected');
+                feedback.innerText = 'Выбор отменен.';
+                return;
+            }
+
+            document.querySelectorAll('#wordBank button').forEach(b => b.classList.remove('selected'));
+
+            this.classList.add('selected');
+            selectedWord = word;
+            feedback.innerText = `Выбрано: "${word}". Куда поместим?`;
+            feedback.style.color = '#ffffff';
+        }
+
+        function renderZones() {
+            zoneNoun.innerHTML = '';
+            zoneAdj.innerHTML = '';
+            zoneVerb.innerHTML = '';
+            zonePrep.innerHTML = '';
+            zoneAdv.innerHTML = '';
+            zoneConj.innerHTML = '';
+
+            for (const [word, zone] of Object.entries(wordPlacement)) {
+                const span = document.createElement('span');
+                span.className = 'placed-word-tag';
+                span.textContent = word;
+                
+                if (zone === 'noun') zoneNoun.appendChild(span);
+                else if (zone === 'adjective') zoneAdj.appendChild(span);
+                else if (zone === 'verb') zoneVerb.appendChild(span);
+                else if (zone === 'preposition') zonePrep.appendChild(span);
+                else if (zone === 'adverb') zoneAdv.appendChild(span);
+                else if (zone === 'conjunction') zoneConj.appendChild(span);
+            }
+
+            document.querySelectorAll('#wordBank button').forEach(btn => {
+                const word = btn.getAttribute('data-word');
+                if (wordPlacement[word] !== null) {
+                    btn.disabled = true;
+                    btn.classList.remove('selected');
+                } else {
+                    btn.disabled = false;
+                }
+            });
+
+            const allPlaced = Object.values(wordPlacement).every(v => v !== null);
+            if (allPlaced) {
+                feedback.innerHTML = 'УРОВЕНЬ ПРОЙДЕН! Все ресурсы распределены!';
+                feedback.style.color = '#5fb14b'; // Green
+            } else {
+                const placedCount = Object.values(wordPlacement).filter(v => v !== null).length;
+                feedback.innerText = `Обработано ${placedCount} из ${Object.keys(wordMap).length}`;
+                feedback.style.color = '#ffffff';
+            }
+        }
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('click', function() {
+                const zoneType = this.getAttribute('data-zone');
+                if (!selectedWord) {
+                    feedback.innerText = 'Сначала выбери слово из инвентаря!';
+                    feedback.style.color = '#ff5555';
+                    return;
+                }
+
+                if (wordPlacement[selectedWord] !== null) {
+                    feedback.innerText = 'Этот ресурс уже обработан!';
+                    feedback.style.color = '#ff5555';
+                    selectedWord = null;
+                    document.querySelectorAll('#wordBank button').forEach(b => b.classList.remove('selected'));
+                    return;
+                }
+
+                const correctZone = wordMap[selectedWord];
+                if (correctZone === zoneType) {
+                    wordPlacement[selectedWord] = zoneType;
+                    
+                    let typeName = '';
+                    switch(zoneType) {
+                        case 'noun': typeName = 'Предмет'; break;
+                        case 'adjective': typeName = 'Признак'; break;
+                        case 'verb': typeName = 'Действие'; break;
+                        case 'preposition': typeName = 'Предлог'; break;
+                        case 'adverb': typeName = 'Наречие'; break;
+                        case 'conjunction': typeName = 'Союз'; break;
+                    }
+
+                    feedback.innerHTML = `Верно! "${selectedWord}" — это ${typeName}.`;
+                    feedback.style.color = '#5fb14b';
+                    
+                    document.querySelectorAll('#wordBank button').forEach(b => b.classList.remove('selected'));
+                    selectedWord = null;
+                    renderZones();
+                } else {
+                    feedback.innerText = 'Не туда! Попробуй другой сундук.';
+                    feedback.style.color = '#ff5555';
+                }
+            });
+        });
+
+        resetBtn.addEventListener('click', function() {
+            for (let w in wordPlacement) {
+                wordPlacement[w] = null;
+            }
+            selectedWord = null;
+            renderWordButtons();
+            feedback.innerText = 'Мир сброшен. Начинай заново!';
+            feedback.style.color = '#ffffff';
+            renderZones();
+        });
+
+        // Init
+        renderWordButtons();
+        renderZones();
+    })();
+</script>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>
+

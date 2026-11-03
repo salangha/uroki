@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>Урок чтения — Мисаренко, план А</title>
+<meta property="og:title" content="Урок чтения по Мисаренко · №1">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{height:100%}
+body{margin:0;font-family:Verdana,"Segoe UI",Arial,sans-serif;background:#eef4fb;color:#16222f;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-bottom:3px solid #d5e2f2;flex-wrap:wrap}
+#tabs{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+#tabs button{font-size:19px;font-weight:bold;padding:9px 16px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+#tabs button.active{background:#2f6fd6;border-color:#2f6fd6;color:#fff}
+#stars{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:bold;background:#fff8e1;border:2px solid #f1d27a;border-radius:12px;padding:6px 10px}
+#stars button{font-size:18px;font-weight:bold;border:none;border-radius:8px;padding:6px 12px;cursor:pointer}
+#addStar{background:#f5b301;color:#fff}
+#resetStars{background:#ececec;color:#666}
+main{flex:1;min-height:0}
+main>section{display:none;height:100%;overflow:auto;padding:16px 20px}
+main>section.active{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.hint{font-size:20px;color:#5c6f83;max-width:1100px}
+.cnt{font-size:22px;color:#41546b;font-weight:bold}
+.word{font-weight:bold;line-height:1.05;letter-spacing:.02em}
+#wBig{font-size:clamp(64px,14vw,210px);min-height:1.1em}
+#wBig.target{color:#c2410c}
+.badge{font-size:20px;font-weight:bold;color:#c2410c;min-height:26px}
+.pic{font-size:clamp(70px,15vw,190px);line-height:1.15;min-height:1.25em}
+.btnrow{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.bigbtn{font-size:24px;padding:14px 30px;border-radius:14px;border:none;background:#2f6fd6;color:#fff;font-weight:bold;cursor:pointer}
+.bigbtn:disabled{background:#aec3dd;cursor:default}
+.ghostbtn{font-size:20px;padding:12px 20px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+.tiles{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;min-height:110px}
+.tile{font-size:clamp(38px,6.5vw,84px);width:1.55em;height:1.55em;display:flex;align-items:center;justify-content:center;background:#fff;border:3px solid #9db7dd;border-radius:14px;cursor:pointer;font-weight:bold}
+.tile:hover{border-color:#2f6fd6;transform:translateY(-2px)}
+.slots{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;min-height:110px}
+.slot{font-size:clamp(38px,6.5vw,84px);width:1.55em;height:1.55em;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px dashed #b9c8da;background:#fbfdff;cursor:pointer;font-weight:bold}
+.slot.filled{border-style:solid;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.msg{font-size:32px;font-weight:bold;color:#15803d;min-height:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;width:100%;max-width:1500px}
+.chip{font-size:clamp(26px,3.6vw,46px);padding:12px 4px;text-align:center;background:#fff;border:3px solid #c9d9ec;border-radius:14px;cursor:pointer;font-weight:bold}
+.chip:hover{border-color:#2f6fd6}
+.chip.read{background:#dcfce7;border-color:#16a34a;color:#166534}
+.subbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.subbtns button{font-size:20px;font-weight:bold;padding:10px 18px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+.subbtns button.active{background:#16a34a;border-color:#16a34a;color:#fff}
+#pzEmoji{font-size:clamp(80px,16vw,200px);line-height:1.1}
+#pzText{font-size:clamp(30px,4.5vw,56px);font-weight:bold}
+#eSent{font-size:clamp(40px,7.5vw,110px);min-height:1.2em}
+</style>
+</head>
+<body>
+<header>
+  <div id="tabs">
+    <button data-tab="t1" class="active">1 📋 Таблица</button>
+    <button data-tab="t2">2 🔤 Слова</button>
+    <button data-tab="t3">☕ Пауза</button>
+    <button data-tab="t4">🎨 Слоги</button>
+    <button data-tab="t5">🔠 Буквы</button>
+    <button data-tab="t6">🗣 Эхо</button>
+  </div>
+  <div id="stars">⭐ <span id="starCount">0</span><button id="addStar">+1</button><button id="resetStars" title="Сбросить">⟲</button></div>
+</header>
+<main>
+
+<section id="t1" class="active">
+  <div class="subbtns">
+    <button id="subDirect" class="active">Прямые слоги</button>
+    <button id="subReverse">Обратные слоги</button>
+    <button id="subShuffle">🔀 Перемешать</button>
+  </div>
+  <div id="slogGrid" class="grid"></div>
+</section>
+
+<section id="t2">
+  <div id="wBadge" class="badge"></div>
+  <div id="wBig" class="word"></div>
+  <div id="wPic" class="pic"></div>
+  <div class="btnrow">
+    <button id="wBack" class="ghostbtn">‹ Назад</button>
+    <button id="wNext" class="bigbtn">Показать картинку 🖼</button>
+    <span id="wCnt" class="cnt"></span>
+  </div>
+</section>
+
+<section id="t3">
+  <div id="pzEmoji">🤸</div>
+  <div id="pzText"></div>
+  <button id="pzBtn" class="bigbtn">Ещё движение 🔄</button>
+</section>
+
+<section id="t4">
+  <div id="sCnt" class="cnt"></div>
+  <div id="sTiles" class="tiles"></div>
+  <div id="sSlots" class="slots"></div>
+  <div id="sMsg" class="msg"></div>
+  <div class="btnrow">
+    <button id="sPic" class="ghostbtn" disabled>🖼 Картинка</button>
+    <button id="sNext" class="bigbtn" disabled>Следующее слово →</button>
+  </div>
+  <div id="sPicBox" class="pic"></div>
+</section>
+
+<section id="t5">
+  <div id="bCnt" class="cnt"></div>
+  <div id="bTiles" class="tiles"></div>
+  <div id="bSlots" class="slots"></div>
+  <div id="bMsg" class="msg"></div>
+  <div class="btnrow">
+    <button id="bPic" class="ghostbtn" disabled>🖼 Картинка</button>
+    <button id="bNext" class="bigbtn" disabled>Следующее слово →</button>
+  </div>
+  <div id="bPicBox" class="pic"></div>
+</section>
+
+<section id="t6">
+  <div id="eSent" class="word"></div>
+  <div class="btnrow">
+    <button id="eBack" class="ghostbtn">‹ Назад</button>
+    <button id="eNext" class="bigbtn">Следующее предложение →</button>
+    <span id="eCnt" class="cnt"></span>
+  </div>
+</section>
+
+</main>
+<script>
+'use strict';
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function el(id){return document.getElementById(id);}
+
+/* ---------- звёзды ---------- */
+var stars=0;
+try{stars=parseInt(localStorage.getItem('misarStars')||'0',10)||0;}catch(e){}
+function drawStars(){el('starCount').textContent=stars;}
+function saveStars(){try{localStorage.setItem('misarStars',String(stars));}catch(e){}drawStars();}
+el('addStar').onclick=function(){stars++;saveStars();};
+el('resetStars').onclick=function(){stars=0;saveStars();};
+drawStars();
+
+/* ---------- вкладки ---------- */
+var curTab='t1';
+var tabBtns=document.querySelectorAll('#tabs button');
+for(var tb=0;tb<tabBtns.length;tb++){
+  (function(b){b.onclick=function(){showTab(b.getAttribute('data-tab'));};})(tabBtns[tb]);
+}
+function showTab(id){
+  curTab=id;
+  for(var k=0;k<tabBtns.length;k++){
+    tabBtns[k].className=(tabBtns[k].getAttribute('data-tab')===id)?'active':'';
+  }
+  var secs=document.querySelectorAll('main>section');
+  for(var m=0;m<secs.length;m++){
+    secs[m].className=(secs[m].id===id)?'active':'';
+  }
+  if(document.activeElement&&document.activeElement.blur){document.activeElement.blur();}
+}
+
+/* ---------- 1. слоговая таблица ---------- */
+var DIRECT=['са','со','се','сы','та','то','те','ты','фа','фо','фе','ша','ши','ше','шу','ща','ще','щу','ча','чу','че','ба','бо','бе','бы','ма','мо','ме','мы','на','не','ни','но','ра','ро','ре','ру','ла','ле','ли','лу','ка','ко','ке','ку','ва','во','ве','да','до','де','го','зи','хо'];
+var REVERSE=['ас','ос','ус','ес','ыс','ар','ор','ер','ур','ан','он','ен','ат','от','ет','ак','ок','ек','аж','од','ад','ем','ец','ыщ'];
+var subTable='direct';
+el('subDirect').onclick=function(){subTable='direct';renderTable();};
+el('subReverse').onclick=function(){subTable='reverse';renderTable();};
+el('subShuffle').onclick=function(){renderTable();};
+function renderTable(){
+  el('subDirect').className=(subTable==='direct')?'active':'';
+  el('subReverse').className=(subTable==='reverse')?'active':'';
+  var arr=shuffle(subTable==='direct'?DIRECT:REVERSE);
+  var g=el('slogGrid');
+  g.innerHTML='';
+  for(var i=0;i<arr.length;i++){
+    (function(s){
+      var d=document.createElement('div');
+      d.className='chip';
+      d.textContent=s;
+      d.onclick=function(){d.className=(d.className==='chip')?'chip read':'chip';};
+      g.appendChild(d);
+    })(arr[i]);
+  }
+}
+
+/* ---------- 2. слова с картинками ---------- */
+var TRIPLETS=[
+  [{w:'си́ла',e:'💪'},{w:'со́ты',e:'🍯'},{w:'са́хар',e:'🍬',t:1}],
+  [{w:'те́ло',e:'🧍'},{w:'се́ла',e:'🪑'},{w:'се́вер',e:'🧭',t:1}],
+  [{w:'фо́то',e:'📷'},{w:'фа́ра',e:'🚗'},{w:'со́кол',e:'🦅',t:1}],
+  [{w:'мы́ла',e:'🧼'},{w:'щу́ка',e:'🐟'},{w:'сы́щик',e:'🕵️',t:1}],
+  [{w:'та́ра',e:'📦'},{w:'ту́ча',e:'☁️'},{w:'та́нец',e:'💃',t:1}],
+  [{w:'тётя',e:'👩'},{w:'тёща',e:'👵'},{w:'те́нор',e:'🎤',t:1}],
+  [{w:'чу́до',e:'✨'},{w:'ши́на',e:'🛞'},{w:'фо́кус',e:'🎩',t:1}],
+  [{w:'су́хо',e:'🌵'},{w:'ти́ше',e:'🤫'},{w:'хо́лод',e:'🥶',t:1}],
+  [{w:'вода́',e:'💧'},{w:'гора́',e:'⛰️'},{w:'бага́ж',e:'🧳',t:1}],
+  [{w:'лиса́',e:'🦊'},{w:'сова́',e:'🦉'},{w:'бана́н',e:'🍌',t:1}],
+  [{w:'цена́',e:'🏷️'},{w:'дыра́',e:'🕳️'},{w:'бале́т',e:'🩰',t:1}],
+  [{w:'нога́',e:'🦶'},{w:'рука́',e:'✋'},{w:'бато́н',e:'🥖',t:1}]
+];
+var seq2=[],ti2=0,rev2=false;
+function buildSeq2(){
+  seq2=[];
+  var ts=shuffle(TRIPLETS);
+  for(var i=0;i<ts.length;i++){seq2=seq2.concat(ts[i]);}
+}
+function showWord2(){
+  rev2=false;
+  var c=seq2[ti2];
+  el('wBig').textContent=c.w;
+  el('wBig').className=c.t?'word target':'word';
+  el('wBadge').textContent=c.t?'новое слово ⭐':'';
+  el('wPic').textContent='';
+  el('wNext').textContent='Показать картинку 🖼';
+  el('wCnt').textContent=(ti2+1)+' / '+seq2.length;
+}
+el('wNext').onclick=function(){
+  if(!rev2){rev2=true;el('wPic').textContent=seq2[ti2].e;el('wNext').textContent='Дальше →';}
+  else{ti2++;if(ti2>=seq2.length){ti2=0;buildSeq2();}showWord2();}
+};
+el('wBack').onclick=function(){if(ti2>0){ti2--;showWord2();}};
+
+/* ---------- 3. пауза ---------- */
+var MOVES=[
+  {e:'🤸',t:'10 прыжков, как зайчик'},
+  {e:'🍎',t:'Съешь невидимое яблоко'},
+  {e:'🙌',t:'Потяни руки к потолку'},
+  {e:'🔠',t:'Покажи букву «Т» телом'},
+  {e:'🕺',t:'Станцуй 10 секунд'},
+  {e:'👣',t:'Пройди по комнате на носочках'}
+];
+function showMove(){
+  var m=MOVES[Math.floor(Math.random()*MOVES.length)];
+  el('pzEmoji').textContent=m.e;
+  el('pzText').textContent=m.t;
+}
+el('pzBtn').onclick=showMove;
+
+/* ---------- 4. слоги по цветам (стр. 9) ---------- */
+var SLOT_COLORS=['#3b82f6','#f59e0b','#22c55e','#ef4444'];
+var WORDS9=[
+  {s:['ла','ви','на'],e:'🏔️'},
+  {s:['ло','па','та'],e:''},
+  {s:['ма','ли','на'],e:'🧺'},
+  {s:['ма','ши','на'],e:'🚗'},
+  {s:['ми','мо','за'],e:'🌼'},
+  {s:['ми','ну','та'],e:'⏱️'},
+  {s:['мо','не','та'],e:'🪙'},
+  {s:['не','де','ля'],e:'📅'},
+  {s:['по','го','да'],e:'⛅'},
+  {s:['по','бе','да'],e:'🏆'},
+  {s:['ра','бо','та'],e:'🧰'},
+  {s:['ра','ке','та'],e:'🚀'},
+  {s:['ре','зи','на'],e:'🛞'},
+  {s:['си','ни','ца'],e:'🐦'},
+  {s:['со','ба','ка'],e:'🐕'},
+  {s:['со','ро','ка'],e:'🐦'},
+  {s:['ку','ри','ца'],e:'🐔'},
+  {s:['де','ре','во'],e:'🌳'},
+  {s:['зо','ло','то'],e:'🥇'},
+  {s:['му','зы','ка'],e:'🎵'}
+];
+var b5=[],i5=0,placed5=[],order5=[];
+function newBatch5(){var sh=shuffle(WORDS9);b5=sh.slice(0,5);i5=0;load5();}
+function load5(){
+  placed5=[];
+  var c=b5[i5];
+  var ident5=c.s.map(function(_,k){return k;});
+  order5=shuffle(ident5);
+  var guard5=0;
+  while(order5.join()===ident5.join()&&guard5<20){order5=shuffle(ident5);guard5++;}
+  el('sCnt').textContent='Слово '+(i5+1)+' из 5';
+  el('sMsg').textContent='';
+  el('sPicBox').textContent='';
+  el('sPic').disabled=true;
+  var nb=el('sNext');
+  nb.disabled=true;
+  nb.textContent=(i5===4)?'Ещё? Новые 5 слов 🔄':'Следующее слово →';
+  render5();
+}
+function render5(){
+  var syl=b5[i5].s;
+  var remaining=order5.filter(function(k){return placed5.indexOf(k)<0;});
+  var tEl=el('sTiles');
+  tEl.innerHTML='';
+  for(var i=0;i<remaining.length;i++){
+    (function(k){
+      var d=document.createElement('div');
+      d.className='tile';
+      d.style.background=SLOT_COLORS[k];
+      d.style.borderColor=SLOT_COLORS[k];
+      d.style.color='#fff';
+      d.style.textShadow='0 1px 2px rgba(0,0,0,.35)';
+      d.textContent=syl[k];
+      d.onclick=function(){if(placed5.length<syl.length){placed5.push(k);render5();}};
+      tEl.appendChild(d);
+    })(remaining[i]);
+  }
+  var slEl=el('sSlots');
+  slEl.innerHTML='';
+  for(var j=0;j<syl.length;j++){
+    (function(pos){
+      var d=document.createElement('div');
+      d.style.borderColor=SLOT_COLORS[pos];
+      if(pos<placed5.length){
+        d.className='slot filled';
+        d.style.background=SLOT_COLORS[pos];
+        d.textContent=syl[placed5[pos]];
+        d.onclick=function(){placed5.splice(pos,1);render5();};
+      }else{
+        d.className='slot';
+        d.style.background=SLOT_COLORS[pos]+'55';
+        d.style.borderStyle='solid';
+      }
+      slEl.appendChild(d);
+    })(j);
+  }
+  if(placed5.length===syl.length){
+    el('sMsg').textContent='✅ Собрали! Читай слово!';
+    el('sNext').disabled=false;
+    el('sPic').disabled=!b5[i5].e;
+  }
+}
+el('sNext').onclick=function(){i5++;if(i5>4){newBatch5();}else{load5();}};
+el('sPic').onclick=function(){el('sPicBox').textContent=b5[i5].e||'';};
+
+/* ---------- 5. буквы в слове (стр. 8) ---------- */
+var WORDS8=[
+  {w:'акула',e:'🦈'},
+  {w:'арена',e:'🎪'},
+  {w:'афиша',e:'🎭'},
+  {w:'обида',e:'😢'},
+  {w:'осина',e:'🌳'},
+  {w:'удача',e:'🍀'},
+  {w:'учёба',e:'📚'},
+  {w:'какао',e:'🍫'},
+  {w:'лилия',e:'🌸'},
+  {w:'линия',e:'〰️'},
+  {w:'радио',e:'📻'},
+  {w:'диета',e:'🥗'},
+  {w:'наука',e:'🎓'},
+  {w:'бумага',e:'📄'},
+  {w:'ворона',e:'🐦'},
+  {w:'ворота',e:'🥅'},
+  {w:'газета',e:'📰'},
+  {w:'гитара',e:'🎸'},
+  {w:'дорога',e:'🛣️'},
+  {w:'комета',e:'☄️'},
+  {w:'корона',e:'👑'},
+  {w:'корова',e:'🐄'}
+];
+var b4=[],i4=0,placed4=[],order4=[];
+function newBatch4(){var sh=shuffle(WORDS8);b4=sh.slice(0,5);i4=0;load4();}
+function load4(){
+  placed4=[];
+  var c=b4[i4];
+  var idx=c.w.split('').map(function(_,k){return k;});
+  order4=shuffle(idx);
+  var guard4=0;
+  while(order4.join()===idx.join()&&guard4<20){order4=shuffle(idx);guard4++;}
+  el('bCnt').textContent='Слово '+(i4+1)+' из 5';
+  el('bMsg').textContent='';
+  el('bPicBox').textContent='';
+  el('bPic').disabled=true;
+  var nb=el('bNext');
+  nb.disabled=true;
+  nb.textContent=(i4===4)?'Ещё? Новые 5 слов 🔄':'Следующее слово →';
+  render4();
+}
+function render4(){
+  var w=b4[i4].w;
+  var remaining=order4.filter(function(k){return placed4.indexOf(k)<0;});
+  var tEl=el('bTiles');
+  tEl.innerHTML='';
+  for(var i=0;i<remaining.length;i++){
+    (function(k){
+      var d=document.createElement('div');
+      d.className='tile';
+      d.textContent=w[k];
+      var ratio=(w.length>1)?(k/(w.length-1)):0;
+      d.style.fontSize='clamp(34px,'+(6.8-3.6*ratio).toFixed(2)+'vw,'+(92-56*ratio).toFixed(0)+'px)';
+      d.onclick=function(){if(placed4.length<w.length){placed4.push(k);render4();}};
+      tEl.appendChild(d);
+    })(remaining[i]);
+  }
+  var slEl=el('bSlots');
+  slEl.innerHTML='';
+  for(var j=0;j<w.length;j++){
+    (function(pos){
+      var d=document.createElement('div');
+      if(pos<placed4.length){
+        d.className='slot filled';
+        d.style.background=SLOT_COLORS[pos%SLOT_COLORS.length];
+        d.style.borderColor=SLOT_COLORS[pos%SLOT_COLORS.length];
+        d.textContent=w[placed4[pos]];
+        d.onclick=function(){placed4.splice(pos,1);render4();};
+      }else{
+        d.className='slot';
+      }
+      slEl.appendChild(d);
+    })(j);
+  }
+  if(placed4.length===w.length){
+    el('bMsg').textContent='✅ Собрали! Читай слово!';
+    el('bNext').disabled=false;
+    el('bPic').disabled=!b4[i4].e;
+  }
+}
+el('bNext').onclick=function(){i4++;if(i4>4){newBatch4();}else{load4();}};
+el('bPic').onclick=function(){el('bPicBox').textContent=b4[i4].e||'';};
+
+/* ---------- 6. эхо-чтение ---------- */
+var SENT=[
+  'Кофе для мамы.',
+  'Роща у горы.',
+  'Мыла руки.',
+  'Косы у Маши.',
+  'Руки шире!',
+  'Щука в реке.',
+  'Выше горы.',
+  'Няня села.',
+  'Тётя Оля.',
+  'Туча на небе.',
+  'Лила воду.',
+  'Была зима.',
+  'Перо совы.',
+  'На руке рана.',
+  'Лиса в норе.',
+  'Кора липы.',
+  'Ещё рано.',
+  'Рога лося.',
+  'Осока у озера.'
+];
+var ei=0;
+function showSent(){
+  el('eSent').textContent=SENT[ei];
+  el('eCnt').textContent='Предложение '+(ei+1)+' из '+SENT.length;
+}
+el('eNext').onclick=function(){ei++;if(ei>=SENT.length){ei=0;}showSent();};
+el('eBack').onclick=function(){if(ei>0){ei--;showSent();}};
+
+/* ---------- клавиатура ---------- */
+document.addEventListener('keydown',function(e){
+  var k=e.code||e.key;
+  var isNext=(k==='ArrowRight'||k==='Right'||k==='Space'||k===' ');
+  var isBack=(k==='ArrowLeft'||k==='Left');
+  if(isNext){
+    if(curTab==='t2'){e.preventDefault();el('wNext').click();}
+    else if(curTab==='t6'){e.preventDefault();el('eNext').click();}
+  }else if(isBack){
+    if(curTab==='t2'){el('wBack').click();}
+    else if(curTab==='t6'){el('eBack').click();}
+  }
+});
+
+/* ---------- запуск ---------- */
+buildSeq2();showWord2();
+showMove();
+newBatch5();
+newBatch4();
+showSent();
+renderTable();
+showTab('t1');
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

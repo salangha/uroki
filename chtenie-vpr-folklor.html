@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>ВПР. Литературное чтение. Фольклор — тест-квест</title>
+<meta property="og:title" content="ВПР · Фольклор — тест-квест">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 60%, #7CFC00 60%, #5CB85C 100%);
+    min-height: 100vh;
+    padding: 24px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    font-size: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 8px;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #000;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .hud {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    border-radius: 4px;
+    padding: 12px 18px;
+    max-width: 1000px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .qlabel { font-size: 22px; font-weight: bold; color: #FFD700; white-space: nowrap; }
+  .xp-bar {
+    flex: 1;
+    min-width: 200px;
+    height: 24px;
+    background: #222;
+    border: 3px solid #555;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: inset 0 0 8px #000;
+  }
+  .xp-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #7EFC20, #3dd650);
+    transition: width 0.4s;
+  }
+  .gems { font-size: 24px; font-weight: bold; color: #4FC3F7; white-space: nowrap; }
+  .quest-panel {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    border-radius: 4px;
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto 20px;
+  }
+  .quest-text {
+    font-size: 29px;
+    line-height: 1.45;
+    color: #FFD700;
+    font-weight: bold;
+    margin-bottom: 22px;
+  }
+  .options { display: flex; flex-direction: column; gap: 14px; }
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    font-size: 25px;
+    line-height: 1.35;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    background: #8B4513;
+    border: 3px solid #5C2E0A;
+    border-radius: 4px;
+    padding: 16px 20px;
+    cursor: pointer;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+    transition: transform 0.1s;
+  }
+  .option-btn:hover:not(.disabled) { transform: scale(1.01); background: #A0522D; }
+  .option-btn:active:not(.disabled) { transform: translateY(2px); }
+  .option-btn .num {
+    flex: 0 0 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #5C2E0A;
+    border: 2px solid #FFD700;
+    border-radius: 4px;
+    color: #FFD700;
+    font-size: 24px;
+  }
+  .option-btn.correct { background: #2ECC40; border-color: #1a7a26; }
+  .option-btn.correct .num { background: #1a7a26; border-color: #fff; color: #fff; }
+  .option-btn.wrong { background: #E74C3C; border-color: #8b2a1f; animation: shake 0.4s; }
+  .option-btn.wrong .num { background: #8b2a1f; border-color: #fff; color: #fff; }
+  .option-btn.disabled { cursor: default; opacity: 0.9; pointer-events: none; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .feedback {
+    display: none;
+    max-width: 1000px;
+    margin: 0 auto 20px;
+    background: rgba(0,0,0,0.75);
+    border-radius: 4px;
+    padding: 18px 24px;
+    font-size: 22px;
+    line-height: 1.55;
+  }
+  .feedback.show { display: block; }
+  .feedback.good { border: 4px solid #2ECC40; }
+  .feedback.bad { border: 4px solid #E74C3C; }
+  .fb-title { font-size: 28px; font-weight: bold; margin-bottom: 12px; }
+  .feedback.good .fb-title { color: #7EFC20; }
+  .feedback.bad .fb-title { color: #FF6B5B; }
+  .fb-body > div { margin-bottom: 12px; }
+  .fb-body b { color: #FFD700; }
+  .controls { text-align: center; margin: 10px 0 20px; }
+  .action {
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    background: #2ECC40;
+    border: 4px solid #1a7a26;
+    border-radius: 4px;
+    padding: 16px 34px;
+    margin: 6px 10px;
+    cursor: pointer;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+  }
+  .action:hover { background: #3dd650; }
+  .action:active { transform: translateY(2px); }
+  .action.retry { background: #E67E22; border-color: #8b4a15; }
+  .action.retry:hover { background: #f39c3a; }
+  .action.prev { background: #2980B9; border-color: #1a5c8a; }
+  .action.prev:hover { background: #3498db; }
+  .result {
+    display: none;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.75);
+    border: 4px solid #FFD700;
+    border-radius: 4px;
+    padding: 30px;
+    text-align: center;
+    font-size: 24px;
+    line-height: 1.6;
+  }
+  .result.show { display: block; }
+  .result .big { font-size: 40px; color: #FFD700; font-weight: bold; margin-bottom: 14px; }
+  .result .score { color: #7EFC20; font-size: 32px; font-weight: bold; }
+  .result .rank { font-size: 28px; margin: 14px 0; }
+  .result .wrong-list { font-size: 22px; margin: 10px 0 20px; color: #FFB3AB; }
+</style>
+</head>
+<body>
+
+<h1>📖 ФОЛЬКЛОР: КВЕСТ ЗНАНИЙ ⛏</h1>
+<div class="subtitle">ВПР • Литературное чтение • 4 класс • 25 вопросов</div>
+
+<div class="hud" id="hud">
+  <div class="qlabel" id="qlabel">Вопрос 1 / 25</div>
+  <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+  <div class="gems" id="gems">💎 0</div>
+</div>
+
+<div id="quizArea">
+  <div class="quest-panel">
+    <div class="quest-text" id="questText"></div>
+    <div class="options" id="options"></div>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <div class="controls" id="controls">
+    <button class="action prev" id="prevBtn" onclick="prev()">⬅ НАЗАД</button>
+    <button class="action retry" id="retryBtn" onclick="retry()">🔄 ЕЩЁ РАЗ</button>
+    <button class="action" id="nextBtn" onclick="next()">ДАЛЬШЕ ➡</button>
+  </div>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+  // Вопросы ВПР по фольклору. correct — индекс правильного варианта (0, 1, 2).
+  // t — текст варианта, e — объяснение (что это такое).
+  const questions = [
+    {
+      q: "К какому виду относится сказка, в которой описывается повседневная жизнь людей, без магии и волшебства?",
+      options: [
+        { t: "волшебная сказка", e: "в такой сказке есть чудеса: магия, волшебные предметы, превращения" },
+        { t: "сказка о животных", e: "её герои — животные: лиса, волк, заяц" },
+        { t: "бытовая сказка", e: "сказка о повседневной жизни обычных людей, без магии" }
+      ],
+      correct: 2
+    },
+    {
+      q: "Как называется краткое мудрое изречение, один из малых жанров фольклора?",
+      options: [
+        { t: "прибаутка", e: "весёлая шутка, чтобы оживить речь" },
+        { t: "потешка", e: "стишок-игра для самых маленьких, например «Ладушки»" },
+        { t: "пословица", e: "краткое мудрое изречение народа" }
+      ],
+      correct: 2
+    },
+    {
+      q: "К какому виду относится сказка «Сестрица Алёнушка и братец Иванушка»?",
+      options: [
+        { t: "бытовая сказка", e: "в бытовых сказках нет чудес, а здесь есть ведьма и превращение" },
+        { t: "волшебная сказка", e: "есть чудеса: превращение Иванушки в козлёночка, ведьма, чудесное спасение" },
+        { t: "сказка о животных", e: "главные герои этой сказки — дети, а не животные" }
+      ],
+      correct: 1
+    },
+    {
+      q: "Какое произведение относится к фольклорному?",
+      options: [
+        { t: "«Сказка о жабе и розе»", e: "это сказка писателя Всеволода Гаршина, у неё есть автор" },
+        { t: "«Сестрица Алёнушка и братец Иванушка»", e: "русская народная сказка — у неё нет автора, её создал народ" },
+        { t: "«Путешествие Алисы»", e: "повесть писателя Кира Булычёва" }
+      ],
+      correct: 1
+    },
+    {
+      q: "Какой из перечисленных жанров не относится к малым жанрам фольклора?",
+      options: [
+        { t: "сказка", e: "сказка — большое произведение, поэтому она не малый жанр" },
+        { t: "поговорка", e: "меткое короткое выражение, малый жанр фольклора" },
+        { t: "загадка", e: "короткое описание предмета с секретом, малый жанр" }
+      ],
+      correct: 0
+    },
+    {
+      q: "Какой герой не является персонажем фольклора?",
+      options: [
+        { t: "жар-птица", e: "чудесная птица из русских народных сказок — это фольклор" },
+        { t: "златогривый конь", e: "волшебный помощник из народных сказок — это фольклор" },
+        { t: "гадкий утёнок", e: "герой авторской сказки Ганса Христиана Андерсена, это не фольклор" }
+      ],
+      correct: 2
+    },
+    {
+      q: "К какому виду относится сказка «Царевна-лягушка»?",
+      options: [
+        { t: "бытовая сказка", e: "в бытовых сказках нет колдовства, а тут лягушка превращается в царевну" },
+        { t: "волшебная сказка", e: "есть волшебство: превращение, Кощей Бессмертный, трудные испытания" },
+        { t: "сказка о животных", e: "главные герои — Василиса и царевич, а не животные" }
+      ],
+      correct: 1
+    },
+    {
+      q: "Как называется краткое выразительное изречение, содержащее поучение (например, «Делу время — потехе час»)?",
+      options: [
+        { t: "потешка", e: "весёлый стишок для малышей, в нём нет поучения" },
+        { t: "пословица", e: "краткое изречение с поучением и народной мудростью" },
+        { t: "прибаутка", e: "шутка для оживления речи, без поучения" }
+      ],
+      correct: 1
+    },
+    {
+      q: "К какому виду относится сказка «Морозко»?",
+      options: [
+        { t: "волшебная сказка", e: "есть волшебный персонаж — Морозко, он чудесно награждает и наказывает" },
+        { t: "бытовая сказка", e: "в бытовых сказках нет волшебных персонажей" },
+        { t: "сказка о животных", e: "герои сказки — падчерица, мачеха и Морозко, а не животные" }
+      ],
+      correct: 0
+    },
+    {
+      q: "Какое из перечисленных произведений является былиной?",
+      options: [
+        { t: "«Сказка о мёртвой царевне и о семи богатырях»", e: "авторская сказка А. С. Пушкина" },
+        { t: "«Детство» Л. Н. Толстого", e: "авторская повесть Л. Н. Толстого" },
+        { t: "«Илья Муромец и Соловей-разбойник»", e: "былина — эпическая песнь о подвиге богатыря" }
+      ],
+      correct: 2
+    },
+    {
+      q: "Какой из перечисленных жанров относится к малым жанрам фольклора?",
+      options: [
+        { t: "загадка", e: "малый жанр фольклора — короткое описание с секретом" },
+        { t: "повесть", e: "большое произведение авторской, письменной литературы" },
+        { t: "рассказ", e: "авторское произведение, к фольклору не относится" }
+      ],
+      correct: 0
+    },
+    {
+      q: "Какой герой является персонажем русских былин?",
+      options: [
+        { t: "Добрыня Никитич", e: "один из трёх богатырей русских былин" },
+        { t: "Гадкий утёнок", e: "герой сказки Андерсена" },
+        { t: "Золотая рыбка", e: "героиня авторской «Сказки о рыбаке и рыбке» А. С. Пушкина" }
+      ],
+      correct: 0
+    },
+    {
+      q: "Какое произведение является басней?",
+      options: [
+        { t: "«Стрекоза и Муравей» И. А. Крылова", e: "басня И. А. Крылова: короткая стихотворная история о животных с моралью" },
+        { t: "«Утёс» М. Ю. Лермонтова", e: "лирическое стихотворение М. Ю. Лермонтова о природе" },
+        { t: "«Няне» А. С. Пушкина", e: "стихотворение А. С. Пушкина, посвящённое его няне Арине Родионовне" }
+      ],
+      correct: 0
+    },
+    {
+      q: "Какой жанр не относится к малым жанрам фольклора?",
+      options: [
+        { t: "потешка", e: "короткий стишок для малышей — малый жанр фольклора" },
+        { t: "повесть", e: "большое авторское произведение — не малый жанр фольклора" },
+        { t: "загадка", e: "малый жанр фольклора — короткое описание с секретом" }
+      ],
+      correct: 1
+    },
+    {
+      q: "Какое произведение является исторической песней?",
+      options: [
+        { t: "«Сказка о золотом петушке» А. С. Пушкина", e: "авторская сказка А. С. Пушкина" },
+        { t: "«Илья Муромец и Соловей-разбойник»", e: "былина (историческая песнь) — прославляет подвиги богатыря" },
+        { t: "«Путешествие Алисы» К. Булычёва", e: "фантастическая повесть К. Булычёва" }
+      ],
+      correct: 1
+    },
+    {
+      q: "К какому виду относится сказка, в которой описываются чудесные превращения, магия и волшебство?",
+      options: [
+        { t: "волшебная сказка", e: "чудеса, магия и превращения — её главные признаки" },
+        { t: "сказка о животных", e: "её герои — животные, а чудеса не обязательны" },
+        { t: "бытовая сказка", e: "рассказывает о повседневной жизни, без магии" }
+      ],
+      correct: 0
+    },
+    {
+      q: "К какому виду относится сказка, в которой действующими героями являются животные?",
+      options: [
+        { t: "волшебная сказка", e: "её узнают по чудесам и волшебным предметам" },
+        { t: "сказка о животных", e: "её герои — животные: лиса, волк, медведь, заяц" },
+        { t: "бытовая сказка", e: "её герои — обычные люди" }
+      ],
+      correct: 1
+    },
+    {
+      q: "К какому виду относится сказка, в которой описываются события каждодневной жизни?",
+      options: [
+        { t: "волшебная сказка", e: "в ней больше чудес, чем будней" },
+        { t: "сказка о животных", e: "её герои — животные" },
+        { t: "бытовая сказка", e: "именно она описывает каждодневную жизнь людей" }
+      ],
+      correct: 2
+    },
+    {
+      q: "К какому жанру относится повествование о богатырях?",
+      options: [
+        { t: "волшебная сказка", e: "это вид сказки про чудеса" },
+        { t: "былина", e: "народная эпическая песнь о подвигах богатырей, например Ильи Муромца" },
+        { t: "литературная сказка", e: "это просто сказка с автором, не про богатырей" }
+      ],
+      correct: 1
+    },
+    {
+      q: "К какому жанру относится сказка, написанная автором?",
+      options: [
+        { t: "волшебная сказка", e: "вид народной сказки — автора у неё нет" },
+        { t: "былина", e: "народная песнь о богатырях" },
+        { t: "литературная сказка", e: "у такой сказки есть конкретный автор: Пушкин, Андерсен, Гаршин" }
+      ],
+      correct: 2
+    },
+    {
+      q: "Что не относится к фольклору?",
+      options: [
+        { t: "рассказ", e: "авторское произведение письменной литературы" },
+        { t: "закличка", e: "малый жанр фольклора — песенка-обращение к солнцу, дождю, весне" },
+        { t: "пословица", e: "малый жанр фольклора — мудрое изречение" }
+      ],
+      correct: 0
+    },
+    {
+      q: "К какому виду относится сказка, в которой, как правило, высмеиваются человеческие пороки, но вместо людей героями становятся животные?",
+      options: [
+        { t: "волшебная сказка", e: "её главное — чудеса, а не насмешка над недостатками" },
+        { t: "сказка о животных", e: "животные изображают людей: хитрая лиса, глупый волк — так высмеивают человеческие пороки" },
+        { t: "бытовая сказка", e: "пороки высмеивает и она, но героями там являются люди" }
+      ],
+      correct: 1
+    },
+    {
+      q: "Какое произведение не относится к фольклорному?",
+      options: [
+        { t: "«Ильины три поездочки»", e: "фольклорное произведение о богатыре Илье Муромце" },
+        { t: "«Житие Сергия Радонежского»", e: "произведение древнерусской литературы: у жития есть авторы, это не фольклор" },
+        { t: "«Гуси-лебеди»", e: "русская народная сказка" }
+      ],
+      correct: 1
+    },
+    {
+      q: "Какой герой является персонажем фольклора?",
+      options: [
+        { t: "Приёмыш", e: "герой рассказа И. С. Соколова-Микитова — это авторская литература" },
+        { t: "Листопадничек", e: "герой сказки Виталия Бианки — это авторская литература" },
+        { t: "Сивка-бурка", e: "конь из русской народной сказки «Сивка-бурка» — это фольклор" }
+      ],
+      correct: 2
+    },
+    {
+      q: "Как называется ритмичный стишок, который является частью игры, один из малых жанров фольклора?",
+      options: [
+        { t: "поговорка", e: "меткое короткое выражение, для игр не используется" },
+        { t: "небылица", e: "весёлая история о том, чего на свете не бывает" },
+        { t: "считалка", e: "ритмичный стишок, по которому выбирают водящего в игре" }
+      ],
+      correct: 2
+    }
+  ];
+
+  const total = questions.length;
+  let current = 0;
+  let score = 0;
+  let answered = false;
+  let resultShown = false;
+  // results[i]: null — вопрос остался без ответа, true — верно с первой попытки, false — была ошибка
+  let results = new Array(total).fill(null);
+  let optionOrder = []; // порядок показа вариантов текущего вопроса (перемешан)
+  function countScore() { return results.filter(r => r === true).length; }
+  function shuffle(a) {
+    const r = a.slice();
+    for (let i = r.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [r[i], r[j]] = [r[j], r[i]];
+    }
+    return r;
+  }
+
+  function showQuestion() {
+    answered = false;
+    const q = questions[current];
+    document.getElementById("qlabel").textContent = "Вопрос " + (current + 1) + " / " + total;
+    document.getElementById("xpFill").style.width = (current / total * 100) + "%";
+    document.getElementById("questText").textContent = q.q;
+    const box = document.getElementById("options");
+    box.innerHTML = "";
+    // варианты каждый раз перемешиваются: правильный ответ не стоит на одном и том же месте
+    optionOrder = shuffle(q.options.map((_, i) => i));
+    optionOrder.forEach((orig, i) => {
+      const opt = q.options[orig];
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      const num = document.createElement("span");
+      num.className = "num";
+      num.textContent = i + 1;
+      const txt = document.createElement("span");
+      txt.textContent = opt.t;
+      btn.appendChild(num);
+      btn.appendChild(txt);
+      btn.addEventListener("click", () => answer(i));
+      box.appendChild(btn);
+    });
+    document.getElementById("feedback").className = "feedback";
+    document.getElementById("retryBtn").style.display = "none";
+    document.getElementById("prevBtn").style.visibility = (current === 0) ? "hidden" : "visible";
+    document.getElementById("nextBtn").textContent = (current === total - 1) ? "🏆 ИТОГИ" : "ДАЛЬШЕ ➡";
+  }
+
+  function answer(i) {
+    if (answered || resultShown) return;
+    answered = true;
+    const q = questions[current];
+    const btns = Array.from(document.querySelectorAll("#options .option-btn"));
+    btns.forEach(b => b.classList.add("disabled"));
+    const orig = optionOrder[i]; // какой по счёту вариант показан на месте i
+    const ok = (orig === q.correct);
+    btns[optionOrder.indexOf(q.correct)].classList.add("correct");
+    const fb = document.getElementById("feedback");
+    const retryBtn = document.getElementById("retryBtn");
+    if (results[current] === null) results[current] = ok;
+    const failedBefore = (results[current] === false);
+    if (ok) {
+      fb.className = "feedback show good";
+      fb.innerHTML =
+        '<div class="fb-title">✅ ВЕРНО!' + (failedBefore ? " Теперь запомнил! 🔧" : "") + '</div>' +
+        '<div class="fb-body">💬 ' + q.options[q.correct].e + '.</div>';
+      retryBtn.style.display = "none";
+    } else {
+      btns[i].classList.add("wrong");
+      fb.className = "feedback show bad";
+      fb.innerHTML =
+        '<div class="fb-title">❌ ОШИБКА В КОДЕ!</div>' +
+        '<div class="fb-body">' +
+          '<div>🔴 <b>Ты выбрал:</b> «' + q.options[orig].t + '» — ' + q.options[orig].e + '.</div>' +
+          '<div>🟢 <b>Правильный ответ:</b> «' + q.options[q.correct].t + '» — ' + q.options[q.correct].e + '.</div>' +
+        '</div>';
+      retryBtn.style.display = "";
+    }
+    document.getElementById("gems").textContent = "💎 " + countScore();
+    document.getElementById("xpFill").style.width = ((current + 1) / total * 100) + "%";
+    document.getElementById("controls").scrollIntoView({ block: "nearest" });
+  }
+
+  function retry() {
+    if (!answered || resultShown) return;
+    answered = false;
+    document.querySelectorAll("#options .option-btn").forEach(b => b.classList.remove("correct", "wrong", "disabled"));
+    document.getElementById("feedback").className = "feedback";
+    document.getElementById("xpFill").style.width = (current / total * 100) + "%";
+    window.scrollTo(0, 0);
+  }
+
+  function prev() {
+    if (resultShown || current === 0) return;
+    current--;
+    showQuestion();
+  }
+
+  // «Дальше» работает и без ответа: вопрос просто остаётся пропущенным
+  function next() {
+    if (resultShown) return;
+    if (current < total - 1) {
+      current++;
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    resultShown = true;
+    document.getElementById("quizArea").style.display = "none";
+    document.getElementById("xpFill").style.width = "100%";
+    score = countScore();
+    const pct = Math.round(score / total * 100);
+    let rank;
+    if (pct >= 90) {
+      rank = "🏆 АЛМАЗНЫЙ УРОВЕНЬ! Ты — настоящий знаток фольклора!";
+    } else if (pct >= 75) {
+      rank = "⚔️ ЖЕЛЕЗНЫЙ УРОВЕНЬ! Отличный результат!";
+    } else if (pct >= 50) {
+      rank = "🪨 КАМЕННЫЙ УРОВЕНЬ! Неплохо, но жанры фольклора стоит повторить!";
+    } else {
+      rank = "🪵 ДЕРЕВЯННЫЙ УРОВЕНЬ. Ничего страшного — повторим и пройдём снова!";
+    }
+    const result = document.getElementById("result");
+    result.innerHTML =
+      '<div class="big">🏆 КВЕСТ ЗАВЕРШЁН!</div>' +
+      '<div>Правильно с первой попытки: <span class="score">' + score + ' из ' + total + '</span> (' + pct + '%)</div>' +
+      '<div class="rank">' + rank + '</div>' +
+      (results.some(r => r === false)
+        ? '<div class="wrong-list">🔧 Вопросы с ошибками: ' + results.map((r, i) => r === false ? i + 1 : 0).filter(n => n).join(", ") + ' — их стоит разобрать ещё раз.</div>'
+        : '<div class="wrong-list" style="color:#7EFC20">🐞 Багов не найдено — ни одной ошибки!</div>') +
+      (results.some(r => r === null)
+        ? '<div class="wrong-list">⏭ Без ответа оставлены вопросы: ' + results.map((r, i) => r === null ? i + 1 : 0).filter(n => n).join(", ") + '.</div>'
+        : '') +
+      '<button class="action retry" onclick="restart()">🔄 ПРОЙТИ ЗАНОВО</button>';
+    result.classList.add("show");
+  }
+
+  function restart() {
+    current = 0;
+    score = 0;
+    results = new Array(total).fill(null);
+    resultShown = false;
+    document.getElementById("gems").textContent = "💎 0";
+    document.getElementById("result").className = "result";
+    document.getElementById("quizArea").style.display = "";
+    showQuestion();
+  }
+
+  // Управление с клавиатуры (работает на любой раскладке)
+  document.addEventListener("keydown", e => {
+    if (resultShown) {
+      if (e.code === "Enter") restart();
+      return;
+    }
+    if (!answered && (e.code === "Digit1" || e.code === "Numpad1")) answer(0);
+    else if (!answered && (e.code === "Digit2" || e.code === "Numpad2")) answer(1);
+    else if (!answered && (e.code === "Digit3" || e.code === "Numpad3")) answer(2);
+    else if (answered && e.code === "KeyR") retry();
+    else if (answered && (e.code === "Enter" || e.code === "ArrowRight" || e.code === "KeyN")) next();
+    else if (e.code === "ArrowLeft" || e.code === "KeyP") prev();
+  });
+
+  showQuestion();
+</script>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

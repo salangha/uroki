@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Миссия 05 — КБ «Вега»</title>
+<meta property="og:title" content="Миссия 05 — КБ «Вега»">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --paper:#f4eee1; --card:#fbf7ee; --ink:#2b3a48; --muted:#6b7a86;
+    --blue:#5c7a99; --ochre:#c9a227; --red:#a63d2f; --green:#4a7a4f;
+    --line:#d8cdb8; --board:#efe7d5;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:24px 14px 48px;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(201,162,39,.10), transparent 30%),
+      radial-gradient(circle at 82% 8%, rgba(92,122,153,.12), transparent 32%),
+      var(--paper);
+    color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+  }
+  .sheet{
+    max-width:880px; margin:0 auto; background:var(--card);
+    border:1px solid var(--line); border-radius:8px;
+    box-shadow:0 14px 34px rgba(43,58,72,.14);
+    padding:26px 30px 34px;
+  }
+  .agency-line{
+    display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    font-size:.78rem; letter-spacing:.16em; color:var(--muted);
+    border-bottom:2px solid var(--ink); padding-bottom:8px;
+  }
+  .agency-line .stamp-mini{
+    color:var(--red); border:1.5px solid var(--red); padding:2px 8px;
+    border-radius:3px; transform:rotate(-2deg); white-space:nowrap; letter-spacing:.12em;
+  }
+  .mission-line{
+    margin-top:10px; font-size:.86rem; letter-spacing:.14em; color:var(--ink);
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+  }
+  .progress{display:flex; gap:6px}
+  .dot{width:12px; height:12px; border-radius:50%; border:1.5px solid var(--blue); background:transparent}
+  .dot.active{background:var(--ochre); border-color:var(--ochre)}
+  .dot.done{background:var(--green); border-color:var(--green)}
+  .scene{margin:18px 0 4px}
+  .scene-img{
+    width:100%; max-height:240px; object-fit:cover; display:block;
+    border:1px solid var(--line); border-radius:6px; filter:sepia(.08);
+  }
+  .scene-caption{font-size:.82rem; color:var(--muted); margin-top:6px; font-style:italic}
+  .task-head{display:flex; align-items:center; gap:12px; margin-top:22px}
+  .tag{
+    font-size:.68rem; letter-spacing:.14em; color:var(--card); background:var(--blue);
+    padding:3px 8px; border-radius:3px; white-space:nowrap;
+  }
+  h1{font-size:1.5rem; margin:0; letter-spacing:.3px}
+  #taskText{font-size:1.08rem; line-height:1.65; margin:14px 0 6px}
+  .question{font-size:1.05rem; font-weight:bold; margin:12px 0 0; color:var(--ink)}
+  /* фигуры */
+  .fig-wrap{
+    display:flex; justify-content:center; align-items:flex-start; gap:16px;
+    margin:16px 0 4px; flex-wrap:wrap;
+  }
+  .fig-box{
+    background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px;
+    box-shadow:0 2px 8px rgba(43,58,72,.06);
+  }
+  .fig-box img{display:block; max-width:100%; height:auto}
+  #figImg{max-height:300px}
+  .options-box{width:100%; margin-top:8px}
+  .options-box img{width:100%; height:auto; display:block}
+  .fig-caption{font-size:.78rem; color:var(--muted); text-align:center; margin-top:6px}
+  /* вариант-кнопки */
+  .letters{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:6px}
+  .letter-btn{
+    font-family:inherit; font-size:1.2rem; font-weight:bold; width:58px; height:52px;
+    cursor:pointer; border:2px solid var(--ink); border-radius:6px; background:#fff; color:var(--ink);
+  }
+  .letter-btn:hover{background:rgba(92,122,153,.08)}
+  .letter-btn.sel{background:var(--blue); color:#fff; border-color:#46617c}
+  .letter-btn:disabled{opacity:.45; cursor:default}
+  /* ---------- разбор по клеткам ---------- */
+  .explain{
+    margin:16px 0 0; padding:16px 18px; background:#faf6ea;
+    border:2px dashed var(--blue); border-radius:8px;
+  }
+  .explain h2{font-size:1.15rem; margin:0 0 10px; letter-spacing:.2px}
+  .estep{margin:12px 0 0}
+  .estep p{margin:0 0 8px; font-size:1rem; line-height:1.55}
+  .mini-row{display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; margin-top:8px}
+  .mini-item{text-align:center}
+  .mini-item .mini-label{font-size:.78rem; color:var(--muted); margin-top:6px; max-width:150px}
+  .mini{display:inline-grid; gap:2px}
+  .mc{width:24px; height:24px; border:1px solid #cfc4ad; border-radius:3px; background:#fff}
+  .mc.empty{border-color:transparent; background:transparent}
+  .mc.panel{background:#e8edf3}
+  .mc.count{background:var(--ochre)}
+  .mc.corner{background:#f0c93a; box-shadow:inset 0 0 0 2px #a88410}
+  .mc.near{background:#f6e6b8}
+  .mc.cross{background:var(--blue)}
+  .mc.red{background:rgba(166,61,47,.22); border:2px dashed var(--red)}
+  .mc.tA{background:#98b4cf}
+  .mc.tB{background:#c9a227}
+  .mc.tC{background:#a9c2a4}
+  .mc.tD{background:#d3a08f}
+  .mc.tE{background:#b9a7c9}
+  .explain-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap}
+  .note{
+    margin:16px 0 0; padding:10px 14px; background:#f2ecdc; border-left:4px solid var(--ochre);
+    font-size:.95rem; border-radius:0 6px 6px 0;
+  }
+  .choice{margin-top:22px; text-align:center}
+  .choice-q{font-style:italic; color:var(--muted); margin:0 0 12px}
+  .choice-btns{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    font-family:inherit; font-size:1rem; padding:11px 22px; cursor:pointer;
+    border-radius:5px; letter-spacing:.04em; transition:transform .08s, box-shadow .08s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--blue); color:#fff; border:2px solid #46617c; font-weight:bold}
+  .btn.primary:hover{box-shadow:0 4px 12px rgba(92,122,153,.4)}
+  .btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--ink)}
+  .btn.ghost:hover{background:rgba(92,122,153,.08)}
+  .btn:disabled{opacity:.45; cursor:default}
+  .hints{margin-top:20px}
+  .speech{display:flex; gap:14px; align-items:flex-start}
+  .avatar{
+    width:76px; height:76px; border-radius:50%; object-fit:cover;
+    border:2px solid var(--line); flex:0 0 auto; filter:sepia(.05);
+  }
+  .bubble{
+    background:#f6f1e4; border:1px solid var(--line); border-left:4px solid var(--blue);
+    border-radius:0 8px 8px 8px; padding:12px 16px; flex:1;
+  }
+  .who{font-size:.78rem; letter-spacing:.1em; color:var(--blue); text-transform:uppercase; margin-bottom:6px}
+  .hint-count{color:var(--muted); text-transform:none; letter-spacing:0; margin-left:8px}
+  #hintText{margin:0; font-size:1.02rem; line-height:1.55}
+  .hint-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px; flex-wrap:wrap}
+  .answer{margin-top:20px; text-align:center}
+  .feedback{margin-top:12px; font-size:1rem; line-height:1.5; min-height:1.2em; text-align:left}
+  .feedback.bad{color:var(--red)}
+  .feedback.ok{color:var(--green); font-weight:bold}
+  .shake{animation:shake .35s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)}
+    50%{transform:translateX(6px)} 75%{transform:translateX(-4px)}
+  }
+  .next{margin-top:24px; text-align:center; padding:22px; border:2px solid var(--green); border-radius:8px; background:#f0f4ee}
+  .stamp{
+    display:inline-block; padding:10px 22px; border:3px double var(--green); color:var(--green);
+    font-size:1.4rem; letter-spacing:.22em; transform:rotate(-5deg); margin-bottom:12px;
+    border-radius:6px; background:rgba(74,122,79,.06);
+  }
+  .final{margin-top:24px; text-align:center; padding:26px; border:2px solid var(--ochre); border-radius:8px; background:#faf5e6}
+  .final .stamp{border-color:var(--ochre); color:#8a6d14; background:rgba(201,162,39,.08)}
+  .final p{margin:8px 0}
+  .final .stats{color:var(--muted); font-style:italic; font-size:.95rem}
+  .soon{color:var(--muted); font-size:.85rem; margin-top:14px; letter-spacing:.06em}
+  footer{margin-top:26px; font-size:.75rem; color:var(--muted); text-align:center; letter-spacing:.1em}
+  @media (max-width:640px){
+    .sheet{padding:20px 14px 26px}
+    .avatar{width:58px; height:58px}
+    h1{font-size:1.25rem}
+    #figImg{max-height:220px}
+    .letter-btn{width:48px; height:44px; font-size:1.05rem}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="agency-line">
+      <span>МЕЖПЛАНЕТНОЕ АГЕНТСТВО «ЗАРЯ»</span>
+      <span class="stamp-mini">АТТЕСТАЦИЯ СТАЖЁРА</span>
+    </div>
+    <div class="mission-line">
+      <span>МИССИЯ 05 · КБ «ВЕГА» · ЗАДАЧА <span id="taskNum">1</span> ИЗ 2</span>
+      <span class="progress"><i class="dot active" id="dot1"></i><i class="dot" id="dot2"></i></span>
+    </div>
+  </header>
+
+  <section class="scene">
+    <img class="scene-img" src="assets/grigory.jpg" alt="Григорий, конструкторское бюро «Вега»">
+    <div class="scene-caption">Земля. КБ «Вега». Григорий раскладывает чертежи: панель обшивки надо разрезать на одинаковые плитки.</div>
+  </section>
+
+  <section class="task">
+    <div class="task-head"><span class="tag">ЗАКАЗ КБ «ВЕГА»</span><h1 id="taskTitle"></h1></div>
+    <p id="taskText"></p>
+
+    <div class="fig-wrap">
+      <div class="fig-box">
+        <img id="figImg" src="assets/vega-fig1.png" alt="Фигура для разрезания">
+        <div class="fig-caption" id="figCaption"></div>
+      </div>
+    </div>
+
+    <p class="question">Разрежь фигуру по сторонам клеток на одинаковые по форме и размеру части. Части можно поворачивать и переворачивать. Какая фигурка подходит?</p>
+
+    <div class="fig-wrap">
+      <div class="fig-box options-box">
+        <img src="assets/vega-options.png" alt="Варианты фигурок: а, б, в, г, д">
+        <div class="fig-caption">варианты фигурок — выбери букву</div>
+      </div>
+    </div>
+
+    <div class="letters" id="letters"></div>
+
+    <div style="text-align:center; margin-top:14px">
+      <button class="btn ghost" id="btnExplain" type="button">Разбор: углы и наложение</button>
+    </div>
+
+    <section class="explain" id="explain" hidden>
+      <h2>Разбор от Григория</h2>
+
+      <div class="estep" id="estep1">
+        <p><b>Шаг 1. Клетки.</b> Первым делом считаем клетки: их <b>25</b>. Запомни: плитка должна накрыть все до единой, без щелей.</p>
+        <div class="mini-row"><div class="mini-item"><div class="mini" id="mini1"></div><div class="mini-label">25 клеток — считаем первым делом</div></div></div>
+      </div>
+
+      <div class="estep" id="estep2" hidden>
+        <p><b>Шаг 2. Угол.</b> Верхняя левая клетка (жёлтая) — особая: у неё соседи только справа и снизу, слева и сверху — граница панели. Значит, плитка, которая её накрывает, должна целиком поместиться в этот тесный карман.</p>
+        <p>Пробуем крестик <b>в)</b> — единственную фигурку, которой нужны клетки со всех четырёх сторон. Он может накрыть угол только двумя способами:</p>
+        <div class="mini-row">
+          <div class="mini-item"><div class="mini" id="mini2a"></div><div class="mini-label">центр — на углу: нужна клетка слева и сверху — их нет</div></div>
+          <div class="mini-item"><div class="mini" id="mini2b"></div><div class="mini-label">центр — под углом: нужна клетка слева — её нет</div></div>
+        </div>
+        <p>Оба положения вылезают за край панели — значит, <b>в) не подходит</b>, даже не считая клеток. б) и д) проверяются так же: приложи к углу — и рядом останется клетка, которую уже нечем накрыть.</p>
+      </div>
+
+      <div class="estep" id="estep3" hidden>
+        <p><b>Шаг 3. Наложение.</b> А плитка <b>г)</b> ложится вплотную. Вот вся раскладка: пять плиток, по пять клеток каждая, все двадцать пять закрыты — щелей нет. Так и проверяется наложение: уложил до конца — значит, подходит.</p>
+        <div class="mini-row"><div class="mini-item"><div class="mini" id="mini3"></div><div class="mini-label">пять плиток г) — все 25 клеток закрыты</div></div></div>
+      </div>
+
+      <div class="estep" id="estep4" hidden>
+        <p><b>Шаг 4. А что с б) и д)?</b> Они тоже по пять клеток — счёт их не отсеивает. Но их форма — <b>зигзаг</b>, без прямого уголка. У панели два тесных места: верхний угол и нижняя ступенька (жёлтые клетки). Угол зигзаг ещё может накрыть, а вот на ступеньке и дальше остаются клетки-сироты, которые таким зигзагом уже не закрыть. И это не «не повезло с поворотом»: я проверила все повороты и отражения — панель зигзагами не складывается вообще.</p>
+        <div class="mini-row"><div class="mini-item"><div class="mini" id="mini4"></div><div class="mini-label">два тесных места панели — начинай укладку с них</div></div></div>
+      </div>
+
+      <div class="explain-actions">
+        <button class="btn primary" id="btnExplainNext">Дальше →</button>
+        <button class="btn ghost" id="btnExplainClose">Закрыть</button>
+      </div>
+    </section>
+
+    <p class="note" id="noHintsNote" hidden>Теперь — <b>сам, без подсказок</b>: на настоящем туре подсказывать будет некому. Это тренировка именно такого режима.</p>
+  </section>
+
+  <section class="choice" id="choice">
+    <p class="choice-q">Как поступим, стажёр?</p>
+    <div class="choice-btns">
+      <button class="btn primary" id="btnAnswer">Отвечу сразу</button>
+      <button class="btn ghost" id="btnHint">Подскажи, Григорий</button>
+    </div>
+  </section>
+
+  <section class="hints" id="hints" hidden>
+    <div class="speech">
+      <img class="avatar" src="assets/grigory.jpg" alt="Григорий, КБ «Вега»">
+      <div class="bubble">
+        <div class="who">Григорий · КБ «Вега» <span class="hint-count" id="hintCount"></span></div>
+        <p id="hintText"></p>
+      </div>
+    </div>
+    <div class="hint-actions">
+      <button class="btn ghost" id="btnMoreHint">Ещё подсказку</button>
+      <button class="btn ghost" id="btnStopHint">Понятно, отвечу</button>
+    </div>
+  </section>
+
+  <section class="answer" id="answer" hidden>
+    <button class="btn primary" id="btnCheck">Проверить</button>
+    <div class="feedback" id="feedback"></div>
+  </section>
+
+  <section class="next" id="nextBlock" hidden>
+    <div class="stamp">ЗАЧЁТ</div>
+    <p id="nextText"></p>
+    <button class="btn primary" id="btnNext">Дальше →</button>
+  </section>
+
+  <section class="final" id="final" hidden>
+    <div class="stamp">МИССИЯ ВЫПОЛНЕНА</div>
+    <p><b>Обе панели раскроены без единой щели — Григорий принял работу.</b></p>
+    <p class="stats" id="finalStats"></p>
+    <p>Метод конструктора: <b>клетки → делимость → углы → наложение</b>. Он годится для любой такой задачи, а не только для этой панели.</p>
+    <p>Следующая миссия — <b>«Рассвет»</b>: Богдан зовёт на грядки в теплицу.</p>
+    <div class="hint-actions" style="justify-content:center">
+      <button class="btn ghost" id="btnRestart">Пройти заново</button>
+    </div>
+    <p class="soon">Продолжение аттестации — в следующей миссии.</p>
+  </section>
+
+  <footer>МИР: ЭКСПЕДИЦИЯ «ЗАРЯ» · ПОДСКАЗОК В МИССИИ: НЕ БОЛЬШЕ ТРЁХ · РЕЖИМ ОФЛАЙН</footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var LETTERS = ['а', 'б', 'в', 'г', 'д'];
+
+  var tasks = [
+    {
+      title: 'Панель №1',
+      text: 'Первая панель обшивки — вон та высокая фигура со ступенькой внизу. ' +
+            'Григорий кроит её на одинаковые плитки: части можно поворачивать и переворачивать. ' +
+            'Он уже набросал пять вариантов плитки — и просит тебя выбрать подходящий.',
+      fig: 'assets/vega-fig1.png',
+      figCaption: 'панель №1 (клетки — по 1 метру)',
+      answer: 'г',
+      hints: [
+        'Сначала посчитай клетки в самой панели — это главный инспектор. Двадцать пять, верно. Теперь посчитай клетки в каждой фигурке-кандидате: 25 должно делиться на это число без остатка. Какие варианты отпадают сразу?',
+        'Отпадает а): в ней четыре клетки, а 25 на 4 не делится. Дальше смотри на углы: угловую клетку панели может закрыть только плитка, у которой есть прямой уголок. Крестик в) угол не закроет никогда — ему нужны клетки со всех четырёх сторон. А б) и д)? Положи каждую в верхний левый угол и посмотри, какая клетка останется рядом.',
+        'Открываю чертёж: подходит только <b>г)</b> — пять плиток по пять клеток накрывают все двадцать пять. Проверь наложением — и в протокол.'
+      ],
+      wrongSpecial: {
+        'а': 'Четыре клетки в плитке? 25 на 4 не делится — часть клеток панели останется без пары. Отсеивай по делимости.',
+        'в': 'Крестик не сумеет закрыть угловую клетку: у угла соседи только с двух сторон, а кресту нужны все четыре. Отпадает.',
+        'б': 'Клеток в ней хватает, но панель она не накрывает: положи её в верхний левый угол — рядом застрянет клетка, которую уже не включить ни в одну такую же плитку. Отпадает.',
+        'д': 'По числу клеток проходит, но нижняя ступенька всё портит: этой плиткой её не заполнить без дырок. Отпадает.'
+      },
+      wrongGeneric: 'Не та плитка. Метод конструктора: клетки → делимость → углы → наложение. Прогони кандидатов ещё раз.',
+      success: 'Точно, г)! Пять плиток по пять клеток — панель раскроена без щели. Печать в бортжурнал.'
+    },
+    {
+      title: 'Панель №2',
+      text: 'Вторая панель — пошире, с вырезами по бокам. Плитка та же — из набора а)–д). ' +
+            'Григорий просит кроить сам, без подсказок: у него обед, а панель нужна к утру.',
+      fig: 'assets/vega-fig2.png',
+      figCaption: 'панель №2 (клетки — по 1 метру)',
+      answer: 'б',
+      hints: null,
+      wrongSpecial: {},
+      wrongGeneric: 'Не она. Считай клетки панели, считай клетки плитки — и проверяй накрытие от углов. Попробуй ещё.',
+      success: 'Да, б) — панель накрыта целиком, без подсказок. Григорий молча кивает: это высшая похвала.'
+    }
+  ];
+
+  var state = { i: 0, hints: 0, wrong: 0, savedHints: 0, savedWrong: 0, picked: null };
+  var el = function(id){ return document.getElementById(id); };
+
+  function show(node){ node.hidden = false; }
+  function hide(node){ node.hidden = true; }
+
+  function buildLetters(){
+    var box = el('letters');
+    box.innerHTML = '';
+    LETTERS.forEach(function(ch){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'letter-btn';
+      b.textContent = ch + ')';
+      b.dataset.letter = ch;
+      b.addEventListener('click', function(){
+        state.picked = ch;
+        var all = box.querySelectorAll('.letter-btn');
+        for (var k = 0; k < all.length; k++) all[k].classList.remove('sel');
+        b.classList.add('sel');
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function render(){
+    var t = tasks[state.i];
+    state.hints = 0; state.wrong = 0; state.picked = null;
+
+    el('taskNum').textContent = String(state.i + 1);
+    el('dot1').className = 'dot' + (state.i === 0 ? ' active' : ' done');
+    el('dot2').className = 'dot' + (state.i === 1 ? ' active' : '');
+
+    el('taskTitle').textContent = t.title;
+    el('taskText').innerHTML = t.text;
+    el('figImg').src = t.fig;
+    el('figCaption').textContent = t.figCaption;
+
+    buildLetters();
+    el('btnCheck').disabled = false;
+    setFeedback('', '');
+    hide(el('explain'));
+    hide(el('hints')); hide(el('nextBlock')); hide(el('final'));
+
+    var withHints = !!t.hints;
+    hide(el('noHintsNote'));
+    if (withHints){
+      show(el('choice'));
+      hide(el('answer'));
+      hide(el('letters'));
+    } else {
+      hide(el('choice'));
+      show(el('noHintsNote'));
+      show(el('answer'));
+      show(el('letters'));
+    }
+    el('btnHint').hidden = !withHints;
+  }
+
+  function setFeedback(text, cls){
+    var f = el('feedback');
+    f.innerHTML = text;
+    f.className = 'feedback' + (cls ? ' ' + cls : '');
+    if (cls === 'bad'){
+      f.classList.remove('shake');
+      void f.offsetWidth;
+      f.classList.add('shake');
+    }
+  }
+
+  el('btnAnswer').addEventListener('click', function(){
+    hide(el('choice'));
+    show(el('answer'));
+    show(el('letters'));
+  });
+
+  el('btnHint').addEventListener('click', function(){
+    hide(el('choice'));
+    show(el('answer'));
+    show(el('letters'));
+    giveHint();
+  });
+
+  function giveHint(){
+    var t = tasks[state.i];
+    if (!t.hints || state.hints >= t.hints.length) return;
+    state.hints++;
+    show(el('hints'));
+    el('hintText').innerHTML = t.hints[state.hints - 1];
+    el('hintCount').textContent = '· подсказка ' + state.hints + ' из ' + t.hints.length;
+    el('btnMoreHint').hidden = (state.hints >= t.hints.length);
+  }
+
+  el('btnMoreHint').addEventListener('click', giveHint);
+
+  el('btnStopHint').addEventListener('click', function(){
+    hide(el('hints'));
+    show(el('answer'));
+    show(el('letters'));
+  });
+
+  el('btnCheck').addEventListener('click', function(){
+    var t = tasks[state.i];
+    if (!state.picked){
+      setFeedback('Сначала выбери фигурку — нажми букву а), б), в), г) или д).', 'bad');
+      return;
+    }
+    if (state.picked === t.answer){
+      solved();
+      return;
+    }
+    state.wrong++;
+    var msg = (t.wrongSpecial && t.wrongSpecial[state.picked]) || t.wrongGeneric;
+    if (t.hints && state.wrong >= 3 && state.hints < t.hints.length){
+      giveHint();
+      msg += ' Держи ещё подсказку — мне за тебя чертить некогда.';
+    }
+    setFeedback(msg, 'bad');
+  });
+
+  function solved(){
+    var t = tasks[state.i];
+    setFeedback(t.success, 'ok');
+    el('btnCheck').disabled = true;
+    var all = el('letters').querySelectorAll('.letter-btn');
+    for (var k = 0; k < all.length; k++) all[k].disabled = true;
+    if (state.i === 0){
+      el('dot1').className = 'dot done';
+      state.savedHints = state.hints;
+      state.savedWrong = state.wrong;
+      el('nextText').innerHTML = 'Первая панель закрыта. Теперь <b>вторая</b> — тот же метод, другая фигура. ' +
+        'И без подсказок: проверим, что метод твой.';
+      show(el('nextBlock'));
+    } else {
+      finish();
+    }
+  }
+
+  el('btnNext').addEventListener('click', function(){
+    state.i = 1;
+    render();
+  });
+
+  function finish(){
+    hide(el('answer')); hide(el('hints')); hide(el('choice')); hide(el('nextBlock')); hide(el('letters'));
+    el('dot2').className = 'dot done';
+    var hintsTotal = (Number(state.savedHints) || 0) + (Number(state.hints) || 0);
+    var wrongTotal = (Number(state.savedWrong) || 0) + (Number(state.wrong) || 0);
+    if (isNaN(hintsTotal)) hintsTotal = 0;
+    if (isNaN(wrongTotal)) wrongTotal = 0;
+    el('finalStats').textContent = 'Подсказок использовано: ' + hintsTotal + ' из 3. ' +
+      'Ошибок по пути: ' + (wrongTotal > 0 ? wrongTotal : 'ни одной') + '.';
+    show(el('final'));
+    try {
+      localStorage.setItem('zarya_mission05', JSON.stringify({
+        date: new Date().toISOString().slice(0, 10), hints: hintsTotal
+      }));
+    } catch(e){}
+  }
+
+  el('btnRestart').addEventListener('click', function(){
+    state.i = 0;
+    render();
+  });
+
+  /* ---------- разбор по клеткам ---------- */
+  var PANEL = (function(){
+    var cells = [];
+    var rowsDef = {0:[1,2,3,4], 1:[1,2,3,4], 2:[1,2,3,4], 3:[1,2,3,4], 4:[1,2,3,4], 5:[2,3,4], 6:[3,4]};
+    Object.keys(rowsDef).forEach(function(r){
+      rowsDef[r].forEach(function(c){ cells.push([+r, c]); });
+    });
+    return cells;
+  })();
+
+  var TILING = {
+    A: [[0,1],[0,2],[1,1],[1,2],[2,1]],
+    B: [[0,3],[0,4],[1,3],[1,4],[2,3]],
+    C: [[2,2],[3,1],[3,2],[4,1],[4,2]],
+    D: [[2,4],[3,3],[3,4],[4,3],[4,4]],
+    E: [[5,2],[5,3],[5,4],[6,3],[6,4]]
+  };
+
+  function makeGrid(host, rows, cols, map){
+    host.innerHTML = '';
+    host.style.gridTemplateColumns = 'repeat(' + cols + ', 24px)';
+    for (var r = 0; r < rows; r++){
+      for (var c = 0; c < cols; c++){
+        var d = document.createElement('div');
+        d.className = 'mc ' + (map[r + ',' + c] || 'empty');
+        host.appendChild(d);
+      }
+    }
+  }
+
+  var explainStep = 0;
+
+  function renderExplain(){
+    // шаг 1 — вся панель
+    var m1 = {};
+    PANEL.forEach(function(rc){ m1[rc[0] + ',' + (rc[1] - 1)] = 'count'; });
+    makeGrid(el('mini1'), 7, 4, m1);
+
+    // шаг 2a — крест центром на углу
+    var m2a = {};
+    var crossA = [[0,1],[0,0],[1,1],[0,2],[-1,1]];
+    crossA.forEach(function(rc){
+      var key = (rc[0] + 1) + ',' + rc[1];
+      var inside = rc[0] >= 0 && rc[1] >= 1 && rc[1] <= 4;
+      if (!inside) m2a[key] = 'red';
+      else if (rc[1] === 1 && rc[0] === 0) m2a[key] = 'corner';
+      else m2a[key] = 'cross';
+    });
+    makeGrid(el('mini2a'), 4, 4, m2a);
+
+    // шаг 2b — крест центром под углом
+    var m2b = {};
+    var crossB = [[1,1],[0,1],[2,1],[1,0],[1,2]];
+    crossB.forEach(function(rc){
+      var inside = rc[0] >= 0 && rc[1] >= 1;
+      if (!inside) m2b[rc[0] + ',' + rc[1]] = 'red';
+      else if (rc[0] === 0 && rc[1] === 1) m2b[rc[0] + ',' + rc[1]] = 'corner';
+      else m2b[rc[0] + ',' + rc[1]] = 'cross';
+    });
+    makeGrid(el('mini2b'), 3, 3, m2b);
+
+    // шаг 3 — раскладка
+    var m3 = {};
+    Object.keys(TILING).forEach(function(letter){
+      TILING[letter].forEach(function(rc){ m3[rc[0] + ',' + (rc[1] - 1)] = 't' + letter; });
+    });
+    makeGrid(el('mini3'), 7, 4, m3);
+
+    // шаг 4 — тесные места панели
+    var m4 = {};
+    PANEL.forEach(function(rc){ m4[rc[0] + ',' + (rc[1] - 1)] = 'panel'; });
+    m4['0,0'] = 'corner';
+    m4['5,1'] = 'corner';
+    makeGrid(el('mini4'), 7, 4, m4);
+  }
+
+  el('btnExplain').addEventListener('click', function(){
+    explainStep = 1;
+    show(el('explain'));
+    renderExplain();
+    el('estep1').hidden = false;
+    el('estep2').hidden = true;
+    el('estep3').hidden = true;
+    el('estep4').hidden = true;
+    el('btnExplainNext').hidden = false;
+  });
+
+  el('btnExplainNext').addEventListener('click', function(){
+    if (explainStep === 1){ explainStep = 2; el('estep2').hidden = false; }
+    else if (explainStep === 2){ explainStep = 3; el('estep3').hidden = false; }
+    else if (explainStep === 3){ explainStep = 4; el('estep4').hidden = false; el('btnExplainNext').hidden = true; }
+  });
+
+  el('btnExplainClose').addEventListener('click', function(){
+    hide(el('explain'));
+  });
+
+  render();
+})();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

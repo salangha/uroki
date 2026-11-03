@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Миссия 02 — Астероид «Рассвет»</title>
+<meta property="og:title" content="Миссия 02 — Астероид «Рассвет»">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --paper:#f4eee1; --card:#fbf7ee; --ink:#2b3a48; --muted:#6b7a86;
+    --blue:#5c7a99; --ochre:#c9a227; --red:#a63d2f; --green:#4a7a4f;
+    --line:#d8cdb8; --board:#efe7d5;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:24px 14px 48px;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(201,162,39,.10), transparent 30%),
+      radial-gradient(circle at 82% 8%, rgba(92,122,153,.12), transparent 32%),
+      var(--paper);
+    color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+  }
+  .sheet{
+    max-width:880px; margin:0 auto; background:var(--card);
+    border:1px solid var(--line); border-radius:8px;
+    box-shadow:0 14px 34px rgba(43,58,72,.14);
+    padding:26px 30px 34px;
+  }
+  .agency-line{
+    display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    font-size:.78rem; letter-spacing:.16em; color:var(--muted);
+    border-bottom:2px solid var(--ink); padding-bottom:8px;
+  }
+  .agency-line .stamp-mini{
+    color:var(--red); border:1.5px solid var(--red); padding:2px 8px;
+    border-radius:3px; transform:rotate(-2deg); white-space:nowrap; letter-spacing:.12em;
+  }
+  .mission-line{
+    margin-top:10px; font-size:.86rem; letter-spacing:.14em; color:var(--ink);
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+  }
+  .progress{display:flex; gap:6px}
+  .dot{width:12px; height:12px; border-radius:50%; border:1.5px solid var(--blue); background:transparent}
+  .dot.active{background:var(--ochre); border-color:var(--ochre)}
+  .dot.done{background:var(--green); border-color:var(--green)}
+  .scene{margin:18px 0 4px}
+  .scene-img{
+    width:100%; max-height:260px; object-fit:cover; display:block;
+    border:1px solid var(--line); border-radius:6px; filter:sepia(.08);
+  }
+  .scene-caption{font-size:.82rem; color:var(--muted); margin-top:6px; font-style:italic}
+  .task-head{display:flex; align-items:center; gap:12px; margin-top:22px}
+  .tag{
+    font-size:.68rem; letter-spacing:.14em; color:var(--card); background:var(--blue);
+    padding:3px 8px; border-radius:3px; white-space:nowrap;
+  }
+  h1{font-size:1.5rem; margin:0; letter-spacing:.3px}
+  #taskText{font-size:1.08rem; line-height:1.65; margin:14px 0 6px}
+  .question{font-size:1.05rem; font-weight:bold; margin:10px 0 0; color:var(--ink)}
+  .note{
+    margin:16px 0 0; padding:10px 14px; background:#f2ecdc; border-left:4px solid var(--ochre);
+    font-size:.95rem; border-radius:0 6px 6px 0;
+  }
+  /* ---------- табло ---------- */
+  .board{
+    margin:18px 0 2px; padding:16px 14px; background:var(--board);
+    border:2px solid var(--ink); border-radius:8px;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.65), inset 0 -4px 10px rgba(43,58,72,.09);
+  }
+  .board-row{display:flex; justify-content:center; align-items:center; gap:7px; flex-wrap:wrap}
+  .cell{
+    width:56px; height:56px; display:flex; align-items:center; justify-content:center;
+    font-size:1.45rem; font-weight:bold; text-align:center;
+  }
+  .num{border:2px solid var(--ink); border-radius:6px; background:#fff}
+  .num.target{border-color:var(--red); color:var(--red)}
+  .op{
+    font-family:inherit; padding:0; cursor:pointer; color:var(--blue);
+    border:2px dashed var(--blue); border-radius:6px; background:#fffdf6;
+    appearance:none; -webkit-appearance:none; -moz-appearance:none;
+    text-align-last:center;
+  }
+  .op:focus{outline:none; border-color:var(--ochre); color:var(--ink)}
+  .op.filled{border-style:solid; color:var(--ink); background:#eef2f6}
+  .eq-sign{font-size:1.7rem; font-weight:bold; margin:0 3px}
+  /* ---------- выбор ---------- */
+  .choice{margin-top:22px; text-align:center}
+  .choice-q{font-style:italic; color:var(--muted); margin:0 0 12px}
+  .choice-btns{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    font-family:inherit; font-size:1rem; padding:11px 22px; cursor:pointer;
+    border-radius:5px; letter-spacing:.04em; transition:transform .08s, box-shadow .08s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--blue); color:#fff; border:2px solid #46617c; font-weight:bold}
+  .btn.primary:hover{box-shadow:0 4px 12px rgba(92,122,153,.4)}
+  .btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--ink)}
+  .btn.ghost:hover{background:rgba(92,122,153,.08)}
+  .btn:disabled{opacity:.45; cursor:default}
+  .hints{margin-top:20px}
+  .speech{display:flex; gap:14px; align-items:flex-start}
+  .avatar{
+    width:76px; height:76px; border-radius:50%; object-fit:cover;
+    border:2px solid var(--line); flex:0 0 auto; filter:sepia(.05);
+  }
+  .bubble{
+    background:#f6f1e4; border:1px solid var(--line); border-left:4px solid var(--blue);
+    border-radius:0 8px 8px 8px; padding:12px 16px; flex:1;
+  }
+  .who{font-size:.78rem; letter-spacing:.1em; color:var(--blue); text-transform:uppercase; margin-bottom:6px}
+  .hint-count{color:var(--muted); text-transform:none; letter-spacing:0; margin-left:8px}
+  #hintText{margin:0; font-size:1.02rem; line-height:1.55}
+  .hint-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px; flex-wrap:wrap}
+  .answer{margin-top:20px; text-align:center}
+  .feedback{margin-top:12px; font-size:1rem; line-height:1.5; min-height:1.2em; text-align:left}
+  .feedback.bad{color:var(--red)}
+  .feedback.ok{color:var(--green); font-weight:bold}
+  .shake{animation:shake .35s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)}
+    50%{transform:translateX(6px)} 75%{transform:translateX(-4px)}
+  }
+  .next{margin-top:24px; text-align:center; padding:22px; border:2px solid var(--green); border-radius:8px; background:#f0f4ee}
+  .stamp{
+    display:inline-block; padding:10px 22px; border:3px double var(--green); color:var(--green);
+    font-size:1.4rem; letter-spacing:.22em; transform:rotate(-5deg); margin-bottom:12px;
+    border-radius:6px; background:rgba(74,122,79,.06);
+  }
+  .final{margin-top:24px; text-align:center; padding:26px; border:2px solid var(--ochre); border-radius:8px; background:#faf5e6}
+  .final .stamp{border-color:var(--ochre); color:#8a6d14; background:rgba(201,162,39,.08)}
+  .final p{margin:8px 0}
+  .final .stats{color:var(--muted); font-style:italic; font-size:.95rem}
+  .soon{color:var(--muted); font-size:.85rem; margin-top:14px; letter-spacing:.06em}
+  footer{margin-top:26px; font-size:.75rem; color:var(--muted); text-align:center; letter-spacing:.1em}
+  @media (max-width:640px){
+    .sheet{padding:20px 14px 26px}
+    .avatar{width:58px; height:58px}
+    h1{font-size:1.25rem}
+    .cell{width:42px; height:42px; font-size:1.1rem}
+    .board{padding:12px 8px}
+    .board-row{gap:4px}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="agency-line">
+      <span>МЕЖПЛАНЕТНОЕ АГЕНТСТВО «ЗАРЯ»</span>
+      <span class="stamp-mini">АТТЕСТАЦИЯ СТАЖЁРА</span>
+    </div>
+    <div class="mission-line">
+      <span>МИССИЯ 02 · АСТЕРОИД «РАССВЕТ» · ЗАДАЧА <span id="taskNum">1</span> ИЗ 2</span>
+      <span class="progress"><i class="dot active" id="dot1"></i><i class="dot" id="dot2"></i></span>
+    </div>
+  </header>
+
+  <section class="scene">
+    <img class="scene-img" src="assets/asteroid.jpg" alt="Астероид «Рассвет»">
+    <div class="scene-caption">Пояс астероидов. Лаборатория «Рассвет». Богдан один — и пульт заперт.</div>
+  </section>
+
+  <section class="task">
+    <div class="task-head"><span class="tag">ДОНЕСЕНИЕ С «РАССВЕТА»</span><h1 id="taskTitle"></h1></div>
+    <p id="taskText"></p>
+    <p class="question" id="taskQuestion"></p>
+
+    <div class="board" id="board">
+      <div class="board-row">
+        <span class="cell num">10</span>
+        <select class="cell op" id="op1" aria-label="знак между 10 и 8">
+          <option value="">&#160;</option><option value="add">+</option><option value="sub">−</option><option value="mul">·</option><option value="div">:</option>
+        </select>
+        <span class="cell num">8</span>
+        <select class="cell op" id="op2" aria-label="знак между 8 и 6">
+          <option value="">&#160;</option><option value="add">+</option><option value="sub">−</option><option value="mul">·</option><option value="div">:</option>
+        </select>
+        <span class="cell num">6</span>
+        <select class="cell op" id="op3" aria-label="знак между 6 и 4">
+          <option value="">&#160;</option><option value="add">+</option><option value="sub">−</option><option value="mul">·</option><option value="div">:</option>
+        </select>
+        <span class="cell num">4</span>
+        <select class="cell op" id="op4" aria-label="знак между 4 и 2">
+          <option value="">&#160;</option><option value="add">+</option><option value="sub">−</option><option value="mul">·</option><option value="div">:</option>
+        </select>
+        <span class="cell num">2</span>
+        <span class="eq-sign">=</span>
+        <span class="cell num target" id="targetNum">50</span>
+      </div>
+    </div>
+
+    <p class="note" id="noHintsNote" hidden>Теперь — <b>сам, без подсказок</b>: на настоящем туре подсказывать будет некому. Это тренировка именно такого режима.</p>
+  </section>
+
+  <section class="choice" id="choice">
+    <p class="choice-q">Как поступим, стажёр?</p>
+    <div class="choice-btns">
+      <button class="btn primary" id="btnAnswer">Отвечу сразу</button>
+      <button class="btn ghost" id="btnHint">Подскажи, Богдан</button>
+    </div>
+  </section>
+
+  <section class="hints" id="hints" hidden>
+    <div class="speech">
+      <img class="avatar" src="assets/bogdan.jpg" alt="Богдан, инженер лаборатории «Рассвет»">
+      <div class="bubble">
+        <div class="who">Богдан · инженер «Рассвета» <span class="hint-count" id="hintCount"></span></div>
+        <p id="hintText"></p>
+      </div>
+    </div>
+    <div class="hint-actions">
+      <button class="btn ghost" id="btnMoreHint">Ещё подсказку</button>
+      <button class="btn ghost" id="btnStopHint">Понятно, отвечу</button>
+    </div>
+  </section>
+
+  <section class="answer" id="answer" hidden>
+    <button class="btn primary" id="btnCheck">Проверить</button>
+    <div class="feedback" id="feedback"></div>
+  </section>
+
+  <section class="next" id="nextBlock" hidden>
+    <div class="stamp">ЗАЧЁТ</div>
+    <p id="nextText"></p>
+    <button class="btn primary" id="btnNext">Дальше →</button>
+  </section>
+
+  <section class="final" id="final" hidden>
+    <div class="stamp">МИССИЯ ВЫПОЛНЕНА</div>
+    <p><b>Обе двери открыты, хлорелла спасена, Богдан успевает на все три дела.</b></p>
+    <p class="stats" id="finalStats"></p>
+    <p>Кстати, самая простая дверь на «Рассвете» — код <b>30</b>: она открывается одними плюсами. Проверь как-нибудь.</p>
+    <p>Следующая миссия — <b>ЦУП</b>: Алиса уже на связи.</p>
+    <div class="hint-actions" style="justify-content:center">
+      <button class="btn ghost" id="btnRestart">Пройти заново</button>
+    </div>
+    <p class="soon">Продолжение аттестации — в следующей миссии.</p>
+  </section>
+
+  <footer>МИР: ЭКСПЕДИЦИЯ «ЗАРЯ» · ПОДСКАЗОК В МИССИИ: НЕ БОЛЬШЕ ТРЁХ · РЕЖИМ ОФЛАЙН</footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* порядок действий: сначала · и : (слева направо), потом + и − */
+  function calc(nums, ops){
+    var vals = [nums[0]], os = [], i, j;
+    for (i = 0; i < 4; i++){
+      if (ops[i] === 'mul' || ops[i] === 'div'){
+        var a = vals.pop(), b = nums[i + 1];
+        vals.push(ops[i] === 'mul' ? a * b : a / b);
+      } else {
+        vals.push(nums[i + 1]);
+        os.push(ops[i]);
+      }
+    }
+    var res = vals[0];
+    for (j = 0; j < os.length; j++){
+      res = os[j] === 'add' ? res + vals[j + 1] : res - vals[j + 1];
+    }
+    return res;
+  }
+
+  function fmt(x){
+    if (!isFinite(x)) return 'бесконечность';
+    return (Math.round(x * 100) / 100).toString().replace('.', ',');
+  }
+
+  var tasks = [
+    {
+      title: 'Код теплицы',
+      text: 'Пока Богдан летал на разведку пролетающей мимо кометы, из-за солнечной вспышки ' +
+            'случился сбой в системе открывания дверей — и лаборатории «Рассвета» оказались заперты. ' +
+            'Дверь в теплицу с хлореллой откроется, если на пульте собрать верное равенство:',
+      question: 'Вставь в пустые клетки знаки «+, −, ·, :» (повторять можно) так, чтобы равенство стало верным.',
+      nums: [10, 8, 6, 4, 2],
+      target: 50,
+      hints: [
+        'Так, стажёр, без паники — я тут один, но мы вдвоём. Сначала прикинем границы: сложи все числа на табло. 10 + 8 + 6 + 4 + 2 — сколько будет? Тридцать. А код — пятьдесят. Одними плюсами тридцати не превысить: значит, в клетках прячется умножение. Найди, где оно.',
+        'Где спрятать умножение? Перемножай соседей: 10 · 8 = 80 — перелёт, 8 · 6 = <b>48</b> — почти в точку, 6 · 4 = 24 — маловато. Сорока восьми до пятидесяти не хватает ровно двух. Теперь пусть остальные числа — <b>10, 4 и 2</b> — как раз эту двойку и дадут.',
+        'Ладно, открываю карты: <b>10 + 8 · 6 − 4 · 2</b>. Прогони по порядку действий и жми «Проверить». А если хочешь задачу посложнее — найди второй ключ: сорок восемь можно собрать и без восьмёрки.'
+      ],
+      wrongSpecial: {
+        30: 'Тридцать? Так выйдет, если всё складывать. Пятьдесят одними плюсами не собрать — нужно умножение.',
+        60: 'Шестьдесят! Это код соседней двери. Перепутаешь шлюзы — залетишь не в тот отсек. Нам нужно 50.',
+        48: 'Сорок восемь? Ты взял 8 · 6 и потерял десятку — равенство-то не закончено. Продолжай!'
+      },
+      wrongGeneric: 'Пульт показывает: <b>{res}</b>. Не пятьдесят. Я злиться умею быстро, а новый способ придумываю за пять минут. Помни про порядок действий — и попробуй ещё.',
+      success: 'Код принят! Дверь теплицы открыта, хлорелла спасена. Кстати, у этой двери есть и второй ключ — сорок восемь здесь можно собрать и по-другому. Печать в бортжурнал — и сразу вторая дверь.'
+    },
+    {
+      title: 'Код склада',
+      text: 'Вторая дверь — склад с образцами льда. На табло те же числа, но код другой: ' +
+            'дверь откроется, если равенство станет верным с ответом 60.',
+      question: 'Собери код 60 — знаки можно повторять.',
+      nums: [10, 8, 6, 4, 2],
+      target: 60,
+      hints: null,
+      wrongSpecial: {
+        50: 'Пятьдесят — это прошлая дверь! Здесь нужен шестьдесят. Поменяй всего один знак.',
+        30: 'Тридцать — это одни плюсы. Шестьдесят одними плюсами не собрать.'
+      },
+      wrongGeneric: 'Пульт показывает: <b>{res}</b>. Не шестьдесят. Твой ход из первой двери почти подходит — поменяй один-два знака. Попробуй ещё.',
+      success: 'Код принят! Склад открыт — без единой подсказки. Вот это работа стажёра!'
+    }
+  ];
+
+  var state = { i: 0, hints: 0, wrong: 0, savedHints: 0, savedWrong: 0 };
+  var el = function(id){ return document.getElementById(id); };
+  var opIds = ['op1', 'op2', 'op3', 'op4'];
+
+  function show(node){ node.hidden = false; }
+  function hide(node){ node.hidden = true; }
+
+  function paintOps(){
+    for (var k = 0; k < 4; k++){
+      var s = el(opIds[k]);
+      if (s.value) s.classList.add('filled');
+      else s.classList.remove('filled');
+    }
+  }
+
+  function render(){
+    var t = tasks[state.i];
+    state.hints = 0; state.wrong = 0;
+
+    el('taskNum').textContent = String(state.i + 1);
+    el('dot1').className = 'dot' + (state.i === 0 ? ' active' : ' done');
+    el('dot2').className = 'dot' + (state.i === 1 ? ' active' : '');
+
+    el('taskTitle').textContent = t.title;
+    el('taskText').innerHTML = t.text;
+    el('taskQuestion').textContent = t.question;
+    el('targetNum').textContent = String(t.target);
+    for (var k = 0; k < 4; k++){ el(opIds[k]).value = ''; el(opIds[k]).disabled = false; }
+    paintOps();
+    el('btnCheck').disabled = false;
+    setFeedback('', '');
+    hide(el('hints')); hide(el('nextBlock')); hide(el('final'));
+
+    var withHints = !!t.hints;
+    hide(el('noHintsNote'));
+    if (withHints){
+      show(el('choice'));
+      hide(el('answer'));
+    } else {
+      hide(el('choice'));
+      show(el('noHintsNote'));
+      show(el('answer'));
+    }
+    el('btnHint').hidden = !withHints;
+  }
+
+  function setFeedback(text, cls){
+    var f = el('feedback');
+    f.innerHTML = text;
+    f.className = 'feedback' + (cls ? ' ' + cls : '');
+    if (cls === 'bad'){
+      f.classList.remove('shake');
+      void f.offsetWidth;
+      f.classList.add('shake');
+    }
+  }
+
+  el('btnAnswer').addEventListener('click', function(){
+    hide(el('choice'));
+    show(el('answer'));
+  });
+
+  el('btnHint').addEventListener('click', function(){
+    hide(el('choice'));
+    show(el('answer'));
+    giveHint();
+  });
+
+  function giveHint(){
+    var t = tasks[state.i];
+    if (!t.hints || state.hints >= t.hints.length) return;
+    state.hints++;
+    show(el('hints'));
+    el('hintText').innerHTML = t.hints[state.hints - 1];
+    el('hintCount').textContent = '· подсказка ' + state.hints + ' из ' + t.hints.length;
+    el('btnMoreHint').hidden = (state.hints >= t.hints.length);
+  }
+
+  el('btnMoreHint').addEventListener('click', giveHint);
+
+  el('btnStopHint').addEventListener('click', function(){
+    hide(el('hints'));
+  });
+
+  for (var q = 0; q < 4; q++){
+    el(opIds[q]).addEventListener('change', paintOps);
+  }
+
+  el('btnCheck').addEventListener('click', function(){
+    var t = tasks[state.i];
+    var ops = opIds.map(function(id){ return el(id).value; });
+    if (ops.some(function(v){ return v === ''; })){
+      setFeedback('Не все клетки заполнены — вставь знаки во все четыре пустые клетки.', 'bad');
+      return;
+    }
+    var res = calc(t.nums, ops);
+    if (Math.abs(res - t.target) < 1e-9){
+      solved();
+      return;
+    }
+    state.wrong++;
+    var msg = t.wrongSpecial[res] || t.wrongGeneric.replace('{res}', fmt(res));
+    if (t.hints && state.wrong >= 3 && state.hints < t.hints.length){
+      giveHint();
+      msg += ' Держи ещё подсказку — мне всё равно нужно успеть до заката.';
+    }
+    setFeedback(msg, 'bad');
+  });
+
+  function solved(){
+    var t = tasks[state.i];
+    setFeedback(t.success, 'ok');
+    el('btnCheck').disabled = true;
+    for (var k = 0; k < 4; k++) el(opIds[k]).disabled = true;
+    if (state.i === 0){
+      el('dot1').className = 'dot done';
+      state.savedHints = state.hints;
+      state.savedWrong = state.wrong;
+      el('nextText').innerHTML = 'Код теплицы собран. Теперь <b>вторая дверь</b> — тот же приём, другой код. ' +
+        'И без подсказок: проверим, что приём твой.';
+      show(el('nextBlock'));
+    } else {
+      finish();
+    }
+  }
+
+  el('btnNext').addEventListener('click', function(){
+    state.i = 1;
+    render();
+  });
+
+  function finish(){
+    hide(el('answer')); hide(el('hints')); hide(el('choice')); hide(el('nextBlock'));
+    el('dot2').className = 'dot done';
+    var hintsTotal = (Number(state.savedHints) || 0) + (Number(state.hints) || 0);
+    var wrongTotal = (Number(state.savedWrong) || 0) + (Number(state.wrong) || 0);
+    if (isNaN(hintsTotal)) hintsTotal = 0;
+    if (isNaN(wrongTotal)) wrongTotal = 0;
+    el('finalStats').textContent = 'Подсказок использовано: ' + hintsTotal + ' из 3. ' +
+      'Ошибок по пути: ' + (wrongTotal > 0 ? wrongTotal : 'ни одной') + '.';
+    show(el('final'));
+    try {
+      localStorage.setItem('zarya_mission02', JSON.stringify({
+        date: new Date().toISOString().slice(0, 10), hints: hintsTotal
+      }));
+    } catch(e){}
+  }
+
+  el('btnRestart').addEventListener('click', function(){
+    state.i = 0;
+    render();
+  });
+
+  render();
+})();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

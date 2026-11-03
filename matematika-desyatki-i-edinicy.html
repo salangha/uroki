@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>Урок математики — десятки и единицы</title>
+<meta property="og:title" content="Урок математики — десятки и единицы">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{height:100%}
+body{margin:0;font-family:Verdana,"Segoe UI",Arial,sans-serif;background:#eef4fb;color:#16222f;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-bottom:3px solid #d5e2f2;flex-wrap:wrap}
+#tabs{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+#tabs button{font-size:19px;font-weight:bold;padding:9px 16px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+#tabs button.active{background:#7c3aed;border-color:#7c3aed;color:#fff}
+#stars{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:bold;background:#fff8e1;border:2px solid #f1d27a;border-radius:12px;padding:6px 10px}
+#stars button{font-size:18px;font-weight:bold;border:none;border-radius:8px;padding:6px 12px;cursor:pointer}
+#addStar{background:#f5b301;color:#fff}
+#resetStars{background:#ececec;color:#666}
+main{flex:1;min-height:0}
+main>section{display:none;height:100%;overflow:auto;padding:16px 20px}
+main>section.active{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.cnt{font-size:22px;color:#41546b;font-weight:bold}
+.bigbtn{font-size:24px;padding:14px 30px;border-radius:14px;border:none;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer}
+.bigbtn:disabled{background:#c6b8e8;cursor:default}
+.ghostbtn{font-size:20px;padding:12px 20px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+.legend{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.legend span{font-size:19px;font-weight:bold;padding:7px 14px;border-radius:20px;color:#fff}
+.lgT{background:#3b82f6}.lgE{background:#ef4444}
+.algo{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.algo span{font-size:19px;font-weight:bold;padding:8px 16px;border-radius:20px;border:3px solid #cfdcec;background:#fff;color:#8aa0b5}
+.algo span.on1{border-color:#ef4444;color:#ef4444;background:#fef2f2}
+.algo span.on2{border-color:#3b82f6;color:#3b82f6;background:#eff6ff}
+.algo span.on3{border-color:#16a34a;color:#16a34a;background:#f0fdf4}
+.example{font-size:clamp(56px,11vw,170px);font-weight:bold;line-height:1.05}
+.d{color:#3b82f6}.e{color:#ef4444}
+.example .hl-u .e,.example .hl-t .d{text-decoration:underline 6px}
+.q{font-size:clamp(26px,3.4vw,44px);font-weight:bold;min-height:1.3em}
+.q .r{color:#ef4444}.q .b{color:#3b82f6}
+.choices{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;min-height:76px}
+.choice{font-size:clamp(30px,4.2vw,54px);font-weight:bold;padding:12px 26px;border-radius:16px;border:3px solid #9db7dd;background:#fff;cursor:pointer}
+.choice:hover{border-color:#7c3aed}
+.choice.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.plates{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center;min-height:120px}
+.plate{border-radius:18px;padding:14px 24px;color:#fff;font-weight:bold;display:flex;flex-direction:column;align-items:center;cursor:pointer;animation:pop .35s}
+.plate b{font-size:clamp(46px,7vw,96px);line-height:1}
+.plate small{font-size:19px;margin-top:6px}
+.pE{background:#ef4444}.pT{background:#3b82f6}.pC{background:#16a34a}
+@keyframes pop{0%{transform:scale(.3);opacity:0}80%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.msg{font-size:32px;font-weight:bold;color:#15803d;min-height:42px}
+.btnrow{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.subbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.subbtns button{font-size:20px;font-weight:bold;padding:10px 18px;border-radius:12px;border:2px solid #c9d9ec;background:#fff;cursor:pointer;color:#24425f}
+.subbtns button.active{background:#7c3aed;border-color:#7c3aed;color:#fff}
+#pzEmoji{font-size:clamp(80px,16vw,200px);line-height:1.1}
+#pzText{font-size:clamp(30px,4.5vw,56px);font-weight:bold}
+.rmNum{font-size:clamp(80px,17vw,220px);font-weight:bold;line-height:1}
+.rmParts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;min-height:110px}
+.chip{border-radius:18px;padding:14px 24px;color:#fff;font-weight:bold;display:flex;flex-direction:column;align-items:center;animation:pop .35s}
+.chip b{font-size:clamp(40px,6vw,80px);line-height:1}
+.chip small{font-size:19px;margin-top:6px}
+.cT{background:#3b82f6}.cE{background:#ef4444}
+#rmEmoji{font-size:clamp(70px,12vw,150px);min-height:1.2em}
+.jumpNum{font-size:clamp(90px,18vw,230px);font-weight:bold;line-height:1}
+.jumpNum.bounce{animation:bounce .45s}
+@keyframes bounce{0%{transform:scale(1)}40%{transform:scale(1.25);color:#16a34a}100%{transform:scale(1)}}
+.streak{font-size:26px;font-weight:bold;color:#7c3aed;min-height:32px}
+#lbGrid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:100%;max-width:1300px}
+.lbCell{font-size:clamp(13px,1.9vw,24px);font-weight:bold;text-align:center;padding:5px 2px;border-radius:8px;border:2px solid #dfe8f2;background:#fff}
+.lbRow{background:#dbeafe;border-color:#93c5fd}
+.lbCol{background:#fee2e2;border-color:#fca5a5}
+.lbCell.lbRow.lbCol{background:#e0e7ff}
+.lbCur{border:3px solid #16a34a;background:#dcfce7 !important;font-size:clamp(16px,2.4vw,30px)}
+#lbPhrase{min-height:1.4em}
+#shItems{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.item{background:#fff;border:3px solid #c9d9ec;border-radius:18px;padding:14px 22px;text-align:center}
+.item .ie{font-size:clamp(60px,9vw,120px);line-height:1.1}
+.item .ip{font-size:clamp(26px,3.5vw,44px);font-weight:bold;margin-top:6px}
+#ovl{position:fixed;inset:0;background:rgba(20,30,50,.82);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#fff;text-align:center;z-index:50}
+#ovl .oe{font-size:clamp(90px,18vw,220px);line-height:1.1}
+#ovl .ot{font-size:clamp(30px,5vw,60px);font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+  <div id="tabs">
+    <button data-tab="m1" class="active">1 🔢 Разминка</button>
+    <button data-tab="m2">2 ➕ Сложение</button>
+    <button data-tab="m3">☕ Пауза</button>
+    <button data-tab="m4">🛒 Магазин</button>
+    <button data-tab="m45">🪜 Лента</button>
+    <button data-tab="m5">5 🚀 Прыжки</button>
+  </div>
+  <div id="stars">⭐ <span id="starCount">0</span><button id="addStar">+1</button><button id="resetStars" title="Сбросить">⟲</button></div>
+</header>
+<main>
+
+<section id="m1" class="active">
+  <div class="subbtns">
+    <button id="rmMode1" class="active">Число → разряды</button>
+    <button id="rmMode2">Разряды → число</button>
+  </div>
+  <div id="rmNum" class="rmNum"></div>
+  <div id="rmParts" class="rmParts"></div>
+  <div id="rmEmoji"></div>
+  <div class="btnrow">
+    <button id="rmShow" class="bigbtn">Показать 🔍</button>
+    <button id="rmNext" class="ghostbtn">Ещё 🔄</button>
+  </div>
+</section>
+
+<section id="m2">
+  <div class="legend"><span class="lgT">синие — десятки</span><span class="lgE">красные — единицы</span></div>
+  <div class="algo"><span id="al1">1️⃣ Единицы</span><span id="al2">2️⃣ Десятки</span><span id="al3">3️⃣ Собери</span></div>
+  <div id="adEx" class="example"></div>
+  <div id="adQ" class="q"></div>
+  <div id="adChoices" class="choices"></div>
+  <div id="adPlates" class="plates"></div>
+  <div id="adMsg" class="msg"></div>
+  <div id="rocket" style="font-size:clamp(30px,4vw,48px)"></div>
+  <div class="btnrow">
+    <button id="adModeS" class="ghostbtn active">Простые</button>
+    <button id="adModeC" class="ghostbtn">С новым десятком</button>
+    <button id="adNext" class="bigbtn">Ещё пример 🔄</button>
+  </div>
+</section>
+
+<section id="m3">
+  <div id="pzEmoji">🤸</div>
+  <div id="pzText"></div>
+  <button id="pzBtn" class="bigbtn">Ещё движение 🔄</button>
+</section>
+
+<section id="m4">
+  <div class="legend"><span class="lgT">синие — десятки</span><span class="lgE">красные — единицы</span></div>
+  <div id="shItems"></div>
+  <div id="shQ" class="q"></div>
+  <div id="shChoices" class="choices"></div>
+  <div id="shPlates" class="plates"></div>
+  <div id="shMsg" class="msg"></div>
+  <div id="shCnt" class="streak"></div>
+  <div class="btnrow"><button id="shNew" class="bigbtn">Новая покупка 🛒</button></div>
+</section>
+
+<section id="m45">
+  <div class="legend"><span class="lgT">синяя строка — десятки</span><span class="lgE">красный столбец — единицы</span></div>
+  <div id="lbPhrase" class="q"></div>
+  <div id="lbGrid"></div>
+  <div class="btnrow">
+    <button id="lbStart" class="ghostbtn">Старт 🎲</button>
+    <button id="lbDown" class="ghostbtn">−10 🔽</button>
+    <button id="lbUp" class="bigbtn">+10 🔼</button>
+    <button id="lbHide" class="ghostbtn">Скрыть ленту 🙈</button>
+  </div>
+</section>
+
+<section id="m5">
+  <div id="jpNum" class="jumpNum">34</div>
+  <div id="jpStreak" class="streak">серия: 0</div>
+  <div class="btnrow">
+    <button id="jpStart" class="ghostbtn">Старт 🎲</button>
+    <button id="jpUp" class="bigbtn">+10 🔼</button>
+    <button id="jpDown" class="ghostbtn">−10 🔽</button>
+  </div>
+</section>
+
+</main>
+<div id="ovl"><div class="oe">🚀🌙</div><div class="ot">Долетели!</div></div>
+<script>
+'use strict';
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function el(id){return document.getElementById(id);}
+function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+
+/* ---------- звёзды ---------- */
+var stars=0;
+try{stars=parseInt(localStorage.getItem('maximMathStars')||'0',10)||0;}catch(e){}
+function drawStars(){el('starCount').textContent=stars;}
+function saveStars(){try{localStorage.setItem('maximMathStars',String(stars));}catch(e){}drawStars();}
+el('addStar').onclick=function(){stars++;saveStars();};
+el('resetStars').onclick=function(){stars=0;saveStars();};
+drawStars();
+
+/* ---------- вкладки ---------- */
+var curTab='m1';
+var tabBtns=document.querySelectorAll('#tabs button');
+for(var tb=0;tb<tabBtns.length;tb++){
+  (function(b){b.onclick=function(){showTab(b.getAttribute('data-tab'));};})(tabBtns[tb]);
+}
+function showTab(id){
+  curTab=id;
+  for(var k=0;k<tabBtns.length;k++){
+    tabBtns[k].className=(tabBtns[k].getAttribute('data-tab')===id)?'active':'';
+  }
+  var secs=document.querySelectorAll('main>section');
+  for(var m=0;m<secs.length;m++){
+    secs[m].className=(secs[m].id===id)?'active':'';
+  }
+  if(document.activeElement&&document.activeElement.blur){document.activeElement.blur();}
+}
+
+/* ---------- 1. разминка ---------- */
+var rmMode='num';
+var REWARDS=['🎉','🥳','🌟','💥','🎈','🏆','🦁','🐸','🐬'];
+function rmNewNum(){
+  el('rmNum').textContent=ri(1,9)*10+ri(1,9);
+  el('rmParts').innerHTML='';
+  el('rmEmoji').textContent='';
+  el('rmShow').textContent='Показать 🔍';
+  el('rmShow').disabled=false;
+  el('rmShow').dataset.state='hidden';
+}
+function rmShow(){
+  if(el('rmShow').dataset.state==='shown'){return;}
+  if(rmMode==='num'){
+    var n=parseInt(el('rmNum').textContent,10);
+    var t=Math.floor(n/10),u=n%10;
+    el('rmParts').innerHTML='';
+    var c1=document.createElement('div');c1.className='chip cT';c1.innerHTML='<b>'+t+'</b><small>'+(t===1?'десяток':(t<5?'десятка':'десятков'))+'</small>';
+    var c2=document.createElement('div');c2.className='chip cE';c2.innerHTML='<b>'+u+'</b><small>'+(u===1?'единица':(u<5?'единицы':'единиц'))+'</small>';
+    el('rmParts').appendChild(c1);el('rmParts').appendChild(c2);
+  }else{
+    var t2=parseInt(el('rmNum').dataset.t,10),u2=parseInt(el('rmNum').dataset.u,10);
+    el('rmNum').textContent=String(t2*10+u2);
+  }
+  el('rmEmoji').textContent=REWARDS[ri(0,REWARDS.length-1)];
+  el('rmShow').textContent='Показано ✅';
+  el('rmShow').disabled=true;
+  el('rmShow').dataset.state='shown';
+}
+el('rmShow').onclick=rmShow;
+el('rmNext').onclick=function(){if(rmMode==='parts'){rmNewParts();}else{rmNewNum();}};
+function rmNewParts(){
+  var t=ri(1,9),u=ri(1,9);
+  el('rmNum').textContent='';
+  el('rmNum').dataset.t=t;el('rmNum').dataset.u=u;
+  el('rmParts').innerHTML='';
+  var c1=document.createElement('div');c1.className='chip cT';c1.innerHTML='<b>'+t+'</b><small>'+(t===1?'десяток':(t<5?'десятка':'десятков'))+'</small>';
+  var c2=document.createElement('div');c2.className='chip cE';c2.innerHTML='<b>'+u+'</b><small>'+(u===1?'единица':(u<5?'единицы':'единиц'))+'</small>';
+  el('rmParts').appendChild(c1);el('rmParts').appendChild(c2);
+  el('rmEmoji').textContent='';
+  el('rmShow').textContent='Показать 🔍';
+  el('rmShow').disabled=false;
+  el('rmShow').dataset.state='hidden';
+}
+el('rmMode1').onclick=function(){rmMode='num';el('rmMode1').className='active';el('rmMode2').className='';rmNewNum();};
+el('rmMode2').onclick=function(){rmMode='parts';el('rmMode2').className='active';el('rmMode1').className='';rmNewParts();};
+rmNewNum();
+
+/* ---------- 3. пауза ---------- */
+var MOVES=[
+  {e:'🤸',t:'10 прыжков, как зайчик'},
+  {e:'🍎',t:'Съешь невидимое яблоко'},
+  {e:'🙌',t:'Потяни руки к потолку'},
+  {e:'🕺',t:'Станцуй 10 секунд'},
+  {e:'👣',t:'Пройди по комнате на носочках'},
+  {e:'💥',t:'Изобрази взрыв ракеты!'}
+];
+function showMove(){
+  var m=MOVES[ri(0,MOVES.length-1)];
+  el('pzEmoji').textContent=m.e;
+  el('pzText').textContent=m.t;
+}
+el('pzBtn').onclick=showMove;
+showMove();
+
+/* ---------- 2. сложение ---------- */
+var addMode='simple';
+var rocketStars=0;
+function updRocket(){
+  var s='';
+  for(var i=0;i<5;i++){s+=(i<rocketStars?'⭐':'☆');}
+  el('rocket').textContent=s+' 🚀';
+}
+function celebrateRocket(){
+  if(rocketStars>=5){
+    rocketStars=0;
+    var o=el('ovl');
+    o.style.display='flex';
+    setTimeout(function(){o.style.display='none';},2600);
+  }
+  updRocket();
+}
+var A={};
+function newExample(){
+  var u1,u2,t1,t2;
+  do{
+    t1=ri(1,4);t2=ri(1,4);u1=ri(1,9);u2=ri(1,9);
+  }while(addMode==='simple'?(u1+u2>9):(u1+u2<10));
+  A={t1:t1,t2:t2,u1:u1,u2:u2,
+     unitsSum:u1+u2,tensSum:t1+t2,
+     carry:(u1+u2>=10),
+     unitsLeft:(u1+u2)%10,tensTotal:t1+t2+((u1+u2>=10)?1:0),
+     step:'units',split:false,solved:false};
+  renderAdd();
+}
+function algoHi(){
+  el('al1').className=(A.step==='units')?'on1':'';
+  el('al2').className=(A.step==='tens')?'on2':((A.step==='combine')?'on3':'');
+  el('al3').className=(A.step==='combine')?'on3':'';
+}
+function exHtml(){
+  function num(t,u,hlT,hlU){
+    var cls=(hlT&&A.step==='tens')?' class="hl-t"':(hlU&&A.step==='units'?' class="hl-u"':'');
+    return '<span'+cls+'><span class="d">'+t+'</span><span class="e">'+u+'</span></span>';
+  }
+  return num(A.t1,A.u1,true,true)+' + '+num(A.t2,A.u2,true,true);
+}
+function plateHtml(color,text,label,onclick){
+  var d=document.createElement('div');
+  d.className='plate '+(color==='red'?'pE':(color==='blue'?'pT':'pC'));
+  d.innerHTML='<b>'+text+'</b><small>'+label+'</small>';
+  if(onclick){d.onclick=onclick;}
+  return d;
+}
+function pickChoices(correct,cands){
+  var set=[correct];
+  var cs=shuffle(cands);
+  for(var i=0;i<cs.length&&set.length<4;i++){
+    if(cs[i]>=0&&cs[i]<=98&&set.indexOf(cs[i])<0){set.push(cs[i]);}
+  }
+  return shuffle(set);
+}
+function renderChoices(container,correct,cands,onOk){
+  container.innerHTML='';
+  var arr=pickChoices(correct,cands);
+  arr.forEach(function(v){
+    var b=document.createElement('button');
+    b.className='choice';b.textContent=v;
+    b.onclick=function(){
+      if(v===correct){onOk();}
+      else{b.className='choice shake';setTimeout(function(){if(b.parentNode){b.className='choice';}},450);}
+    };
+    container.appendChild(b);
+  });
+}
+function tenWord(n){return n===1?'десяток':(n<5?'десятка':'десятков');}
+function unitWord(n){return n===1?'единица':(n<5?'единицы':'единиц');}
+function renderAdd(){
+  algoHi();
+  el('adEx').innerHTML=exHtml();
+  var q=el('adQ'),ch=el('adChoices'),pl=el('adPlates');
+  if(A.step!=='done'){
+    pl.innerHTML='';
+    el('adMsg').textContent='';
+  }
+  if(A.step==='units'){
+    q.innerHTML='Единицы: <span class="r">'+A.u1+' + '+A.u2+'</span> = ?';
+    renderChoices(ch,A.unitsSum,[A.unitsSum+1,A.unitsSum-1,A.unitsSum+2,A.unitsSum-2,A.u1,A.u2],function(){
+      A.step=(A.carry)?'split':'tens';
+      renderAdd();
+    });
+  }else if(A.step==='split'){
+    q.innerHTML='<span class="r">'+A.unitsSum+'</span> — это много! Свяжи новый десяток!';
+    ch.innerHTML='';
+    var tie=document.createElement('button');
+    tie.className='bigbtn';tie.textContent='🔗 Связать десяток!';
+    tie.onclick=function(){A.split=true;A.step='tens';renderAdd();};
+    ch.appendChild(tie);
+  }else if(A.step==='tens'){
+    if(A.carry&&A.split){
+      pl.appendChild(plateHtml('blue','1','новый десяток',function(){A.step='units';A.split=false;renderAdd();}));
+      pl.appendChild(plateHtml('red',A.unitsLeft,unitWord(A.unitsLeft),function(){A.step='units';A.split=false;renderAdd();}));
+    }else{
+      pl.appendChild(plateHtml('red',A.unitsSum,unitWord(A.unitsSum),function(){A.step='units';renderAdd();}));
+    }
+    q.innerHTML='Десятки: <span class="b">'+A.t1+' + '+A.t2+'</span> = ?';
+    renderChoices(ch,A.tensSum,[A.tensSum+1,A.tensSum-1,A.tensSum+2,A.tensSum-2],function(){
+      A.step='combine';renderAdd();
+    });
+  }else if(A.step==='combine'){
+    var final=A.tensTotal*10+A.unitsLeft;
+    if(A.carry&&A.split){
+      pl.appendChild(plateHtml('blue',A.tensSum,tenWord(A.tensSum),function(){A.step='tens';renderAdd();}));
+      pl.appendChild(plateHtml('blue','+1','новый десяток',function(){A.step='tens';renderAdd();}));
+      pl.appendChild(plateHtml('red',A.unitsLeft,unitWord(A.unitsLeft),function(){A.step='units';A.split=false;renderAdd();}));
+    }else{
+      pl.appendChild(plateHtml('blue',A.tensSum,tenWord(A.tensSum),function(){A.step='tens';renderAdd();}));
+      pl.appendChild(plateHtml('red',A.unitsSum,unitWord(A.unitsSum),function(){A.step='units';renderAdd();}));
+    }
+    q.innerHTML='Какое число получилось?';
+    var rev=parseInt(String(final).split('').reverse().join(''),10);
+    var cands=[rev,final+10,final-10,final+1,final-1];
+    if(A.carry){cands.push(final-10+10);}
+    renderChoices(ch,final,cands,function(){
+      A.step='done';A.solved=true;
+      pl.innerHTML='';
+      pl.appendChild(plateHtml('green',final,'ответ'));
+      el('adMsg').textContent='🎉 Верно!';
+      rocketStars++;
+      saveStars();stars++;drawStars();
+      updRocket();celebrateRocket();
+      renderAdd();
+    });
+  }else if(A.step==='done'){
+    q.innerHTML='<span style="color:#16a34a">'+(A.tensTotal*10+A.unitsLeft)+'</span>';
+    ch.innerHTML='';
+  }
+}
+el('adNext').onclick=newExample;
+el('adModeS').onclick=function(){addMode='simple';el('adModeS').className='ghostbtn active';el('adModeC').className='ghostbtn';newExample();};
+el('adModeC').onclick=function(){addMode='carry';el('adModeC').className='ghostbtn active';el('adModeS').className='ghostbtn';newExample();};
+newExample();
+updRocket();
+
+/* ---------- 4. магазин ---------- */
+var S={};
+var SHOP_ITEMS=['🍕','🎈','🧃','🚗','🧸','🍬','⚽','🍦','🎓','🪁','🍪','🎒'];
+var purchases=0;
+try{purchases=parseInt(localStorage.getItem('maximPurchases')||'0',10)||0;}catch(e){}
+function updPurchases(){
+  el('shCnt').textContent='покупок: '+purchases;
+  try{localStorage.setItem('maximPurchases',String(purchases));}catch(e){}
+}
+function shopNew(){
+  var t1,t2,u1,u2;
+  do{t1=ri(1,4);t2=ri(1,4);u1=ri(1,9);u2=ri(1,9);}while(u1+u2>9);
+  S={t1:t1,t2:t2,u1:u1,u2:u2,unitsSum:u1+u2,tensSum:t1+t2,
+     e1:SHOP_ITEMS[ri(0,SHOP_ITEMS.length-1)],e2:'',step:'units',solved:false};
+  do{S.e2=SHOP_ITEMS[ri(0,SHOP_ITEMS.length-1)];}while(S.e2===S.e1);
+  renderShop();
+}
+function renderShop(){
+  var p1=S.t1*10+S.u1,p2=S.t2*10+S.u2;
+  el('shItems').innerHTML=
+    '<div class="item"><div class="ie">'+S.e1+'</div><div class="ip"><span class="d">'+S.t1+'</span><span class="e">'+S.u1+'</span> ₽</div></div>'+
+    '<div style="font-size:clamp(44px,7vw,90px);font-weight:bold">+</div>'+
+    '<div class="item"><div class="ie">'+S.e2+'</div><div class="ip"><span class="d">'+S.t2+'</span><span class="e">'+S.u2+'</span> ₽</div></div>';
+  var q=el('shQ'),ch=el('shChoices'),pl=el('shPlates');
+  if(S.step!=='done'){
+    pl.innerHTML='';
+    el('shMsg').textContent='';
+  }
+  if(S.step==='units'){
+    q.innerHTML='Сначала единицы: <span class="r">'+S.u1+' + '+S.u2+'</span> = ?';
+    renderChoices(ch,S.unitsSum,[S.unitsSum+1,S.unitsSum-1,S.unitsSum+2,S.unitsSum-2,S.u1,S.u2],function(){
+      S.step='tens';renderShop();
+    });
+  }else if(S.step==='tens'){
+    pl.appendChild(plateHtml('red',S.unitsSum,'₽ '+unitWord(S.unitsSum),function(){S.step='units';renderShop();}));
+    q.innerHTML='Теперь рубли-десятки: <span class="b">'+S.t1+' + '+S.t2+'</span> = ?';
+    renderChoices(ch,S.tensSum,[S.tensSum+1,S.tensSum-1,S.tensSum+2],function(){
+      S.step='combine';renderShop();
+    });
+  }else if(S.step==='combine'){
+    pl.appendChild(plateHtml('blue',S.tensSum,'₽ '+tenWord(S.tensSum),function(){S.step='tens';renderShop();}));
+    pl.appendChild(plateHtml('red',S.unitsSum,'₽ '+unitWord(S.unitsSum),function(){S.step='units';renderShop();}));
+    var final=S.tensSum*10+S.unitsSum;
+    q.innerHTML='Сколько стоит вся покупка?';
+    var rev=parseInt(String(final).split('').reverse().join(''),10);
+    renderChoices(ch,final,[rev,final+10,final-10,final+1,final-1],function(){
+      S.step='done';
+      pl.innerHTML='';
+      pl.appendChild(plateHtml('green',final,'₽ всего'));
+      el('shMsg').textContent='🛍️ Спасибо за покупку!';
+      purchases++;
+      saveStars();stars++;drawStars();
+      updPurchases();
+      renderShop();
+    });
+  }else if(S.step==='done'){
+    q.innerHTML='<span style="color:#16a34a">'+(S.tensSum*10+S.unitsSum)+' ₽</span>';
+    ch.innerHTML='';
+  }
+}
+el('shNew').onclick=shopNew;
+shopNew();
+updPurchases();
+
+/* ---------- 5. прыжки ---------- */
+var jp=34,jpStreak=0;
+function jpRender(){
+  var n=el('jpNum');
+  n.textContent=jp;
+  n.className='jumpNum bounce';
+  setTimeout(function(){n.className='jumpNum';},480);
+  el('jpStreak').textContent='серия: '+jpStreak;
+}
+el('jpStart').onclick=function(){jp=ri(3,92);jpStreak=0;jpRender();};
+el('jpUp').onclick=function(){if(jp<=89){jp+=10;jpStreak++;}jpRender();};
+el('jpDown').onclick=function(){if(jp>=11){jp-=10;jpStreak++;}jpRender();};
+jpRender();
+
+/* ---------- 4b. лента (коррекция прыжков +10/−10) ---------- */
+var L={n:27,dir:1,hidden:false};
+function lbBuild(){
+  var g=el('lbGrid');
+  g.innerHTML='';
+  var ct=Math.floor((L.n-1)/10),cu=L.n%10;
+  for(var i=0;i<100;i++){
+    var num=i+1;
+    var t=Math.floor((num-1)/10),u=num%10;
+    var d=document.createElement('div');
+    d.className='lbCell';
+    if(t===ct){d.className+=' lbRow';}
+    if(u===cu){d.className+=' lbCol';}
+    if(num===L.n){d.className+=' lbCur';}
+    d.textContent=num;
+    g.appendChild(d);
+  }
+}
+function lbShow(){
+  if(L.hidden){el('lbGrid').style.display='none';el('lbHide').textContent='Показать ленту 👀';}
+  else{el('lbGrid').style.display='grid';el('lbHide').textContent='Скрыть ленту 🙈';}
+}
+function lbRender(){
+  lbBuild();
+  var t=Math.floor(L.n/10),u=L.n%10;
+  var was=L.n-(L.dir*10);
+  var tw=Math.floor(was/10),uw=was%10;
+  el('lbPhrase').innerHTML='<span class="b">'+was+'</span> → <b>'+L.n+'</b> • десятки: '+tw+' → '+t+' • единицы: '+uw+' → '+u+' — не изменились!';
+}
+function lbJump(dir){
+  var was=L.n;
+  if(dir>0&&L.n<=89){L.dir=1;L.n+=10;}
+  else if(dir<0&&L.n>=11){L.dir=-1;L.n-=10;}
+  else{return;}
+  lbRender();
+}
+el('lbUp').onclick=function(){lbJump(1);};
+el('lbDown').onclick=function(){lbJump(-1);};
+el('lbStart').onclick=function(){
+  do{L.n=ri(11,89);}while(L.n%10===0);
+  L.dir=1;
+  var t=Math.floor(L.n/10),u=L.n%10;
+  el('lbPhrase').innerHTML='<span class="r">'+L.n+'</span> — это '+t+' '+(t===1?'десяток':(t<5?'десятка':'десятков'))+' и '+u+' '+(u===1?'единица':(u<5?'единицы':'единиц'))+'. Прыгай +10 или −10!';
+  lbRender();
+};
+el('lbHide').onclick=function(){L.hidden=!L.hidden;lbShow();};
+(function(){var t=Math.floor(L.n/10),u=L.n%10;el('lbPhrase').innerHTML='<span class="r">'+L.n+'</span> — это '+t+' '+(t===1?'десяток':(t<5?'десятка':'десятков'))+' и '+u+' '+(u===1?'единица':(u<5?'единицы':'единиц'))+'. Прыгай +10 или −10!';})();
+lbRender();
+
+/* ---------- запуск ---------- */
+showTab('m1');
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

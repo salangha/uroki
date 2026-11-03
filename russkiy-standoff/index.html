@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Миссия: Имя существительное | Standoff Training</title>
+<meta property="og:title" content="Имя существительное — Standoff-тренировка">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: #0f0f0f;
+    background-image: 
+      linear-gradient(rgba(255, 140, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 140, 0, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #1a1a1a;
+    border: 2px solid #ff8c00;
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+    display: flex;
+  }
+  .avatar {
+    width: 200px;
+    background: #0f0f0f;
+    border-right: 2px solid #ff8c00;
+    border-left: 2px solid #ff8c00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .avatar img {
+    width: 100%;
+    height: auto;
+    border: 2px solid #444;
+    border-radius: 4px;
+  }
+  .main-content {
+    flex: 1;
+  }
+  .header {
+    background: linear-gradient(90deg, #1f1f1f, #2a1a0a);
+    padding: 20px;
+    border-bottom: 2px solid #ff8c00;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mission-title {
+    color: #ff8c00;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  .mission-subtitle {
+    color: #888;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .stats {
+    display: flex;
+    gap: 15px;
+    font-size: 13px;
+  }
+  .stat {
+    background: #0f0f0f;
+    padding: 6px 12px;
+    border: 1px solid #444;
+    border-radius: 2px;
+  }
+  .stat-value { color: #ff8c00; font-weight: bold; }
+  
+  .round-indicator {
+    display: flex;
+    padding: 15px 20px;
+    background: #0f0f0f;
+    border-bottom: 1px solid #333;
+    gap: 8px;
+  }
+  .round-dot {
+    flex: 1;
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    transition: all 0.3s;
+  }
+  .round-dot.active { background: #ff8c00; box-shadow: 0 0 8px #ff8c00; }
+  .round-dot.completed { background: #4caf50; }
+  
+  .content {
+    padding: 30px;
+    min-height: 600px;
+  }
+  .round-title {
+    color: #ff8c00;
+    font-size: 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .round-task {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 25px;
+    padding: 12px;
+    background: #0f0f0f;
+    border-left: 3px solid #ff8c00;
+  }
+  .theory {
+    background: #1f1f1f;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    border-radius: 3px;
+  }
+  .theory-title {
+    color: #ff8c00;
+    font-size: 13px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .theory-text {
+    color: #ccc;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .theory-text b { color: #ff8c00; }
+  .warning {
+    color: #f44336;
+    background: #2f1a1a;
+    padding: 10px;
+    border-left: 3px solid #f44336;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  
+  .task-word {
+    text-align: center;
+    font-size: 36px;
+    color: #fff;
+    padding: 25px;
+    background: #0f0f0f;
+    border: 2px solid #444;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: lowercase;
+  }
+  .task-word .highlight { color: #ff8c00; font-weight: bold; }
+  
+  .options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .option-btn {
+    background: #1f1f1f;
+    border: 2px solid #444;
+    color: #e0e0e0;
+    padding: 15px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .option-btn:hover {
+    border-color: #ff8c00;
+    background: #2a1a0a;
+    transform: translateY(-2px);
+  }
+  .option-btn.correct {
+    border-color: #4caf50;
+    background: #1a2f1a;
+    color: #4caf50;
+  }
+  .option-btn.wrong {
+    border-color: #f44336;
+    background: #2f1a1a;
+    color: #f44336;
+  }
+  .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+  
+  .feedback {
+    padding: 15px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.success {
+    background: #1a2f1a;
+    border: 1px solid #4caf50;
+    color: #4caf50;
+  }
+  .feedback.error {
+    background: #2f1a1a;
+    border: 1px solid #f44336;
+    color: #f44336;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    gap: 10px;
+  }
+  .btn {
+    background: #ff8c00;
+    color: #0f0f0f;
+    border: none;
+    padding: 12px 25px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: #ffa033; transform: translateY(-2px); }
+  .btn:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; }
+  .btn-secondary {
+    background: transparent;
+    color: #ff8c00;
+    border: 2px solid #ff8c00;
+  }
+  .btn-secondary:hover { background: #2a1a0a; }
+  .btn-skip {
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .btn-skip:hover {
+    border-color: #ff8c00;
+    color: #ff8c00;
+  }
+  .btn-menu {
+    background: #1f1f1f;
+    color: #ff8c00;
+    border: 1px solid #ff8c00;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .btn-menu:hover {
+    background: #2a1a0a;
+  }
+  
+  .progress-bar {
+    height: 4px;
+    background: #333;
+    margin-top: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff8c00, #ffa033);
+    transition: width 0.3s;
+  }
+  
+  .final-screen {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .final-rank {
+    font-size: 48px;
+    color: #ff8c00;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+  }
+  .final-title {
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 30px;
+  }
+  .final-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  .final-stat {
+    background: #0f0f0f;
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 3px;
+  }
+  .final-stat-value {
+    font-size: 32px;
+    color: #ff8c00;
+    font-weight: bold;
+  }
+  .final-stat-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+  
+  .case-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 13px;
+  }
+  .case-table th, .case-table td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: left;
+  }
+  .case-table th {
+    background: #1f1f1f;
+    color: #ff8c00;
+  }
+  .case-table td { background: #0f0f0f; }
+  
+  .declension-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 12px;
+    background: #0f0f0f;
+    border: 2px solid #ff8c00;
+  }
+  .declension-table th {
+    background: linear-gradient(90deg, #1f1f1f, #2a1a0a);
+    color: #ff8c00;
+    padding: 10px;
+    border: 1px solid #ff8c00;
+    text-align: center;
+    font-size: 13px;
+  }
+  .declension-table td {
+    padding: 8px;
+    border: 1px solid #444;
+    text-align: center;
+  }
+  .declension-table tr:nth-child(even) { background: #151515; }
+  .declension-table tr:hover { background: #1f1f1f; }
+  .declension-table .case-name {
+    color: #ff8c00;
+    font-weight: bold;
+    width: 80px;
+  }
+  
+  .input-field {
+    background: #0f0f0f;
+    border: 2px solid #444;
+    color: #fff;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 3px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: #ff8c00;
+  }
+  
+  .fill-task {
+    background: #0f0f0f;
+    padding: 20px;
+    border: 2px solid #444;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .fill-word {
+    font-size: 24px;
+    color: #fff;
+    margin: 10px 0;
+    text-align: center;
+  }
+  .fill-word .blank {
+    color: #ff8c00;
+    border-bottom: 2px solid #ff8c00;
+    min-width: 30px;
+    display: inline-block;
+  }
+  
+  /* Модальное окно */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.show {
+    display: flex;
+  }
+  .modal-content {
+    background: #1a1a1a;
+    border: 2px solid #ff8c00;
+    border-radius: 4px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 0 40px rgba(255, 140, 0, 0.4);
+  }
+  .modal-title {
+    color: #ff8c00;
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+  .round-select-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .round-select-btn {
+    background: #0f0f0f;
+    border: 2px solid #444;
+    color: #e0e0e0;
+    padding: 15px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .round-select-btn:hover {
+    border-color: #ff8c00;
+    background: #2a1a0a;
+    transform: translateY(-2px);
+  }
+  .round-select-btn.completed {
+    border-color: #4caf50;
+    color: #4caf50;
+  }
+  .round-select-btn.current {
+    border-color: #ff8c00;
+    background: #2a1a0a;
+    color: #ff8c00;
+  }
+  .round-select-btn .round-num {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .round-select-btn .round-name {
+    font-size: 10px;
+    color: #888;
+  }
+  .modal-close {
+    width: 100%;
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .modal-close:hover {
+    background: #555;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="avatar">
+    <img src="assets/9d4bda29b93ed5ee8d093d106c7d275a.jpg" alt="Standoff Avatar">
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <div>
+        <div class="mission-title">МИССИЯ: ИМЯ СУЩЕСТВИТЕЛЬНОЕ</div>
+        <div class="mission-subtitle">STANDOFF TRAINING // КЛАССИФИКАЦИЯ ОБЪЕКТОВ</div>
+      </div>
+      <div class="stats">
+        <div class="stat">РАУНД: <span class="stat-value" id="currentRound">1</span>/6</div>
+        <div class="stat">ОЧКИ: <span class="stat-value" id="score">0</span></div>
+      </div>
+    </div>
+    
+    <div class="round-indicator">
+      <div class="round-dot active" id="dot1"></div>
+      <div class="round-dot" id="dot2"></div>
+      <div class="round-dot" id="dot3"></div>
+      <div class="round-dot" id="dot4"></div>
+      <div class="round-dot" id="dot5"></div>
+      <div class="round-dot" id="dot6"></div>
+    </div>
+    
+    <div class="content" id="content">
+      <!-- Контент загружается через JS -->
+    </div>
+  </div>
+  
+  <!-- Модальное окно выбора раунда -->
+  <div class="modal-overlay" id="roundMenu">
+    <div class="modal-content">
+      <div class="modal-title">ВЫБОР РАУНДА</div>
+      <div class="round-select-grid" id="roundSelectGrid">
+        <!-- Заполняется через JS -->
+      </div>
+      <button class="modal-close" onclick="closeRoundMenu()">ЗАКРЫТЬ</button>
+    </div>
+  </div>
+  
+  <div class="avatar">
+    <img src="assets/9d4bda29b93ed5ee8d093d106c7d275a.jpg" alt="Standoff Avatar">
+  </div>
+</div>
+
+<script>
+// БАЗА ДАННЫХ СЛОВ
+const wordDatabase = {
+  nouns: [
+    { word: "карта", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "земля", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "команда", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "anim" },
+    { word: "задача", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "площадка", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "тропинка", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "книга", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "поляна", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "деревня", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "доска", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "база", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "сумка", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "молодость", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "старость", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "мать", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "anim" },
+    { word: "аптека", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "дорога", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "блокнот", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "перемена", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "дорожка", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "чулан", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "граница", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "солнце", type: "noun", gender: "n", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "площадь", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "друг", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "anim" },
+    { word: "район", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "радость", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "магистраль", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "боец", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "anim" },
+    { word: "автомат", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "оружие", type: "noun", gender: "n", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "патрон", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "стол", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "окно", type: "noun", gender: "n", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "поле", type: "noun", gender: "n", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "ночь", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "мышь", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "anim" },
+    { word: "печь", type: "noun", gender: "f", number: "sg", declension: 3, animacy: "inanim" },
+    { word: "плакса", type: "noun", gender: "m", number: "sg", declension: 1, animacy: "anim" },
+    { word: "плач", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim" },
+    { word: "печка", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "речка", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim" },
+    { word: "молоко", type: "noun", gender: "n", number: "sg", declension: 2, animacy: "inanim", onlySingular: true },
+    { word: "песок", type: "noun", gender: "m", number: "sg", declension: 2, animacy: "inanim", onlySingular: true },
+    { word: "тишина", type: "noun", gender: "f", number: "sg", declension: 1, animacy: "inanim", onlySingular: true },
+    { word: "ножницы", type: "noun", gender: "f", number: "pl", declension: 0, animacy: "inanim", onlyPlural: true },
+    { word: "очки", type: "noun", gender: "n", number: "pl", declension: 0, animacy: "inanim", onlyPlural: true },
+    { word: "каникулы", type: "noun", gender: "f", number: "pl", declension: 0, animacy: "inanim", onlyPlural: true },
+    { word: "бойцы", type: "noun", gender: "m", number: "pl", declension: 0, animacy: "anim" },
+    { word: "карты", type: "noun", gender: "f", number: "pl", declension: 0, animacy: "inanim" },
+    { word: "патроны", type: "noun", gender: "m", number: "pl", declension: 0, animacy: "inanim" }
+  ],
+  adjectives: [
+    { word: "красный", type: "adjective" },
+    { word: "быстрый", type: "adjective" },
+    { word: "синий", type: "adjective" },
+    { word: "большой", type: "adjective" },
+    { word: "маленький", type: "adjective" }
+  ],
+  verbs: [
+    { word: "бежит", type: "verb" },
+    { word: "стреляет", type: "verb" },
+    { word: "прячется", type: "verb" },
+    { word: "атакует", type: "verb" },
+    { word: "защищает", type: "verb" }
+  ],
+  pronouns: [
+    { word: "он", type: "pronoun" },
+    { word: "она", type: "pronoun" },
+    { word: "оно", type: "pronoun" },
+    { word: "они", type: "pronoun" },
+    { word: "я", type: "pronoun" }
+  ],
+  prepositions: [
+    { word: "в", type: "preposition" },
+    { word: "на", type: "preposition" },
+    { word: "под", type: "preposition" },
+    { word: "над", type: "preposition" },
+    { word: "с", type: "preposition" }
+  ],
+  conjunctions: [
+    { word: "и", type: "conjunction" },
+    { word: "а", type: "conjunction" },
+    { word: "но", type: "conjunction" },
+    { word: "или", type: "conjunction" },
+    { word: "что", type: "conjunction" }
+  ],
+  adverbs: [
+    { word: "быстро", type: "adverb" },
+    { word: "медленно", type: "adverb" },
+    { word: "громко", type: "adverb" },
+    { word: "тихо", type: "adverb" },
+    { word: "здесь", type: "adverb" }
+  ]
+};
+
+const endingWords = [
+  { phrase: "у речк_", answer: "е", case: "Р.п.", declension: 1 },
+  { phrase: "на карт_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "по тропинк_", answer: "е", case: "Д.п.", declension: 1 },
+  { phrase: "в книг_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "на полян_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "из деревн_", answer: "и", case: "Р.п.", declension: 1 },
+  { phrase: "под доск_", answer: "ой", case: "Т.п.", declension: 1 },
+  { phrase: "к баз_", answer: "е", case: "Д.п.", declension: 1 },
+  { phrase: "с сумк_", answer: "ой", case: "Т.п.", declension: 1 },
+  { phrase: "в молодост_", answer: "и", case: "П.п.", declension: 3 },
+  { phrase: "в старост_", answer: "и", case: "П.п.", declension: 3 },
+  { phrase: "ближе матер_", answer: "и", case: "Р.п.", declension: 3 },
+  { phrase: "в аптек_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "по дорог_", answer: "е", case: "Д.п.", declension: 1 },
+  { phrase: "из блокнот_", answer: "а", case: "Р.п.", declension: 2 },
+  { phrase: "на перемен_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "по дорожк_", answer: "е", case: "Д.п.", declension: 1 },
+  { phrase: "в чулан_", answer: "е", case: "П.п.", declension: 2 },
+  { phrase: "на границ_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "на солнц_", answer: "е", case: "П.п.", declension: 2 },
+  { phrase: "на площад_", answer: "и", case: "П.п.", declension: 3 },
+  { phrase: "на площадк_", answer: "е", case: "П.п.", declension: 1 },
+  { phrase: "с друг_", answer: "ом", case: "Т.п.", declension: 2 },
+  { phrase: "в район_", answer: "е", case: "П.п.", declension: 2 },
+  { phrase: "от радост_", answer: "и", case: "Р.п.", declension: 3 },
+  { phrase: "к магистрал_", answer: "и", case: "Д.п.", declension: 3 }
+];
+
+let currentRound = 0;
+let currentTask = 0;
+let score = 0;
+let totalCorrect = 0;
+let totalTasks = 0;
+let currentRoundTasks = [];
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function getCaseForm(word, declension, caseName) {
+  const endings = {
+    1: {
+      "Р.п": { а: "ы", я: "и" },
+      "Д.п": { а: "е", я: "е" },
+      "В.п": { а: "у", я: "ю" },
+      "Т.п": { а: "ой", я: "ей" },
+      "П.п": { а: "е", я: "е" }
+    },
+    2: {
+      "Р.п": { о: "а", е: "я", "∅": "а" },
+      "Д.п": { о: "у", е: "ю", "∅": "у" },
+      "В.п": { о: "о", е: "е", "∅": "" },
+      "Т.п": { о: "ом", е: "ем", "∅": "ом" },
+      "П.п": { о: "е", е: "е", "∅": "е" }
+    },
+    3: {
+      "Р.п": { ь: "и" },
+      "Д.п": { ь: "и" },
+      "В.п": { ь: "∅" },
+      "Т.п": { ь: "ью" },
+      "П.п": { ь: "и" }
+    }
+  };
+  
+  const lastChar = word.slice(-1);
+  const ending = endings[declension]?.[caseName]?.[lastChar];
+  
+  if (ending === undefined) return word;
+  if (ending === "∅") return word.slice(0, -1);
+  return word.slice(0, -1) + ending;
+}
+
+function generateRound1Tasks() {
+  const tasks = [];
+  const nouns = shuffleArray(wordDatabase.nouns).slice(0, 10);
+  nouns.forEach(n => {
+    tasks.push({ word: n.word, correct: true, hint: `${n.word} — это предмет. Отвечает на вопрос КТО? или ЧТО?` });
+  });
+  const others = [
+    ...shuffleArray(wordDatabase.adjectives).slice(0, 2),
+    ...shuffleArray(wordDatabase.verbs).slice(0, 2),
+    ...shuffleArray(wordDatabase.pronouns).slice(0, 2),
+    ...shuffleArray(wordDatabase.prepositions).slice(0, 2),
+    ...shuffleArray(wordDatabase.conjunctions).slice(0, 2),
+    ...shuffleArray(wordDatabase.adverbs).slice(0, 2)
+  ];
+  others.forEach(w => {
+    let question = "";
+    if (w.type === "adjective") question = "КАКОЙ?";
+    else if (w.type === "verb") question = "ЧТО ДЕЛАЕТ?";
+    else if (w.type === "pronoun") question = "указывает на предмет";
+    else if (w.type === "preposition") question = "служит для связи слов";
+    else if (w.type === "conjunction") question = "соединяет слова";
+    else if (w.type === "adverb") question = "КАК?";
+    tasks.push({ word: w.word, correct: false, hint: `${w.word} — не существительное. Отвечает на вопрос ${question}.` });
+  });
+  return shuffleArray(tasks);
+}
+
+function generateRound2Tasks() {
+  const nouns = shuffleArray(wordDatabase.nouns.filter(n => n.number === "sg")).slice(0, 12);
+  return nouns.map(n => ({
+    word: n.word,
+    correct: n.gender,
+    hint: `${n.gender === 'm' ? 'ОН' : n.gender === 'f' ? 'ОНА' : 'ОНО'} мой/моя/моё — ${n.word}. ${n.gender === 'm' ? 'Мужской' : n.gender === 'f' ? 'Женский' : 'Средний'} род.`
+  }));
+}
+
+function generateRound3Tasks() {
+  const nouns = shuffleArray(wordDatabase.nouns).slice(0, 12);
+  return nouns.map(n => ({
+    word: n.word,
+    correct: n.number,
+    onlySpecial: n.onlySingular || n.onlyPlural,
+    hint: n.number === 'sg' ? `Один ${n.word} — единственное число.` : `Много ${n.word} — множественное число.`
+  }));
+}
+
+function generateRound4Tasks() {
+  const cases = [
+    { name: "Р.п", question: "кого? чего?", helper: "нет" },
+    { name: "Д.п", question: "кому? чему?", helper: "дать" },
+    { name: "В.п", question: "кого? что?", helper: "вижу" },
+    { name: "Т.п", question: "кем? чем?", helper: "доволен" },
+    { name: "П.п", question: "о ком? о чём?", helper: "думаю" }
+  ];
+  
+  const nouns = shuffleArray(wordDatabase.nouns.filter(n => n.number === "sg" && n.declension > 0)).slice(0, 12);
+  
+  return nouns.map((n, i) => {
+    const c = cases[i % cases.length];
+    const declinedWord = getCaseForm(n.word, n.declension, c.name);
+    return {
+      phrase: `(${c.helper}) ${declinedWord}`,
+      correct: c.name,
+      hint: `(${c.helper.toUpperCase()}) ${c.question} — ${declinedWord}. ${c.name}`
+    };
+  });
+}
+
+function generateRound5Tasks() {
+  const nouns = shuffleArray(wordDatabase.nouns.filter(n => n.number === "sg" && n.declension > 0)).slice(0, 12);
+  return nouns.map(n => ({
+    word: n.word,
+    correct: String(n.declension),
+    hint: getDeclensionHint(n)
+  }));
+}
+
+function getDeclensionHint(noun) {
+  if (noun.declension === 1) {
+    return `${noun.word} — ${noun.gender === 'f' ? 'женский' : 'мужской'} род, оканчивается на -А/-Я. I склонение.`;
+  } else if (noun.declension === 2) {
+    return `${noun.word} — ${noun.gender === 'm' ? 'мужской' : 'средний'} род, ${noun.word.endsWith('о') || noun.word.endsWith('е') ? 'оканчивается на -О/-Е' : 'нулевое окончание'}. II склонение.`;
+  } else {
+    return `${noun.word} — женский род, оканчивается на -Ь. III склонение.`;
+  }
+}
+
+function generateRound6Tasks() {
+  return shuffleArray(endingWords).slice(0, 15);
+}
+
+function renderRound() {
+  if (currentRoundTasks.length === 0) {
+    switch(currentRound) {
+      case 0: currentRoundTasks = generateRound1Tasks(); break;
+      case 1: currentRoundTasks = generateRound2Tasks(); break;
+      case 2: currentRoundTasks = generateRound3Tasks(); break;
+      case 3: currentRoundTasks = generateRound4Tasks(); break;
+      case 4: currentRoundTasks = generateRound5Tasks(); break;
+      case 5: currentRoundTasks = generateRound6Tasks(); break;
+    }
+  }
+  
+  const task = currentRoundTasks[currentTask];
+  const round = rounds[currentRound];
+  
+  document.getElementById('currentRound').textContent = currentRound + 1;
+  for (let i = 1; i <= 6; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active', 'completed');
+    if (i - 1 < currentRound) dot.classList.add('completed');
+    else if (i - 1 === currentRound) dot.classList.add('active');
+  }
+  
+  let html = `
+    <div class="round-title">${round.title}</div>
+    <div class="round-task">${round.task}</div>
+    <div class="theory">
+      <div class="theory-title">${round.theory.title}</div>
+      <div class="theory-text">${round.theory.text}</div>
+      ${round.theory.warning ? `<div class="warning">${round.theory.warning}</div>` : ''}
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width: ${(currentTask / currentRoundTasks.length) * 100}%"></div></div>
+    <div style="margin: 15px 0; color: #888; font-size: 13px;">ЗАДАНИЕ ${currentTask + 1} ИЗ ${currentRoundTasks.length}</div>
+  `;
+  
+  if (round.type === "identify") {
+    html += `
+      <div class="task-word">${task.word}</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkAnswer(true, ${task.correct})">ДА, СУЩЕСТВИТЕЛЬНОЕ</button>
+        <button class="option-btn" onclick="checkAnswer(false, ${task.correct})">НЕТ, ДРУГАЯ Ч.Р.</button>
+      </div>
+    `;
+  } else if (round.type === "gender") {
+    html += `
+      <div class="task-word">${task.word}</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkAnswer('m', '${task.correct}')">МУЖСКОЙ (ОН)</button>
+        <button class="option-btn" onclick="checkAnswer('f', '${task.correct}')">ЖЕНСКИЙ (ОНА)</button>
+        <button class="option-btn" onclick="checkAnswer('n', '${task.correct}')">СРЕДНИЙ (ОНО)</button>
+      </div>
+    `;
+  } else if (round.type === "number") {
+    html += `
+      <div class="task-word">${task.word}</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkAnswer('sg', '${task.correct}')">ЕДИНСТВЕННОЕ</button>
+        <button class="option-btn" onclick="checkAnswer('pl', '${task.correct}')">МНОЖЕСТВЕННОЕ</button>
+      </div>
+    `;
+  } else if (round.type === "case") {
+    html += `
+      <div class="task-word">${task.phrase}</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkAnswer('И.п.', '${task.correct}')">ИМЕНительный</button>
+        <button class="option-btn" onclick="checkAnswer('Р.п.', '${task.correct}')">РОДИТЕЛЬНЫЙ</button>
+        <button class="option-btn" onclick="checkAnswer('Д.п.', '${task.correct}')">ДАТЕЛЬНЫЙ</button>
+        <button class="option-btn" onclick="checkAnswer('В.п.', '${task.correct}')">ВИНИТЕЛЬНЫЙ</button>
+        <button class="option-btn" onclick="checkAnswer('Т.п.', '${task.correct}')">ТВОРИТЕЛЬНЫЙ</button>
+        <button class="option-btn" onclick="checkAnswer('П.п.', '${task.correct}')">ПРЕДЛОЖНЫЙ</button>
+      </div>
+    `;
+  } else if (round.type === "declension") {
+    html += `
+      <div class="task-word">${task.word}</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkAnswer('1', '${task.correct}')">I СКЛОНЕНИЕ</button>
+        <button class="option-btn" onclick="checkAnswer('2', '${task.correct}')">II СКЛОНЕНИЕ</button>
+        <button class="option-btn" onclick="checkAnswer('3', '${task.correct}')">III СКЛОНЕНИЕ</button>
+      </div>
+    `;
+  } else if (round.type === "ending") {
+    html += `
+      <div class="fill-task">
+        <div class="fill-word">${task.phrase.replace('_', '<span class="blank">_</span>')}</div>
+      </div>
+      <input type="text" class="input-field" id="endingInput" placeholder="Вставь букву (одну)" maxlength="3" autocomplete="off">
+      <button class="btn" onclick="checkEnding()">ПРОВЕРИТЬ</button>
+    `;
+  }
+  
+  html += `
+    <div class="controls">
+      <button class="btn-menu" onclick="openRoundMenu()">⚙ ВЫБОР РАУНДА</button>
+      <button class="btn-skip" onclick="skipRound()">ПРОПУСТИТЬ РАУНД →</button>
+    </div>
+  `;
+  
+  html += `<div class="feedback" id="feedback"></div>`;
+  
+  document.getElementById('content').innerHTML = html;
+}
+
+function checkAnswer(answer, correct) {
+  const feedback = document.getElementById('feedback');
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(b => b.disabled = true);
+  
+  totalTasks++;
+  
+  if (String(answer) === String(correct)) {
+    feedback.className = 'feedback show success';
+    feedback.innerHTML = '✓ ВЕРНО! ' + currentRoundTasks[currentTask].hint;
+    score += 10;
+    totalCorrect++;
+  } else {
+    feedback.className = 'feedback show error';
+    feedback.innerHTML = '✗ ОШИБКА. ' + currentRoundTasks[currentTask].hint;
+  }
+  
+  document.getElementById('score').textContent = score;
+  
+  setTimeout(() => {
+    currentTask++;
+    if (currentTask >= currentRoundTasks.length) {
+      currentTask = 0;
+      currentRoundTasks = [];
+      currentRound++;
+      if (currentRound >= rounds.length) {
+        showFinalScreen();
+        return;
+      }
+    }
+    renderRound();
+  }, 2500);
+}
+
+function checkEnding() {
+  const input = document.getElementById('endingInput');
+  const answer = input.value.trim().toLowerCase();
+  const correct = currentRoundTasks[currentTask].answer.toLowerCase();
+  
+  const feedback = document.getElementById('feedback');
+  totalTasks++;
+  
+  if (answer === correct) {
+    feedback.className = 'feedback show success';
+    feedback.innerHTML = `✓ ВЕРНО! Правильный ответ: <b>${correct}</b>. ${currentRoundTasks[currentTask].hint}`;
+    score += 10;
+    totalCorrect++;
+  } else {
+    feedback.className = 'feedback show error';
+    feedback.innerHTML = `✗ ОШИБКА. Правильный ответ: <b>${correct}</b>. ${currentRoundTasks[currentTask].hint}`;
+  }
+  
+  input.disabled = true;
+  document.getElementById('score').textContent = score;
+  
+  setTimeout(() => {
+    currentTask++;
+    if (currentTask >= currentRoundTasks.length) {
+      currentTask = 0;
+      currentRoundTasks = [];
+      currentRound++;
+      if (currentRound >= rounds.length) {
+        showFinalScreen();
+        return;
+      }
+    }
+    renderRound();
+  }, 3000);
+}
+
+function showFinalScreen() {
+  const percent = Math.round((totalCorrect / totalTasks) * 100);
+  let rank, rankTitle;
+  
+  if (percent >= 90) { rank = "S"; rankTitle = "ЭЛИТНЫЙ СПЕЦИАЛИСТ"; }
+  else if (percent >= 75) { rank = "A"; rankTitle = "СТАРШИЙ БОЕЦ"; }
+  else if (percent >= 60) { rank = "B"; rankTitle = "БОЕЦ"; }
+  else if (percent >= 40) { rank = "C"; rankTitle = "НОВИЧОК"; }
+  else { rank = "D"; rankTitle = "СТАЖЁР"; }
+  
+  document.getElementById('content').innerHTML = `
+    <div class="final-screen">
+      <div class="final-rank">РАНГ ${rank}</div>
+      <div class="final-title">${rankTitle}</div>
+      <div class="final-stats">
+        <div class="final-stat">
+          <div class="final-stat-value">${totalCorrect}</div>
+          <div class="final-stat-label">ВЕРНЫХ ОТВЕТОВ</div>
+        </div>
+        <div class="final-stat">
+          <div class="final-stat-value">${totalTasks}</div>
+          <div class="final-stat-label">ВСЕГО ЗАДАНИЙ</div>
+        </div>
+        <div class="final-stat">
+          <div class="final-stat-value">${percent}%</div>
+          <div class="final-stat-label">ТОЧНОСТЬ</div>
+        </div>
+      </div>
+      <div style="text-align: left; padding: 20px; background: #0f0f0f; border: 1px solid #444; border-radius: 3px; margin-bottom: 20px;">
+        <div style="color: #ff8c00; margin-bottom: 10px; font-size: 14px;">ИТОГОВАЯ СВОДКА ПО ТЕМЕ:</div>
+        <div style="color: #ccc; font-size: 13px; line-height: 1.8;">
+          ✓ <b>Имя существительное</b> — часть речи, обозначает предмет, вопросы КТО? ЧТО?<br>
+          ✓ <b>Род:</b> мужской (он), женский (она), средний (оно)<br>
+          ✓ <b>Число:</b> единственное и множественное<br>
+          ✓ <b>6 падежей:</b> И.п., Р.п., Д.п., В.п., Т.п., П.п.<br>
+          ✓ <b>3 склонения:</b> I (ж.р. на -А/-Я, м.р. на -А/-Я), II (м.р. с 0 оконч., ср.р. на -О/-Е), III (ж.р. на -Ь)<br>
+          ✓ <b>Безударные окончания</b> проверяются через определение склонения и падежа
+        </div>
+      </div>
+      <button class="btn" onclick="restartMission()">ПОВТОРИТЬ МИССИЮ</button>
+    </div>
+  `;
+  
+  for (let i = 1; i <= 6; i++) {
+    document.getElementById('dot' + i).classList.remove('active');
+    document.getElementById('dot' + i).classList.add('completed');
+  }
+}
+
+function restartMission() {
+  currentRound = 0;
+  currentTask = 0;
+  score = 0;
+  totalCorrect = 0;
+  totalTasks = 0;
+  currentRoundTasks = [];
+  document.getElementById('score').textContent = 0;
+  renderRound();
+}
+
+// Функция открытия меню выбора раунда
+function openRoundMenu() {
+  const modal = document.getElementById('roundMenu');
+  const grid = document.getElementById('roundSelectGrid');
+  
+  const roundNames = [
+    "ИДЕНТИФИКАЦИЯ",
+    "РОД",
+    "ЧИСЛО",
+    "ПАДЕЖ",
+    "СКЛОНЕНИЕ",
+    "ОКОНЧАНИЯ"
+  ];
+  
+  grid.innerHTML = '';
+  rounds.forEach((round, index) => {
+    const btn = document.createElement('button');
+    btn.className = 'round-select-btn';
+    if (index < currentRound) btn.classList.add('completed');
+    if (index === currentRound) btn.classList.add('current');
+    btn.innerHTML = `
+      <span class="round-num">${index + 1}</span>
+      <span class="round-name">${roundNames[index]}</span>
+    `;
+    btn.onclick = () => {
+      goToRound(index);
+      closeRoundMenu();
+    };
+    grid.appendChild(btn);
+  });
+  
+  modal.classList.add('show');
+}
+
+// Функция закрытия меню
+function closeRoundMenu() {
+  document.getElementById('roundMenu').classList.remove('show');
+}
+
+// Функция перехода к конкретному раунду
+function goToRound(roundIndex) {
+  currentRound = roundIndex;
+  currentTask = 0;
+  currentRoundTasks = [];
+  renderRound();
+}
+
+// Функция пропуска раунда
+function skipRound() {
+  currentTask = 0;
+  currentRoundTasks = [];
+  currentRound++;
+  if (currentRound >= rounds.length) {
+    showFinalScreen();
+  } else {
+    renderRound();
+  }
+}
+
+// Закрытие модального окна при клике вне его
+document.getElementById('roundMenu').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeRoundMenu();
+  }
+});
+
+const rounds = [
+  {
+    title: "РАУНД 1. ИДЕНТИФИКАЦИЯ ОБЪЕКТА",
+    task: "Операция «Существительное». Определи, является ли слово именем существительным. Вспомни: имя существительное — это часть речи, которая обозначает предмет и отвечает на вопросы КТО? ЧТО?",
+    theory: {
+      title: "Тактическая справка",
+      text: "<b>Имя существительное</b> — самостоятельная часть речи. Обозначает <b>предмет</b> (лица, животные, вещи, явления). Отвечает на вопросы: <b>КТО?</b> (если можно увидеть, потрогать — одушевлённое) или <b>ЧТО?</b> (неодушевлённое). Начальная форма — именительный падеж единственного числа."
+    },
+    type: "identify"
+  },
+  {
+    title: "РАУНД 2. КЛАСС ОБЪЕКТА",
+    task: "Определи род существительного. Помни: род — постоянный признак. Мужской род — он мой, женский — она моя, средний — оно моё.",
+    theory: {
+      title: "Подсказка по определению рода",
+      text: "В единственном числе род определяется по вспомогательному слову:<br>• <b>Мужской род</b> (он мой): стол, дом, автомат, боец<br>• <b>Женский род</b> (она моя): карта, стена, задача, команда<br>• <b>Средний род</b> (оно моё): окно, задание, оружие, время"
+    },
+    type: "gender"
+  },
+  {
+    title: "РАУНД 3. КОЛИЧЕСТВО",
+    task: "Определи число существительного: единственное (один объект) или множественное (два и более).",
+    theory: {
+      title: "Тактическая справка",
+      text: "<b>Единственное число</b> — один предмет: боец, карта, патрон.<br><b>Множественное число</b> — несколько предметов: бойцы, карты, патроны.",
+      warning: "⚠ ВНИМАНИЕ: есть существительные, которые употребляются ТОЛЬКО в единственном числе (молоко, песок, тишина) или ТОЛЬКО во множественном (ножницы, очки, каникулы)."
+    },
+    type: "number"
+  },
+  {
+    title: "РАУНД 4. ТАКТИЧЕСКАЯ ПОЗИЦИЯ",
+    task: "Определи падеж существительного. Вспомни 6 падежей и их вопросы.",
+    theory: {
+      title: "Шесть падежей русского языка",
+      text: '<table class="case-table"><tr><th>Падеж</th><th>Вопросы</th><th>Вспомогательное слово</th><th>Пример</th></tr><tr><td>Именительный (И.п.)</td><td>кто? что?</td><td>это</td><td>кто? боец</td></tr><tr><td>Родительный (Р.п.)</td><td>кого? чего?</td><td>нет</td><td>нет бойца</td></tr><tr><td>Дательный (Д.п.)</td><td>кому? чему?</td><td>дать</td><td>дать бойцу</td></tr><tr><td>Винительный (В.п.)</td><td>кого? что?</td><td>вижу</td><td>вижу бойца</td></tr><tr><td>Творительный (Т.п.)</td><td>кем? чем?</td><td>доволен</td><td>доволен бойцом</td></tr><tr><td>Предложный (П.п.)</td><td>о ком? о чём?</td><td>думаю</td><td>думаю о бойце</td></tr></table>'
+    },
+    type: "case"
+  },
+  {
+    title: "РАУНД 5. БОЕВОЙ КЛАСС",
+    task: "Определи склонение существительного. В русском языке 3 склонения.",
+    theory: {
+      title: "Три склонения",
+      text: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0;"><div style="background: #0f0f0f; border: 1px solid #444; padding: 12px; border-radius: 3px; text-align: center;"><h4 style="color: #ff8c00; font-size: 13px; margin-bottom: 8px;">I СКЛОНЕНИЕ</h4><p style="color: #ccc; font-size: 12px; line-height: 1.5;">Жен. и муж. род на -А, -Я<br><i>мама, земля, карта, папа</i></p></div><div style="background: #0f0f0f; border: 1px solid #444; padding: 12px; border-radius: 3px; text-align: center;"><h4 style="color: #ff8c00; font-size: 13px; margin-bottom: 8px;">II СКЛОНЕНИЕ</h4><p style="color: #ccc; font-size: 12px; line-height: 1.5;">Муж. род с 0 окончанием<br>Ср. род на -О, -Е<br><i>стол, дом, окно, поле</i></p></div><div style="background: #0f0f0f; border: 1px solid #444; padding: 12px; border-radius: 3px; text-align: center;"><h4 style="color: #ff8c00; font-size: 13px; margin-bottom: 8px;">III СКЛОНЕНИЕ</h4><p style="color: #ccc; font-size: 12px; line-height: 1.5;">Жен. род с Ь на конце<br><i>ночь, мышь, площадь</i></p></div></div>'
+    },
+    type: "declension"
+  },
+  {
+    title: "РАУНД 6. ФИНАЛЬНАЯ КАЛИБРОВКА",
+    task: "Вставь безударное падежное окончание. Подсказка: определи склонение и падеж — окончание станет ясным.",
+    theory: {
+      title: "Таблица окончаний",
+      text: '<table class="declension-table"><tr><th></th><th>1-е скл.</th><th>2-е скл.</th><th>3-е скл.</th></tr><tr><td class="case-name">И.п.</td><td>-а, -я</td><td>∅, -о, -е</td><td>∅</td></tr><tr><td class="case-name">Р.п.</td><td>-ы, -и</td><td>-а, -я</td><td>-и</td></tr><tr><td class="case-name">Д.п.</td><td>-е</td><td>-у, -ю</td><td>-и</td></tr><tr><td class="case-name">В.п.</td><td>-у, -ю</td><td>одуш. -а, -я<br>неодуш. -∅, -о, -е</td><td>∅</td></tr><tr><td class="case-name">Т.п.</td><td>-ой, -ей, -ей<br>-ою, -ею, -ею</td><td>-ом, -ем, -ём</td><td>-ю</td></tr><tr><td class="case-name">П.п.</td><td>-е</td><td>-е</td><td>-и</td></tr></table>'
+    },
+    type: "ending"
+  }
+];
+
+// Запуск
+renderRound();
+</script>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

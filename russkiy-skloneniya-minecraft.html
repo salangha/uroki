@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Этап 1. Существительное — Блоки и Мобы</title>
+<meta property="og:title" content="Существительное: склонения — Minecraft">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 60%, #7CFC00 60%, #5CB85C 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+  }
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #000;
+    letter-spacing: 2px;
+  }
+  .legend {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    padding: 15px;
+    margin: 0 auto 20px;
+    max-width: 900px;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .legend b { color: #FFD700; }
+  .hint {
+    background: rgba(139, 69, 19, 0.9);
+    border: 3px dashed #FFD700;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .words-container {
+    background: rgba(0,0,0,0.5);
+    border: 4px solid #555;
+    padding: 15px;
+    margin: 0 auto 20px;
+    max-width: 900px;
+    min-height: 120px;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .word-block {
+    background: #8B4513;
+    border: 3px solid #5C2E0A;
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: grab;
+    user-select: none;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+    transition: transform 0.1s;
+  }
+  .word-block:hover { transform: scale(1.05); }
+  .word-block:active { cursor: grabbing; }
+  .word-block.correct { background: #2ECC40; border-color: #1a7a26; }
+  .word-block.wrong { background: #E74C3C; border-color: #8b2a1f; animation: shake 0.4s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .chests {
+    display: flex;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .chest {
+    flex: 1;
+    min-width: 280px;
+    background: rgba(139, 69, 19, 0.85);
+    border: 4px solid #5C2E0A;
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 250px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  .chest h2 {
+    text-align: center;
+    font-size: 18px;
+    color: #FFD700;
+    margin-bottom: 5px;
+    border-bottom: 2px dashed #FFD700;
+    padding-bottom: 8px;
+  }
+  .chest .rule {
+    text-align: center;
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .chest .drop-zone {
+    min-height: 150px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 5px;
+  }
+  .chest.drag-over { background: rgba(46, 204, 64, 0.4); }
+  .controls {
+    text-align: center;
+    margin: 20px 0;
+  }
+  button {
+    background: #2ECC40;
+    border: 3px solid #1a7a26;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 30px;
+    cursor: pointer;
+    margin: 0 10px;
+    text-shadow: 2px 2px 0 #000;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+  }
+  button:hover { background: #3dd650; }
+  button:active { transform: translateY(2px); }
+  .reset-btn { background: #E67E22; border-color: #8b4a15; }
+  .reset-btn:hover { background: #f39c3a; }
+  .result {
+    text-align: center;
+    font-size: 22px;
+    margin: 20px auto;
+    max-width: 900px;
+    padding: 15px;
+    background: rgba(0,0,0,0.7);
+    border: 3px solid #FFD700;
+    border-radius: 4px;
+    display: none;
+  }
+  .result.show { display: block; }
+  .score { color: #FFD700; font-size: 28px; }
+</style>
+</head>
+<body>
+
+<h1>⛏ ЭТАП 1. СУЩЕСТВИТЕЛЬНОЕ — БЛОКИ И МОБЫ ⛏</h1>
+
+<div class="legend">
+  <b>Легенда:</b> Ты — главный разработчик новой карты в Minecraft. Чтобы мир заработал, нужно загрузить в движок <b>объекты</b> (блоки, предметы, мобов).<br>
+  <b>Существительное</b> — это любой предмет в игре. Отвечает на вопросы: <b>КТО? ЧТО?</b><br>
+  <b>Твоя задача:</b> разложить все блоки по трём сундукам — в соответствии с их <b>склонением</b>.
+  <div class="hint">
+    💡 <b>Подсказка-шпаргалка:</b><br>
+    • <b>1 склонение</b> — сущ. женского рода на <b>-А, -Я</b> (база, атака) И мужского рода на <b>-А, -Я</b> (дядя, судья).<br>
+    • <b>2 склонение</b> — сущ. мужского рода с <b>нулевым окончанием</b> (меч, блок), а также среднего рода на <b>-О, -Е</b> (поле, оружие).<br>
+    • <b>3 склонение</b> — сущ. женского рода с <b>мягким знаком -Ь</b> на конце (тень, кость).
+  </div>
+</div>
+
+<div class="words-container" id="wordsContainer"></div>
+
+<div class="chests">
+  <div class="chest" id="chest1" data-skl="1">
+    <h2>🟦 СУНДУК 1 (1 СКЛОНЕНИЕ)</h2>
+    <div class="rule">ж.р. на -А/-Я + м.р. на -А/-Я</div>
+    <div class="drop-zone" id="drop1"></div>
+  </div>
+  <div class="chest" id="chest2" data-skl="2">
+    <h2>🟩 СУНДУК 2 (2 СКЛОНЕНИЕ)</h2>
+    <div class="rule">м.р. (нулевое ) + ср.р. на -О/-Е</div>
+    <div class="drop-zone" id="drop2"></div>
+  </div>
+  <div class="chest" id="chest3" data-skl="3">
+    <h2>🟥 СУНДУК 3 (3 СКЛОНЕНИЕ)</h2>
+    <div class="rule">ж.р. с -Ь на конце</div>
+    <div class="drop-zone" id="drop3"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="checkAnswers()">✅ ПРОВЕРИТЬ КОД</button>
+  <button class="reset-btn" onclick="resetGame()">🔄 ПЕРЕЗАГРУЗИТЬ МИР</button>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+  // Слова с указанием склонения и рода
+  const words = [
+    // 1 склонение, ж.р.
+    {text: "база", skl: 1, rod: "ж.р."},
+    {text: "атака", skl: 1, rod: "ж.р."},
+    {text: "победа", skl: 1, rod: "ж.р."},
+    {text: "команда", skl: 1, rod: "ж.р."},
+    {text: "звезда", skl: 1, rod: "ж.р."},
+    // 1 склонение, м.р.
+    {text: "дядя", skl: 1, rod: "м.р."},
+    {text: "судья", skl: 1, rod: "м.р."},
+    {text: "воевода", skl: 1, rod: "м.р."},
+    {text: "парниша", skl: 1, rod: "м.р."},
+    {text: "слуга", skl: 1, rod: "м.р."},
+
+    // 2 склонение, м.р.
+    {text: "блок", skl: 2, rod: "м.р."},
+    {text: "меч", skl: 2, rod: "м.р."},
+    {text: "щит", skl: 2, rod: "м.р."},
+    {text: "шлем", skl: 2, rod: "м.р."},
+    {text: "сервер", skl: 2, rod: "м.р."},
+    // 2 склонение, ср.р.
+    {text: "поле", skl: 2, rod: "ср.р."},
+    {text: "оружие", skl: 2, rod: "ср.р."},
+    {text: "снаряжение", skl: 2, rod: "ср.р."},
+    {text: "задание", skl: 2, rod: "ср.р."},
+    {text: "подземелье", skl: 2, rod: "ср.р."},
+
+    // 3 склонение, ж.р. на -Ь
+    {text: "тень", skl: 3, rod: "ж.р."},
+    {text: "вещь", skl: 3, rod: "ж.р."},
+    {text: "кость", skl: 3, rod: "ж.р."},
+    {text: "дверь", skl: 3, rod: "ж.р."},
+    {text: "кровь", skl: 3, rod: "ж.р."},
+    {text: "пыль", skl: 3, rod: "ж.р."},
+    {text: "цель", skl: 3, rod: "ж.р."},
+    {text: "помощь", skl: 3, rod: "ж.р."},
+    {text: "ночь", skl: 3, rod: "ж.р."},
+    {text: "мышь", skl: 3, rod: "ж.р."}
+  ];
+
+  let draggedEl = null;
+
+  function shuffle(arr) {
+    return arr.slice().sort(() => Math.random() - 0.5);
+  }
+
+  function renderWords() {
+    const container = document.getElementById("wordsContainer");
+    container.innerHTML = "";
+    shuffle(words).forEach((w, i) => {
+      const div = document.createElement("div");
+      div.className = "word-block";
+      div.textContent = w.text;
+      div.draggable = true;
+      div.dataset.index = words.indexOf(w);
+      div.dataset.skl = w.skl;
+      div.addEventListener("dragstart", e => {
+        draggedEl = div;
+        e.dataTransfer.setData("text/plain", div.dataset.index);
+      });
+      container.appendChild(div);
+    });
+  }
+
+  function setupDropZones() {
+    document.querySelectorAll(".drop-zone").forEach(zone => {
+      zone.addEventListener("dragover", e => {
+        e.preventDefault();
+        zone.parentElement.classList.add("drag-over");
+      });
+      zone.addEventListener("dragleave", () => {
+        zone.parentElement.classList.remove("drag-over");
+      });
+      zone.addEventListener("drop", e => {
+        e.preventDefault();
+        zone.parentElement.classList.remove("drag-over");
+        if (draggedEl) {
+          zone.appendChild(draggedEl);
+          draggedEl.classList.remove("correct", "wrong");
+        }
+      });
+    });
+    // Возврат в исходный контейнер
+    const mainZone = document.getElementById("wordsContainer");
+    mainZone.addEventListener("dragover", e => e.preventDefault());
+    mainZone.addEventListener("drop", e => {
+      e.preventDefault();
+      if (draggedEl) {
+        mainZone.appendChild(draggedEl);
+        draggedEl.classList.remove("correct", "wrong");
+      }
+    });
+  }
+
+  function checkAnswers() {
+    let correct = 0;
+    let total = words.length;
+    for (let i = 1; i <= 3; i++) {
+      const zone = document.getElementById("drop" + i);
+      const blocks = zone.querySelectorAll(".word-block");
+      blocks.forEach(b => {
+        const realSkl = parseInt(b.dataset.skl);
+        if (realSkl === i) {
+          b.classList.add("correct");
+          b.classList.remove("wrong");
+          correct++;
+        } else {
+          b.classList.add("wrong");
+          b.classList.remove("correct");
+        }
+      });
+    }
+    // Проверим, все ли слова расложены
+    const remaining = document.getElementById("wordsContainer").querySelectorAll(".word-block").length;
+    const result = document.getElementById("result");
+    result.classList.add("show");
+    if (remaining > 0) {
+      result.innerHTML = `⚠️ В инвентаре осталось <span class="score">${remaining}</span> блоков! Распредели все слова.`;
+      return;
+    }
+    result.innerHTML = `✅ МИР ЗАГРУЖЕН! Правильно: <span class="score">${correct} из ${total}</span><br>
+      ${correct === total ? "🏆 ИДЕАЛЬНЫЙ КОД! Ты — настоящий геймдизайнер!" : "🔧 Найди красные блоки — это баги. Перетащи их в верный сундук."}`;
+  }
+
+  function resetGame() {
+    document.getElementById("result").classList.remove("show");
+    renderWords();
+  }
+
+  renderWords();
+  setupDropZones();
+</script>
+
+
+<style>.tap-selected{outline:4px dashed #FFD700 !important;outline-offset:3px}</style>
+<script>
+(function(){
+  var sel=null;
+  document.addEventListener('click',function(ev){
+    var w=ev.target.closest('.word-block');
+    var c=ev.target.closest('.chest');
+    var main=ev.target.closest('#wordsContainer');
+    if(w){
+      if(sel===w){w.classList.remove('tap-selected');sel=null;return;}
+      if(sel){sel.classList.remove('tap-selected');}
+      sel=w;w.classList.add('tap-selected');return;
+    }
+    if(sel){
+      var z=c?c.querySelector('.drop-zone'):null;
+      if(z){z.appendChild(sel);sel.classList.remove('tap-selected');sel=null;return;}
+      if(main){main.appendChild(sel);sel.classList.remove('tap-selected');sel=null;}
+    }
+  },true);
+})();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

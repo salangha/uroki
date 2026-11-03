@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox English: Времена и неправильные глаголы (4 класс)</title>
+<meta property="og:title" content="Roblox English: времена и неправильные глаголы">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial Black', 'Roblox', sans-serif;
+        }
+
+        body {
+            background: #1a2a3a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .roblox-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            background: #2e3b4e;
+            border: 8px solid #ffc42e;
+            border-radius: 40px 40px 20px 20px;
+            box-shadow: 0 20px 0 #0f1a22, 0 30px 40px rgba(0, 0, 0, 0.7);
+            padding: 25px 30px 35px;
+            position: relative;
+        }
+
+        .title-block {
+            background: #ffb82e;
+            border-radius: 60px 60px 30px 30px;
+            padding: 18px 20px 14px;
+            margin-top: -45px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 0 #a06f1a, inset 0 -4px 0 #d49d2a;
+            text-align: center;
+            transform: rotate(-1deg);
+        }
+
+        .title-block h1 {
+            font-size: 2.6rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #1d2b3a;
+            text-shadow: 3px 3px 0 #ffdd88, 0 6px 0 #7f5f1a;
+            word-break: break-word;
+        }
+        .title-block .sub {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1f2e3d;
+            background: #ffeecc;
+            display: inline-block;
+            padding: 0 25px;
+            border-radius: 40px;
+            box-shadow: inset 0 -3px 0 #b38f4a;
+            margin-top: 5px;
+        }
+
+        .content-grid {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .main-game {
+            flex: 3;
+            min-width: 300px;
+        }
+
+        .vocab-sidebar {
+            flex: 1;
+            min-width: 180px;
+            background: #1f2c3f;
+            border: 4px solid #ffc42e;
+            border-radius: 30px;
+            padding: 20px 15px;
+            box-shadow: inset 0 -8px 0 #0f1a22, 0 10px 0 #0c151f;
+            height: fit-content;
+        }
+        .vocab-sidebar h3 {
+            background: #ffb82e;
+            color: #1d2b3a;
+            padding: 8px 0;
+            text-align: center;
+            border-radius: 40px;
+            margin-top: -35px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 0 #7f5f1a;
+        }
+        .vocab-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 5px;
+            border-bottom: 2px dashed #4a5f7a;
+            color: #e0ecff;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        .vocab-item span:last-child {
+            color: #ffd966;
+        }
+        .vocab-item.past {
+            color: #ffb3b3;
+        }
+        .vocab-item.past span:last-child {
+            color: #ff8a8a;
+        }
+
+        .tense-grid {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tense-badge {
+            background: #27374a;
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 3px solid #ffc42e;
+            color: white;
+            font-weight: bold;
+            box-shadow: inset 0 -4px 0 #121e2b;
+            font-size: 0.9rem;
+        }
+        .tense-badge span {
+            color: #ffb82e;
+        }
+
+        .game-section {
+            background: #1b293a;
+            border-radius: 50px 50px 30px 30px;
+            padding: 20px 25px 30px;
+            border: 4px solid #ffb82e;
+            box-shadow: inset 0 -8px 0 #0f1823, 0 12px 0 #0d1721;
+            margin-top: 5px;
+        }
+
+        .question-box {
+            background: #31455c;
+            border-radius: 40px;
+            padding: 20px 25px;
+            border: 4px solid #80a0c0;
+            box-shadow: inset 0 -6px 0 #17212e;
+            margin: 10px 0;
+        }
+        .question-box p {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #f5f9ff;
+            text-shadow: 2px 2px 0 #1d2f40;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .option-btn {
+            background: #3c5a78;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 10px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 8px 0 #1a2b3b, inset 0 -4px 0 #1f3450;
+            transition: all 0.05s linear;
+            cursor: pointer;
+            border: 2px solid #7fa0c0;
+            text-shadow: 2px 2px 0 #14212e;
+            letter-spacing: 1px;
+        }
+        .option-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #1a2b3b;
+        }
+        .option-btn.correct {
+            background: #2ac76e;
+            border-color: #b1ffb1;
+            box-shadow: 0 8px 0 #137a3a;
+        }
+        .option-btn.wrong {
+            background: #d43f3f;
+            border-color: #ff8a8a;
+            box-shadow: 0 8px 0 #7a1f1f;
+        }
+        .option-btn:disabled {
+            opacity: 0.7;
+            transform: translateY(4px);
+        }
+
+        .feedback {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 15px 20px;
+            border-radius: 60px;
+            background: #1f3144;
+            border: 4px solid #ffc42e;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reset-btn {
+            background: #ffb82e;
+            border: none;
+            border-radius: 80px;
+            padding: 18px 40px;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: #1d2b3a;
+            box-shadow: 0 10px 0 #7f5f1a;
+            cursor: pointer;
+            transition: all 0.05s linear;
+            border: 3px solid #ffe49e;
+            margin-top: 20px;
+            width: 100%;
+            text-shadow: 2px 2px 0 #f7d78a;
+        }
+        .reset-btn:active {
+            transform: translateY(7px);
+            box-shadow: 0 3px 0 #7f5f1a;
+        }
+
+        .progress-bar {
+            color: #95abc9;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        .roblox-img {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .roblox-img img {
+            max-width: 100%;
+            border-radius: 30px;
+            border: 4px solid #ffc42e;
+            box-shadow: 0 8px 0 #0f1a22;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .score-display {
+            background: #1f2c3f;
+            border: 3px solid #ffc42e;
+            border-radius: 40px;
+            padding: 10px 20px;
+            text-align: center;
+            color: #ffdd99;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .score-display span {
+            color: #fff;
+            font-size: 1.8rem;
+        }
+
+        @media (max-width: 700px) {
+            .title-block h1 { font-size: 2rem; }
+            .option-btn { font-size: 1rem; padding: 12px 5px; }
+            .question-box p { font-size: 1.3rem; }
+            .options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="roblox-wrapper">
+
+    <div class="title-block">
+        <h1>⚡ ROBLOX ENGLISH ⚡</h1>
+        <div class="sub">4 КЛАСС • ВРЕМЕНА И НЕПРАВИЛЬНЫЕ ГЛАГОЛЫ</div>
+    </div>
+
+    <div class="roblox-img">
+        <img src="assets/roblox-1-1200px-png.jpeg" alt="Roblox Style" onerror="this.style.display='none'">
+    </div>
+
+    <div class="tense-grid">
+        <div class="tense-badge">📘 <span>Present Simple</span> (every day, usually)</div>
+        <div class="tense-badge">📙 <span>Past Simple</span> (yesterday, last)</div>
+        <div class="tense-badge">📗 <span>Future Simple</span> (tomorrow, next)</div>
+        <div class="tense-badge">🟢 <span>Present Continuous</span> (now, at the moment)</div>
+    </div>
+
+    <div class="content-grid">
+        <div class="main-game">
+            <div class="game-section">
+                <div class="score-display">
+                    🏆 Очки: <span id="scoreValue">0</span>
+                </div>
+
+                <div class="question-box" id="questionBox">
+                    <p id="questionText">My Roblox friend _____ (to play) a new game every day.</p>
+                </div>
+
+                <div class="options" id="optionsContainer"></div>
+
+                <div class="feedback" id="feedbackMessage">💡 Нажми на кнопку с ответом!</div>
+
+                <button class="reset-btn" id="nextQuestionBtn">🔄 СЛЕДУЮЩЕЕ ЗАДАНИЕ</button>
+                <div class="progress-bar" id="progressBar">Вопрос 1 из 20</div>
+            </div>
+        </div>
+
+        <div class="vocab-sidebar">
+            <h3>📖 СЛОВАРИК</h3>
+            <div class="vocab-item"><span>to play</span><span>играть</span></div>
+            <div class="vocab-item"><span>to go</span><span>идти</span></div>
+            <div class="vocab-item"><span>to read</span><span>читать</span></div>
+            <div class="vocab-item"><span>to do</span><span>делать</span></div>
+            <div class="vocab-item"><span>to visit</span><span>посещать</span></div>
+            <div class="vocab-item"><span>to watch</span><span>смотреть</span></div>
+            <div class="vocab-item"><span>to help</span><span>помогать</span></div>
+            <div class="vocab-item"><span>to like</span><span>нравиться</span></div>
+            <div class="vocab-item"><span>to swim</span><span>плавать</span></div>
+            <div class="vocab-item"><span>to eat</span><span>есть</span></div>
+            <div class="vocab-item"><span>to make</span><span>создавать</span></div>
+            <div class="vocab-item"><span>to run</span><span>бегать</span></div>
+            <div class="vocab-item"><span>to write</span><span>писать</span></div>
+            <div class="vocab-item"><span>to build</span><span>строить</span></div>
+            <div class="vocab-item"><span>to buy</span><span>покупать</span></div>
+            <div class="vocab-item past" style="margin-top:10px;border-top:3px solid #ffc42e;padding-top:10px;">
+                <span>⚠️ Неправильные глаголы</span>
+            </div>
+            <div class="vocab-item past"><span>go — went</span><span>идти</span></div>
+            <div class="vocab-item past"><span>eat — ate</span><span>есть</span></div>
+            <div class="vocab-item past"><span>swim — swam</span><span>плавать</span></div>
+            <div class="vocab-item past"><span>write — wrote</span><span>писать</span></div>
+            <div class="vocab-item past"><span>make — made</span><span>создавать</span></div>
+            <div class="vocab-item past"><span>run — ran</span><span>бегать</span></div>
+            <div class="vocab-item past"><span>buy — bought</span><span>покупать</span></div>
+            <div class="vocab-item past"><span>build — built</span><span>строить</span></div>
+            <div class="vocab-item past"><span>read — read</span><span>читать</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const questions = [
+            // ---- Present Simple (every day, usually, always) ----
+            { 
+                text: 'My Roblox friend _____ (to play) a new game every day.', 
+                correct: 'plays', 
+                options: ['play', 'plays', 'is playing', 'played']
+            },
+            { 
+                text: 'We usually _____ (to go) to the park on Sundays.', 
+                correct: 'go', 
+                options: ['go', 'goes', 'went', 'will go']
+            },
+            { 
+                text: 'She always _____ (to read) books about Roblox adventures.', 
+                correct: 'reads', 
+                options: ['read', 'reads', 'is reading', 'will read']
+            },
+            { 
+                text: 'I _____ (to do) my homework after school every day.', 
+                correct: 'do', 
+                options: ['do', 'does', 'did', 'will do']
+            },
+            // ---- Present Continuous (now, at the moment) ----
+            { 
+                text: 'Look! My character _____ (to run) very fast now!', 
+                correct: 'is running', 
+                options: ['runs', 'is running', 'ran', 'will run']
+            },
+            { 
+                text: 'I _____ (to write) a message to my friend at the moment.', 
+                correct: 'am writing', 
+                options: ['write', 'am writing', 'wrote', 'will write']
+            },
+            { 
+                text: 'They _____ (to build) a new house in the game right now.', 
+                correct: 'are building', 
+                options: ['build', 'built', 'are building', 'will build']
+            },
+            // ---- Past Simple (yesterday, last, ago) ----
+            { 
+                text: 'Yesterday we _____ (to visit) a huge castle in the game.', 
+                correct: 'visited', 
+                options: ['visit', 'visits', 'visited', 'will visit']
+            },
+            { 
+                text: 'She _____ (to help) me with the quest last Monday.', 
+                correct: 'helped', 
+                options: ['helps', 'helped', 'is helping', 'will help']
+            },
+            // ---- Future Simple (tomorrow, next, in the future) ----
+            { 
+                text: 'We _____ (to go) to the new game world tomorrow.', 
+                correct: 'will go', 
+                options: ['go', 'went', 'will go', 'are going']
+            },
+            { 
+                text: 'She _____ (to make) a new outfit next week.', 
+                correct: 'will make', 
+                options: ['makes', 'made', 'will make', 'is making']
+            },
+            // ===== НЕПРАВИЛЬНЫЕ ГЛАГОЛЫ (Past Simple) =====
+            { 
+                text: 'Вчера я _____ (to go) в парк с друзьями.', 
+                correct: 'went', 
+                options: ['go', 'goes', 'went', 'will go']
+            },
+            { 
+                text: 'Она _____ (to eat) пиццу в Roblox кафе вчера.', 
+                correct: 'ate', 
+                options: ['eat', 'eats', 'ate', 'will eat']
+            },
+            { 
+                text: 'Мы _____ (to swim) в океане прошлым летом.', 
+                correct: 'swam', 
+                options: ['swim', 'swims', 'swam', 'will swim']
+            },
+            { 
+                text: 'Я _____ (to write) письмо другу вчера.', 
+                correct: 'wrote', 
+                options: ['write', 'writes', 'wrote', 'will write']
+            },
+            { 
+                text: 'Они _____ (to make) новый дом в игре на прошлой неделе.', 
+                correct: 'made', 
+                options: ['make', 'makes', 'made', 'will make']
+            },
+            { 
+                text: 'Мой персонаж _____ (to run) очень быстро вчера.', 
+                correct: 'ran', 
+                options: ['run', 'runs', 'ran', 'will run']
+            },
+            { 
+                text: 'Я _____ (to buy) новый скин в Roblox на прошлой неделе.', 
+                correct: 'bought', 
+                options: ['buy', 'buys', 'bought', 'will buy']
+            },
+            { 
+                text: 'Они _____ (to build) этот замок 5 лет назад.', 
+                correct: 'built', 
+                options: ['build', 'builds', 'built', 'will build']
+            },
+            { 
+                text: 'Я _____ (to read) эту книгу в прошлом году.', 
+                correct: 'read', 
+                options: ['read', 'reads', 'reading', 'will read']
+            },
+        ];
+
+        let currentIndex = 0;
+        let answered = false;
+        let score = 0;
+
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackDiv = document.getElementById('feedbackMessage');
+        const nextBtn = document.getElementById('nextQuestionBtn');
+        const progressBar = document.getElementById('progressBar');
+        const scoreValue = document.getElementById('scoreValue');
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function loadQuestion(index) {
+            if (index >= questions.length) {
+                questionText.textContent = '🎉 Ты прошёл(а) все задания! Молодец!';
+                optionsContainer.innerHTML = '';
+                feedbackDiv.textContent = `Твой результат: ${score} из ${questions.length} правильных ответов!`;
+                feedbackDiv.style.background = '#1e7a3b';
+                feedbackDiv.style.borderColor = '#6fdf8a';
+                nextBtn.textContent = '🔄 НАЧАТЬ ЗАНОВО';
+                progressBar.textContent = `Готово! ${score}/${questions.length}`;
+                return;
+            }
+
+            const q = questions[index];
+            questionText.textContent = q.text;
+
+            const shuffledOptions = shuffleArray([...q.options]);
+
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.classList.add('option-btn');
+                btn.textContent = opt;
+                btn.dataset.choice = opt;
+                btn.addEventListener('click', onOptionClick);
+                optionsContainer.appendChild(btn);
+            });
+
+            resetButtonsStyle();
+            feedbackDiv.textContent = '💡 Нажми на кнопку с ответом!';
+            feedbackDiv.style.background = '#1f3144';
+            feedbackDiv.style.borderColor = '#ffc42e';
+            answered = false;
+            progressBar.textContent = `Вопрос ${index + 1} из ${questions.length}`;
+        }
+
+        function resetButtonsStyle() {
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('correct', 'wrong');
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            });
+        }
+
+        function onOptionClick(e) {
+            if (answered) return;
+            const btn = e.currentTarget;
+            const selected = btn.dataset.choice;
+            const q = questions[currentIndex];
+            const isCorrect = (selected === q.correct);
+
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            allBtns.forEach(b => {
+                if (b.dataset.choice === q.correct) {
+                    b.classList.add('correct');
+                } else if (b.dataset.choice === selected && !isCorrect) {
+                    b.classList.add('wrong');
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                scoreValue.textContent = score;
+                feedbackDiv.textContent = '✅ Отлично! +1 очко!';
+                feedbackDiv.style.background = '#1e7a3b';
+                feedbackDiv.style.borderColor = '#6fdf8a';
+            } else {
+                feedbackDiv.textContent = `❌ Правильный ответ: "${q.correct}"`;
+                feedbackDiv.style.background = '#7a2a2a';
+                feedbackDiv.style.borderColor = '#ff7a7a';
+            }
+            answered = true;
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            loadQuestion(currentIndex);
+        }
+
+        function restartGame() {
+            currentIndex = 0;
+            score = 0;
+            scoreValue.textContent = '0';
+            nextBtn.textContent = '🔄 СЛЕДУЮЩЕЕ ЗАДАНИЕ';
+            loadQuestion(0);
+        }
+
+        nextBtn.addEventListener('click', function() {
+            if (currentIndex >= questions.length) {
+                restartGame();
+            } else {
+                nextQuestion();
+            }
+        });
+
+        loadQuestion(0);
+    })();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

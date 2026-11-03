@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Собери слово из слогов — словарные слова</title>
+<meta property="og:title" content="Собери слово из слогов — словарные слова">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #f6f1e4;
+    color: #2b2b2b;
+    -webkit-user-select: none; user-select: none;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 16px 14px 30px; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-bottom: 12px; }
+  h1 { font-size: 30px; margin: 0 0 4px; }
+  .sub { font-size: 15px; color: #7a6f57; }
+  .meta { text-align: right; }
+  #counter { font-size: 20px; font-weight: 700; color: #2f6db3; }
+  #prog { font-size: 15px; letter-spacing: 3px; margin-top: 2px; }
+  #board {
+    background: #fffdf5; border: 3px solid #e3d9bf; border-radius: 20px;
+    padding: 18px 16px 22px; text-align: center;
+  }
+  .q { font-size: 24px; font-weight: 700; color: #8a5a1f; margin-bottom: 10px; }
+  .picbox img {
+    max-width: 94%; max-height: 300px;
+    background: #fff; padding: 10px 10px 14px;
+    border: 2px solid #e8e0cc; border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.12);
+  }
+  #cells { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 18px 0 10px; min-height: 84px; }
+  .cell {
+    width: 114px; height: 86px;
+    border: 3px dashed #c9b98f; border-radius: 14px;
+    background: #fffef9;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, border-color .15s;
+  }
+  .cell.over { border-color: #2f6db3; background: #eaf2fc; }
+  .cell.filled { border-style: solid; border-color: #9fb8d8; }
+  .cell .card { cursor: grab; }
+  .msg { min-height: 26px; font-size: 17px; color: #5a5344; margin-bottom: 10px; }
+  .pool {
+    display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center;
+    min-height: 76px; padding: 14px;
+    background: #efe7d2; border-radius: 16px; margin-bottom: 14px;
+  }
+  .card {
+    min-width: 96px; padding: 12px 18px;
+    font-size: 34px; font-weight: 800; letter-spacing: 1px;
+    color: #233; background: #fff;
+    border: 3px solid #2f6db3; border-radius: 14px;
+    box-shadow: 0 3px 0 #23486f;
+    cursor: grab; touch-action: none; text-align: center;
+  }
+  .card.sel { outline: 4px solid #f2a33c; }
+  .card.dragging { box-shadow: 0 14px 26px rgba(0,0,0,.28); cursor: grabbing; }
+  .btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    font-size: 19px; padding: 10px 18px;
+    border-radius: 12px; border: 2px solid #2f6db3;
+    background: #fff; color: #23486f; cursor: pointer;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn.big { font-size: 24px; padding: 14px 30px; }
+  .overlay {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(252, 248, 238, .97);
+    flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    text-align: center; padding: 20px;
+  }
+  .overlay.show { display: flex; }
+  .stamp {
+    display: inline-block; border: 6px double #d33; color: #d33;
+    border-radius: 50%; padding: 14px 30px;
+    font-size: 42px; font-weight: 800; letter-spacing: 4px;
+    transform: rotate(-10deg);
+    animation: pop .35s ease;
+  }
+  @keyframes pop { 0% { transform: rotate(-10deg) scale(.3); opacity: 0; } 100% { transform: rotate(-10deg) scale(1); opacity: 1; } }
+  .winword { font-size: 54px; font-weight: 800; letter-spacing: 8px; }
+  .winword em, .final-word em { font-style: normal; color: #d33; border-bottom: 4px solid #d33; padding: 0 2px; }
+  .winnote { font-size: 18px; color: #7a6f57; }
+  .final-title { font-size: 46px; font-weight: 800; }
+  .final-sub { font-size: 22px; }
+  .shake { animation: shake .4s; }
+  @keyframes shake { 25% { transform: translateX(-9px); } 75% { transform: translateX(9px); } }
+  .hint-pulse { animation: pulse .5s ease 3; }
+  @keyframes pulse { 50% { transform: scale(1.12); background: #fff3c4; } }
+  .hint-bad { animation: badp .4s ease 3; }
+  @keyframes badp { 50% { border-color: #d33; background: #fdeaea; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Собери слово из слогов</h1>
+      <div class="sub">словарные слова · набор 1</div>
+    </div>
+    <div class="meta">
+      <div id="counter"></div>
+      <div id="prog"></div>
+    </div>
+  </header>
+
+  <div id="board">
+    <div class="q" id="q"></div>
+    <div class="picbox"><img id="pic" alt=""></div>
+    <div id="cells"></div>
+    <div class="msg" id="msg"></div>
+    <div class="pool" id="pool"></div>
+    <div class="btns">
+      <button class="btn" id="hintBtn">💡 Подсказка</button>
+      <button class="btn" id="resetBtn">↺ Сброс</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="winO">
+  <div class="stamp">ВЕРНО!</div>
+  <div class="winword" id="winWord"></div>
+  <div class="winnote">Опасные буквы выделены — запомни их!</div>
+  <button class="btn big" id="nextBtn">Дальше →</button>
+</div>
+
+<div class="overlay" id="finalO">
+  <div class="final-title">🏆 Мастер слогов!</div>
+  <div class="final-sub">Собрано слов: <b id="finalCount"></b></div>
+  <button class="btn big" id="againBtn">Сыграть ещё раз</button>
+</div>
+
+<script>
+"use strict";
+
+var WORDS = [
+  { w: "КОРОВА",   q: "Кто это?", pic: "словарь-картинки/КОРОВА.jpg",   syl: ["КО","РО","ВА"],     extra: ["КА"],          show: "К<em>О</em>Р<em>О</em>ВА" },
+  { w: "ВОРОНА",   q: "Кто это?", pic: "словарь-картинки/ВОРОНА.jpg",   syl: ["ВО","РО","НА"],     extra: ["ВА"],          show: "В<em>О</em>Р<em>О</em>НА" },
+  { w: "ВОРОБЕЙ",  q: "Кто это?", pic: "словарь-картинки/ВОРОБЕЙ.jpg",  syl: ["ВО","РО","БЕЙ"],    extra: ["ВА","БАЙ"],    show: "В<em>О</em>Р<em>О</em>БЕЙ" },
+  { w: "СОБАКА",   q: "Кто это?", pic: "словарь-картинки/СОБАКА.jpg",   syl: ["СО","БА","КА"],     extra: ["СА"],          show: "С<em>О</em>Б<em>А</em>КА" },
+  { w: "МЕДВЕДЬ",  q: "Кто это?", pic: "словарь-картинки/МЕДВЕДЬ.jpg",  syl: ["МЕД","ВЕДЬ"],       extra: ["МИД","ВЕТЬ"],  show: "М<em>Е</em>ДВ<em>Е</em>ДЬ" },
+  { w: "ЛИСИЦА",   q: "Кто это?", pic: "словарь-картинки/ЛИСИЦА.jpg",   syl: ["ЛИ","СИ","ЦА"],     extra: ["ЛЕ","СЕ"],     show: "Л<em>И</em>С<em>И</em>ЦА" },
+  { w: "ЗАЯЦ",     q: "Кто это?", pic: "словарь-картинки/ЗАЯЦ.jpg",     syl: ["ЗА","ЯЦ"],          extra: ["ЕЦ"],     show: "З<em>А</em>ЯЦ" },
+  { w: "ПЕТУХ",    q: "Кто это?", pic: "словарь-картинки/ПЕТУХ.jpg",    syl: ["ПЕ","ТУХ"],         extra: ["ПИ"],          show: "П<em>Е</em>ТУХ" },
+  { w: "СОРОКА",   q: "Кто это?", pic: "словарь-картинки/СОРОКА.jpg",   syl: ["СО","РО","КА"],     extra: ["СА","КО"],     show: "С<em>О</em>Р<em>О</em>К<em>А</em>" },
+  { w: "МОЛОКО",   q: "Что это?", pic: "словарь-картинки/МОЛОКО.jpg",   syl: ["МО","ЛО","КО"],     extra: ["МА","ЛА"],     show: "М<em>О</em>Л<em>О</em>К<em>О</em>" },
+  { w: "КАПУСТА",  q: "Что это?", pic: "словарь-картинки/КАПУСТА.jpg",  syl: ["КА","ПУС","ТА"],   extra: ["КО","ПУ"],     show: "К<em>А</em>ПУСТА" },
+  { w: "МОРКОВЬ",  q: "Что это?", pic: "словарь-картинки/МОРКОВЬ.jpg",  syl: ["МОР","КОВЬ"],       extra: ["МАР","КОФЬ"],  show: "М<em>О</em>РКОВЬ" },
+  { w: "ЯБЛОКО",   q: "Что это?", pic: "словарь-картинки/ЯБЛОКО.jpg",   syl: ["ЯБ","ЛО","КО"],     extra: ["ЛА"],          show: "ЯБЛ<em>О</em>КО" },
+  { w: "КАРАНДАШ", q: "Что это?", pic: "словарь-картинки/КАРАНДАШ.jpg", syl: ["КА","РАН","ДАШ"],   extra: ["КО","РОН"],    show: "К<em>А</em>Р<em>А</em>НД<em>А</em>Ш" },
+  { w: "ТЕТРАДЬ",  q: "Что это?", pic: "словарь-картинки/ТЕТРАДЬ.jpg",  syl: ["ТЕТ","РАДЬ"],       extra: ["ТИТ","РАТЬ"],  show: "Т<em>Е</em>ТР<em>А</em>ДЬ" },
+  { w: "ЛОПАТА",   q: "Что это?", pic: "словарь-картинки/ЛОПАТА.jpg",   syl: ["ЛО","ПА","ТА"],     extra: ["ЛА","ПО"],     show: "Л<em>О</em>П<em>А</em>Т<em>А</em>" },
+  { w: "МОЛОТОК",  q: "Что это?", pic: "словарь-картинки/МОЛОТОК.jpg",  syl: ["МО","ЛО","ТОК"],    extra: ["МА","ЛА"],     show: "М<em>О</em>Л<em>О</em>Т<em>О</em>К" }
+];
+
+var idx = 0, done = 0;
+var cards = {}, placed = [], selected = null, locked = false, drag = null;
+
+var qEl = document.getElementById("q");
+var picEl = document.getElementById("pic");
+var cellsEl = document.getElementById("cells");
+var poolEl = document.getElementById("pool");
+var msgEl = document.getElementById("msg");
+var progEl = document.getElementById("prog");
+var counterEl = document.getElementById("counter");
+var boardEl = document.getElementById("board");
+var winO = document.getElementById("winO");
+var finalO = document.getElementById("finalO");
+
+function shuffle(a) {
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function msg(t) { msgEl.textContent = t; }
+
+function renderProgress() {
+  var s = "";
+  for (var i = 0; i < WORDS.length; i++) s += (i < idx ? "⭐" : (i === idx ? "▶" : "⚪"));
+  progEl.textContent = s;
+  counterEl.textContent = (idx + 1) + " / " + WORDS.length;
+}
+
+function buildWord() {
+  cards = {}; placed = []; selected = null; locked = false; drag = null;
+  var w = WORDS[idx], n = w.syl.length;
+  placed = new Array(n);
+  for (var i = 0; i < n; i++) placed[i] = null;
+
+  qEl.textContent = w.q;
+  picEl.src = w.pic;
+  picEl.alt = "Картинка к слову";
+
+  cellsEl.innerHTML = "";
+  for (i = 0; i < n; i++) {
+    var c = document.createElement("div");
+    c.className = "cell";
+    c.dataset.i = i;
+    c.setAttribute("aria-label", "окошко " + (i + 1));
+    cellsEl.appendChild(c);
+  }
+
+  poolEl.innerHTML = "";
+  var texts = shuffle(w.syl.concat(w.extra));
+  texts.forEach(function (t, k) {
+    var el = document.createElement("div");
+    var id = idx + "-" + k;
+    el.className = "card";
+    el.textContent = t;
+    el.dataset.id = id;
+    el.addEventListener("pointerdown", cardDown);
+    el.addEventListener("pointermove", cardMove);
+    el.addEventListener("pointerup", cardUp);
+    cards[id] = { text: t, el: el, where: "pool" };
+    poolEl.appendChild(el);
+  });
+
+  renderProgress();
+  winO.classList.remove("show");
+  finalO.classList.remove("show");
+  msg("Собери слово: перетащи слоги в окошки — или нажми на слог, потом на окошко.");
+}
+
+function cardDown(e) {
+  if (locked) return;
+  e.preventDefault();
+  var el = e.currentTarget;
+  var rect = el.getBoundingClientRect();
+  drag = {
+    id: el.dataset.id,
+    el: el,
+    startX: e.clientX, startY: e.clientY,
+    offX: e.clientX - rect.left, offY: e.clientY - rect.top,
+    w: rect.width,
+    moved: false
+  };
+  try { el.setPointerCapture(e.pointerId); } catch (err) {}
+}
+
+function cardMove(e) {
+  if (!drag) return;
+  var dx = e.clientX - drag.startX, dy = e.clientY - drag.startY;
+  if (!drag.moved && Math.sqrt(dx * dx + dy * dy) > 8) {
+    drag.moved = true;
+    drag.el.style.width = drag.w + "px";
+    drag.el.style.position = "fixed";
+    drag.el.style.zIndex = "999";
+    drag.el.style.pointerEvents = "none";
+    drag.el.classList.add("dragging");
+  }
+  if (drag.moved) {
+    drag.el.style.left = (e.clientX - drag.offX) + "px";
+    drag.el.style.top = (e.clientY - drag.offY) + "px";
+    var cs = document.querySelectorAll(".cell.over");
+    for (var i = 0; i < cs.length; i++) cs[i].classList.remove("over");
+    var t = document.elementFromPoint(e.clientX, e.clientY);
+    var cell = t && t.closest ? t.closest(".cell") : null;
+    if (cell && !cell.firstChild) cell.classList.add("over");
+  }
+}
+
+function cardUp(e) {
+  if (!drag) return;
+  var d = drag; drag = null;
+  var cs = document.querySelectorAll(".cell.over");
+  for (var i = 0; i < cs.length; i++) cs[i].classList.remove("over");
+
+  if (!d.moved) { /* это был клик */
+    if (typeof cards[d.id].where === "number") { returnToPool(d.id); clearSel(); msg("Слог вернулся в пул."); }
+    else toggleSel(d.id);
+    return;
+  }
+
+  var t = document.elementFromPoint(e.clientX, e.clientY);
+  var cell = t && t.closest ? t.closest(".cell") : null;
+
+  d.el.style.cssText = "";
+  d.el.classList.remove("dragging");
+
+  if (cell && !cell.firstChild) {
+    if (typeof cards[d.id].where === "number") placed[cards[d.id].where] = null;
+    place(d.id, parseInt(cell.dataset.i, 10));
+  } else if (typeof cards[d.id].where === "number") {
+    var j = cards[d.id].where;
+    cellsEl.children[j].appendChild(d.el);
+  } else {
+    poolEl.appendChild(d.el);
+  }
+}
+
+function toggleSel(id) {
+  if (selected === id) { clearSel(); return; }
+  clearSel();
+  selected = id;
+  cards[id].el.classList.add("sel");
+  msg("Теперь нажми на свободное окошко.");
+}
+
+function clearSel() {
+  if (selected != null && cards[selected]) cards[selected].el.classList.remove("sel");
+  selected = null;
+}
+
+function place(id, i) {
+  placed[i] = id;
+  cards[id].where = i;
+  var cell = cellsEl.children[i];
+  cell.appendChild(cards[id].el);
+  cell.classList.add("filled");
+  cards[id].el.classList.remove("sel");
+  if (selected === id) selected = null;
+  setTimeout(check, 250);
+}
+
+function returnToPool(id) {
+  var w = cards[id].where;
+  if (typeof w === "number") {
+    placed[w] = null;
+    cellsEl.children[w].classList.remove("filled");
+  }
+  cards[id].where = "pool";
+  poolEl.appendChild(cards[id].el);
+}
+
+function check() {
+  if (locked) return;
+  for (var i = 0; i < placed.length; i++) if (placed[i] === null) { msg("Остались пустые окошки — заполни все."); return; }
+  var w = WORDS[idx], seq = "";
+  for (i = 0; i < placed.length; i++) seq += cards[placed[i]].text;
+  if (seq === w.syl.join("")) {
+    win();
+  } else {
+    boardEl.classList.add("shake");
+    msg("Есть не тот слог! Переставь слоги или нажми «Сброс».");
+    setTimeout(function () { boardEl.classList.remove("shake"); }, 450);
+  }
+}
+
+function win() {
+  locked = true;
+  done++;
+  renderProgress();
+  document.getElementById("winWord").innerHTML = WORDS[idx].show;
+  winO.classList.add("show");
+  if (WORDS[idx + 1]) { var im = new Image(); im.src = WORDS[idx + 1].pic; }
+}
+
+function hint() {
+  if (locked) return;
+  var w = WORDS[idx];
+  for (var i = 0; i < w.syl.length; i++) {
+    if (placed[i] === null || cards[placed[i]].text !== w.syl[i]) {
+      if (placed[i] !== null) {
+        var cell = cellsEl.children[i];
+        cell.classList.add("hint-bad");
+        setTimeout(function (c) { return function () { c.classList.remove("hint-bad"); }; }(cell), 1600);
+        msg("В этом окошке не тот слог.");
+      } else {
+        for (var id in cards) {
+          if (cards[id].where === "pool" && cards[id].text === w.syl[i]) {
+            var el = cards[id].el;
+            el.classList.add("hint-pulse");
+            setTimeout(function (x) { return function () { x.classList.remove("hint-pulse"); }; }(el), 1600);
+            break;
+          }
+        }
+        msg("Ищи подсвеченный слог.");
+      }
+      return;
+    }
+  }
+}
+
+cellsEl.addEventListener("click", function (e) {
+  var cell = e.target.closest(".cell");
+  if (!cell || cell.firstChild || locked || selected === null) return;
+  place(selected, parseInt(cell.dataset.i, 10));
+  clearSel();
+});
+
+document.getElementById("nextBtn").addEventListener("click", function () {
+  winO.classList.remove("show");
+  idx++;
+  if (idx >= WORDS.length) {
+    document.getElementById("finalCount").textContent = done;
+    finalO.classList.add("show");
+  } else {
+    buildWord();
+  }
+});
+document.getElementById("againBtn").addEventListener("click", function () { location.reload(); });
+document.getElementById("resetBtn").addEventListener("click", function () {
+  if (locked) return;
+  for (var id in cards) if (typeof cards[id].where === "number") returnToPool(id);
+  clearSel();
+  msg("Начинай сначала — собери слово заново.");
+});
+document.getElementById("hintBtn").addEventListener("click", hint);
+buildWord();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

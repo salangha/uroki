@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Математика 1-4: диагностика (по разделам, для печати)</title>
+<meta property="og:title" content="Математика 1–4: диагностическая таблица">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: white;
+            margin: 0;
+            padding: 0;
+        }
+        .section-page {
+            page-break-after: always;
+            min-height: 100vh;
+            padding: 12px 15px 20px 15px;
+            margin: 0;
+            background: white;
+        }
+        .section-page:last-child {
+            page-break-after: auto;
+        }
+        h1 {
+            font-size: 1.6rem;
+            text-align: center;
+            margin: 5px 0 0 0;
+            color: #1e3a5f;
+            font-weight: bold;
+        }
+        .sub {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            color: #2c5a7a;
+            border-bottom: 1px solid #aaa;
+            padding-bottom: 6px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: #1e3a5f;
+            color: white;
+            padding: 8px 12px;
+            margin: 10px 0 12px 0;
+            border-radius: 8px;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 10px 0 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .legend span {
+            display: inline-block;
+            width: 28px;
+            text-align: center;
+            border: 1px solid black;
+            margin-right: 6px;
+            font-weight: normal;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10pt;
+            margin-top: 5px;
+        }
+        th {
+            background: #1e3a5f;
+            color: white;
+            padding: 8px 4px;
+            border: 1px solid #2c4c7a;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11pt;
+        }
+        td {
+            border: 1px solid #7f8c8d;
+            padding: 8px 5px;
+            vertical-align: middle;
+        }
+        .skill-cell {
+            font-weight: 500;
+            width: 45%;
+            background-color: #fefcf5;
+        }
+        .check-col {
+            text-align: center;
+            vertical-align: middle;
+            width: 13%;
+            background: #ffffff;
+        }
+        .check-box {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 2px solid #000;
+            background: white;
+            margin: 4px auto;
+            font-size: 20pt;
+            text-align: center;
+            line-height: 32px;
+            font-weight: normal;
+        }
+        .not-study {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #999;
+            text-align: center;
+        }
+        .small-note {
+            font-size: 8pt;
+            text-align: center;
+            margin-top: 20px;
+            border-top: 1px dashed gray;
+            padding-top: 8px;
+            color: #2c3e50;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .section-page {
+                padding: 10px 12px;
+                page-break-after: always;
+            }
+            th {
+                background: #1e3a5f !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .skill-cell {
+                background-color: #fefcf5 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .section-title {
+                background: #1e3a5f !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== СТРАНИЦА 1: ЧИСЛА И СЧЁТ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">🔢 РАЗДЕЛ 1. ЧИСЛА И СЧЁТ</div>
+    <table>
+        <thead>
+            <tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr>
+        </thead>
+        <tbody>
+            <tr><td class="skill-cell">Считать предметы до 10, называть число</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Читать и записывать числа от 0 до 20</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сравнивать числа до 20</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Предыдущее и следующее число до 20</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Читать и записывать числа до 100</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Понимать десятки и единицы (до 100)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сравнивать числа до 100</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Читать и записывать числа до 1000</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Понимать сотни, десятки, единицы (до 1000)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сравнивать числа до 1000</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Разрядные слагаемые (345 = 300+40+5)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Читать и записывать числа до миллиона</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Классы и разряды (единицы, тысячи)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сравнивать многозначные числа (до 1 000 000)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Находить число на несколько единиц больше/меньше</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Находить число в несколько раз больше/меньше</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<!-- ==================== СТРАНИЦА 2: СЛОЖЕНИЕ И ВЫЧИТАНИЕ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">➕➖ РАЗДЕЛ 2. СЛОЖЕНИЕ И ВЫЧИТАНИЕ</div>
+    <table>
+        <thead><tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr></thead>
+        <tbody>
+            <tr><td class="skill-cell">Сложение и вычитание в пределах 10 (быстро)</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Состав чисел до 10</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание до 20 без перехода</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание до 20 с переходом</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание круглых чисел до 100</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание до 100 без перехода</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание до 100 с переходом</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание до 1000 (столбиком)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Сложение и вычитание многозначных чисел (столбиком)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Проверка вычитания сложением (обратное действие)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<!-- ==================== СТРАНИЦА 3: УМНОЖЕНИЕ И ДЕЛЕНИЕ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">✖️➗ РАЗДЕЛ 3. УМНОЖЕНИЕ И ДЕЛЕНИЕ</div>
+    <table>
+        <thead><tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr></thead>
+        <tbody>
+            <tr><td class="skill-cell">Понимать смысл умножения (3×4 = три по 4)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Понимать смысл деления (12:3 = разложить на 3 части)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Таблица умножения на 2,3</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Таблица умножения на 4,5</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Таблица умножения на 6,7</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Таблица умножения на 8,9</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Деление с остатком (17:5 = 3 ост.2)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Умножение и деление на 0 и 1</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Умножение и деление на 10, 100, 1000</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Умножение круглых чисел (20×3)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Деление круглых чисел (60:2)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Умножение столбиком на однозначное (123×4)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Деление уголком на однозначное (84:6)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Умножение столбиком на двузначное (23×15)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Деление уголком на двузначное (425:17)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Деление с остатком в пределах 1000</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<!-- ==================== СТРАНИЦА 4: ВЕЛИЧИНЫ И ИЗМЕРЕНИЯ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">📏 РАЗДЕЛ 4. ВЕЛИЧИНЫ И ИЗМЕРЕНИЯ</div>
+    <table>
+        <thead><tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr></thead>
+        <tbody>
+            <tr><td class="skill-cell">Сравнивать длину (длиннее — короче)</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Измерять отрезок линейкой в см</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Знать: 1 дм = 10 см, 1 м = 100 см</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Знать: 1 км = 1000 м, 1 см = 10 мм</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Переводить единицы длины (3 м = 300 см)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Единицы массы: кг, г, центнер, тонна</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Единицы времени: час, минута, секунда, сутки, неделя, месяц, год, век</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Определять время по часам (точно)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Находить продолжительность события</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Рубль, копейка (сравнение стоимости)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Единицы площади: см², дм², м²</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Понимать скорость (км/ч), вместимость (литр)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<!-- ==================== СТРАНИЦА 5: ГЕОМЕТРИЯ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">📐 РАЗДЕЛ 5. ГЕОМЕТРИЯ</div>
+    <table>
+        <thead><tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr></thead>
+        <tbody>
+            <tr><td class="skill-cell">Различать круг, треугольник, прямоугольник, квадрат</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Начертить отрезок заданной длины</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Найти длину ломаной</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Периметр прямоугольника и квадрата</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Площадь прямоугольника (длина × ширина)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Различать окружность и круг, строить окружность (циркуль)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Площадь фигуры из прямоугольников</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Различать: шар, куб, цилиндр, конус, пирамиду</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<!-- ==================== СТРАНИЦА 6: ТЕКСТОВЫЕ ЗАДАЧИ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">📖 РАЗДЕЛ 6. ТЕКСТОВЫЕ ЗАДАЧИ</div>
+    <table>
+        <thead><tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr></thead>
+        <tbody>
+            <tr><td class="skill-cell">«Сколько всего?» (сложение, 1 действие)</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">«Сколько осталось?» (вычитание, 1 действие)</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">«На сколько больше/меньше?»</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">«В несколько раз больше/меньше»</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Задача в 2 действия</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Задача в 3 действия</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Цена, количество, стоимость</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Скорость, время, расстояние</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Производительность, работа, время</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Нахождение периметра или площади</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Задача с остатком (сколько автобусов?)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Нахождение доли (половина, треть, четверть)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Нахождение величины по её доле</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Задача с избыточными данными</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<!-- ==================== СТРАНИЦА 7: ЛОГИКА, ПОНЯТИЯ, ИНФОРМАЦИЯ ==================== -->
+<div class="section-page">
+    <h1>📊 Математика: диагностическая таблица</h1>
+    <div class="sub">1–4 классы (ФРП 2025) — контроль умений</div>
+    <div class="legend">
+        <span>✅</span> умею уверенно &nbsp;&nbsp;&nbsp;
+        <span>☑️</span> с подсказкой / ошибки &nbsp;&nbsp;&nbsp;
+        <span>◻️</span> не умею / не понимаю
+    </div>
+    <div class="section-title">🧠 РАЗДЕЛ 7. ЛОГИКА, ПОНЯТИЯ, ИНФОРМАЦИЯ</div>
+    <table>
+        <thead><tr><th>Умение</th><th>1 кл</th><th>2 кл</th><th>3 кл</th><th>4 кл</th></tr></thead>
+        <tbody>
+            <tr><td class="skill-cell">«Увеличить/уменьшить на …»</td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">«Увеличить/уменьшить в … раз»</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Половина, треть, четверть, пятая, десятая часть</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Правильный порядок действий (× и : раньше + и –)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Скобки в выражениях меняют порядок</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Переместительное свойство (a+b = b+a)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Находить неизвестное слагаемое, уменьшаемое, вычитаемое</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Находить неизвестный множитель, делимое, делитель</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Читать таблицу (расписание, график)</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Читать столбчатую диаграмму</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Понимать «если … то …», «все», «каждый», «некоторые»</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td><td class="check-col"><div class="check-box"></div></td></tr>
+            <tr><td class="skill-cell">Приводить пример и контрпример</td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="not-study">—</div></td><td class="check-col"><div class="check-box"></div></td></tr>
+        </tbody>
+    </table>
+    <div class="small-note">✅ — уверенно | ☑️ — с ошибками | ◻️ — не умею | — — ещё не изучали</div>
+</div>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

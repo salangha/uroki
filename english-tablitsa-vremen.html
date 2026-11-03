@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица времён английского языка — Полиглот</title>
+<meta property="og:title" content="Таблица времён английского — «Полиглот»">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a0a0c0;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .legend {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-active {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+
+        .legend-inactive {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 1400px;
+            overflow-x: auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px;
+        }
+
+        th {
+            padding: 14px 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 16px 12px;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            vertical-align: middle;
+            min-height: 80px;
+        }
+
+        /* Неактивные ячейки — приглушённые */
+        .inactive {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #808090;
+        }
+
+        .inactive:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Present Simple — ЯРКОЕ ПОДСВЕЧИВАНИЕ */
+        .present-simple {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
+            color: #1a1a2e;
+            font-weight: 700;
+            border: 2px solid #ffcc00;
+            box-shadow: 
+                0 0 20px rgba(255, 107, 53, 0.5),
+                0 0 40px rgba(255, 107, 53, 0.3),
+                inset 0 0 20px rgba(255,255,255,0.2);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .present-simple::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255,255,255,0.3) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .present-simple .verb {
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .present-simple .example {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .present-simple .label {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            font-size: 0.7rem;
+            background: rgba(255,255,255,0.25);
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Заголовок строки */
+        .time-label {
+            background: rgba(255,255,255,0.12);
+            font-weight: 600;
+            color: #c0c0d0;
+            font-size: 1rem;
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.3);
+            }
+            50% { 
+                transform: scale(1.02); 
+                box-shadow: 0 0 30px rgba(255, 107, 53, 0.7), 0 0 60px rgba(255, 107, 53, 0.4);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #606080;
+            text-align: center;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            color: #ff6b35;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Для печати и презентаций */
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+            .present-simple {
+                background: #ff6b35 !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* Альбомная ориентация для мобильных */
+        @media (max-width: 900px) {
+            .table-container {
+                transform: rotate(-90deg);
+                transform-origin: center center;
+                width: 100vh;
+                height: 100vw;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                margin-top: -50vh;
+                margin-left: -50vw;
+            }
+            
+            body {
+                overflow: hidden;
+            }
+            
+            h1, .subtitle, .legend, .footer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Таблица времён английского языка</h1>
+    <p class="subtitle">Методика Дмитрия Петрова «Полиглот»</p>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-box legend-active"></div>
+            <span>Изучаем сейчас — Present Simple</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box legend-inactive"></div>
+            <span>Будем изучать позже</span>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Время →</th>
+                    <th>Past<br><span style="font-size:0.8rem;opacity:0.7">Прошедшее</span></th>
+                    <th>Present<br><span style="font-size:0.8rem;opacity:0.7">Настоящее</span></th>
+                    <th>Future<br><span style="font-size:0.8rem;opacity:0.7">Будущее</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="time-label">Simple<br><span style="font-size:0.8rem;opacity:0.7">Простое</span></td>
+                    <td class="inactive">
+                        <span class="verb">V-ed / V₂</span>
+                        <div class="example">I played</div>
+                    </td>
+                    <td class="present-simple">
+                        <span class="label">Сейчас</span>
+                        <span class="verb">V / V+s</span>
+                        <div class="example">I play<br>He plays</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">will + V</span>
+                        <div class="example">I will play</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="time-label">Continuous<br><span style="font-size:0.8rem;opacity:0.7">Длительное</span></td>
+                    <td class="inactive">
+                        <span class="verb">was/were + V-ing</span>
+                        <div class="example">I was playing</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">am/is/are + V-ing</span>
+                        <div class="example">I am playing</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">will be + V-ing</span>
+                        <div class="example">I will be playing</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="time-label">Perfect<br><span style="font-size:0.8rem;opacity:0.7">Совершенное</span></td>
+                    <td class="inactive">
+                        <span class="verb">had + V₃</span>
+                        <div class="example">I had played</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">have/has + V₃</span>
+                        <div class="example">I have played</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">will have + V₃</span>
+                        <div class="example">I will have played</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="time-label">Perfect Continuous<br><span style="font-size:0.8rem;opacity:0.7">Совершенное длительное</span></td>
+                    <td class="inactive">
+                        <span class="verb">had been + V-ing</span>
+                        <div class="example">I had been playing</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">have/has been + V-ing</span>
+                        <div class="example">I have been playing</div>
+                    </td>
+                    <td class="inactive">
+                        <span class="verb">will have been + V-ing</span>
+                        <div class="example">I will have been playing</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <span class="arrow">⬇</span> Начинаем с Present Simple — простого настоящего времени <span class="arrow">⬇</span>
+    </div>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

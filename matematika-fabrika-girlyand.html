@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новогодняя фабрика гирлянд — урок по заданию 11 ВПР (закономерности)</title>
+<meta property="og:title" content="Новогодняя фабрика гирлянд — задача №11 ВПР">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", "Arial", sans-serif;
+    background: #e8f3fb;
+    color: #2b2b2b;
+    font-size: 24px;
+    line-height: 1.45;
+    padding: 0 0 60px 0;
+  }
+  #topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: #14532d; color: #fff;
+    padding: 10px 18px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  #progressWrap { flex: 1; background: rgba(255,255,255,.25); border-radius: 99px; height: 16px; overflow: hidden; }
+  #progressBar { height: 100%; width: 0%; background: #ffb703; border-radius: 99px; transition: width .3s; }
+  #stepLabel { white-space: nowrap; font-size: 18px; }
+  #starBox { white-space: nowrap; font-size: 22px; font-weight: bold; color: #ffd60a; }
+  #topbar button {
+    background: transparent; border: 2px solid rgba(255,255,255,.6); color: #fff;
+    border-radius: 10px; font-size: 18px; padding: 4px 10px; cursor: pointer;
+    min-width: 38px;
+  }
+  #topbar button:hover { background: rgba(255,255,255,.15); }
+  .casebar {
+    background: #c1121f; color: #fff;
+    padding: 10px 18px; font-size: 20px; font-weight: bold;
+    text-align: center; letter-spacing: .3px;
+    border-bottom: 4px solid #780000;
+  }
+  #stage { max-width: 1000px; margin: 0 auto; padding: 26px 20px 40px; }
+  .card {
+    background: #fff; border-radius: 24px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.10);
+    padding: 30px 34px; margin-bottom: 22px;
+  }
+  .casecard { border: 4px solid #c1121f; background: #fff8f0; }
+  .casecard h2 { color: #c1121f; font-size: 25px; margin-bottom: 10px; }
+  .lead p { margin: 8px 0; }
+  .big { font-size: 30px; }
+  .question {
+    font-size: 31px; font-weight: bold; color: #1e3a5f;
+    margin: 18px 0 22px;
+  }
+  .proof-flag {
+    display: inline-block; background: #1e3a5f; color: #fff;
+    border-radius: 12px; padding: 4px 16px; font-size: 20px;
+    font-weight: bold; margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .opts { display: flex; flex-direction: column; gap: 14px; }
+  .opt {
+    font-size: 28px; font-weight: bold;
+    padding: 18px 24px; min-height: 72px;
+    background: #fff; color: #1e3a5f;
+    border: 3px solid #1e3a5f; border-radius: 18px;
+    cursor: pointer; transition: transform .1s, background .15s;
+    text-align: left;
+  }
+  .opt:hover { background: #eef4fb; transform: scale(1.01); }
+  .opt:disabled { cursor: default; }
+  .opt.ok {
+    background: #2a9d3f; color: #fff; border-color: #1b6e2a;
+    animation: pop .3s;
+  }
+  .opt.wrong { animation: shake .35s; background: #ffe3e3; border-color: #e63946; color: #a4161a; }
+  .opt.reveal { animation: pulse 1s infinite; border-color: #ffb703; background: #fff3cd; }
+  .opt.dim { opacity: .45; }
+  @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,183,3,.7); } 50% { box-shadow: 0 0 0 14px rgba(255,183,3,0); } }
+  .feedback { border-radius: 18px; padding: 18px 22px; font-size: 26px; margin-top: 20px; display: none; }
+  .hintbox { background: #fff3cd; border: 3px dashed #ffb703; }
+  .whybox { background: #dcfce7; border: 3px solid #2a9d3f; font-weight: bold; }
+  .nextbtn {
+    display: none; margin-top: 24px; width: 100%;
+    font-size: 30px; font-weight: bold; min-height: 76px;
+    background: #ffb703; color: #4a3200; border: none; border-radius: 18px; cursor: pointer;
+  }
+  .nextbtn:hover { background: #ffc300; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; justify-content: center; }
+  .chip {
+    background: #eef4fb; border: 2px solid #b9cdf0; color: #1e3a5f;
+    border-radius: 12px; padding: 8px 16px; font-size: 24px; font-weight: bold;
+  }
+  .chip.hit { background: #dcfce7; border-color: #2a9d3f; animation: pop .4s; }
+  .rowname { font-size: 20px; color: #6b705c; text-align: center; }
+  .lamprow { text-align: center; font-size: 42px; letter-spacing: 8px; margin: 14px 0; }
+  .start-title { font-size: 42px; font-weight: 900; color: #14532d; text-align: center; margin-bottom: 8px; }
+  .start-sub { text-align: center; font-size: 24px; color: #6b705c; margin-bottom: 18px; }
+  .rules { font-size: 26px; margin: 12px 0 24px; }
+  .rules li { margin: 10px 0 10px 30px; }
+  .startbtn {
+    display: block; width: 100%; min-height: 90px;
+    font-size: 36px; font-weight: 900;
+    background: #c1121f; color: #fff; border: none; border-radius: 22px; cursor: pointer;
+  }
+  .startbtn:hover { background: #d9232f; }
+  .party { text-align: center; font-size: 56px; }
+  .party-title { text-align: center; font-size: 38px; font-weight: 900; color: #1b6e2a; margin-bottom: 10px; }
+  .cert { text-align: center; border: 4px double #ffb703; border-radius: 18px; padding: 22px; background: #fffdf2; }
+  .cert .t { font-size: 32px; font-weight: 900; color: #b26a00; }
+  .algo { background: #eef4fb; border-radius: 18px; padding: 20px 24px; }
+  .algo h3 { color: #1e3a5f; margin-bottom: 10px; font-size: 26px; }
+  .algo ol { margin-left: 30px; }
+  .algo li { margin: 8px 0; }
+  .confetti { position: fixed; top: -40px; font-size: 30px; z-index: 100; pointer-events: none; animation: fall 1.6s linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(340deg); opacity: .7; } }
+  /* сборка гирлянды */
+  .tgrid { display: grid; grid-template-columns: 168px 1fr; gap: 16px; align-items: start; margin: 16px 0 8px; }
+  .blockstack { border: 3px dashed #b9cdf0; border-radius: 14px; padding: 10px 8px; background: #fffdf5; }
+  .blockstack h4 { font-size: 16px; color: #6b705c; text-align: center; margin-bottom: 10px; font-weight: 600; }
+  .blockcard {
+    border: 3px solid #1e3a5f; border-radius: 14px; background: #fff;
+    padding: 8px 6px; margin-bottom: 10px; text-align: center; cursor: pointer;
+    transition: transform .1s;
+  }
+  .blockcard:hover { transform: scale(1.04); }
+  .blockcard.active { background: #fff3cd; border-color: #ffb703; animation: pulse 1.2s infinite; }
+  .blockcard.locked { opacity: .35; cursor: default; }
+  .blockcard.locked:hover { transform: none; }
+  .blockcard.draggable { cursor: grab; }
+  .blockcard.wrong { animation: shake .35s; }
+  .blockcard.mini {
+    padding: 5px 8px; margin: 0; border-width: 2px;
+    cursor: pointer; animation: pop .25s; display: inline-block;
+  }
+  .blockcard.mini:hover { background: #eef4fb; transform: scale(1.04); }
+  .blockcard.mini .bnum { font-size: 13px; }
+  .blockcard.mini .blamps { font-size: 16px; }
+  .bnum { font-size: 15px; color: #6b705c; font-weight: 700; }
+  .blamps { font-size: 18px; letter-spacing: 1px; overflow-wrap: anywhere; }
+  .itable { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .itable td { border: 3px solid #eef4fb; background: #fff; text-align: center; vertical-align: middle; padding: 8px 6px; }
+  .igoal { background: #dce9f8 !important; font-size: 21px; color: #1e3a5f; padding: 10px !important; }
+  .igoal .need { color: #c1121f; font-weight: 900; font-size: 24px; }
+  .igoal .gots { font-weight: bold; color: #1e3a5f; }
+  .igoal .gots.win { color: #1b6e2a; }
+  .igoal .gots.over { color: #c1121f; }
+  .colhead { font-weight: bold; font-size: 20px; color: #1e3a5f; background: #f4f8fd !important; }
+  .lampcell { min-height: 170px; overflow-wrap: anywhere; }
+  .lampcell.over { background: #fff3cd; }
+  .collist { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; min-height: 150px; }
+  .lampcell div { line-height: 1.5; }
+  .lamp { font-size: 30px; margin: 1px; }
+  .alldone { font-size: 15px; color: #6b705c; text-align: center; padding: 8px 4px; }
+  .ctrlrow { display: flex; gap: 10px; margin-top: 10px; justify-content: center; flex-wrap: wrap; }
+  .resetbtn { font-size: 17px; padding: 6px 14px; border-radius: 10px; border: 2px solid #b9c2cf; background: #fff; color: #6b705c; cursor: pointer; }
+  .resetbtn:hover { background: #eef4fb; }
+  .blockmini { display: inline-block; border: 3px solid #b9cdf0; border-radius: 12px; background: #fffdf5; padding: 6px 10px; margin: 4px; text-align: center; }
+  .blockmini .blamps { font-size: 19px; }
+  /* платье в полоску */
+  .stripes { display: flex; gap: 5px; justify-content: center; margin: 20px 0 4px; }
+  .strip { width: 34px; height: 96px; border-radius: 6px; border: 2px solid rgba(0,0,0,.18); position: relative; }
+  .strip .star { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); font-size: 17px; }
+  .vitlabel { text-align: center; font-size: 18px; color: #6b705c; margin: 10px 0 4px; }
+  #qbox { display: none; }
+  #teacherBtn {
+    position: fixed; right: 14px; bottom: 14px; z-index: 90;
+    background: #14532d; color: #fff; border: none; border-radius: 14px;
+    padding: 10px 16px; font-size: 18px; cursor: pointer; opacity: .85;
+  }
+  #teacherOverlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 120;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #teacherOverlay .panel {
+    background: #fff; border-radius: 20px; max-width: 720px; width: 100%;
+    max-height: 86vh; overflow: auto; padding: 26px 30px; font-size: 19px; line-height: 1.5;
+  }
+  #teacherOverlay h3 { color: #14532d; margin: 14px 0 6px; font-size: 22px; }
+  #teacherOverlay .closeBtn { margin-top: 16px; font-size: 20px; padding: 10px 18px; border-radius: 12px; border: 2px solid #14532d; background: #eef4fb; cursor: pointer; }
+  #teacherOverlay table { border-collapse: collapse; width: 100%; }
+  #teacherOverlay td { border-bottom: 1px solid #e5e5e5; padding: 4px 8px; }
+  .kbrd { font-size: 16px; color: #9a8f80; text-align: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <button id="restartBtn" title="Начать урок заново">⟲</button>
+  <button id="prevBtn" title="Предыдущий шаг (можно без ответа)">◀</button>
+  <button id="nextBtn" title="Следующий шаг (можно без ответа)">▶</button>
+  <span id="stepLabel">Шаг 1</span>
+  <div id="progressWrap"><div id="progressBar"></div></div>
+  <div id="starBox">⭐ 0</div>
+</div>
+<div id="casebar" class="casebar" style="display:none;"></div>
+
+<div id="stage"></div>
+
+<button id="teacherBtn">🧑‍🏫 для учителя</button>
+
+<div id="teacherOverlay">
+  <div class="panel">
+    <h3>🧑‍🏫 Шпаргалка учителя</h3>
+    <p><b>Как вести урок:</b> ребёнок читает вопрос на экране сам и отвечает вслух. Вы нажимаете кнопку с его ответом (или клавиши 1–3). «Дальше» — клавиша Enter. За ответ с первой попытки — 2 звезды, со второй — 1.</p>
+    <p><b>Кнопки ◀ и ▶</b> в верхней панели листают шаги без ответов — удобно вернуться и показать снова.</p>
+    <p><b>Сборка гирлянды (заказы 1 и 2):</b> кликайте по блокам на складе слева — они встают в свои колонки строго по порядку. «Убрать последний» и «Собрать заново» — если перебрали. Как только собрано ровно нужное число — появится вопрос. Лампочки нужного цвета ребёнок считает глазами и вслух (подсказка появится после двух проб).</p>
+    <h3>Если он устал</h3>
+    <p>Можно честно остановиться после любого заказа — каждый из них самостоятельный урок. Заказ № 5 (платье Снегурочки) — самый хитрый: белая полоска живёт на 7-м месте витка, а в хвостике из 6 полосок её нет.</p>
+    <h3>Суть метода (для мамы)</h3>
+    <p>Задачи ВПР на закономерности = <b>ЦИКЛ + остаток</b>. Находим повторяющийся узор, выясняем, сколько полных циклов помещается в заданном количестве (это деление с остатком), и отвечаем на вопрос по полным циклам и остатку. Доказательство — обратная проверка сложением. Это задание 11 ВПР «логика».</p>
+    <h3>Продолжение серии — такие же задачи из тест.pdf</h3>
+    <table id="taskTable"></table>
+    <p style="margin-top:10px;">Все решаются этим же алгоритмом — просто меняются числа.</p>
+    <h3>Что дальше (следующие типы из тест.pdf)</h3>
+    <p>«Каждый следующий на N больше» — № 31, 49, 71, 76, 82, 88 (хитрые: № 57, 68).<br>
+    «Расписание и планы» — № 2, 8, 35, 36, 45, 52, 54, 62, 65, 66, 70, 74, 75, 77, 78, 81, 84.<br>
+    «Пакетики с конфетами» — № 29, 33, 34, 37, 40, 41, 42, 44, 47, 50, 51, 58, 67, 72, 83, 87.<br>
+    «Трое собирали/покупали» — № 9–18, 24–28, 38, 64.<br>
+    «Шеренги и пароли» — № 5, 7, 32, 43, 61, 63, 73, 86.</p>
+    <button class="closeBtn" onclick="closeTeacher()">Закрыть (клавиша T)</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- данные ---------- */
+
+var ORDERS = {
+  o1: { bar: "📋 ЗАКАЗ № 1 · Гирлянда для городской ёлки · 21 лампочка",
+        full: ["Гирлянда для городской ёлки — <b>21 лампочка</b>.",
+               "Лампочки идут в таком порядке: <b>одна красная, две синих, три красных, четыре синих</b> и так далее.",
+               "<b>Сколько всего красных лампочек</b> в гирлянде?"] },
+  o2: { bar: "📋 ЗАКАЗ № 2 · Гирлянда для школьной ёлки · 28 лампочек",
+        full: ["Второй заказ — гирлянда для школьной ёлки. В ней <b>28 лампочек</b>.",
+               "Порядок: <b>одна жёлтая, две зелёных, три жёлтых, четыре зелёных, пять жёлтых</b> и так далее.",
+               "<b>Сколько всего зелёных лампочек</b> в гирлянде?"] },
+  o3: { bar: "📋 ЗАКАЗ № 3 · Коробка ёлочных шаров · 7 рядов",
+        full: ["Ёлочные шары уложены в коробку в <b>семь рядов</b>.",
+               "В первом ряду <b>3</b> шара, во втором <b>4</b>, в третьем снова <b>3</b>, в четвёртом снова <b>4</b> и так далее.",
+               "<b>Сколько всего шаров</b> лежит в коробке?"] },
+  o4: { bar: "📋 ЗАКАЗ № 4 · Коробка для магазина · 9 рядов · решай сам!",
+        full: ["Новый заказ: коробка для магазина — <b>девять рядов</b>.",
+               "В первом ряду <b>два</b> украшения, во втором <b>три</b>, в третьем снова <b>два</b>, в четвёртом снова <b>три</b> и так далее.",
+               "<b>Сколько всего украшений</b> в коробке? Этот заказ контролёр считает <b>сам</b>!"] },
+  o5: { bar: "📋 ЗАКАЗ № 5 ⭐ · Платье Снегурочки · 41 полоска",
+        full: ["⭐ Самый хитрый заказ фабрики!",
+               "Полоски на платье Снегурочки чередуются сверху вниз: <b>жёлтая, зелёная, синяя</b>, снова жёлтая, снова зелёная и так далее.",
+               "После каждых шести таких полосок идёт <b>седьмая — белая</b>, и узор повторяется.",
+               "Всего на платье <b>41 полоска</b>. <b>Сколько белых полосок</b> на платье?"] }
+};
+
+var S = [
+
+  { kind: "start" },
+
+  { lead: ["Разминка! Дед Мороз нанизал пробную гирлянду-повторялку."],
+    lampsrow: "🔴🔵🔵🔴🔵🔵🔴",
+    q: "Какая лампочка будет СЛЕДУЮЩЕЙ?",
+    opts: [{t:"🔴"},{t:"🔵",ok:1},{t:"⚪"}],
+    hint: "Узор: 🔴🔵🔵 — и снова сначала.",
+    why: "Узор 🔴🔵🔵 повторяется. После 🔴 узор начнётся заново — значит, дальше 🔵!" },
+
+  { lead: ["На фабрике гирлянды собирают <b>блоками</b>: 1 красная, 2 синих, 3 красных, 4 синих…", "Вот первые четыре блока:"],
+    blockrow: ["🔴","🔵🔵","🔴🔴🔴","🔵🔵🔵🔵"],
+    q: "Сколько лампочек в первых ЧЕТЫРЁХ блоках?",
+    opts: [{t:"8"},{t:"10",ok:1},{t:"12"}],
+    hint: "Сложи размеры блоков: 1 + 2 + 3 + 4.",
+    why: "1 + 2 + 3 + 4 = 10. А дальше будет блок № 5 — пять красных лампочек!" },
+
+  { c:"o1", full:true,
+    q: "Блоки какого размера войдут в гирлянду из 21 лампочки?",
+    opts: [{t:"1, 2, 3 и 4"},{t:"1, 2, 3, 4, 5 и 6",ok:1},{t:"1, 2, 3, 4, 5, 6 и 7"}],
+    hint: "Складывай размеры блоков подряд: 1+2=3, +3=6, +4=10, +5=15…",
+    why: "1+2+3+4+5+6 = 21 — ровно столько, сколько заказано! Гирлянда — из шести блоков." },
+
+  { kind: "table", c:"o1", need:21,
+    colors: { a:{label:"🔴 КРАСНЫЕ", emoji:"🔴"}, b:{label:"🔵 СИНИЕ", emoji:"🔵"} },
+    blocks: [1,2,3,4,5,6], blockCols: ["a","b","a","b","a","b"],
+    lead: ["Собери гирлянду: выкладывай блоки <b>по порядку</b> — кликай по блокам на складе слева.",
+           "Каждый блок встанет в свою колонку. Собери ровно <b>21</b> лампочку!"],
+    q: "Сколько КРАСНЫХ лампочек в гирлянде?",
+    answer: 9,
+    qhint: "Посчитай 🔴 в левой колонке. Можно вслух, по одной!",
+    checkLead: "9 красных + 12 синих" },
+
+  { c:"o1", party:true, partyTitle:"🎉 ЗАКАЗ № 1 ВЫПОЛНЕН!",
+    lead: ["Ответ: <b>9 красных</b> лампочек — и ещё 12 синих. Всего 21, заказ точный!"],
+    q: "Кто собрал гирлянду для городской ёлки?",
+    opts: [{t:"Я, контролёр гирлянд!",ok:1}],
+    hint: "Конечно, ты!",
+    why: "Городская ёлка будет сиять! ⭐" },
+
+  { c:"o2", full:true,
+    lead: ["Принимай второй заказ!"],
+    q: "Первые шесть блоков дадут 21 лампочку. Сколько лампочек будет в СЕДЬМОМ блоке?",
+    opts: [{t:"6"},{t:"7",ok:1},{t:"8"}],
+    hint: "21 + сколько = 28?",
+    why: "21 + 7 = 28 — ровно как в заказе! Значит, в гирлянде семь блоков: 1ж, 2з, 3ж, 4з, 5ж, 6з и 7ж." },
+
+  { kind: "table", c:"o2", need:28,
+    colors: { a:{label:"🟡 ЖЁЛТЫЕ", emoji:"🟡"}, b:{label:"🟢 ЗЕЛЁНЫЕ", emoji:"🟢"} },
+    blocks: [1,2,3,4,5,6,7], blockCols: ["a","b","a","b","a","b","a"],
+    lead: ["Собери вторую гирлянду: 1 жёлтая, 2 зелёных, 3 жёлтых… — <b>семь блоков</b>.",
+           "Собери ровно <b>28</b> лампочек!"],
+    q: "Сколько ЗЕЛЁНЫХ лампочек в гирлянде?",
+    answer: 12,
+    qhint: "Посчитай 🟢 в правой колонке. Спокойно, по одной!",
+    checkLead: "16 жёлтых + 12 зелёных" },
+
+  { c:"o2", party:true, partyTitle:"🎉 ЗАКАЗ № 2 ВЫПОЛНЕН!",
+    lead: ["Ответ: <b>12 зелёных</b> лампочек — и ещё 16 жёлтых. Всего 28!"],
+    q: "Кто контролёр года на этой фабрике?",
+    opts: [{t:"Я!",ok:1}],
+    hint: "Ну конечно!",
+    why: "Ты! Официально! 🏅" },
+
+  { c:"o3", full:true, chips:[3,4,3,4,3,4,3],
+    q: "Сколько шаров в первых ШЕСТИ рядах?",
+    opts: [{t:"18"},{t:"21",ok:1},{t:"24"}],
+    hint: "Складывай ряды по очереди: 3+4=7, +3=10, +4=14, +3=17, +4=?",
+    why: "3+4+3+4+3+4 = 21 шар — это шесть рядов." },
+
+  { c:"o3", chips:[3,4,3,4,3,4,3], hlIdx:6,
+    q: "А в коробке СЕМЬ рядов. Сколько шаров во всей коробке?",
+    opts: [{t:"22"},{t:"24",ok:1},{t:"25"}],
+    hint: "К 21 шести рядов прибавь седьмой. В седьмом ряду снова 3.",
+    why: "21 + 3 = 24 шара в коробке." },
+
+  { c:"o4", full:true, chips:[2,3,2,3,2,3,2,3,2], hlIdx:8,
+    q: "Сколько всего украшений в коробке? Считай сам!",
+    opts: [{t:"20"},{t:"22",ok:1},{t:"24"}],
+    hint: "Складывай по рядам: 2+3=5, +2=7, +3=10, +2=12, +3=15…",
+    why: "2+3+2+3+2+3+2+3+2 = 22 украшения. Самостоятельный заказ — высший класс!" },
+
+  { c:"o5", full:true, stripes:"full",
+    q: "Сколько полосок в одном полном ВИТКЕ узора?",
+    opts: [{t:"6"},{t:"7",ok:1},{t:"10"}],
+    hint: "Посчитай полоски на рисунке до звёздочки-белой включительно.",
+    why: "6 цветных полосок и СЕДЬМАЯ — белая. Один виток = 7 полосок." },
+
+  { c:"o5",
+    q: "На платье 41 полоска. Пять полных витков — это 35 полосок. Сколько полосок в хвостике-остатке?",
+    opts: [{t:"5"},{t:"6",ok:1},{t:"7"}],
+    hint: "41 − 35 = ?",
+    why: "41 − 35 = 6 полосок остаётся после пяти витков." },
+
+  { c:"o5", stripes:"tail",
+    q: "Вот этот хвостик. Есть ли среди этих шести полосок БЕЛАЯ?",
+    opts: [{t:"Да, есть"},{t:"Нет, белой нет",ok:1}],
+    hint: "Белая полоска — седьмая в витке. А сколько полосок в хвостике?",
+    why: "В хвостике 6 полосок: ж-з-с-ж-з-с. До белой — седьмой — не дошли!" },
+
+  { c:"o5",
+    q: "Сколько всего БЕЛЫХ полосок на платье?",
+    opts: [{t:"4"},{t:"5",ok:1},{t:"6"}],
+    hint: "По сколько белых полосок в каждом полном витке? А сколько витков?",
+    why: "По одной белой в каждом из 5 витков — всего 5 белых полосок. ДОКАЗАНО! ⚖️" },
+
+  { c:"o5", party:true, partyTitle:"🎉 ЗАКАЗ № 5 ВЫПОЛНЕН!",
+    lead: ["Ответ: <b>5 белых</b> полосок. Платье Снегурочки принято без замечаний!"],
+    q: "Кто самый хитрый контролёр фабрики?",
+    opts: [{t:"Я!",ok:1}],
+    hint: "А то!",
+    why: "Две гирлянды, две коробки и платье — все заказы закрыты! 🏅" },
+
+  { kind: "final" }
+];
+
+var TASK_LIST = [
+  ["№ 4 · стоянка: 7 рядов по 4, 3, 4, 3…","25 машин"],
+  ["№ 39 · шарфики: синий, чёрный, зелёный по будням, 2 недели","чёрный — 3 раза"],
+  ["№ 46 · спорт по будням: бокс, бег, бадминтон, 2 недели","бадминтон — 3 раза"],
+  ["№ 48 · 28 учеников рассчитались на первый-второй-третий","«Первый» — 10 раз"],
+  ["№ 53 · бусины: 1 фиолет., 2 красн., 3 син.… красных всего 40","фиолетовых — 35"],
+  ["№ 55 · подтягивания по очереди 1, 2, 3… всего 21","Андрей — 9 раз"],
+  ["№ 56 · футболка: 42 полоски, белая — каждая 10-я","красных — 12"],
+  ["№ 60 · бусины: 1 белая, 2 красн., 3 син.… синих всего 45","красных — 40"],
+  ["№ 79 · 27 учеников рассчитались на 1-2-3-4","«Четвёртый» — 6 раз"],
+  ["№ 80 · подтягивания по очереди 1, 2, 3… всего 21","Миша — 12 раз"]
+];
+
+/* ---------- движок ---------- */
+
+var i = 0, stars = 0, attempts = 0, solved = false;
+var stage = document.getElementById("stage");
+var casebar = document.getElementById("casebar");
+var stepLabel = document.getElementById("stepLabel");
+var progressBar = document.getElementById("progressBar");
+var starBox = document.getElementById("starBox");
+
+function updateTopbar() {
+  stepLabel.textContent = "Шаг " + (i + 1) + " из " + S.length;
+  progressBar.style.width = Math.round(100 * i / S.length) + "%";
+  starBox.textContent = "⭐ " + stars;
+}
+
+function addStars(n) { stars += n; starBox.textContent = "⭐ " + stars; }
+
+function confetti() {
+  var emo = ["⭐","✨","🎉","🎄"];
+  for (var k = 0; k < 14; k++) {
+    var d = document.createElement("span");
+    d.className = "confetti";
+    d.textContent = emo[Math.floor(Math.random() * emo.length)];
+    d.style.left = (Math.random() * 96) + "vw";
+    d.style.animationDelay = (Math.random() * 0.4) + "s";
+    document.body.appendChild(d);
+    setTimeout(function(el) { return function() { el.remove(); }; }(d), 2200);
+  }
+}
+
+function stripesHTML(kind) {
+  var seq = ["#ffd60a","#37b24d","#1c7ed6","#ffd60a","#37b24d","#1c7ed6","#ffffff"];
+  var cols, starsAt;
+  if (kind === "full") {
+    cols = seq.concat(seq);
+    starsAt = [6, 13];
+  } else {
+    cols = seq.slice(0, 6);
+    starsAt = [];
+  }
+  var h = '<div class="stripes">';
+  for (var k = 0; k < cols.length; k++) {
+    h += '<div class="strip" style="background:' + cols[k] + ';">' +
+         (starsAt.indexOf(k) >= 0 ? '<span class="star">⭐</span>' : '') +
+         '</div>';
+  }
+  h += '</div><div class="vitlabel">' +
+       (kind === "full"
+         ? "На рисунке — два витка узора. ⭐ — белая полоска, седьмая в витке"
+         : "Хвостик после пяти витков — 6 полосок") +
+       '</div>';
+  return h;
+}
+
+function showStart() {
+  casebar.style.display = "none";
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="start-title">🎄 Новогодняя фабрика Деда Мороза</div>' +
+      '<div class="start-title" style="color:#c1121f; font-size:34px;">ЦЕХ ГИРЛЯНД И УЗОРОВ</div>' +
+      '<div class="start-sub">Срочный заказ! Фабрика нанимает контролёра гирлянд</div>' +
+      '<ol class="rules">' +
+        '<li>📖 Читай заказ <b>сам</b>.</li>' +
+        '<li>🗣️ Скажи ответ вслух.</li>' +
+        '<li>👉 Твой напарник нажмёт кнопку.</li>' +
+        '<li>⚖️ Докажи ответ — и заказ принят!</li>' +
+      '</ol>' +
+      '<button class="startbtn" id="go">▶ Принять заказы</button>' +
+      '<div class="kbrd">Правило звёзд: с первой попытки — 2 ⭐, со второй — 1 ⭐</div>' +
+    '</div>';
+  document.getElementById("go").onclick = function() { i = 1; render(); };
+}
+
+function render() {
+  solved = false; attempts = 0;
+  updateTopbar();
+  var s = S[i];
+
+  if (s.kind === "start") { showStart(); return; }
+  if (s.kind === "final") { showFinal(); return; }
+  if (s.kind === "table") { showTable(s); return; }
+
+  if (s.c && !s.full) {
+    casebar.textContent = ORDERS[s.c].bar;
+    casebar.style.display = "block";
+  } else {
+    casebar.style.display = "none";
+  }
+
+  var html = '<div class="card">';
+
+  if (s.party) html += '<div class="party">🎉</div><div class="party-title">' + s.partyTitle + '</div>';
+  if (s.full) {
+    html += '<div class="card casecard"><h2>' + ORDERS[s.c].bar + '</h2>' +
+            ORDERS[s.c].full.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>';
+  }
+  if (s.lead) html += '<div class="lead">' + s.lead.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>';
+  if (s.lampsrow) html += '<div class="lamprow">' + s.lampsrow + '</div>';
+  if (s.blockrow) {
+    html += '<div style="text-align:center; margin:10px 0;">' +
+      s.blockrow.map(function(b, bi) {
+        return '<div class="blockmini"><div class="bnum">Блок № ' + (bi + 1) + '</div><div class="blamps">' + b + '</div></div>';
+      }).join("") + '</div>';
+  }
+  if (s.stripes) html += stripesHTML(s.stripes);
+  if (s.chips) {
+    html += '<div class="rowname">Размеры рядов:</div><div class="chips">' +
+      s.chips.map(function(n, idx) { return '<span class="chip" data-idx="' + idx + '">' + n + '</span>'; }).join("") + '</div>';
+  }
+  if (s.q) html += '<div class="question">' + s.q + '</div>';
+
+  html += '<div class="opts">' + s.opts.map(function(o, k) {
+    return '<button class="opt" data-k="' + k + '">' + o.t + '</button>';
+  }).join("") + '</div>';
+
+  html += '<div class="feedback hintbox" id="hint">💡 ' + (s.hint || "") + '</div>';
+  html += '<div class="feedback whybox" id="why" aria-live="polite">✅ ' + s.why + '</div>';
+  html += '<button class="nextbtn" id="next">' + (i === S.length - 1 ? "🏁 Финиш" : "Дальше ▶") + '</button>';
+  html += '</div>';
+
+  stage.innerHTML = html;
+
+  var btns = stage.querySelectorAll(".opt");
+  btns.forEach(function(b) {
+    b.onclick = function() { pick(parseInt(b.getAttribute("data-k"), 10), b, btns, s); };
+  });
+  document.getElementById("next").onclick = function() { i++; render(); };
+}
+
+function pick(k, btn, btns, s) {
+  if (solved) return;
+  var o = s.opts[k];
+  if (o.ok) {
+    solved = true;
+    addStars(attempts === 0 ? 2 : 1);
+    btn.classList.add("ok");
+    btns.forEach(function(b) { b.disabled = true; if (b !== btn) b.classList.add("dim"); });
+    document.getElementById("why").style.display = "block";
+    document.getElementById("next").style.display = "block";
+    if (s.chips && typeof s.hlIdx === "number") {
+      stage.querySelectorAll(".chip").forEach(function(ch) {
+        if (parseInt(ch.getAttribute("data-idx"), 10) === s.hlIdx) ch.classList.add("hit");
+      });
+    }
+    confetti();
+    document.getElementById("next").focus();
+  } else {
+    attempts++;
+    btn.classList.remove("wrong");
+    void btn.offsetWidth;
+    btn.classList.add("wrong");
+    document.getElementById("hint").style.display = "block";
+    if (attempts >= 2) {
+      btns.forEach(function(b) {
+        if (s.opts[parseInt(b.getAttribute("data-k"), 10)].ok) b.classList.add("reveal");
+      });
+    }
+  }
+}
+
+/* ---------- интерактивная сборка гирлянды ---------- */
+
+function showTable(s) {
+  casebar.textContent = ORDERS[s.c].bar;
+  casebar.style.display = "block";
+  var NEED = s.need;
+  var st = { placed: [], locked: false };
+
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="lead">' + s.lead.map(function(l){ return "<p>" + l + "</p>"; }).join("") + '</div>' +
+      '<div class="tgrid">' +
+        '<div class="blockstack"><h4>СКЛАД БЛОКОВ</h4><div id="stack"></div></div>' +
+        '<div>' +
+          '<table class="itable">' +
+            '<tr><td colspan="2" class="igoal">Нужно лампочек: <span class="need">' + NEED + '</span> &nbsp;·&nbsp; Собрано: <span class="gots" id="got">0</span></td></tr>' +
+            '<tr><td class="colhead">' + s.colors.a.label + '</td><td class="colhead">' + s.colors.b.label + '</td></tr>' +
+            '<tr><td class="lampcell" id="dzA"><div class="collist" id="colA"></div></td><td class="lampcell" id="dzB"><div class="collist" id="colB"></div></td></tr>' +
+          '</table>' +
+          '<div class="ctrlrow" id="ctrls">' +
+            '<button class="resetbtn" id="undoBtn">↩ Убрать последний блок</button>' +
+            '<button class="resetbtn" id="resetBtn">⟲ Собрать заново</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="qbox">' +
+        '<div class="question">' + s.q + '</div>' +
+        '<div class="opts" id="qopts"></div>' +
+        '<div class="feedback hintbox" id="qhint">💡 ' + s.qhint + '</div>' +
+        '<div id="q2" style="display:none;">' +
+          '<span class="proof-flag">⚖️ ДОКАЗАТЕЛЬСТВО</span>' +
+          '<div class="question">' + s.checkLead + ' = ?</div>' +
+          '<div class="opts" id="popts"></div>' +
+        '</div>' +
+        '<div class="feedback whybox" id="tblWhy" aria-live="polite"></div>' +
+        '<button class="nextbtn" id="tblNext">Заказ принят! Дальше ▶</button>' +
+      '</div>' +
+    '</div>';
+
+  var stack = document.getElementById("stack");
+  var dzA = document.getElementById("dzA");
+  var dzB = document.getElementById("dzB");
+  var colA = document.getElementById("colA");
+  var colB = document.getElementById("colB");
+
+  function lampStr(col, n) {
+    var e = s.colors[col].emoji, out = "";
+    for (var j = 0; j < n; j++) out += e;
+    return out;
+  }
+
+  function lampSpans(col, n) {
+    var e = s.colors[col].emoji, out = "";
+    for (var j = 0; j < n; j++) out += '<span class="lamp">' + e + '</span> ';
+    return out;
+  }
+
+  function blockHTML(idx) {
+    var cls = "blockcard " + (idx === st.placed ? "active" : "locked");
+    return '<div class="' + cls + '" data-i="' + idx + '">' +
+           '<div class="bnum">Блок № ' + (idx + 1) + '</div>' +
+           '<div class="blamps">' + lampStr(s.blockCols[idx], s.blocks[idx]) + '</div></div>';
+  }
+
+  function upd() {
+    var total = 0, a = "", b = "", j;
+    for (j = 0; j < st.placed; j++) {
+      total += s.blocks[j];
+      if (s.blockCols[j] === "a") a += lampSpans("a", s.blocks[j]);
+      else b += lampSpans("b", s.blocks[j]);
+    }
+    colA.innerHTML = a || '<span class="hintdrop">положи сюда</span>';
+    colB.innerHTML = b || '<span class="hintdrop">положи сюда</span>';
+
+    var got = document.getElementById("got");
+    got.classList.remove("win", "over");
+    got.textContent = total;
+    if (total === NEED && st.placed > 0) { got.classList.add("win"); got.textContent += " ✓"; }
+    if (total > NEED) { got.classList.add("over"); got.textContent += " — перебор!"; }
+
+    stack.innerHTML = "";
+    for (var k = 0; k < s.blocks.length; k++) stack.insertAdjacentHTML("beforeend", blockHTML(k));
+    var active = stack.querySelector(".blockcard.active");
+    if (active) active.onclick = function() { if (!st.locked) { st.placed++; upd(); } };
+
+    checkReady(total);
+  }
+
+  document.getElementById("undoBtn").onclick = function() {
+    if (!st.locked && st.placed > 0) { st.placed--; upd(); }
+  };
+  document.getElementById("resetBtn").onclick = function() {
+    if (!st.locked) { st.placed = 0; upd(); }
+  };
+
+  function askOpts(containerId, values, correct, onRight, hintId) {
+    var box = document.getElementById(containerId);
+    box.innerHTML = values.map(function(v) {
+      return '<button class="opt" data-v="' + v + '">' + v + '</button>';
+    }).join("");
+    var btns = box.querySelectorAll(".opt");
+    var tries = 0;
+    btns.forEach(function(b) {
+      b.onclick = function() {
+        var v = parseInt(b.getAttribute("data-v"), 10);
+        if (v === correct) {
+          addStars(tries === 0 ? 2 : 1);
+          b.classList.add("ok");
+          btns.forEach(function(x) { x.disabled = true; if (x !== b) x.classList.add("dim"); });
+          confetti();
+          onRight();
+        } else {
+          tries++;
+          b.classList.remove("wrong");
+          void b.offsetWidth;
+          b.classList.add("wrong");
+          if (tries >= 2) {
+            var hb = hintId ? document.getElementById(hintId) : null;
+            if (hb) hb.style.display = "block";
+            btns.forEach(function(x) {
+              if (parseInt(x.getAttribute("data-v"), 10) === correct) x.classList.add("reveal");
+            });
+          }
+        }
+      };
+    });
+  }
+
+  function checkReady(total) {
+    if (total === NEED && !st.locked) {
+      st.locked = true;
+      document.getElementById("ctrls").style.display = "none";
+      document.getElementById("qbox").style.display = "block";
+      askOpts("qopts", [s.answer - 1, s.answer, s.answer + 1], s.answer, function() {
+        document.getElementById("q2").style.display = "block";
+        askOpts("popts", [NEED - 1, NEED, NEED + 1], NEED, function() {
+          var w = document.getElementById("tblWhy");
+          w.innerHTML = "✅ " + s.checkLead + " = " + NEED + " — ровно как в заказе! ЗАКАЗ ПРИНЯТ. ⚖️";
+          w.style.display = "block";
+          var nx = document.getElementById("tblNext");
+          nx.style.display = "block";
+          nx.onclick = function() { i++; render(); };
+          nx.focus();
+        }, null);
+      }, "qhint");
+    }
+  }
+
+  upd();
+}
+
+function showFinal() {
+  casebar.style.display = "none";
+  updateTopbar();
+  progressBar.style.width = "100%";
+  stage.innerHTML =
+    '<div class="card">' +
+      '<div class="party">🏅🎉</div>' +
+      '<div class="party-title">ПОЗДРАВЛЯЕМ, ГЛАВНЫЙ КОНТРОЛЁР РОБЕРТ!</div>' +
+      '<p class="big" style="text-align:center;">Теперь ты умеешь решать задачи на закономерности:<br>находить ЦИКЛ, считать полные повторы и остаток!</p>' +
+      '<p class="big" style="text-align:center; margin-top:12px;">Но что ещё круче —<br><b>ты умеешь ДОКАЗЫВАТЬ ответ.</b> ⚖️</p>' +
+      '<p style="text-align:center; margin-top:16px; font-size:26px;">Ты выполнил <b>5 заказов</b> и заработал <b>' + stars + ' ⭐</b></p>' +
+    '</div>' +
+    '<div class="card cert"><div class="t">СЕРТИФИКАТ</div>' +
+      '<p style="margin-top:8px;">Контролёр новогодней фабрики гирлянд<br><b>Контролёр</b><br>умеет: находить повторяющийся узор, считать повторы и остаток, доказывать ответ</p>' +
+    '</div>' +
+    '<div class="card algo"><h3>🤖 АЛГОРИТМ КОНТРОЛЁРА (для любой задачи на узор)</h3><ol>' +
+      '<li>Найди повторяющийся узор — <b>ЦИКЛ</b>. Сколько «мест» в одном цикле?</li>' +
+      '<li>Раздели количество на цикл: сколько полных повторов помещается? Сколько останется в хвостике?</li>' +
+      '<li>Ответь на вопрос: что в полных повторах и что в хвостике?</li>' +
+      '<li>ДОКАЖИ: сложи части — получится число из заказа.</li>' +
+    '</ol></div>' +
+    '<button class="startbtn" onclick="location.reload()">🔁 Играть снова</button>';
+  window.scrollTo(0, 0);
+}
+
+/* ---------- учитель ---------- */
+
+function openTeacher() { document.getElementById("teacherOverlay").style.display = "flex"; }
+function closeTeacher() { document.getElementById("teacherOverlay").style.display = "none"; }
+document.getElementById("teacherBtn").onclick = openTeacher;
+document.getElementById("teacherOverlay").onclick = function(e) { if (e.target === this) closeTeacher(); };
+document.getElementById("taskTable").innerHTML = TASK_LIST.map(function(r) {
+  return "<tr><td>" + r[0] + "</td><td><b>" + r[1] + "</b></td></tr>";
+}).join("");
+
+document.getElementById("restartBtn").onclick = function() {
+  i = 0; stars = 0; render();
+};
+document.getElementById("prevBtn").onclick = function() {
+  if (i > 0) { i--; render(); }
+};
+document.getElementById("nextBtn").onclick = function() {
+  if (i < S.length - 1) { i++; render(); }
+};
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "t" || e.key === "T" || e.key === "е" || e.key === "Е") {
+    if (document.getElementById("teacherOverlay").style.display === "flex") closeTeacher(); else openTeacher();
+    return;
+  }
+  if (document.getElementById("teacherOverlay").style.display === "flex") return;
+  var nextBtn = document.getElementById("next") || document.getElementById("tblNext");
+  if ((e.key === "Enter" || e.key === " ") && nextBtn && nextBtn.style.display === "block") {
+    e.preventDefault(); nextBtn.click(); return;
+  }
+  var n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 4) {
+    var bs = Array.prototype.slice.call(stage.querySelectorAll(".opt")).filter(function(b) { return !b.disabled; });
+    if (bs[n - 1]) bs[n - 1].click();
+  }
+});
+
+/* старт */
+render();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>Переход через десяток</title>
+<meta property="og:title" content="Переход через десяток">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<!--
+Урок по переходу через десяток (сложение и вычитание).
+Вкладки: 1) ➕ Плюс по шагам  2) ➖ Минус по шагам  3) 🎨 Торт-рисовашка  4) 🏁 Проверка
+Ключевая идея: шаг «пучок-десяток переходит» выделен отдельно, с картинкой из точек.
+-->
+<style>
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{height:100%}
+body{margin:0;font-family:Verdana,"Segoe UI",Arial,sans-serif;background:#fdf2f8;color:#3b2340;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-bottom:3px solid #f3d7ea;flex-wrap:wrap}
+#tabs{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+#tabs button{font-size:19px;font-weight:bold;padding:9px 16px;border-radius:12px;border:2px solid #ecc9e2;background:#fff;cursor:pointer;color:#7a2f63}
+#tabs button.active{background:#c026d3;border-color:#c026d3;color:#fff}
+#stars{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:bold;background:#fff8e1;border:2px solid #f1d27a;border-radius:12px;padding:6px 10px}
+#stars button{font-size:18px;font-weight:bold;border:none;border-radius:8px;padding:6px 12px;cursor:pointer}
+#addStar{background:#f5b301;color:#fff}
+#resetStars{background:#ececec;color:#666}
+#stars.pop{animation:starpop .4s}
+@keyframes starpop{50%{transform:scale(1.25)}}
+main{flex:1;min-height:0}
+main>section{display:none;height:100%;overflow:auto;padding:14px 18px}
+main>section.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;text-align:center}
+h2{margin:0;font-size:26px;color:#a21caf}
+.lead{font-size:19px;color:#6b4a63;margin:0}
+.example{
+  font-size:clamp(40px,7vw,72px);font-weight:bold;background:#fff;border:4px solid #e9a8d4;
+  border-radius:20px;padding:8px 36px;box-shadow:0 6px 0 rgba(0,0,0,.06);min-width:280px
+}
+.step{
+  background:#fff;border:3px solid #ecc9e2;border-radius:18px;padding:12px 20px;
+  max-width:860px;width:100%;box-shadow:0 5px 0 rgba(0,0,0,.05)
+}
+.step .q{font-size:clamp(22px,3vw,32px);font-weight:bold;margin-bottom:10px}
+.step.info{background:#fff8e1;border-color:#f1d27a}
+.step.info .q{color:#8a6d00}
+.opts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.opts button{
+  font-family:inherit;font-size:26px;font-weight:bold;color:#fff;border:none;border-radius:14px;
+  padding:13px 26px;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.18);transition:transform .12s
+}
+.opts button:hover{transform:translateY(-2px)}
+.opts button.shake{animation:shk .35s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.msg{font-size:clamp(20px,2.6vw,28px);font-weight:bold;min-height:36px}
+.msg.ok{color:#15803d}
+.msg.err{color:#dc2626}
+.dotsbox{background:#fff;border:3px solid #ecc9e2;border-radius:16px;padding:10px 14px;max-width:860px}
+.bundle{
+  display:inline-flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center;
+  border:4px solid #f5b301;border-radius:14px;padding:6px;background:#fffbeb;margin:14px 8px 0;position:relative
+}
+.bundle::after{content:"10 → в пучок!";position:absolute;top:-24px;left:50%;transform:translateX(-50%);
+  font-size:15px;font-weight:bold;color:#b45309;white-space:nowrap}
+.dot{width:18px;height:18px;border-radius:50%;display:inline-block}
+.dot.o{background:#fb923c}
+.dot.b{background:#60a5fa}
+.dot.g{background:#fbbf24;border:2px solid #d97706}
+.dashbox{display:inline-flex;flex-wrap:wrap;gap:4px;justify-content:center;border:3px dashed #c026d3;border-radius:14px;padding:6px;margin:14px 8px 0;position:relative}
+.dashbox::after{content:"занятый пучок";position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:15px;font-weight:bold;color:#a21caf;white-space:nowrap}
+.navrow{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.bigbtn{font-size:23px;padding:13px 30px;border-radius:14px;border:none;background:#c026d3;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+.bigbtn:disabled{background:#dfc3da;cursor:default;box-shadow:none}
+.cnt{font-size:20px;color:#7a5a74;font-weight:bold}
+/* рисовашка */
+.stage{display:flex;gap:16px;justify-content:center;align-items:flex-start;flex-wrap:wrap;width:100%}
+.picbox{background:#fff;border:4px solid #e9a8d4;border-radius:22px;padding:8px;max-width:560px;flex:1 1 440px}
+svg{width:100%;height:auto;display:block}
+.zone{fill:#fff;stroke:#4a3b32;stroke-width:3;cursor:pointer;transition:fill .5s}
+.zone.sel{stroke:#c026d3;stroke-width:5;stroke-dasharray:10 7;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-34}}
+.zone.done{cursor:default}
+.panel{background:#fff;border:4px solid #e9a8d4;border-radius:22px;padding:16px;max-width:380px;min-width:300px}
+.panel h3{margin:0 0 8px;font-size:21px;color:#a21caf}
+.stepslog{min-height:30px;font-size:17px;color:#15803d;font-weight:bold;margin-bottom:6px}
+#finale{position:fixed;inset:0;background:rgba(59,35,64,.8);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+#finale.show{display:flex}
+.finCard{background:#fff;border-radius:28px;padding:36px 40px;text-align:center;max-width:520px;animation:fpop .5s}
+@keyframes fpop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+.finCard .e{font-size:70px}
+.finCard .t{font-size:25px;color:#3b2340;margin:12px 0 6px;font-weight:bold}
+.finCard .d{font-size:19px;color:#6b4a63;margin-bottom:18px}
+</style>
+</head>
+<body>
+<header>
+  <div id="tabs">
+    <button data-tab="t1" class="active">1 ➕ Плюс по шагам</button>
+    <button data-tab="t2">2 ➖ Минус по шагам</button>
+    <button data-tab="t3">3 🎨 Торт-рисовашка</button>
+    <button data-tab="t4">4 🏁 Проверка</button>
+  </div>
+  <div id="stars">⭐ <span id="starCount">0</span><button id="addStar">+1</button><button id="resetStars" title="Сбросить">⟲</button></div>
+</header>
+<main>
+
+<!-- ================= 1. ПЛЮС ПО ШАГАМ ================= -->
+<section id="t1" class="active">
+  <h2>➕ Плюс: где прячется пучок</h2>
+  <p class="lead">Идём по шагам. Самое важное — шаг 3: пучок из 10 единиц <b>переходит к десяткам</b>. Не теряем его!</p>
+  <div class="example" id="plusEx"></div>
+  <div id="plusSteps"></div>
+  <div class="dotsbox" id="plusDots" style="display:none"></div>
+  <div class="msg" id="plusMsg"></div>
+  <div class="navrow">
+    <button class="bigbtn" id="plusNext" disabled>Следующий пример →</button>
+    <span class="cnt" id="plusCnt"></span>
+  </div>
+</section>
+
+<!-- ================= 2. МИНУС ПО ШАГАМ ================= -->
+<section id="t2">
+  <h2>➖ Минус: занимаем пучок</h2>
+  <p class="lead">Если единиц не хватает — открываем один пучок-десяток. Тогда десятков становится на один меньше!</p>
+  <div class="example" id="minusEx"></div>
+  <div id="minusSteps"></div>
+  <div class="dotsbox" id="minusDots" style="display:none"></div>
+  <div class="msg" id="minusMsg"></div>
+  <div class="navrow">
+    <button class="bigbtn" id="minusNext" disabled>Следующий пример →</button>
+    <span class="cnt" id="minusCnt"></span>
+  </div>
+</section>
+
+<!-- ================= 3. РИСОВАШКА ================= -->
+<section id="t3">
+  <h2>🎨 Торт для Мурчика</h2>
+  <p class="lead">Выбери часть торта — реши пример по шагам — и она раскрасится!</p>
+  <div class="stage">
+    <div class="picbox">
+      <svg viewBox="0 0 480 430">
+        <rect class="zone" data-z="bg" x="2" y="2" width="476" height="426" rx="18"/>
+        <rect class="zone" data-z="table" x="2" y="330" width="476" height="98" rx="18"/>
+        <ellipse class="zone" data-z="plate" cx="240" cy="332" rx="155" ry="24"/>
+        <rect class="zone" data-z="layer1" x="128" y="248" width="224" height="80" rx="10"/>
+        <rect class="zone" data-z="layer2" x="162" y="180" width="156" height="68" rx="10"/>
+        <rect class="zone" data-z="icing" x="158" y="168" width="164" height="30" rx="15"/>
+        <circle class="zone" data-z="cherry" cx="205" cy="160" r="13"/>
+        <rect class="zone" data-z="candle" x="231" y="108" width="18" height="60" rx="6"/>
+        <ellipse class="zone" data-z="flame" cx="240" cy="96" rx="9" ry="14"/>
+      </svg>
+    </div>
+    <div class="panel">
+      <h3 id="panelTitle">✏️ Выбери часть торта</h3>
+      <div class="stepslog" id="panelLog"></div>
+      <div id="panelBody"><p style="font-size:17px;color:#6b4a63">Нажми на картинку — появится пример. Решаем по шагам, пучок не теряем!</p></div>
+      <div class="msg ok" id="panelDone" style="min-height:26px"></div>
+      <div class="cnt" id="cakeCnt" style="margin-top:8px">Раскрашено: 0 / 9</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. ПРОВЕРКА ================= -->
+<section id="t4">
+  <h2>🏁 Проверка: считаем сразу!</h2>
+  <p class="lead">Теперь без подсказок. Держи пучок в голове!</p>
+  <div class="example" id="qEx"></div>
+  <div class="opts" id="qOpts" style="margin-top:10px"></div>
+  <div class="msg" id="qMsg"></div>
+  <div class="navrow">
+    <span class="cnt" id="qCnt"></span>
+  </div>
+</section>
+
+</main>
+
+<div id="finale">
+  <div class="finCard">
+    <div class="e">🎉🐱⭐</div>
+    <div class="t">Переход через десяток — покорён!</div>
+    <div class="d">Пучок больше не потеряется. Мурчик в восторге!</div>
+    <button class="bigbtn" onclick="document.getElementById('finale').classList.remove('show')">Ура!</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function el(id){return document.getElementById(id);}
+
+/* ---------- звёзды ---------- */
+var stars=0;
+try{stars=parseInt(localStorage.getItem('sashaStars')||'0',10)||0;}catch(e){}
+function drawStars(){el('starCount').textContent=stars;}
+function addStar(){stars++;try{localStorage.setItem('sashaStars',String(stars));}catch(e){}
+  drawStars();var w=el('stars');w.classList.remove('pop');void w.offsetWidth;w.classList.add('pop');}
+el('addStar').onclick=function(){addStar();};
+el('resetStars').onclick=function(){stars=0;try{localStorage.setItem('sashaStars','0');}catch(e){}drawStars();};
+drawStars();
+
+/* ---------- вкладки ---------- */
+var tabBtns=document.querySelectorAll('#tabs button');
+for(var tb=0;tb<tabBtns.length;tb++){
+  (function(b){b.onclick=function(){
+    for(var k=0;k<tabBtns.length;k++)tabBtns[k].className=(tabBtns[k]===b)?'active':'';
+    var secs=document.querySelectorAll('main>section');
+    for(var m=0;m<secs.length;m++)secs[m].className=(secs[m].id===b.getAttribute('data-tab'))?'active':'';
+  };})(tabBtns[tb]);
+}
+function confetti(n){
+  for(var i=0;i<(n||70);i++){
+    var d=document.createElement('div');
+    d.textContent=['🎉','⭐','✨','💖','🌟','🧺'][i%6];
+    d.style.cssText='position:fixed;top:-40px;left:'+(Math.random()*100)+'vw;font-size:'+(16+Math.random()*22)+'px;z-index:99;pointer-events:none;transition:transform 2.8s ease-in,opacity 2.8s;';
+    document.body.appendChild(d);
+    (function(dd){requestAnimationFrame(function(){requestAnimationFrame(function(){
+      dd.style.transform='translateY('+(window.innerHeight+80)+'px) rotate('+(Math.random()*720-360)+'deg)';dd.style.opacity='0';});});})(d);
+    setTimeout(function(){d.remove();},3300);
+  }
+}
+
+/* ---------- генераторы шагов ---------- */
+function plusSteps4(a,b){
+  var ua=a%10,ub=b%10,ta=a-ua,tb=b-ub,u=ua+ub,t=ta+tb,t10=t+10,fin=a+b;
+  return {title:a+' + '+b+' = ?',dots:u,steps:[
+    {t:'Шаг 1. Десятки: '+ta+' + '+tb+' = ?',ans:t,opts:[t-10,t,t+10]},
+    {t:'Шаг 2. Единицы: '+ua+' + '+ub+' = ?',ans:u,opts:[u-1,u,u+1],dots:true},
+    {t:'Шаг 3. '+u+' — это 10 и '+(u-10)+'. ПУЧОК ПЕРЕХОДИТ: '+t+' + 10 = ?',ans:t10,opts:[t,t10,t+(u-10)]},
+    {t:'Шаг 4. Ответ: '+t10+' + '+(u-10)+' = ?',ans:fin,opts:[t+(u-10),fin,fin+10]}
+  ]};
+}
+function minusSteps(a,b){
+  var ua=a%10,ub=b%10,ta=a-ua,tb=b-b%10,u=ua+10-ub,t=ta-10-tb,fin=t+u;
+  return {title:a+' − '+b+' = ?',borrow:{ua:ua,ub:ub},steps:[
+    {t:'Единиц не хватает: '+ua+' − '+ub+' — не вычесть. Открываем пучок-десяток!',info:true},
+    {t:'Шаг 1. К '+ua+' единицам добавили пучок: '+(ua+10)+' − '+ub+' = ?',ans:u,opts:[u-1,u,u+1],dots:true},
+    {t:'Шаг 2. Пучок отдали — десятков меньше: '+(ta-10)+' − '+tb+' = ?',ans:t,opts:[t-10,t,t+10]},
+    {t:'Шаг 3. Ответ: '+t+' + '+u+' = ?',ans:fin,opts:[fin-10,fin,fin+10]}
+  ]};
+}
+function plusSteps3(a,b){
+  var ua=a%10,ub=b%10,ta=a-ua,tb=b-ub,u=ua+ub;
+  return [
+    {t:'Единицы: '+ua+' + '+ub+' = ?',ans:u,opts:[u-1,u,u+1]},
+    {t:'Пучок переходит: '+(ta+tb)+' + 10 = ?',ans:ta+tb+10,opts:[ta+tb,ta+tb+10,ta+tb+20]},
+    {t:'Ответ: '+(ta+tb+10)+' + '+(u-10)+' = ?',ans:a+b,opts:[a+b-10,a+b,a+b+10]}
+  ];
+}
+function minusSteps3(a,b){
+  var ua=a%10,ub=b%10,ta=a-ua,tb=b-b%10;
+  return [
+    {t:'Заняли пучок: '+(ua+10)+' − '+ub+' = ?',ans:ua+10-ub,opts:[ua+10-ub-1,ua+10-ub,ua+10-ub+1]},
+    {t:'Десятков меньше: '+(ta-10)+' − '+tb+' = ?',ans:ta-10-tb,opts:[ta-10-tb-10,ta-10-tb,ta-10-tb+10]},
+    {t:'Ответ: '+(ta-10-tb)+' + '+(ua+10-ub)+' = ?',ans:a-b,opts:[a-b-10,a-b,a-b+10]}
+  ];
+}
+
+/* ---------- пошаговая машина (общая для плюса и минуса) ---------- */
+function runMachine(exs,prefix){
+  var i=0,step=0,cur=null;
+  var msgEl=el(prefix+'Msg'),stepsEl=el(prefix+'Steps'),nextBtn=el(prefix+'Next'),
+      cntEl=el(prefix+'Cnt'),dotsEl=el(prefix+'Dots');
+  function load(){
+    cur=exs[i];step=0;
+    el(prefix+'Ex').textContent=cur.title;
+    msgEl.textContent='';msgEl.className='msg';
+    nextBtn.disabled=true;
+    nextBtn.textContent=(i===exs.length-1)?'Ещё раз 🔄':'Следующий пример →';
+    cntEl.textContent='Пример '+(i+1)+' из '+exs.length;
+    dotsEl.style.display='none';
+    render();
+  }
+  function render(){
+    stepsEl.innerHTML='';
+    var showInfo=false;
+    for(var s=0;s<cur.steps.length;s++){
+      if(s<step){
+        var done=document.createElement('div');
+        done.className='step';done.style.opacity='.55';
+        done.innerHTML='<div class="q" style="color:#15803d">'+cur.steps[s].t.replace('= ?','= <b>'+cur.steps[s].ans+'</b>')+'</div>';
+        stepsEl.appendChild(done);
+      }
+      if(s===step){
+        var st=cur.steps[s];
+        var box=document.createElement('div');
+        box.className='step'+(st.info?' info':'');
+        box.innerHTML='<div class="q">'+st.t+'</div>';
+        if(st.info){
+          stepsEl.appendChild(box);
+        if(cur.borrow){
+          dotsEl.style.display='';
+          var html='<div style="font-size:19px">Было единиц: <b>'+cur.borrow.ua+'</b>, а вычесть надо <b>'+cur.borrow.ub+'</b>. Открываем пучок!</div>'+
+              '<div style="margin-top:12px"><span class="dot o"></span><span class="dot o"></span> + <span class="dashbox">';
+            for(var d3=0;d3<10;d3++)html+='<span class="dot g"></span>';
+            html+='</span> <b style="margin-left:8px">= '+(cur.borrow.ua+10)+' единиц</b></div>';
+          dotsEl.innerHTML=html;
+        }
+          showInfo=true;
+          continue;
+        }
+        var opts=document.createElement('div');opts.className='opts';
+        shuffle(st.opts).forEach(function(v){
+          var b=document.createElement('button');
+          b.style.background='#c026d3';b.textContent=v;
+          b.onclick=function(){
+            if(v===st.ans){
+              ding(1000);
+              if(st.dots&&cur.dots)showDots(cur.dots);
+              step++;
+              if(step>=cur.steps.length){
+                msgEl.textContent='✅ '+cur.title.replace(' = ?','')+' = '+cur.steps[cur.steps.length-1].ans+'. Пучок на месте!';
+                msgEl.className='msg ok';
+                nextBtn.disabled=false;
+                addStar();
+                if(i===exs.length-1)confetti(50);
+              }else render();
+            }else{
+              ding(220,.12);
+              msgEl.textContent='Почти! А куда пошёл пучок-десяток? 🙂';
+              msgEl.className='msg err';
+              b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
+            }
+          };
+          opts.appendChild(b);
+        });
+        box.appendChild(opts);
+        stepsEl.appendChild(box);
+        break;
+      }
+    }
+    if(showInfo&&step===0){
+      step=1;
+      setTimeout(function(){render();},2600);
+    }
+  }
+  function showDots(u){
+    dotsEl.style.display='';
+    var html='<div style="font-size:18px;margin-bottom:6px">Единицы складываются — и 10 из них уходит в пучок:</div>';
+    html+='<span class="bundle">';
+    for(var d=0;d<10;d++)html+='<span class="dot g"></span>';
+    html+='</span>';
+    for(var e=0;e<u-10;e++)html+='<span class="dot b" style="margin:0 3px"></span>';
+    html+='<div style="font-size:17px;margin-top:8px;color:#b45309"><b>'+u+' = 10 + '+(u-10)+'</b> — пучок идёт к десяткам, '+
+      'а '+(u-10)+' единицы остаются!</div>';
+    dotsEl.innerHTML=html;
+  }
+  nextBtn.onclick=function(){i++;if(i>exs.length-1){i=0;}load();};
+  load();
+}
+
+var PLUS=[
+  {a:47,b:38},{a:56,b:29},{a:35,b:47},{a:64,b:28},{a:73,b:19},{a:48,b:27}
+].map(function(x){return plusSteps4(x.a,x.b);});
+var MINUS=[
+  {a:82,b:47},{a:91,b:58},{a:84,b:57},{a:71,b:35},{a:90,b:54},{a:63,b:28}
+].map(function(x){return minusSteps(x.a,x.b);});
+runMachine(PLUS,'plus');
+runMachine(MINUS,'minus');
+
+/* ---------- 3. торт-рисовашка ---------- */
+var CAKE=[
+  {id:'bg',     name:'Фон',          a:26,b:17,plus:true,  c:'#ffd6e8'},
+  {id:'table',  name:'Стол',         a:52,b:28,plus:false, c:'#e7b98a'},
+  {id:'plate',  name:'Тарелка',      a:44,b:38,plus:true,  c:'#e5e7eb'},
+  {id:'layer1', name:'Нижний ярус',  a:71,b:36,plus:false, c:'#f9a8d4'},
+  {id:'layer2', name:'Верхний ярус', a:39,b:25,plus:true,  c:'#a7d8f0'},
+  {id:'icing',  name:'Крем',         a:45,b:27,plus:false, c:'#fffdf7'},
+  {id:'cherry', name:'Ягодка',       a:67,b:29,plus:false, c:'#ef4444'},
+  {id:'candle', name:'Свечка',       a:58,b:33,plus:true,  c:'#f87171'},
+  {id:'flame',  name:'Огонёк',       a:83,b:46,plus:false, c:'#fb923c'}
+];
+CAKE.forEach(function(z){z.steps=z.plus?plusSteps3(z.a,z.b):minusSteps3(z.a,z.b);});
+var cakeSel=null,cakeDone=0,cakeStep=0;
+var panelTitle=el('panelTitle'),panelBody=el('panelBody'),panelLog=el('panelLog');
+document.querySelectorAll('.zone').forEach(function(zn){
+  zn.addEventListener('click',function(){
+    if(zn.classList.contains('done'))return;
+    cakeSel=zn;cakeStep=0;
+    document.querySelectorAll('.zone').forEach(function(x){x.classList.toggle('sel',x===zn);});
+    var z=CAKE.find(function(x){return x.id===zn.dataset.z;});
+    panelTitle.textContent='✏️ '+z.name+': '+z.a+(z.plus?' + ':' − ')+z.b;
+    panelLog.textContent='';
+    el('panelDone').textContent='';
+    renderCake();
+  });
+});
+function renderCake(){
+  var z=CAKE.find(function(x){return x.id===cakeSel.dataset.z;});
+  var st=z.steps[cakeStep];
+  panelBody.innerHTML='';
+  var q=document.createElement('div');q.className='q';q.style.fontSize='clamp(22px,2.6vw,30px)';
+  q.style.fontWeight='bold';q.style.marginBottom='10px';q.textContent=st.t;
+  panelBody.appendChild(q);
+  var opts=document.createElement('div');opts.className='opts';
+  shuffle(st.opts).forEach(function(v){
+    var b=document.createElement('button');b.style.background='#c026d3';b.textContent=v;
+    b.onclick=function(){
+      if(v===st.ans){
+        ding(1000);cakeStep++;
+        if(cakeStep>=z.steps.length){
+          cakeSel.style.fill=z.c;cakeSel.classList.remove('sel');cakeSel.classList.add('done');
+          cakeSel=null;cakeDone++;
+          el('cakeCnt').textContent='Раскрашено: '+cakeDone+' / '+CAKE.length;
+          panelTitle.textContent='✏️ Раскрашено!';
+          panelBody.innerHTML='<p style="font-size:18px;color:#15803d;font-weight:bold">🎉 Готово! Выбирай следующую часть.</p>';
+          panelLog.textContent='';
+          addStar();
+          if(cakeDone===CAKE.length){confetti(90);}
+        }else renderCake();
+      }else{
+        ding(220,.12);
+        panelLog.textContent='Пучок не потеряй 🙂';
+        b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
+      }
+    };
+    opts.appendChild(b);
+  });
+  panelBody.appendChild(opts);
+}
+
+/* ---------- 4. проверка ---------- */
+var QUICK=[
+  {t:'26 + 17 = ?',ans:43,opts:[33,43,53]},
+  {t:'82 − 47 = ?',ans:35,opts:[25,35,45]},
+  {t:'58 + 25 = ?',ans:83,opts:[73,83,93]},
+  {t:'91 − 58 = ?',ans:33,opts:[23,33,43]},
+  {t:'47 + 38 = ?',ans:85,opts:[75,85,95]},
+  {t:'84 − 57 = ?',ans:27,opts:[17,27,37]},
+  {t:'36 + 48 = ?',ans:84,opts:[74,84,94]},
+  {t:'90 − 54 = ?',ans:36,opts:[26,36,46]}
+];
+var qi=0;
+function renderQuick(){
+  var q=QUICK[qi];
+  el('qEx').textContent=q.t;
+  el('qMsg').textContent='';el('qMsg').className='msg';
+  el('qCnt').textContent='Пример '+(qi+1)+' из '+QUICK.length;
+  var o=el('qOpts');o.innerHTML='';
+  shuffle(q.opts).forEach(function(v,j){
+    var b=document.createElement('button');
+    b.style.background=['#c026d3','#0984e3','#00b894'][j%3];b.textContent=v;
+    b.onclick=function(){
+      if(v===q.ans){
+        ding(1100);addStar();
+        el('qMsg').textContent='✅ Верно!';el('qMsg').className='msg ok';
+        qi++;
+        if(qi>=QUICK.length){
+          el('qEx').textContent='🏆';
+          o.innerHTML='';
+          el('qCnt').textContent='Все примеры решены!';
+          el('qMsg').textContent='Переход через десяток — покорён!';
+          confetti(90);
+          setTimeout(function(){el('finale').classList.add('show');},900);
+        }else setTimeout(renderQuick,600);
+      }else{
+        ding(220,.12);
+        el('qMsg').textContent='А пучок-десяток не потерялся? Посчитай ещё 🙂';
+        el('qMsg').className='msg err';
+        b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
+      }
+    };
+    o.appendChild(b);
+  });
+}
+renderQuick();
+
+/* ---------- звук ---------- */
+function ding(f,dur){try{var c=new (window.AudioContext||window.webkitAudioContext)();
+  var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);
+  o.frequency.value=f;g.gain.setValueAtTime(.18,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,c.currentTime+(dur||.2));
+  o.start();o.stop(c.currentTime+(dur||.2));}catch(e){}}
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

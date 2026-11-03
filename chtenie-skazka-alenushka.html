@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Сказка-квест: Алёнушка и Иванушка</title>
+<meta property="og:title" content="Сказка-квест: Алёнушка и Иванушка">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 60%, #7CFC00 60%, #5CB85C 100%);
+    min-height: 100vh;
+    padding: 24px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    font-size: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 34px;
+    margin-bottom: 8px;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #000;
+    letter-spacing: 2px;
+  }
+  .subtitle { text-align: center; font-size: 20px; margin-bottom: 20px; }
+  .hud {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    border-radius: 4px;
+    padding: 12px 18px;
+    max-width: 1000px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .qlabel { font-size: 22px; font-weight: bold; color: #FFD700; white-space: nowrap; }
+  .xp-bar {
+    flex: 1;
+    min-width: 180px;
+    height: 24px;
+    background: #222;
+    border: 3px solid #555;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: inset 0 0 8px #000;
+  }
+  .xp-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #7EFC20, #3dd650);
+    transition: width 0.4s;
+  }
+  .gems { font-size: 24px; font-weight: bold; color: #4FC3F7; white-space: nowrap; }
+  .magic-counter { font-size: 22px; font-weight: bold; color: #EE82EE; white-space: nowrap; }
+  #app { max-width: 1000px; margin: 0 auto; }
+  .scene-head {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #FFD700;
+    margin: 0 auto 18px;
+    letter-spacing: 1px;
+  }
+  .story-panel {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    border-left: 10px solid #FFD700;
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin: 0 auto 16px;
+  }
+  .story-panel.old { opacity: 0.65; border-left-color: #8B4513; }
+  .story-text { font-size: 25px; line-height: 1.55; }
+  .story-text .verse {
+    display: block;
+    font-style: italic;
+    color: #FFE98C;
+    white-space: pre-line;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .btn-row { margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  button {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+  }
+  button:active { transform: translateY(2px); }
+  .primary-btn {
+    font-size: 24px;
+    padding: 14px 30px;
+    background: #2ECC40;
+    border: 4px solid #1a7a26;
+  }
+  .primary-btn:hover { background: #3dd650; }
+  .menu-btn {
+    font-size: 24px;
+    padding: 16px 30px;
+    background: #8B4513;
+    border: 4px solid #5C2E0A;
+    display: block;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto 14px;
+    text-align: center;
+  }
+  .menu-btn:hover { background: #A0522D; }
+  .menu-btn.green { background: #2ECC40; border-color: #1a7a26; }
+  .menu-btn.green:hover { background: #3dd650; }
+  .task-panel {
+    background: rgba(0,0,0,0.75);
+    border: 4px solid #FFD700;
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 0 auto 16px;
+  }
+  .task-title {
+    font-size: 20px;
+    color: #7EFC20;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .task-q { font-size: 27px; font-weight: bold; color: #FFD700; line-height: 1.4; margin-bottom: 18px; }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .opt-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    font-size: 24px;
+    line-height: 1.35;
+    background: #8B4513;
+    border: 3px solid #5C2E0A;
+    padding: 14px 18px;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+    transition: transform 0.1s;
+  }
+  .opt-btn:hover:not(.disabled) { transform: scale(1.01); background: #A0522D; }
+  .opt-btn .num {
+    flex: 0 0 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #5C2E0A;
+    border: 2px solid #FFD700;
+    border-radius: 4px;
+    color: #FFD700;
+    font-size: 23px;
+  }
+  .opt-btn.correct { background: #2ECC40; border-color: #1a7a26; }
+  .opt-btn.correct .num { background: #1a7a26; border-color: #fff; color: #fff; }
+  .opt-btn.wrong { background: #E74C3C; border-color: #8b2a1f; animation: shake 0.4s; }
+  .opt-btn.wrong .num { background: #8b2a1f; border-color: #fff; color: #fff; }
+  .opt-btn.disabled { cursor: default; opacity: 0.9; pointer-events: none; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .feedback {
+    display: none;
+    margin-top: 16px;
+    background: rgba(0,0,0,0.75);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 22px;
+    line-height: 1.55;
+  }
+  .feedback.show { display: block; }
+  .feedback.good { border: 4px solid #2ECC40; }
+  .feedback.bad { border: 4px solid #E74C3C; }
+  .fb-title { font-size: 26px; font-weight: bold; margin-bottom: 10px; }
+  .feedback.good .fb-title { color: #7EFC20; }
+  .feedback.bad .fb-title { color: #FF6B5B; }
+  .feedback b { color: #FFD700; }
+  .controls { margin-top: 16px; text-align: center; }
+  .word-block {
+    display: inline-block;
+    background: #8B4513;
+    border: 3px solid #5C2E0A;
+    padding: 10px 14px;
+    margin: 6px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+  }
+  .word-block:hover { background: #A0522D; }
+  .word-block.found { background: #2ECC40; border-color: #1a7a26; pointer-events: none; }
+  .word-block.miss { background: #E74C3C; border-color: #8b2a1f; animation: shake 0.4s; }
+  .boss-wrap { text-align: center; background: rgba(0,0,0,0.75); border: 4px solid #E74C3C; border-radius: 4px; padding: 20px; margin-bottom: 16px; }
+  .boss-face { font-size: 90px; line-height: 1.2; }
+  .boss-face.hit { animation: shake 0.4s; }
+  .boss-hpbar {
+    height: 26px;
+    background: #222;
+    border: 3px solid #555;
+    border-radius: 3px;
+    overflow: hidden;
+    max-width: 640px;
+    margin: 12px auto;
+    box-shadow: inset 0 0 8px #000;
+  }
+  .boss-hpfill { height: 100%; width: 100%; background: linear-gradient(90deg, #E74C3C, #ff7b6b); transition: width 0.4s; }
+  .boss-label { font-size: 24px; font-weight: bold; color: #FF6B5B; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .card-btn {
+    font-size: 21px;
+    line-height: 1.4;
+    text-align: left;
+    background: #8B4513;
+    border: 3px solid #5C2E0A;
+    padding: 14px 16px;
+    min-height: 90px;
+  }
+  .card-btn:hover:not(.picked) { background: #A0522D; }
+  .card-btn.picked { background: #B8860B; border-color: #FFD700; pointer-events: none; }
+  .card-btn.miss { background: #E74C3C; border-color: #8b2a1f; animation: shake 0.4s; }
+  .chrono-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; min-height: 60px; }
+  .chrono-item {
+    background: #2ECC40;
+    border: 3px solid #1a7a26;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 22px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .chrono-item .num {
+    flex: 0 0 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a7a26;
+    border-radius: 4px;
+    font-size: 22px;
+    border: 2px solid #fff;
+  }
+  .collect-panel {
+    background: rgba(0,0,0,0.8);
+    border: 4px solid #EE82EE;
+    border-radius: 4px;
+    padding: 24px;
+    text-align: center;
+    animation: pop 0.5s;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .collect-panel .c-title { font-size: 28px; color: #EE82EE; font-weight: bold; margin-bottom: 14px; }
+  .collect-item { font-size: 24px; margin: 10px 0; color: #FFE98C; }
+  .verdict-panel {
+    background: rgba(0,0,0,0.8);
+    border: 4px solid #FFD700;
+    border-radius: 4px;
+    padding: 24px;
+    font-size: 24px;
+    line-height: 1.6;
+    text-align: center;
+    animation: pop 0.5s;
+  }
+  .verdict-panel .v-big { font-size: 30px; color: #FFD700; font-weight: bold; margin: 10px 0; }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 50;
+    padding: 24px;
+    overflow-y: auto;
+  }
+  .modal-overlay.show { display: block; }
+  .modal-box {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(20,20,20,0.95);
+    border: 4px solid #8B4513;
+    border-radius: 4px;
+    padding: 24px;
+    font-size: 21px;
+    line-height: 1.6;
+  }
+  .modal-box h2 { color: #FFD700; text-align: center; margin-bottom: 16px; }
+  .modal-box p { margin-bottom: 14px; }
+  .modal-box .verse { font-style: italic; color: #FFE98C; text-align: center; white-space: pre-line; margin-bottom: 14px; }
+  .modal-box .src { font-size: 17px; opacity: 0.8; }
+  .start-mission {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    border-radius: 4px;
+    padding: 20px 24px;
+    font-size: 23px;
+    line-height: 1.55;
+    margin: 0 auto 24px;
+    text-align: center;
+  }
+  .start-mission b { color: #FFD700; }
+  .result {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.75);
+    border: 4px solid #FFD700;
+    border-radius: 4px;
+    padding: 30px;
+    text-align: center;
+    font-size: 24px;
+    line-height: 1.6;
+  }
+  .result .big { font-size: 38px; color: #FFD700; font-weight: bold; margin-bottom: 14px; }
+  .result .score { color: #7EFC20; font-size: 30px; font-weight: bold; }
+  .result .rank { font-size: 27px; margin: 14px 0; }
+</style>
+</head>
+<body>
+
+<h1>⛏ СКАЗКА-КВЕСТ: АЛЁНУШКА И ИВАНУШКА ⛏</h1>
+<div class="subtitle">русская народная сказка • читаем и понимаем • 4 класс</div>
+
+<div class="hud">
+  <div class="qlabel" id="qlabel">ГЛАВНОЕ МЕНЮ</div>
+  <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+  <div class="magic-counter" id="magicCounter">🧰 0/6</div>
+  <div class="gems" id="gems">💎 0</div>
+</div>
+
+<div id="app"></div>
+
+<div class="modal-overlay" id="textModal">
+  <div class="modal-box">
+    <h2>📖 СЕСТРИЦА АЛЕНУШКА, БРАТЕЦ ИВАНУШКА</h2>
+    <p>Жили-были себе царь и царица; у них были сын и дочь, сына звали Иванушкой, а дочь Аленушкой. Вот царь с царицею померли, остались дети одни и пошли странствовать по белу свету. Шли, шли, шли... идут и видят пруд, а около пруда пасется стадо коров. "Я хочу пить", — говорит Иванушка. "Не пей, братец, а то будешь теленочком", — говорит Аленушка. Он послушался, и пошли они дальше; шли-шли и видят реку, а около ходит табун лошадей. "Ах, сестрица, если б ты знала, как мне пить хочется". — "Не пей, братец, а то сделаешься жеребеночком". Иванушка послушался, и пошли они дальше, шли-шли и видят озеро, а около него гуляет стадо овец. "Ах, сестрица, мне страшно пить хочется". — "Не пей, братец, а то будешь баранчиком". Иванушка послушался, и пошли они дальше; шли-шли и видят ручей, а возле стерегут свиней. "Ах, сестрица, я напьюся; мне ужасно пить хочется". — "Не пей, братец, а то будешь поросеночком". Иванушка опять послушался, и пошли они дальше; шли-шли и видят: пасется у воды стадо коз. "Ах, сестрица, я напьюся". — "Не пей, братец, а то будешь козленочком". Он не вытерпел и не послушался сестры, напился и стал козленочком, прыгает перед Аленушкой и кричит: "Ме-ке-ке! Ме-ке-ке!"</p>
+    <p>Аленушка обвязала его шелковым поясом и повела с собою, а сама-то плачет, горько плачет... Козленочек бегал-бегал и забежал раз в сад к одному царю. Люди увидали и тотчас доказывают царю: "У нас, ваше царское величество, в саду козленочек, и держит его на поясе девица, да такая из себя красавица". Царь приказал спросить, кто она такая. Вот люди и спрашивают ее: откуда она и чьего роду-племени? "Так и так, — говорит Аленушка, — был царь и царица, да померли; остались мы, дети: я — царевна, да вот братец мой, царевич; он не утерпел, напился водицы и стал козленочком". Люди доложили все это царю. Царь позвал Аленушку, расспросил обо всем; она ему приглянулась, и царь захотел на ней жениться. Скоро сделали свадьбу и стали жить себе, и козленочек с ними — гуляет себе по саду, а пьет и ест вместе с царем и царицею.</p>
+    <p>Вот поехал царь на охоту. Тем временем пришла колдунья и навела на царицу порчу: сделалась Аленушка больная, да такая худая да бледная. На царском дворе все приуныло; цветы в саду стали вянуть, деревья сохнуть, трава блекнуть. Царь воротился и спрашивает царицу: "Али ты чем нездорова?" — "Да, хвораю", — говорит царица. На другой день царь опять поехал на охоту. Аленушка лежит больная; приходит к ней колдунья и говорит: "Хочешь, я тебя вылечу? Выходи к такому-то морю столько-то зорь и пей там воду". Царица послушалась и в сумерках пошла к морю, а колдунья уж дожидается, схватила ее, навязала ей на шею камень и бросила в море. Аленушка пошла на дно; козленочек прибежал и горько-горько заплакал. А колдунья оборотилась царицею и пошла во дворец.</p>
+    <p>Царь приехал и обрадовался, что царица опять стала здорова. Собрали на стол и сели обедать. "А где же козленочек?" — спрашивает царь. "Не надо его, — говорит колдунья, — я не велела пускать; от него так и несет козлятиной!" На другой день, только царь уехал на охоту, колдунья козленочка била-била, колотила-колотила и грозит ему: "Вот воротится царь, я попрошу тебя зарезать". Приехал царь; колдунья так и пристает к нему: "Прикажи да прикажи зарезать козленочка; он мне надоел, опротивел совсем!" Царю жалко было козленочка, да делать нечего — она так пристает, так упрашивает, что царь, наконец, согласился и позволил его зарезать. Видит козленочек: уж начали точить на него ножи булатные, заплакал он, побежал к царю и просится: "Царь! Пусти меня на море сходить, водицы испить, кишочки всполоскать". Царь пустил его. Вот козленочек прибежал к морю, стал на берегу и жалобно закричал:</p>
+    <p class="verse">Аленушка, сестрица моя!
+Выплынь, выплынь на бережок.
+Огни горят горючие,
+Котлы кипят кипучие,
+Ножи точат булатные,
+Хотят меня зарезати!</p>
+    <p>Она ему отвечает: "Иванушка-братец! Тяжел камень ко дну тянет, люта змея сердце высосала!" Козленочек заплакал и воротился назад. Посеред дня опять просится он у царя: "Царь! Пусти меня на море сходить, водицы испить, кишочки всполоскать". Царь пустил его. Вот козленочек прибежал к морю и жалобно закричал:</p>
+    <p class="verse">Аленушка, сестрица моя!
+Выплынь, выплынь на бережок.
+Огни горят горючие,
+Котлы кипят кипучие,
+Ножи точат булатные,
+Хотят меня зарезати!</p>
+    <p>Она ему отвечает: "Иванушка-братец! Тяжел камень ко дну тянет, люта змея сердце высосала!" Козленочек заплакал и воротился домой. Царь и думает: что бы это значило, козленочек все бегает на море? Вот попросился козленочек в третий раз: "Царь! Пусти меня на море сходить, водицы испить, кишочки всполоскать". Царь отпустил его и сам пошел за ним следом; приходит к морю и слышит — козленочек вызывает сестрицу:</p>
+    <p class="verse">Аленушка, сестрица моя!
+Выплынь, выплынь на бережок.
+Огни горят горючие,
+Котлы кипят кипучие,
+Ножи точат булатные,
+Хотят меня зарезати!</p>
+    <p>Она ему отвечает: "Иванушка-братец! Тяжел камень ко дну тянет, люта змея сердце высосала!" Козленочек опять зачал вызывать сестрицу. Аленушка всплыла кверху и показалась над водой. Царь ухватил ее, сорвал с шеи камень и вытащил Аленушку на берег, да и спрашивает: как это сталося? Она ему все рассказала. Царь обрадовался, козленочек тоже — так и прыгает, в саду все зазеленело и зацвело. А колдунью приказал царь казнить: разложили на дворе костер дров и сожгли ее. После того царь с царицей и с козленочком стали жить да поживать да добра наживать и по-прежнему вместе и пили и ели.</p>
+    <p class="src">Источник: А. Н. Афанасьев. «Народные русские сказки», сказка № 260 (Lib.Ru/Классика). В школьных пересказах вместо стад у воды бывают копытца — сюжет тот же.</p>
+    <div class="controls"><button class="primary-btn" onclick="closeText()">✖ ЗАКРЫТЬ</button></div>
+  </div>
+</div>
+
+<script>
+  // ---------- ДАННЫЕ ----------
+  const scenes = [
+    {
+      icon: "🌲", title: "ОДИНОКИЕ ПУТНИКИ",
+      steps: [
+        { story: "Жили-были себе царь и царица; у них были сын и дочь, сына звали Иванушкой, а дочь Аленушкой. Вот царь с царицею померли, остались дети одни и пошли странствовать по белу свету." },
+        { task: { type: "choice", q: "Кто пошёл странствовать по белу свету?", options: [
+          { t: "Алёнушка с братцем Иванушкой", ok: true, e: "родители умерли — странствовать пошли сами дети" },
+          { t: "Царь с царицей", ok: false, e: "они-то как раз умерли в самом начале: «царь с царицею померли»" },
+          { t: "Колдунья с козлёночком", ok: false, e: "колдунья — враг из середины сказки, с козлёночком она не странствовала" }
+        ] } },
+        { task: { type: "choice", q: "Кем были Алёнушка и Иванушка?", options: [
+          { t: "Царевна и царевич", ok: true, e: "они дети царя и царицы; сама Алёнушка потом говорит царю: «я — царевна, да вот братец мой, царевич»" },
+          { t: "Крестьянские дети", ok: false, e: "нет: их отец был царь — значит, дети царские" },
+          { t: "Дети купца", ok: false, e: "купца в сказке нет вовсе — есть царь, в чей сад забежал козлёночек" }
+        ] } }
+      ]
+    },
+    {
+      icon: "💧", title: "ПЯТЬ ЗАПРЕТОВ",
+      steps: [
+        { story: "Шли, шли... идут и видят пруд, а около пруда пасется стадо коров. «Я хочу пить», — говорит Иванушка. — «Не пей, братец, а то будешь теленочком», — говорит Аленушка." },
+        { task: { type: "bet", q: "Ставка 💎: выпьет Иванушка или стерпит?", options: [
+          { t: "Стерпит!", ok: true, e: "он послушался сестру — и пошли они дальше" },
+          { t: "Выпьет!", ok: false, e: "пока нет: у коровьего пруда он стерпел. Но терпение его не бесконечно..." }
+        ] } },
+        { story: "Так было четыре раза: у реки с лошадьми — «не пей, а то сделаешься жеребеночком», у озера с овцами — «не пей, а то будешь баранчиком», у ручья со свиньями — «не пей, а то будешь поросеночком». Иванушка всё слушался..." },
+        { story: "Шли, шли и видят: пасется у воды стадо коз. «Ах, сестрица, я напьюся». — «Не пей, братец, а то будешь козленочком»." },
+        { task: { type: "choice", q: "Припомни точно: чем грозила вода у ручья со свиньями?", options: [
+          { t: "Стать поросёночком", ok: true, e: "«не пей, братец, а то будешь поросеночком» — именно там" },
+          { t: "Стать баранчиком", ok: false, e: "баранчиком грозили у озера, где паслись овцы" },
+          { t: "Стать телёночком", ok: false, e: "телёночком грозил самый первый запрет — у пруда с коровами" }
+        ] } },
+        { task: { type: "bet", q: "Последняя ставка 💎: что сделал Иванушка?", options: [
+          { t: "Не удержался — напился и стал козленочком", ok: true, e: "он не вытерпел, напился — и обернулся козленочком: «Ме-ке-ке!»" },
+          { t: "Стерпел и пошёл дальше", ok: false, e: "в том-то и сказка: он НЕ удержался. Нарушил запрет — и превратился" }
+        ] } }
+      ]
+    },
+    {
+      icon: "🐐", title: "КОЗЛЁНОЧЕК",
+      steps: [
+        { story: "Аленушка обвязала его шелковым поясом и повела с собою, а сама-то плачет, горько плачет..." },
+        { task: { type: "word", q: "Поймай слово: ЧЕМ Алёнушка обвязала козлёночка?",
+          words: ["Алёнушка", "обвязала", "его", "шелковым", "поясом", "повела", "собою"], target: "поясом" } },
+        { task: { type: "choice", q: "Почему брат превратился в козлёночка?", options: [
+          { t: "Сам не удержался и напил запретной воды у стада коз", ok: true, e: "запрет был, а он ослушался — тут никто его не колдовал" },
+          { t: "Его заколдовала колдунья", ok: false, e: "колдунья объявится только потом, во дворце, — превращение случилось без неё" },
+          { t: "Виноват шелковый пояс, которым его обвязала сестра", ok: false, e: "пояс был самый обычный — им Алёнушка просто привязала братца к себе" }
+        ] } }
+      ]
+    },
+    {
+      icon: "👑", title: "НОВЫЙ ДОМ",
+      steps: [
+        { story: "Козленочек бегал-бегал и забежал раз в сад к одному царю. Царь позвал Аленушку, расспросил обо всем; она ему приглянулась, и царь захотел на ней жениться. Скоро сделали свадьбу и стали жить себе, и козленочек с ними." },
+        { task: { type: "choice", q: "Как козлёночек попал в сад и кто рассказал о них царю?", options: [
+          { t: "Забежал сам, а о гостях царю доложили люди", ok: true, e: "«люди увидали и тотчас доказывают царю» — и царь позвал Алёнушку" },
+          { t: "Козлёночек сам заговорил с царём по-человечески", ok: false, e: "он не говорил по-человечески — только кричал «ме-ке-ке»" },
+          { t: "О них донесла колдунья", ok: false, e: "колдунья узнает о них гораздо позже — и не с добром" }
+        ] } },
+        { task: { type: "choice", q: "Как теперь жилось Иванушке-козлёночку?", options: [
+          { t: "Хорошо, в царском саду, — но он остался козлёночком", ok: true, e: "волшебство само не проходит: он так и остался козлёночком" },
+          { t: "Он снова стал мальчиком", ok: false, e: "нет: превращение держится, и это главная беда сказки" },
+          { t: "Царь велел его зарезать", ok: false, e: "зарезать позже выпросит колдунья, а при дворе он гулял свободно" }
+        ] } }
+      ]
+    },
+    {
+      icon: "🧙‍♀️", title: "КОЛДУНЬЯ",
+      steps: [
+        { story: "Вот поехал царь на охоту. Тем временем пришла колдунья и навела на царицу порчу: сделалась Аленушка больная, худая да бледная. Цветы в саду стали вянуть, деревья сохнуть." },
+        { task: { type: "word", q: "Поймай слово: ЧТО навела колдунья на царицу?",
+          words: ["поехал", "царь", "на", "охоту", "пришла", "колдунья", "навела", "порчу", "больная", "бледная"], target: "порчу" } },
+        { task: { type: "choice", q: "Что стало с царским садом, когда колдунья навела порчу?", options: [
+          { t: "Цветы стали вянуть, деревья сохнуть", ok: true, e: "сад зачах вместе с царицей — беда чувствовалась во всём дворе" },
+          { t: "Сад зацвёл пышнее прежнего", ok: false, e: "наоборот — зацвёл он только после спасения Алёнушки" },
+          { t: "Царь приказал его вырубить", ok: false, e: "такого в сказке нет — сад именно зачах от порчи" }
+        ] } },
+        { story: "Приходит колдунья к больной: «Хочешь, я тебя вылечу? Выходи к морю, попей воды». Царица пошла — а колдунья схватила её, навязала на шею камень и бросила в море. А сама обернулась царицею и пошла во дворец." },
+        { task: { type: "choice", q: "Как колдунья заманила Алёнушку к морю?", options: [
+          { t: "Пообещала вылечить её от болезни", ok: true, e: "обманула: «хочешь, я тебя вылечу?» — а сама утопила" },
+          { t: "Позвала купаться в жаркий день", ok: false, e: "купаться не звала — обещала лечение, вот и хитрость" },
+          { t: "Угрожала зарезать козлёночка", ok: false, e: "угрозы козлёночку были потом, уже во дворце" }
+        ] } }
+      ]
+    },
+    {
+      icon: "🎵", title: "ПЕСЕНКА У МОРЯ",
+      steps: [
+        { story: "Колдунья ненавидит козленочка и просит царя его зарезать. Царь, грустный, согласился. Умоляет козленочек: «Царь! Пусти меня на море сходить, водицы испить!» Прибежал к морю и запел:" },
+        { story: "«Аленушка, сестрица моя!\nВыплынь, выплынь на бережок.\nОгни горят горючие,\nКотлы кипят кипучие,\nНожи точат булатные,\nХотят меня зарезати!»", verse: true },
+        { story: "И отвечает из воды сестрица: «Иванушка-братец! Тяжел камень ко дну тянет, люта змея сердце высосала!»" },
+        { task: { type: "choice", q: "Кому козлёночек поёт песенку?", options: [
+          { t: "Сестрице Алёнушке — она на дне моря", ok: true, e: "он зовёт её: «выплынь, выплынь на бережок»" },
+          { t: "Царю — жалуется на колдунью", ok: false, e: "царю он просится на море словами, а песенку поёт сестре" },
+          { t: "Колдунье — просит пощады", ok: false, e: "колдунью он не просит — её он боится" }
+        ] } },
+        { task: { type: "choice", q: "О чём козлёночек умолял царя, выпрашивая поход к морю?", options: [
+          { t: "«Пусти на море сходить — водицы испить»", ok: true, e: "так он говорил трижды; в последний раз царь сам пошёл за ним следом" },
+          { t: "«Пусти взглянуть на сестрицу»", ok: false, e: "о сестре он пел уже у моря, а у царя просил именно водицы" },
+          { t: "«Пусти погулять в саду»", ok: false, e: "в саду он гулял и так — просился он на море" }
+        ] } },
+        { story: "Так было три раза. Царь задумался: «Что бы это значило? Козленочек всё бегает на море!»" },
+        { task: { type: "bet", q: "Ставка 💎: что сделает царь в третий раз?", options: [
+          { t: "Пойдёт за козлёночком следом к морю", ok: true, e: "в третий раз царь не выдержал и сам пошёл за ним — и услышал песенку" },
+          { t: "Прикажет запереть козлёночка", ok: false, e: "нет — царь заинтересовался и пошёл следом" },
+          { t: "Уедет охотиться и ничего не узнает", ok: false, e: "на охоту он ездил раньше, а тут пошёл за козлёночком" }
+        ] } }
+      ]
+    },
+    {
+      icon: "🌅", title: "СПАСЕНИЕ",
+      steps: [
+        { story: "В третий раз царь пошёл за козленочком следом, слышит песенку — и тут Аленушка всплыла над водой! Царь ухватил её, сорвал с шеи камень и вытащил на берег. Она рассказала всё. В саду все зазеленело и зацвело. А колдунью сожгли в костре. Стали жить да поживать да добра наживать." },
+        { task: { type: "choice", q: "Кто спас Алёнушку?", options: [
+          { t: "Козлёночек — его песенка привела царя к морю", ok: true, e: "маленький козлёночок три раза бегал к морю и пел — пока царь не пошёл за ним" },
+          { t: "Царь — сам догадался, без всякой подсказки", ok: false, e: "не сам: именно песенка козлёночка три раза звала его к морю" },
+          { t: "Колдунья — раскаялась и выпустила", ok: false, e: "колдунья не раскаялась — её в конце наказали" }
+        ] } }
+      ]
+    }
+  ];
+
+  // Волшебные элементы, собираемые в сундук: индекс сцены → список
+  const sceneMagic = {
+    1: ["✨ Заклятье-запрет: «не пей — обернёшься»", "🐐 Превращение в козлёночка"],
+    4: ["🌑 Порча колдуньи", "🧙‍♀️ Оборотень: колдунья обернулась царицей"],
+    5: ["🎵 Чудесная песенка, которую слышит море"],
+    6: ["🌸 Оживление: Алёнуушка спасена, сад зацвёл"]
+  };
+  const MAGIC_TOTAL = 6;
+
+  const chronoEvents = [
+    "Царь с царицей умерли — дети пошли странствовать",
+    "Иванушка напился воды и стал козлёночком",
+    "Царь женился на Алёнушке",
+    "Колдунья навела порчу и утопила Алёнушку в море",
+    "Козлёночек пел песенку у моря",
+    "Царь вытащил Алёнушку — колдунью сожгли"
+  ];
+
+  const bossPool = [
+    { q: "Кем Иванушка приходился Алёнушке?", options: [
+      { t: "Родным братом", ok: true, e: "они брат и сестра" },
+      { t: "Сыном", ok: false, e: "сын — про родителей, а они друг другу брат и сестра" },
+      { t: "Женихом", ok: false, e: "на Алёнушке потом женился царь, а Иванушка — её брат" }
+    ] },
+    { q: "Почему дети остались одни?", options: [
+      { t: "Царь с царицей умерли", ok: true, e: "сказка начинается с этих слов" },
+      { t: "Родители уехали и не вернулись", ok: false, e: "не уезжали — сказка говорит прямо: «царь с царицею померли»" },
+      { t: "Их обманом увела колдунья", ok: false, e: "колдунья объявилась много позже, когда Алёнушка была уже царицей" }
+    ] },
+    { q: "Что запрещала Алёнушка брату?", options: [
+      { t: "Пить запрещённую воду", ok: true, e: "не пей, братец, — а то обернёшься животным" },
+      { t: "Купаться в море", ok: false, e: "море появится в сказке позже, и запрет был не про купание" },
+      { t: "Есть ягоды у дороги", ok: false, e: "про ягоды в сказке ни слова — запрещена была вода" }
+    ] },
+    { q: "В кого превратился Иванушка?", options: [
+      { t: "В козлёночка", ok: true, e: "напился у стада коз — и стал козлёночком" },
+      { t: "В телёночка", ok: false, e: "телёночком он стал бы, если бы напился у коровьего пруда" },
+      { t: "В поросёночка", ok: false, e: "поросёночком грозили у ручья со свиньями" }
+    ] },
+    { q: "У какой воды Иванушка не удержался?", options: [
+      { t: "У стада коз", ok: true, e: "последняя вода — и там он сорвался" },
+      { t: "У коровьего пруда", ok: false, e: "там он стерпел" },
+      { t: "У конской реки", ok: false, e: "и там стерпел — жеребеночком не стал" }
+    ] },
+    { q: "Кто навёл порчу на царицу?", options: [
+      { t: "Колдунья", ok: true, e: "пришла, пока царь был на охоте, и навела порчу" },
+      { t: "Царь", ok: false, e: "царь — добрый герой: он потом вытаскивает Алёнушку из воды" },
+      { t: "Люди из царского сада", ok: false, e: "люди лишь доложили царю о гостях — порчу навела колдунья" }
+    ] },
+    { q: "Как колдунья заманила Алёнушку к морю?", options: [
+      { t: "Пообещала вылечить", ok: true, e: "«хочешь, я тебя вылечу?» — обман и есть хитрость колдуньи" },
+      { t: "Позвала искупаться", ok: false, e: "не купаться — она велела «пей там воду» и обещала лечение" },
+      { t: "Позвала встречать царя с охоты", ok: false, e: "царь был на охоте, но хитрость колдуньи была про лечение" }
+    ] },
+    { q: "Что колдунья навязала Алёнушке на шею?", options: [
+      { t: "Тяжёлый камень", ok: true, e: "с камнем она и пошла ко дну" },
+      { t: "Шелковый пояс", ok: false, e: "поясом Алёнушка обвязывала козлёночка" },
+      { t: "Сундук с золотом", ok: false, e: "сундуков в сказке нет — был только камень" }
+    ] },
+    { q: "Сколько раз козлёночек пел песенку у моря?", options: [
+      { t: "Три раза", ok: true, e: "в третий раз царь пошёл за ним следом" },
+      { t: "Один раз", ok: false, e: "одного раза царь не услышал — поэтому он пел снова" },
+      { t: "Пять раз", ok: false, e: "пять в сказке запретов пить, а песенок — три" }
+    ] },
+    { q: "Кто вытащил Алёнушку из воды?", options: [
+      { t: "Царь — он пошёл за козлёночком следом", ok: true, e: "увидел, сорвал камень с шеи и вытащил на берег" },
+      { t: "Люди из царского сада", ok: false, e: "люди позвали царя в сад в начале, а из моря тянул сам царь" },
+      { t: "Козлёночек сам зубами", ok: false, e: "камень сорвал царь, а козлёночек позвал на помощь" }
+    ] },
+    { q: "Что стало с колдуньей в конце?", options: [
+      { t: "Её сожгли в костре", ok: true, e: "царь приказал её казнить" },
+      { t: "Она утонула в море", ok: false, e: "тонет в сказке Алёнушка, а колдунью сожгли" },
+      { t: "Она убежала из царства", ok: false, e: "не убежала — была наказана" }
+    ] },
+    { q: "Кто помог спасти Алёнушку?", options: [
+      { t: "Козлёночек — его песенка привела царя к морю", ok: true, e: "маленький козлёночок оказался храбрее всех" },
+      { t: "Колдунья — раскаялась", ok: false, e: "она ни о чём не жалела и хотела зарезать козлёночка" },
+      { t: "Цветущий сад", ok: false, e: "сад зацвёл уже после спасения" }
+    ] },
+    { q: "Как Алёнушка объяснила царю, кто она такая?", options: [
+      { t: "«Я — царевна, да вот братец мой, царевич»", ok: true, e: "так она сказала про себя и братца: они царские дети" },
+      { t: "«Я — дочь купца»", ok: false, e: "купца в сказке нет — есть царь, в чей сад они вышли" },
+      { t: "«Я — простая пастушка»", ok: false, e: "пастухи в сказке лишь стерегли стада у воды" }
+    ] }
+  ];
+
+  const courtCards = [
+    { t: "🐐 Иванушка обернулся козлёночком", magic: true },
+    { t: "✨ Запрет-заклятье: «не пей — обернёшься»", magic: true },
+    { t: "🌑 Колдунья навела порчу", magic: true },
+    { t: "🧙‍♀️ Колдунья обернулась царицей", magic: true },
+    { t: "🗿 Алёнушка с камнем на шее жива под водой", magic: true },
+    { t: "🌸 Когда Алёнушку спасли — сад зацвёл", magic: true },
+    { t: "🎵 Песенка козлёночка слышна из-под воды", magic: true },
+    { t: "🧣 Шелковый пояс", magic: false, e: "обычная вещь из сказки" },
+    { t: "👑 Царская свадьба", magic: false, e: "обычное событие" },
+    { t: "🐄 Стадо коров у пруда", magic: false, e: "обычное зрелище у дороги" }
+  ];
+
+  // ---------- СОСТОЯНИЕ ----------
+  let state = {};
+  function resetState() {
+    state = { gems: 0, gradedTotal: 0, gradedOk: 0, magicGot: 0,
+              scene: 0, step: 0, stories: [], chronoPtr: 0, chronoWrong: 0,
+              chronoBtns: [], bossQueue: [], bossHp: 0, courtPicked: 0, courtWrong: false };
+  }
+
+  // ---------- УТИЛИТЫ ----------
+  function $(id) { return document.getElementById(id); }
+  function shuffle(a) {
+    const r = a.slice();
+    for (let i = r.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [r[i], r[j]] = [r[j], r[i]];
+    }
+    return r;
+  }
+  function addGems(n) { state.gems += n; $("gems").textContent = "💎 " + state.gems; }
+  function grade(ok) { state.gradedTotal++; if (ok) state.gradedOk++; }
+  function setHud(label, pct) {
+    $("qlabel").textContent = label;
+    $("xpFill").style.width = pct + "%";
+    $("magicCounter").textContent = "🧰 " + state.magicGot + "/" + MAGIC_TOTAL;
+  }
+  function openText() { $("textModal").classList.add("show"); }
+  function closeText() { $("textModal").classList.remove("show"); }
+
+  // ---------- ГЛАВНОЕ МЕНЮ ----------
+  function showStart() {
+    resetState();
+    setHud("ГЛАВНОЕ МЕНЮ", 0);
+    $("gems").textContent = "💎 0";
+    $("app").innerHTML =
+      '<div class="start-mission">' +
+      'Колдунья утопила царицу <b>Алёнушку</b> и хочет зарезать <b>козлёночка Иванушку</b>.<br>' +
+      'Пройди все 7 уровней сказки, почини хронологию, победи босса —<br>' +
+      'и помоги маленькому козлёночку спасти сестрицу!' +
+      '</div>' +
+      '<button class="menu-btn green" onclick="startQuest()">▶ НАЧАТЬ КВЕСТ</button>' +
+      '<button class="menu-btn" onclick="startRecap()">⏳ ПОВТОРНЫЙ ЗАХОД (для следующего урока)</button>' +
+      '<button class="menu-btn" onclick="openText()">📚 ПОЛНЫЙ ТЕКСТ СКАЗКИ</button>';
+  }
+
+  function startQuest() {
+    state.scene = 0; state.step = 0; state.stories = [];
+    showScene();
+  }
+
+  // ---------- СЦЕНЫ ----------
+  function showScene() {
+    const sc = scenes[state.scene];
+    const step = sc.steps[state.step];
+    setHud(sc.icon + " УРОВЕНЬ " + (state.scene + 1) + " / 7", state.scene / 7 * 100);
+    let html = '<div class="scene-head">' + sc.icon + " УРОВЕНЬ " + (state.scene + 1) + ": " + sc.title + "</div>";
+    html += state.stories.map(s => '<div class="story-panel old">' + s + "</div>").join("");
+    if (step.story !== undefined) {
+      const txt = step.story;
+      const body = step.verse ? '<span class="verse">' + txt + "</span>" : txt;
+      html += '<div class="story-panel"><div class="story-text">📖 ' + body + "</div>" +
+        '<div class="btn-row">' +
+        '<button class="primary-btn" onclick="advanceStep()">▶ ДАЛЬШЕ</button>' +
+        "</div></div>";
+    } else {
+      html += renderTask(step.task);
+    }
+    $("app").innerHTML = html;
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function advanceStep() {
+    const sc = scenes[state.scene];
+    const step = sc.steps[state.step];
+    if (step.story !== undefined) {
+      const body = step.verse ? '<span class="verse">' + step.story + "</span>" : step.story;
+      state.stories.push('<div class="story-text">📖 ' + body + "</div>");
+    }
+    state.step++;
+    if (state.step >= sc.steps.length) { sceneComplete(); return; }
+    showScene();
+  }
+
+  function sceneComplete() {
+    const items = sceneMagic[state.scene];
+    if (items && items.length) {
+      setHud("🧰 НОВОЕ ЧУДО!", (state.scene + 1) / 7 * 100);
+      let html = '<div class="scene-head">🧰 СУНДУК ВОЛШЕБСТВА</div>' +
+        '<div class="collect-panel"><div class="c-title">✨ В сундук упало новое чудо!</div>';
+      items.forEach(it => { html += '<div class="collect-item">' + it + "</div>"; });
+      html += '<div class="controls"><button class="primary-btn" onclick="takeMagic()">ВЗЯТЬ В СУНДУК 🧰</button></div></div>';
+      $("app").innerHTML = html;
+      window.scrollTo(0, document.body.scrollHeight);
+    } else {
+      nextScene();
+    }
+  }
+
+  function takeMagic() {
+    const items = sceneMagic[state.scene];
+    state.magicGot += items.length;
+    nextScene();
+  }
+
+  function nextScene() {
+    state.scene++;
+    state.step = 0;
+    state.stories = [];
+    if (state.scene >= scenes.length) {
+      showChrono();
+    } else {
+      showScene();
+    }
+  }
+
+  // ---------- ЗАДАНИЯ ----------
+  function renderTask(task) {
+    const isBet = task.type === "bet";
+    const title = isBet ? "🎲 СТАВКА: УГАДАЙ, ЧТО БУДЕТ" : "🎯 ЗАДАНИЕ ДОЗОРНОГО";
+    let html = '<div class="task-panel"><div class="task-title">' + title + "</div>" +
+      '<div class="task-q">' + task.q + "</div>";
+    if (task.type === "word") {
+      html += '<div id="wordArea">';
+      shuffle(task.words).forEach(w => {
+        html += '<span class="word-block" onclick="pickWord(this)">' + w + "</span>";
+      });
+      html += "</div>";
+    } else {
+      // варианты перемешиваются — правильный ответ не стоит на одном и том же месте
+      const opts = shuffle(task.options);
+      state._opts = opts;
+      html += '<div class="options" id="opts">';
+      opts.forEach((o, i) => {
+        html += '<button class="opt-btn" onclick="pickOption(' + i + ')"><span class="num">' + (i + 1) + "</span><span>" + o.t + "</span></button>";
+      });
+      html += "</div>";
+    }
+    html += '<div id="feedback" class="feedback"></div><div id="controls" class="controls"></div></div>';
+    state._task = task;
+    state._answered = false;
+    state._wordGraded = false;
+    return html;
+  }
+
+  function pickOption(i) {
+    if (state._answered) return;
+    state._answered = true;
+    const task = state._task;
+    const opts = state._opts;
+    const opt = opts[i];
+    const btns = Array.from(document.querySelectorAll("#opts .opt-btn"));
+    btns.forEach(b => b.classList.add("disabled"));
+    const ok = !!opt.ok;
+    grade(ok);
+    if (ok) addGems(5);
+    btns.forEach((b, j) => { if (opts[j].ok) b.classList.add("correct"); });
+    if (!ok) btns[i].classList.add("wrong");
+    const fb = $("feedback");
+    fb.className = "feedback show " + (ok ? "good" : "bad");
+    if (task.type === "bet") {
+      fb.innerHTML = ok
+        ? '<div class="fb-title">🎲 СТАВКА СЫГРАЛА! +5 💎</div><div>✅ ' + opt.e + ".</div>"
+        : '<div class="fb-title">🎲 Ставка проиграна…</div><div>💡 А на самом деле: ' + opt.e + ".</div>";
+    } else {
+      fb.innerHTML = ok
+        ? '<div class="fb-title">✅ ВЕРНО! +5 💎</div><div>💬 ' + opt.e + ".</div>"
+        : '<div class="fb-title">❌ ГРИФЕР ПОДКРАЛСЯ!</div>' +
+          '<div>🔴 <b>Ты выбрал:</b> «' + opt.t + "» — " + opt.e + ".</div>" +
+          '<div>🟢 <b>Правильный ответ:</b> «' + opts.find(o => o.ok).t + "» — " + opts.find(o => o.ok).e + ".</div>";
+    }
+    $("controls").innerHTML = '<button class="primary-btn" onclick="advanceStep()">ДАЛЬШЕ ▶</button>';
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function pickWord(span) {
+    if (state._answered) return;
+    const task = state._task;
+    if (span.textContent === task.target) {
+      state._answered = true;
+      span.classList.add("found");
+      grade(true);
+      addGems(5);
+      const fb = $("feedback");
+      fb.className = "feedback show good";
+      fb.innerHTML = '<div class="fb-title">✅ СЛОВО ПОЙМАНО! +5 💎</div><div>💬 «' + task.target + "» — верное слово.</div>";
+      $("controls").innerHTML = '<button class="primary-btn" onclick="advanceStep()">ДАЛЬШЕ ▶</button>';
+      window.scrollTo(0, document.body.scrollHeight);
+    } else {
+      span.classList.add("miss");
+      setTimeout(() => span.classList.remove("miss"), 500);
+      if (!state._wordGraded) { grade(false); state._wordGraded = true; }
+    }
+  }
+
+  // ---------- ХРОНОЛОГИЯ ----------
+  function showChrono() {
+    setHud("🧩 ПОЧИНИ ХРОНОЛОГИЮ", 88);
+    state.chronoPtr = 0;
+    state.chronoWrong = 0;
+    state.chronoBtns = shuffle(chronoEvents.map((t, i) => ({ t: t, idx: i })));
+    let html = '<div class="scene-head">🧩 ПОЧИНИ ХРОНОЛОГИЮ</div>' +
+      '<div class="task-panel"><div class="task-title">🧩 СОБЕРИ СЮЖЕТ ПО ПОРЯДКУ</div>' +
+      '<div class="task-q">Кликай события в том порядке, как они были в сказке</div>' +
+      '<div class="chrono-list" id="chronoList"></div>' +
+      '<div class="options" id="chronoBtns">';
+    state.chronoBtns.forEach((ev, i) => {
+      html += '<button class="opt-btn" id="chb' + i + '" onclick="pickChrono(' + i + ')"><span class="num">?</span><span>' + ev.t + "</span></button>";
+    });
+    html += "</div><div id=\"feedback\" class=\"feedback\"></div><div id=\"controls\" class=\"controls\"></div></div>";
+    $("app").innerHTML = html;
+  }
+
+  function pickChrono(i) {
+    const btn = $("chb" + i);
+    if (!btn || btn.classList.contains("disabled")) return;
+    const ev = state.chronoBtns[i];
+    if (ev.idx === state.chronoPtr) {
+      state.chronoPtr++;
+      btn.classList.add("disabled");
+      btn.style.display = "none";
+      const item = document.createElement("div");
+      item.className = "chrono-item";
+      item.innerHTML = '<span class="num">' + state.chronoPtr + "</span><span>" + ev.t + "</span>";
+      $("chronoList").appendChild(item);
+      if (state.chronoPtr >= chronoEvents.length) {
+        grade(state.chronoWrong === 0);
+        addGems(10);
+        const fb = $("feedback");
+        fb.className = "feedback show good";
+        fb.innerHTML = "<div class='fb-title'>✅ ХРОНОЛОГИЯ ПОЧИНЕНА! +10 💎</div><div>💬 Сюжет сказки восстановлен целиком.</div>";
+        $("controls").innerHTML = '<button class="primary-btn" onclick="startBoss()">К БОССУ ⚔️</button>';
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    } else {
+      state.chronoWrong++;
+      btn.classList.add("wrong");
+      setTimeout(() => btn.classList.remove("wrong"), 500);
+      const fb = $("feedback");
+      fb.className = "feedback show bad";
+      fb.innerHTML = "<div class='fb-title'>🚫 Не то событие!</div><div>💡 Подумай: это было в начале сказки или уже в конце? Скажи следующее ПОСЛЕ «" + chronoEvents[state.chronoPtr] + "».</div>";
+    }
+  }
+
+  // ---------- БОСС ----------
+  function startBoss() {
+    state.bossQueue = shuffle(bossPool).slice(0, 10);
+    state.bossQueue.forEach(q => { q.wrong = 0; });
+    state.bossHp = state.bossQueue.length;
+    state.bossMax = state.bossQueue.length;
+    renderBoss();
+  }
+
+  function renderBoss() {
+    setHud("⚔️ БОСС: КОЛДУНЬЯ", 94);
+    if (state.bossQueue.length === 0) {
+      addGems(20);
+      grade(true);
+      $("app").innerHTML =
+        '<div class="scene-head">⚔️ БОСС ПОВЕРЖЕН!</div>' +
+        '<div class="collect-panel"><div class="c-title">🧙‍♀️ Колдунья побеждена! +20 💎</div>' +
+        '<div class="collect-item">Козлёночек спас сестрицу — а ты помог ему пройти сказку до конца.</div>' +
+        '<div class="controls"><button class="primary-btn" onclick="showCourt()">К СУДУ НАД СКАЗКОЙ ⚖️</button></div></div>';
+      return;
+    }
+    const q = state.bossQueue[0];
+    const pct = state.bossHp / state.bossMax * 100;
+    let html = '<div class="scene-head">⚔️ БОСС: КОЛДУНЬЯ</div>' +
+      '<div class="boss-wrap">' +
+      '<div class="boss-face" id="bossFace">🧙‍♀️</div>' +
+      '<div class="boss-label">❤️ ЗДОРОВЬЕ КОЛДУНЬИ: ' + state.bossHp + " / " + state.bossMax + "</div>" +
+      '<div class="boss-hpbar"><div class="boss-hpfill" style="width:' + pct + '%"></div></div>' +
+      "</div>" +
+      '<div class="task-panel"><div class="task-title">⚔️ УДАР ПО КОЛДУНЬЕ</div>' +
+      '<div class="task-q">' + q.q + "</div>" +
+      '<div class="options" id="opts">';
+    // варианты перемешиваются — правильный ответ не стоит на одном и том же месте
+    const opts = shuffle(q.options);
+    state._bossOpts = opts;
+    opts.forEach((o, i) => {
+      html += '<button class="opt-btn" onclick="hitBoss(' + i + ')"><span class="num">' + (i + 1) + "</span><span>" + o.t + "</span></button>";
+    });
+    html += '</div><div id="feedback" class="feedback"></div><div id="controls" class="controls"></div></div>';
+    $("app").innerHTML = html;
+    state._bossAnswered = false;
+  }
+
+  function hitBoss(i) {
+    if (state._bossAnswered) return;
+    state._bossAnswered = true;
+    const q = state.bossQueue[0];
+    const opts = state._bossOpts;
+    const opt = opts[i];
+    const btns = Array.from(document.querySelectorAll("#opts .opt-btn"));
+    btns.forEach(b => b.classList.add("disabled"));
+    const ok = !!opt.ok;
+    const fb = $("feedback");
+    if (ok) {
+      grade(true);
+      addGems(5);
+      state.bossHp--;
+      const face = $("bossFace");
+      if (face) face.classList.add("hit");
+      btns.forEach((b, j) => { if (opts[j].ok) b.classList.add("correct"); });
+      fb.className = "feedback show good";
+      fb.innerHTML = '<div class="fb-title">💥 ПОПАДАНИЕ! −1 ❤️ (+5 💎)</div><div>💬 ' + opt.e + ".</div>";
+      $("controls").innerHTML = '<button class="primary-btn" onclick="bossNext(true)">СЛЕДУЮЩИЙ УДАР ⚔️</button>';
+    } else {
+      grade(false);
+      btns[i].classList.add("wrong");
+      const correct = opts.find(o => o.ok);
+      fb.className = "feedback show bad";
+      fb.innerHTML = '<div class="fb-title">🛡️ Колдунья отбилась!</div>' +
+        '<div>🔴 <b>Ты выбрал:</b> «' + opt.t + "» — " + opt.e + ".</div>" +
+        '<div>🟢 <b>Правильный ответ:</b> «' + correct.t + "» — " + correct.e + ".</div>" +
+        '<div>↩️ Вопрос вернётся ещё раз — босс не уйдёт!</div>';
+      $("controls").innerHTML = '<button class="primary-btn" onclick="bossNext(false)">СЛЕДУЮЩИЙ УДАР ⚔️</button>';
+    }
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function bossNext(wasCorrect) {
+    const q = state.bossQueue.shift();
+    if (!wasCorrect) {
+      q.wrong = (q.wrong || 0) + 1;
+      if (q.wrong < 2) state.bossQueue.push(q);
+    }
+    renderBoss();
+  }
+
+  // ---------- СУД НАД СКАЗКОЙ ----------
+  function showCourt() {
+    setHud("⚖️ СУД НАД СКАЗКОЙ", 97);
+    state.courtPicked = 0;
+    state.courtWrong = false;
+    let html = '<div class="scene-head">⚖️ СУД НАД СКАЗКОЙ</div>' +
+      '<div class="task-panel"><div class="task-title">⚖️ ВЫНЕСИ ВЕРДИКТ</div>' +
+      '<div class="task-q">Открой сундук и выбери <u>три доказательства волшебства</u>. Остальное — обычная жизнь, оно не считается!</div>' +
+      '<div class="card-grid">';
+    state._courtCards = shuffle(courtCards);
+    state._courtCards.forEach((c, i) => {
+      html += '<button class="card-btn" id="card' + i + '" onclick="pickCard(' + i + ')">' + c.t + "</button>";
+    });
+    html += '</div><div id="feedback" class="feedback"></div><div id="verdict"></div><div id="controls" class="controls"></div></div>';
+    $("app").innerHTML = html;
+  }
+
+  function pickCard(i) {
+    const btn = $("card" + i);
+    if (!btn || btn.classList.contains("picked")) return;
+    const c = state._courtCards[i];
+    const fb = $("feedback");
+    if (c.magic) {
+      state.courtPicked++;
+      btn.classList.add("picked");
+      btn.textContent = "✨ " + btn.textContent;
+      fb.className = "feedback show good";
+      fb.innerHTML = "<div class='fb-title'>✨ Чудо № " + state.courtPicked + " из 3!</div><div>" + c.t + " — так в жизни не бывает.</div>";
+      if (state.courtPicked >= 3) {
+        grade(!state.courtWrong);
+        addGems(20);
+        $("verdict").innerHTML =
+          '<div class="verdict-panel">' +
+          '<div class="v-big">⚖️ ВЕРДИКТ</div>' +
+          "В сказке есть превращения, порча, колдовство и оживление — чудеса, которых в жизни не бывает." +
+          '<div class="v-big">Значит, это ВОЛШЕБНАЯ сказка!</div>' +
+          "А имени автора у сказки нет — её сложил народ." +
+          '<div class="v-big">Значит, это ФОЛЬКЛОР!</div>' +
+          "🏅 Ты — Знаток Сказки. +20 💎" +
+          "</div>";
+        $("controls").innerHTML = '<button class="primary-btn" onclick="showFinal()">ФИНИШ 🏆</button>';
+      }
+    } else {
+      state.courtWrong = true;
+      btn.classList.add("miss");
+      setTimeout(() => btn.classList.remove("miss"), 500);
+      fb.className = "feedback show bad";
+      fb.innerHTML = "<div class='fb-title'>🚫 Это НЕ чудо!</div><div>💡 " + c.t + " — " + c.e + ". Ищи волшебство!</div>";
+    }
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  // ---------- ФИНАЛ ----------
+  function showFinal() {
+    setHud("🏆 ФИНИШ", 100);
+    const pct = state.gradedTotal ? Math.round(state.gradedOk / state.gradedTotal * 100) : 0;
+    let rank;
+    if (pct >= 90) rank = "🏆 АЛМАЗНЫЙ ЗНАТОК СКАЗОК!";
+    else if (pct >= 70) rank = "⚔️ ЖЕЛЕЗНЫЙ ЗНАТОК!";
+    else if (pct >= 50) rank = "🪨 КАМЕННЫЙ УЧЕНИК";
+    else rank = "🪵 ЮНЫЙ СТРАННИК";
+    $("app").innerHTML =
+      '<div class="result">' +
+      '<div class="big">🏆 КВЕСТ ПРОЙДЕН!</div>' +
+      '<div>Алёнушка спасена, колдунья наказана, козлёночек — герой!</div>' +
+      '<div style="margin-top:10px">Сказка: <span class="score">ВОЛШЕБНАЯ</span> • это фольклор — автора нет, сложил народ</div>' +
+      '<div style="margin-top:14px">💎 Алмазов собрано: <span class="score">' + state.gems + "</span></div>" +
+      '<div>Верных ответов с первой попытки: ' + state.gradedOk + " из " + state.gradedTotal + " (" + pct + "%)</div>" +
+      '<div class="rank">' + rank + "</div>" +
+      '<button class="menu-btn green" onclick="showStart()">🔄 ПРОЙТИ КВЕСТ ЗАНОВО</button>' +
+      '<button class="menu-btn" onclick="openText()">📚 ПОЛНЫЙ ТЕКСТ СКАЗКИ</button>' +
+      "</div>";
+  }
+
+  // ---------- ПОВТОРНЫЙ ЗАХОД ----------
+  function startRecap() {
+    const pool = [];
+    scenes.forEach(sc => sc.steps.forEach(st => {
+      if (st.task && (st.task.type === "choice" || st.task.type === "bet")) pool.push(st.task);
+    }));
+    bossPool.forEach(q => pool.push(q));
+    state.recapQs = shuffle(pool).slice(0, 10);
+    state.recapI = 0;
+    state.recapOk = 0;
+    renderRecapQ();
+  }
+
+  function renderRecapQ() {
+    setHud("⏳ ПОВТОРНЫЙ ЗАХОД", state.recapI / 10 * 100);
+    if (state.recapI >= state.recapQs.length) {
+      $("app").innerHTML =
+        '<div class="result">' +
+        '<div class="big">⏳ ПОВТОРНЫЙ ЗАХОД ОКОНЧЕН</div>' +
+        '<div>Помнишь сказку? <span class="score">' + state.recapOk + " из " + state.recapQs.length + "</span></div>" +
+        '<div class="rank">' +
+        (state.recapOk >= 9 ? "🏆 Сказка в голове — отлично!" :
+         state.recapOk >= 6 ? "⚔️ Хорошо! Твёрдо помнишь главное." :
+         "🪨 Часть забыта — не страшно, повторим ещё.") + "</div>" +
+        '<button class="menu-btn green" onclick="showStart()">НА ГЛАВНУЮ 🏠</button>' +
+        "</div>";
+      return;
+    }
+    const q = state.recapQs[state.recapI];
+    let html = '<div class="scene-head">⏳ ПОВТОРНЫЙ ЗАХОД</div>' +
+      '<div class="task-panel"><div class="task-title">⏳ ВОПРОС ' + (state.recapI + 1) + " / " + state.recapQs.length + "</div>" +
+      '<div class="task-q">' + q.q + "</div>" +
+      '<div class="options" id="opts">';
+    const opts = shuffle(q.options);
+    state._recapOpts = opts;
+    opts.forEach((o, i) => {
+      html += '<button class="opt-btn" onclick="pickRecap(' + i + ')"><span class="num">' + (i + 1) + "</span><span>" + o.t + "</span></button>";
+    });
+    html += '</div><div id="feedback" class="feedback"></div><div id="controls" class="controls"></div></div>';
+    $("app").innerHTML = html;
+    state._recapAnswered = false;
+  }
+
+  function pickRecap(i) {
+    if (state._recapAnswered) return;
+    state._recapAnswered = true;
+    const opt = state._recapOpts[i];
+    const ok = !!opt.ok;
+    if (ok) state.recapOk++;
+    const btns = Array.from(document.querySelectorAll("#opts .opt-btn"));
+    btns.forEach(b => b.classList.add("disabled"));
+    btns.forEach((b, j) => { if (state._recapOpts[j].ok) b.classList.add("correct"); });
+    if (!ok) btns[i].classList.add("wrong");
+    const fb = $("feedback");
+    fb.className = "feedback show " + (ok ? "good" : "bad");
+    fb.innerHTML = ok
+      ? '<div class="fb-title">✅ ВЕРНО!</div><div>💬 ' + opt.e + ".</div>"
+      : '<div class="fb-title">❌ ЗАБЫЛОСЬ</div><div>🟢 <b>Правильный ответ:</b> «' + state._recapOpts.find(o => o.ok).t + "» — " + state._recapOpts.find(o => o.ok).e + ".</div>";
+    $("controls").innerHTML = '<button class="primary-btn" onclick="recapNext()">ДАЛЬШЕ ▶</button>';
+  }
+
+  function recapNext() {
+    state.recapI++;
+    renderRecapQ();
+  }
+
+  // Enter нажимает главную зелёную кнопку (удобно учителю)
+  document.addEventListener("keydown", e => {
+    if (e.code !== "Enter") return;
+    const btn = Array.from(document.querySelectorAll("#app .primary-btn")).find(b => b.offsetParent !== null);
+    if (btn) btn.click();
+  });
+
+  showStart();
+</script>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

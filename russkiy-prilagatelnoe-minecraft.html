@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Этап 2. Прилагательное — Текстуры и Характеристики</title>
+<meta property="og:title" content="Прилагательное — Minecraft, этап 2">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 60%, #7CFC00 60%, #5CB85C 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+  }
+  h1 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #000;
+    letter-spacing: 2px;
+  }
+  .legend {
+    background: rgba(0,0,0,0.7);
+    border: 4px solid #8B4513;
+    padding: 15px;
+    margin: 0 auto 20px;
+    max-width: 900px;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .legend b { color: #FFD700; }
+  .hint {
+    background: rgba(139, 69, 19, 0.9);
+    border: 3px dashed #FFD700;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .textures-container {
+    background: rgba(0,0,0,0.5);
+    border: 4px solid #555;
+    padding: 15px;
+    margin: 0 auto 20px;
+    max-width: 900px;
+    min-height: 100px;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .texture {
+    background: #4A90E2;
+    border: 3px solid #2C5F8D;
+    padding: 8px 14px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: grab;
+    user-select: none;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+    transition: transform 0.1s;
+  }
+  .texture:hover { transform: scale(1.05); }
+  .texture:active { cursor: grabbing; }
+  .texture.correct { background: #2ECC40; border-color: #1a7a26; }
+  .texture.wrong { background: #E74C3C; border-color: #8b2a1f; animation: shake 0.4s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .workbenches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+  }
+  .workbench {
+    background: rgba(139, 69, 19, 0.85);
+    border: 4px solid #5C2E0A;
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 220px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  .workbench h2 {
+    text-align: center;
+    font-size: 18px;
+    color: #FFD700;
+    margin-bottom: 5px;
+    border-bottom: 2px dashed #FFD700;
+    padding-bottom: 8px;
+  }
+  .workbench .block-info {
+    text-align: center;
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .workbench .drop-zone {
+    min-height: 130px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 5px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+    padding: 8px;
+  }
+  .workbench.drag-over { background: rgba(46, 204, 64, 0.4); }
+  .controls {
+    text-align: center;
+    margin: 20px 0;
+  }
+  button {
+    background: #2ECC40;
+    border: 3px solid #1a7a26;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 30px;
+    cursor: pointer;
+    margin: 0 10px;
+    text-shadow: 2px 2px 0 #000;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), inset 3px 3px 0 rgba(255,255,255,0.2);
+  }
+  button:hover { background: #3dd650; }
+  button:active { transform: translateY(2px); }
+  .reset-btn { background: #E67E22; border-color: #8b4a15; }
+  .reset-btn:hover { background: #f39c3a; }
+  .result {
+    text-align: center;
+    font-size: 22px;
+    margin: 20px auto;
+    max-width: 900px;
+    padding: 15px;
+    background: rgba(0,0,0,0.7);
+    border: 3px solid #FFD700;
+    border-radius: 4px;
+    display: none;
+  }
+  .result.show { display: block; }
+  .score { color: #FFD700; font-size: 28px; }
+</style>
+</head>
+<body>
+
+<h1>🎨 ЭТАП 2. ПРИЛАГАТЕЛЬНОЕ — ТЕКСТУРЫ И ХАРАКТЕРИСТИКИ 🎨</h1>
+
+<div class="legend">
+  <b>Легенда:</b> Ты загрузил блоки в мир. Но они все серые и одинаковые! Теперь нужно задать каждому блоку <b>текстуру</b> и <b>характеристики</b>.<br>
+  <b>Прилагательное</b> — это свойство предмета. Отвечает на вопросы: <b>КАКОЙ? КАКАЯ? КАКОЕ? КАКИЕ?</b><br>
+  <b>Главное правило:</b> прилагательное всегда привязано к существительному и согласуется с ним по <b>роду</b> и <b>числу</b>.
+  <div class="hint">
+    💡 <b>Подсказка-шпаргалка:</b><br>
+    • <b>Мужской род</b> (он мой) → какой? (алмазный, прочный)<br>
+    • <b>Женский род</b> (она моя) → какая? (взрывная, секретная)<br>
+    • <b>Средний род</b> (оно моё) → какое? (невидимое, мощное)<br>
+    • <b>Множественное число</b> (они мои) → какие? (быстрые, меткие)
+  </div>
+</div>
+
+<div class="textures-container" id="texturesContainer"></div>
+
+<div class="workbenches">
+  <div class="workbench" id="wb1" data-target="меч">
+    <h2>⚔️ МЕЧ</h2>
+    <div class="block-info">мужской род, единственное число (он мой)</div>
+    <div class="drop-zone" id="drop1"></div>
+  </div>
+  <div class="workbench" id="wb2" data-target="база">
+    <h2>🏰 БАЗА</h2>
+    <div class="block-info">женский род, единственное число (она моя)</div>
+    <div class="drop-zone" id="drop2"></div>
+  </div>
+  <div class="workbench" id="wb3" data-target="оружие">
+    <h2>🔫 ОРУЖИЕ</h2>
+    <div class="block-info">средний род, единственное число (оно моё)</div>
+    <div class="drop-zone" id="drop3"></div>
+  </div>
+  <div class="workbench" id="wb4" data-target="игроки">
+    <h2>👥 ИГРОКИ</h2>
+    <div class="block-info">множественное число (они мои)</div>
+    <div class="drop-zone" id="drop4"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="checkAnswers()">✅ ПРОВЕРИТЬ НАСТРОЙКИ</button>
+  <button class="reset-btn" onclick="resetGame()">🔄 СБРОСИТЬ ТЕКСТУРЫ</button>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+  // Текстуры (прилагательные) с указанием рода/числа
+  const textures = [
+    // К мечу (м.р.)
+    {text: "алмазный", target: "меч"},
+    {text: "острый", target: "меч"},
+    {text: "прочный", target: "меч"},
+    {text: "зачарованный", target: "меч"},
+    {text: "стальной", target: "меч"},
+    // К базе (ж.р.)
+    {text: "взрывная", target: "база"},
+    {text: "укреплённая", target: "база"},
+    {text: "секретная", target: "база"},
+    {text: "подземная", target: "база"},
+    {text: "вражеская", target: "база"},
+    // К оружию (ср.р.)
+    {text: "невидимое", target: "оружие"},
+    {text: "мощное", target: "оружие"},
+    {text: "скорострельное", target: "оружие"},
+    {text: "редкое", target: "оружие"},
+    {text: "тяжёлое", target: "оружие"},
+    // К игрокам (мн.ч.)
+    {text: "быстрые", target: "игроки"},
+    {text: "опытные", target: "игроки"},
+    {text: "меткие", target: "игроки"},
+    {text: "дружные", target: "игроки"},
+    {text: "сильные", target: "игроки"}
+  ];
+
+  let draggedEl = null;
+
+  function shuffle(arr) {
+    return arr.slice().sort(() => Math.random() - 0.5);
+  }
+
+  function renderTextures() {
+    const container = document.getElementById("texturesContainer");
+    container.innerHTML = "";
+    shuffle(textures).forEach((t, i) => {
+      const div = document.createElement("div");
+      div.className = "texture";
+      div.textContent = t.text;
+      div.draggable = true;
+      div.dataset.index = textures.indexOf(t);
+      div.dataset.target = t.target;
+      div.addEventListener("dragstart", e => {
+        draggedEl = div;
+        e.dataTransfer.setData("text/plain", div.dataset.index);
+      });
+      container.appendChild(div);
+    });
+  }
+
+  function setupDropZones() {
+    document.querySelectorAll(".drop-zone").forEach(zone => {
+      zone.addEventListener("dragover", e => {
+        e.preventDefault();
+        zone.parentElement.classList.add("drag-over");
+      });
+      zone.addEventListener("dragleave", () => {
+        zone.parentElement.classList.remove("drag-over");
+      });
+      zone.addEventListener("drop", e => {
+        e.preventDefault();
+        zone.parentElement.classList.remove("drag-over");
+        if (draggedEl) {
+          zone.appendChild(draggedEl);
+          draggedEl.classList.remove("correct", "wrong");
+        }
+      });
+    });
+    const mainZone = document.getElementById("texturesContainer");
+    mainZone.addEventListener("dragover", e => e.preventDefault());
+    mainZone.addEventListener("drop", e => {
+      e.preventDefault();
+      if (draggedEl) {
+        mainZone.appendChild(draggedEl);
+        draggedEl.classList.remove("correct", "wrong");
+      }
+    });
+  }
+
+  function checkAnswers() {
+    let correct = 0;
+    let total = textures.length;
+    const workbenches = [
+      {id: "wb1", target: "меч"},
+      {id: "wb2", target: "база"},
+      {id: "wb3", target: "оружие"},
+      {id: "wb4", target: "игроки"}
+    ];
+    workbenches.forEach(wb => {
+      const zone = document.querySelector(`#${wb.id} .drop-zone`);
+      const items = zone.querySelectorAll(".texture");
+      items.forEach(item => {
+        if (item.dataset.target === wb.target) {
+          item.classList.add("correct");
+          item.classList.remove("wrong");
+          correct++;
+        } else {
+          item.classList.add("wrong");
+          item.classList.remove("correct");
+        }
+      });
+    });
+    const remaining = document.getElementById("texturesContainer").querySelectorAll(".texture").length;
+    const result = document.getElementById("result");
+    result.classList.add("show");
+    if (remaining > 0) {
+      result.innerHTML = `⚠️ Осталось <span class="score">${remaining}</span> текстур! Натяни их на нужные блоки.`;
+      return;
+    }
+    result.innerHTML = `✅ МИР НАСТРОЕН! Правильно: <span class="score">${correct} из ${total}</span><br>
+      ${correct === total ? "🏆 ИДЕАЛЬНЫЕ ТЕКСТУРЫ! Все характеристики на месте." : "🔧 Найди красные текстуры — они не подходят к этому блоку. Перетащи их на верный верстак."}`;
+  }
+
+  function resetGame() {
+    document.getElementById("result").classList.remove("show");
+    renderTextures();
+  }
+
+  renderTextures();
+  setupDropZones();
+</script>
+
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

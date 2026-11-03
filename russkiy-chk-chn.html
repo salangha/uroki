@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оно (It) - Задание по русскому языку</title>
+<meta property="og:title" content="«Оно»: чк-чн, жи-ши — задание в стиле «Странных дел»">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:type" content="website">
+    <style>
+        /* Стилизация под фильм ужасов */
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            background-image: radial-gradient(circle at 10% 20%, #1a0f0f 0%, #000000 80%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(20, 10, 10, 0.85);
+            backdrop-filter: blur(5px);
+            border: 2px solid #8b0000;
+            box-shadow: 0 0 50px rgba(139, 0, 0, 0.4), inset 0 0 30px rgba(139, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 30px 25px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        /* Декоративные воздушные шары (отсылка к фильму) */
+        .container::before {
+            content: "🎈 🎈 🎈";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 60px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+            pointer-events: none;
+        }
+        .container::after {
+            content: "🎈 🎈";
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            font-size: 80px;
+            opacity: 0.08;
+            transform: rotate(-10deg);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3.2rem;
+            text-align: center;
+            color: #cc0000;
+            text-shadow: 3px 3px 0px #440000, 0 0 20px #ff0000;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-family: 'Creepster', cursive;
+            font-size: 1.2rem;
+            color: #aaaaaa;
+            border-bottom: 1px dashed #5a1a1a;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+        .subtitle span {
+            color: #ff6666;
+        }
+
+        /* Карточка задания */
+        .task-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-left: 5px solid #b30000;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .task-title {
+            font-family: 'Creepster', cursive;
+            font-size: 1.8rem;
+            color: #ff4d4d;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #d1cbcb;
+            margin-bottom: 15px;
+        }
+
+        /* Стили для интерактива */
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .word-item {
+            background: #1f1a1a;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 2px solid #3d2a2a;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #cccccc;
+            letter-spacing: 1px;
+            user-select: none;
+        }
+
+        .word-item:hover {
+            transform: scale(1.05);
+            border-color: #ff3333;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .word-item.correct {
+            border-color: #00cc44;
+            background: #0f2a14;
+            color: #88ff88;
+            cursor: default;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+
+        .word-item.wrong {
+            border-color: #ff0000;
+            background: #2a0f0f;
+            color: #ff8888;
+            animation: shake 0.4s ease;
+            cursor: default;
+        }
+
+        .word-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .input-item {
+            background: #141010;
+            border: 2px solid #3d2a2a;
+            border-radius: 50px;
+            padding: 5px 15px 5px 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .input-item:focus-within {
+            border-color: #cc0000;
+            box-shadow: 0 0 15px rgba(204, 0, 0, 0.3);
+        }
+
+        .input-item label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #a87b7b;
+        }
+
+        .input-item input {
+            background: transparent;
+            border: none;
+            color: #ff9999;
+            font-size: 1.3rem;
+            width: 40px;
+            text-align: center;
+            outline: none;
+            font-weight: 700;
+            padding: 8px 0;
+            caret-color: #ff0000;
+        }
+        .input-item input:focus {
+            color: #ffffff;
+        }
+
+        /* Блок с предложением (сборка) */
+        .sentence-builder {
+            background: #0d0808;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid #4a1a1a;
+            min-height: 80px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sentence-word {
+            background: #1e1212;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px dashed #663333;
+            font-size: 1.2rem;
+            cursor: grab;
+            transition: 0.2s;
+            color: #ddbbbb;
+        }
+        .sentence-word:hover {
+            border-color: #ff4d4d;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .sentence-word.dragging {
+            opacity: 0.3;
+        }
+        .sentence-word.placed {
+            border: 2px solid #00aa44;
+            background: #0f1f12;
+            color: #88ff88;
+            cursor: default;
+        }
+
+        .btn {
+            background: #4a0f0f;
+            border: 2px solid #8b0000;
+            color: #ffb3b3;
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-top: 10px;
+            font-family: 'Creepster', cursive;
+        }
+
+        .btn:hover {
+            background: #6b1515;
+            border-color: #ff3333;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            color: #ffffff;
+            transform: scale(1.02);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 700;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .feedback.success {
+            background: #0f2a14;
+            border-color: #00cc44;
+            color: #88ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .feedback.error {
+            background: #2a0f0f;
+            border-color: #ff0000;
+            color: #ff8888;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            animation: shake 0.5s ease;
+        }
+
+        .feedback.info {
+            background: #1a1a2e;
+            border-color: #6666aa;
+            color: #aaaadd;
+        }
+
+        /* Анимация "дрожание" */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-15px); }
+            40% { transform: translateX(15px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+
+        /* Адаптив */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.4rem; }
+            .container { padding: 15px; }
+            .word-item { font-size: 1rem; padding: 8px 12px; }
+            .input-item input { width: 30px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>ЭТО ОНО</h1>
+    <div class="subtitle">Добро пожаловать в <span>Дерри</span>. Здесь ты либо <span>выживешь</span>, либо <span>ошибешься</span>...</div>
+
+    <!-- РАУНД 1: Охота на ошибки (ЧК, ЧН, НЧ, ЩН, ЧТ) -->
+    <div class="task-card">
+        <div class="task-title">🔴 РАУНД 1: Охота на ошибки</div>
+        <div class="task-desc">
+            Пеннивайз прячется за <strong>неправильными</strong> словами. Найди их и кликни! 
+            Вспомни правило: в сочетаниях <strong>ЧК, ЧН, НЧ, ЩН, ЧТ</strong> мягкий знак <strong>НЕ</strong> пишется.
+        </div>
+        <div id="round1Words" class="word-list">
+            <!-- Слова генерируются из JS -->
+        </div>
+        <div id="round1Feedback" class="feedback info">👆 Найди все слова с ошибками. Их <strong>3</strong>.</div>
+    </div>
+
+    <!-- РАУНД 2: Вставь букву (Ловушка) -->
+    <div class="task-card">
+        <div class="task-title">🟡 РАУНД 2: Ловушка для смелых</div>
+        <div class="task-desc">
+            Вставь пропущенную букву. Если вставишь <strong>Ь</strong> — клоун схватит тебя. 
+            Если <strong>оставишь пустым</strong> — ты спасён!
+        </div>
+        <div id="round2Inputs" class="input-group">
+            <!-- Генерация из JS -->
+        </div>
+        <div id="round2Feedback" class="feedback info">✏️ Введи <strong>ь</strong> или оставь поле пустым.</div>
+    </div>
+
+    <!-- РАУНД 3: Собери заклинание -->
+    <div class="task-card">
+        <div class="task-title">🟢 РАУНД 3: Заклинание против клоуна</div>
+        <div class="task-desc">
+            Перетащи слова в правильном порядке (или кликни на них), чтобы получилось заклинание. 
+            <br>Все слова должны быть написаны <strong>без Ь</strong> в сочетаниях!
+        </div>
+        <div id="round3Builder" class="sentence-builder">
+            <!-- Слова для перетаскивания -->
+        </div>
+        <div id="round3Feedback" class="feedback info">🖱️ Собери предложение. Нажми на слово, чтобы переместить.</div>
+        <button class="btn" id="checkAllBtn">🎈 ПРОВЕРИТЬ ВСЁ</button>
+    </div>
+
+    <!-- Итоговый результат -->
+    <div id="finalResult" class="feedback" style="margin-top: 20px; font-size: 1.3rem; text-align: center;"></div>
+</div>
+
+<script>
+    (function() {
+        // ---------- ДАННЫЕ ----------
+        // Раунд 1: слова (часть с ошибками, часть верные)
+        const wordsRound1 = [
+            { word: 'ночка', correct: true },
+            { word: 'ноч(ь)ка', correct: false }, // ошибка
+            { word: 'речной', correct: true },
+            { word: 'реч(ь)ной', correct: false }, // ошибка
+            { word: 'мощный', correct: true },
+            { word: 'мощ(ь)ный', correct: false }, // ошибка
+            { word: 'кончик', correct: true },
+            { word: 'хищник', correct: true },
+            { word: 'что', correct: true }
+        ];
+
+        // Раунд 2: слова с пропусками (правильно без Ь)
+        const wordsRound2 = [
+            { base: 'ноч?ка', answer: '' },   // ночка
+            { base: 'реч?ной', answer: '' },  // речной
+            { base: 'мощ?ный', answer: '' },  // мощный
+            { base: 'конч?ик', answer: '' },  // кончик
+            { base: 'хищ?ник', answer: '' },  // хищник
+            { base: 'что?', answer: '' }      // что
+        ];
+
+        // Раунд 3: предложение (слова с возможными ошибками)
+        const sentenceWords = ['Красный', 'шарик', 'уплыл', 'в', 'речной', 'ночной', 'мрак.'];
+
+        // ---------- СОСТОЯНИЕ ----------
+        let state = {
+            round1: {
+                // каждое слово: { word, correct, status: 'idle'|'correct'|'wrong', disabled }
+                items: wordsRound1.map(w => ({ ...w, status: 'idle', disabled: false }))
+            },
+            round2: {
+                items: wordsRound2.map(w => ({ ...w, userValue: '' }))
+            },
+            round3: {
+                // массив объектов { text, placed: boolean, originalIndex }
+                items: sentenceWords.map((text, idx) => ({ text, placed: false, originalIndex: idx })),
+                // порядок для сборки (изначально перемешан)
+                order: sentenceWords.map((_, idx) => idx).sort(() => Math.random() - 0.5)
+            }
+        };
+
+        // Количество правильных ответов для подсчета
+        let correctCountR1 = 0;
+        let correctCountR2 = 0;
+        let correctCountR3 = 0;
+        let totalR1 = 0;
+        let totalR2 = 0;
+        let totalR3 = 0;
+
+        // ---------- РЕНДЕРИНГ ----------
+        function renderRound1() {
+            const container = document.getElementById('round1Words');
+            container.innerHTML = '';
+            const items = state.round1.items;
+            items.forEach((item, index) => {
+                const span = document.createElement('span');
+                span.className = 'word-item';
+                if (item.status === 'correct') {
+                    span.classList.add('correct');
+                    span.classList.add('disabled');
+                } else if (item.status === 'wrong') {
+                    span.classList.add('wrong');
+                    span.classList.add('disabled');
+                } else if (item.disabled) {
+                    span.classList.add('disabled');
+                }
+                span.textContent = item.word;
+                span.dataset.index = index;
+                span.addEventListener('click', () => handleRound1Click(index));
+                container.appendChild(span);
+            });
+            updateRound1Feedback();
+        }
+
+        function handleRound1Click(index) {
+            const item = state.round1.items[index];
+            if (item.disabled || item.status !== 'idle') return;
+
+            if (!item.correct) {
+                // Нашли ошибку! (слово с Ь)
+                item.status = 'correct';
+                item.disabled = true;
+                showFeedback('round1Feedback', '✅ Верно! Ты нашел ошибку!', 'success');
+            } else {
+                // Нажали на правильное слово
+                item.status = 'wrong';
+                item.disabled = true;
+                showFeedback('round1Feedback', '❌ Оно здесь! Это слово написано верно. Ищи дальше!', 'error');
+            }
+            renderRound1();
+            updateProgress();
+        }
+
+        function updateRound1Feedback() {
+            const items = state.round1.items;
+            const found = items.filter(i => i.status === 'correct' && !i.correct).length;
+            const totalErrors = items.filter(i => !i.correct).length;
+            const wrongClicks = items.filter(i => i.status === 'wrong').length;
+            if (found === totalErrors) {
+                showFeedback('round1Feedback', '🎉 Ты перехитрил Пеннивайза! Все ошибки найдены!', 'success');
+            } else if (wrongClicks > 0) {
+                // уже показано через клик
+            } else {
+                showFeedback('round1Feedback', `🔍 Осталось найти ${totalErrors - found} ошибок.`, 'info');
+            }
+        }
+
+        // ---------- РАУНД 2 ----------
+        function renderRound2() {
+            const container = document.getElementById('round2Inputs');
+            container.innerHTML = '';
+            const items = state.round2.items;
+            items.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'input-item';
+                const label = document.createElement('label');
+                // Разбиваем строку типа "ноч?ка" на части
+                const parts = item.base.split('?');
+                label.innerHTML = parts[0] + '<span style="color:#ff6666; text-decoration:underline;">?</span>' + (parts[1] || '');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.maxLength = 1;
+                input.value = item.userValue || '';
+                input.dataset.index = idx;
+                input.addEventListener('input', function(e) {
+                    const val = this.value.toLowerCase();
+                    if (val !== 'ь' && val !== '') {
+                        this.value = '';
+                        return;
+                    }
+                    item.userValue = val;
+                    // автофокус на след
+                    if (val === 'ь' || val === '') {
+                        // проверяем после ввода
+                        validateRound2Item(idx);
+                    }
+                });
+                div.appendChild(label);
+                div.appendChild(input);
+                container.appendChild(div);
+            });
+            updateRound2Feedback();
+        }
+
+        function validateRound2Item(idx) {
+            const item = state.round2.items[idx];
+            const val = item.userValue;
+            // правильный ответ: пустая строка (без Ь)
+            const isCorrect = (val === '');
+            // если ввели Ь - ошибка
+            const isWrong = (val === 'ь');
+            // подсветка через feedback общая, но можно показать на время
+            // сохраняем состояние для прогресса
+            // будем считать при общей проверке
+            updateRound2Feedback();
+            updateProgress();
+        }
+
+        function updateRound2Feedback() {
+            // Проверяем только те, где что-то введено
+            const items = state.round2.items;
+            let filled = items.filter(i => i.userValue !== '').length;
+            if (filled === 0) {
+                showFeedback('round2Feedback', '✏️ Введи "ь" или оставь пустым. Будь осторожен!', 'info');
+            } else {
+                let errors = items.filter(i => i.userValue === 'ь').length;
+                if (errors > 0) {
+                    showFeedback('round2Feedback', `⚠️ Осторожно! В ${errors} словах ты вставил "Ь". Это может быть ловушкой!`, 'error');
+                } else {
+                    showFeedback('round2Feedback', `✅ Пока всё верно. Ты не поддался на уловки!`, 'success');
+                }
+            }
+        }
+
+        // ---------- РАУНД 3 ----------
+        function renderRound3() {
+            const container = document.getElementById('round3Builder');
+            container.innerHTML = '';
+            const { order, items } = state.round3;
+            // Показываем слова в порядке order
+            order.forEach((origIdx) => {
+                const wordObj = items[origIdx];
+                const span = document.createElement('span');
+                span.className = 'sentence-word';
+                if (wordObj.placed) {
+                    span.classList.add('placed');
+                }
+                span.textContent = wordObj.text;
+                span.dataset.origIdx = origIdx;
+                span.addEventListener('click', () => handleRound3Click(origIdx));
+                container.appendChild(span);
+            });
+            updateRound3Feedback();
+        }
+
+        function handleRound3Click(origIdx) {
+            const item = state.round3.items[origIdx];
+            if (item.placed) return; // уже на месте
+
+            // Перемещаем в конец (эмулируем "сборку")
+            // Находим его текущую позицию в order и перемещаем в конец
+            const { order } = state.round3;
+            const pos = order.indexOf(origIdx);
+            if (pos !== -1) {
+                order.splice(pos, 1);
+                order.push(origIdx);
+            }
+            // Отмечаем как "размещенное"
+            item.placed = true;
+            renderRound3();
+            updateProgress();
+        }
+
+        function updateRound3Feedback() {
+            const items = state.round3.items;
+            const placed = items.filter(i => i.placed).length;
+            const total = items.length;
+            if (placed === total) {
+                showFeedback('round3Feedback', '🎈 Заклинание собрано! Ты готов встретиться с Пеннивайзом!', 'success');
+            } else {
+                showFeedback('round3Feedback', `📦 Собрано ${placed} из ${total} слов. Кликай на слова, чтобы добавить их в заклинание.`, 'info');
+            }
+        }
+
+        // ---------- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ----------
+        function showFeedback(id, message, type) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = message;
+            el.className = 'feedback ' + type;
+        }
+
+        function updateProgress() {
+            // Подсчет для raund1
+            const items1 = state.round1.items;
+            const totalErrors1 = items1.filter(i => !i.correct).length;
+            const foundErrors1 = items1.filter(i => i.status === 'correct' && !i.correct).length;
+            const wrongClicks1 = items1.filter(i => i.status === 'wrong').length;
+            // если все найдены - ок
+            let r1Done = (foundErrors1 === totalErrors1);
+            // если не все найдены, но есть wrong - считаем ошибкой
+            let r1Score = foundErrors1;
+
+            // Раунд2
+            const items2 = state.round2.items;
+            const filled2 = items2.filter(i => i.userValue !== '').length;
+            const errors2 = items2.filter(i => i.userValue === 'ь').length;
+            let r2Done = (filled2 === items2.length) && (errors2 === 0);
+            let r2Score = items2.filter(i => i.userValue === '' && i.userValue !== '').length; // пустые и не пустые? 
+            // проще: правильных = заполненных без Ь
+            let r2Correct = items2.filter(i => i.userValue === '' && i.userValue !== 'ь' && i.userValue !== '').length;
+            // Но у нас пустая строка - это верно. Но если поле не заполнено, оно не проверяется.
+            // Для подсчета: считаем правильными те, где пусто, но при этом заполнены все
+            // Лучше считать по-другому: если введено не 'ь' - правильно, если 'ь' - неправильно. Если пусто - не проверено.
+            let r2Right = 0;
+            let r2Wrong = 0;
+            items2.forEach(i => {
+                if (i.userValue === 'ь') r2Wrong++;
+                else if (i.userValue === '') r2Right++; // пусто считается правильным (т.к. Ь не пишется)
+                else r2Right++;
+            });
+            let r2Total = items2.length;
+            let r2AllFilled = items2.every(i => i.userValue !== '');
+            // Для сообщения в финале
+
+            // Раунд3
+            const items3 = state.round3.items;
+            const placed3 = items3.filter(i => i.placed).length;
+            const total3 = items3.length;
+            let r3Done = (placed3 === total3);
+
+            // Итоговое сообщение
+            let finalMsg = '';
+            let finalClass = 'info';
+            if (r1Done && r2Wrong === 0 && r3Done) {
+                finalMsg = '🎉 ТЫ ПОБЕДИЛ! Пеннивайз исчез! Ты правильно написал все слова без Ь! Отличная работа!';
+                finalClass = 'success';
+            } else {
+                let parts = [];
+                if (!r1Done) parts.push(`найди все ошибки в 1-м раунде (${foundErrors1}/${totalErrors1})`);
+                if (r2Wrong > 0) parts.push(`в словах с пропусками ${r2Wrong} ошибок (не вставляй Ь!)`);
+                if (!r3Done) parts.push(`собери заклинание (${placed3}/${total3})`);
+                finalMsg = '⚠️ Клоун всё ещё здесь! ' + parts.join('. ');
+                finalClass = 'error';
+            }
+            const finalEl = document.getElementById('finalResult');
+            finalEl.textContent = finalMsg;
+            finalEl.className = 'feedback ' + finalClass;
+
+            // Обновляем фидбеки
+            updateRound1Feedback();
+            updateRound2Feedback();
+            updateRound3Feedback();
+        }
+
+        // ---------- ОБЩАЯ ПРОВЕРКА (кнопка) ----------
+        document.getElementById('checkAllBtn').addEventListener('click', function() {
+            updateProgress();
+            // Дополнительно проверим раунд 2 на наличие Ь
+            const items2 = state.round2.items;
+            let hasError = false;
+            items2.forEach((item, idx) => {
+                if (item.userValue === 'ь') {
+                    hasError = true;
+                    // подсветим инпут красным
+                    const inputs = document.querySelectorAll('#round2Inputs input');
+                    if (inputs[idx]) {
+                        inputs[idx].style.borderBottom = '3px solid #ff0000';
+                        inputs[idx].style.color = '#ff6666';
+                    }
+                } else {
+                    const inputs = document.querySelectorAll('#round2Inputs input');
+                    if (inputs[idx]) {
+                        inputs[idx].style.borderBottom = '3px solid #00aa44';
+                        inputs[idx].style.color = '#88ff88';
+                    }
+                }
+            });
+            if (hasError) {
+                showFeedback('round2Feedback', '❌ Ты вставил "Ь" в некоторых словах! Это ошибка!', 'error');
+            } else {
+                showFeedback('round2Feedback', '✅ Отлично! Ты не поддался иллюзиям Пеннивайза!', 'success');
+            }
+            updateProgress();
+        });
+
+        // ---------- ИНИЦИАЛИЗАЦИЯ ----------
+        function init() {
+            renderRound1();
+            renderRound2();
+            renderRound3();
+            updateProgress();
+        }
+
+        // Запускаем
+        init();
+
+        // Дополнительно при вводе в round2 обновляем прогресс
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('#round2Inputs')) {
+                updateProgress();
+            }
+        });
+
+    })();
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>
