@@ -22,7 +22,7 @@ header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff
 #resetStars{background:#ececec;color:#666}
 main{flex:1;min-height:0}
 main>section{display:none;height:100%;overflow:auto;padding:16px 20px}
-main>section.active{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+main>section.active{display:flex;flex-direction:column;align-items:center;justify-content:center;justify-content:safe center;gap:14px;text-align:center}
 .cnt{font-size:22px;color:#41546b;font-weight:bold}
 .bigbtn{font-size:24px;padding:14px 30px;border-radius:14px;border:none;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer}
 .bigbtn:disabled{background:#c6b8e8;cursor:default}
@@ -76,10 +76,17 @@ main>section.active{display:flex;flex-direction:column;align-items:center;justif
 .lbCell.lbRow.lbCol{background:#e0e7ff}
 .lbCur{border:3px solid #16a34a;background:#dcfce7 !important;font-size:clamp(16px,2.4vw,30px)}
 #lbPhrase{min-height:1.4em}
-#shItems{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
-.item{background:#fff;border:3px solid #c9d9ec;border-radius:18px;padding:14px 22px;text-align:center}
-.item .ie{font-size:clamp(60px,9vw,120px);line-height:1.1}
-.item .ip{font-size:clamp(26px,3.5vw,44px);font-weight:bold;margin-top:6px}
+#shopGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;width:100%;max-width:980px}
+@media(max-width:700px){#shopGrid{grid-template-columns:repeat(3,1fr)}}
+.shopCard{background:#fff;border:3px solid #c9d9ec;border-radius:16px;padding:8px 6px;text-align:center;cursor:pointer;transition:transform .12s,border-color .12s,background .12s}
+.shopCard:hover{border-color:#7c3aed}
+.shopCard .ie{font-size:clamp(34px,5vw,58px);line-height:1.15}
+.shopCard .ip{font-size:clamp(19px,2.4vw,27px);font-weight:bold;margin-top:2px}
+.shopCard.sel{border-color:#7c3aed;background:#f5f0ff;transform:scale(1.07);box-shadow:0 0 0 3px rgba(124,58,237,.25)}
+.shopCard.sel .ip{color:#7c3aed}
+#shopGrid.locked .shopCard{pointer-events:none}
+#shopGrid.locked .shopCard:not(.sel){opacity:.4}
+#shExpr{font-size:clamp(38px,6.5vw,80px);font-weight:bold;line-height:1.15;min-height:1.2em}
 #ovl{position:fixed;inset:0;background:rgba(20,30,50,.82);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#fff;text-align:center;z-index:50}
 #ovl .oe{font-size:clamp(90px,18vw,220px);line-height:1.1}
 #ovl .ot{font-size:clamp(30px,5vw,60px);font-weight:bold}
@@ -137,13 +144,13 @@ main>section.active{display:flex;flex-direction:column;align-items:center;justif
 
 <section id="m4">
   <div class="legend"><span class="lgT">синие — десятки</span><span class="lgE">красные — единицы</span></div>
-  <div id="shItems"></div>
+  <div id="shopGrid"></div>
+  <div id="shExpr"></div>
   <div id="shQ" class="q"></div>
   <div id="shChoices" class="choices"></div>
   <div id="shPlates" class="plates"></div>
   <div id="shMsg" class="msg"></div>
   <div id="shCnt" class="streak"></div>
-  <div class="btnrow"><button id="shNew" class="bigbtn">Новая покупка 🛒</button></div>
 </section>
 
 <section id="m45">
@@ -407,53 +414,104 @@ el('adModeC').onclick=function(){addMode='carry';el('adModeC').className='ghostb
 newExample();
 updRocket();
 
-/* ---------- 4. магазин ---------- */
-var S={};
-var SHOP_ITEMS=['🍕','🎈','🧃','🚗','🧸','🍬','⚽','🍦','🎓','🪁','🍪','🎒'];
+/* ---------- 4. магазин: витрина с фиксированными ценами ---------- */
+var CATALOG=[
+  {e:'🍕',p:23},{e:'🎈',p:14},{e:'🧃',p:35},{e:'🚗',p:42},{e:'🧸',p:26},{e:'🍬',p:17},
+  {e:'⚽',p:38},{e:'🍦',p:21},{e:'🎓',p:45},{e:'🪁',p:33},{e:'🍪',p:12},{e:'🎒',p:47}
+];
+var S={sel:[],step:'pick0'};
 var purchases=0;
 try{purchases=parseInt(localStorage.getItem('maximPurchases')||'0',10)||0;}catch(e){}
 function updPurchases(){
   el('shCnt').textContent='покупок: '+purchases;
   try{localStorage.setItem('maximPurchases',String(purchases));}catch(e){}
 }
-function shopNew(){
-  var t1,t2,u1,u2;
-  do{t1=ri(1,4);t2=ri(1,4);u1=ri(1,9);u2=ri(1,9);}while(u1+u2>9);
-  S={t1:t1,t2:t2,u1:u1,u2:u2,unitsSum:u1+u2,tensSum:t1+t2,
-     e1:SHOP_ITEMS[ri(0,SHOP_ITEMS.length-1)],e2:'',step:'units',solved:false};
-  do{S.e2=SHOP_ITEMS[ri(0,SHOP_ITEMS.length-1)];}while(S.e2===S.e1);
+function priceHtml(p){
+  return '<span class="d">'+Math.floor(p/10)+'</span><span class="e">'+(p%10)+'</span>';
+}
+function shopBusy(){return S.step==='units'||S.step==='split'||S.step==='tens'||S.step==='combine';}
+function buildShop(){
+  var g=el('shopGrid');
+  g.className=shopBusy()?'locked':'';
+  g.innerHTML='';
+  CATALOG.forEach(function(c,i){
+    var d=document.createElement('div');
+    d.className='shopCard'+(S.sel.indexOf(i)>=0?' sel':'');
+    d.innerHTML='<div class="ie">'+c.e+'</div><div class="ip">'+priceHtml(c.p)+' ₽</div>';
+    d.onclick=function(){shopClick(i);};
+    g.appendChild(d);
+  });
+}
+function shopClick(i){
+  if(shopBusy()){return;}
+  var k=S.sel.indexOf(i);
+  if(k>=0){S.sel.splice(k,1);}
+  else{
+    if(S.step==='done'){S.sel=[];}
+    S.sel.push(i);
+  }
+  if(S.sel.length===2){startPurchase();}
+  else{S.step=(S.sel.length===1)?'pick1':'pick0';renderShop();}
+}
+function startPurchase(){
+  var a=CATALOG[S.sel[0]],b=CATALOG[S.sel[1]];
+  S.e1=a.e;S.p1=a.p;S.e2=b.e;S.p2=b.p;
+  S.t1=Math.floor(a.p/10);S.u1=a.p%10;
+  S.t2=Math.floor(b.p/10);S.u2=b.p%10;
+  S.unitsSum=S.u1+S.u2;S.tensSum=S.t1+S.t2;
+  S.carry=S.unitsSum>=10;
+  S.unitsLeft=S.unitsSum%10;S.tensTotal=S.tensSum+(S.carry?1:0);
+  S.step='units';
   renderShop();
 }
 function renderShop(){
-  var p1=S.t1*10+S.u1,p2=S.t2*10+S.u2;
-  el('shItems').innerHTML=
-    '<div class="item"><div class="ie">'+S.e1+'</div><div class="ip"><span class="d">'+S.t1+'</span><span class="e">'+S.u1+'</span> ₽</div></div>'+
-    '<div style="font-size:clamp(44px,7vw,90px);font-weight:bold">+</div>'+
-    '<div class="item"><div class="ie">'+S.e2+'</div><div class="ip"><span class="d">'+S.t2+'</span><span class="e">'+S.u2+'</span> ₽</div></div>';
-  var q=el('shQ'),ch=el('shChoices'),pl=el('shPlates');
-  if(S.step!=='done'){
-    pl.innerHTML='';
-    el('shMsg').textContent='';
+  buildShop();
+  var q=el('shQ'),ch=el('shChoices'),pl=el('shPlates'),ex=el('shExpr');
+  if(!shopBusy()&&S.step!=='done'){
+    ex.innerHTML='';
+    pl.innerHTML='';ch.innerHTML='';el('shMsg').textContent='';
+    q.innerHTML=(S.step==='pick1')?'Отлично! Выбери второй товар 👆':'Выбери на витрине, что купить! 🛒';
+    return;
   }
+  ex.innerHTML=S.e1+' '+priceHtml(S.p1)+' + '+S.e2+' '+priceHtml(S.p2);
+  if(S.step!=='done'){pl.innerHTML='';el('shMsg').textContent='';}
   if(S.step==='units'){
     q.innerHTML='Сначала единицы: <span class="r">'+S.u1+' + '+S.u2+'</span> = ?';
     renderChoices(ch,S.unitsSum,[S.unitsSum+1,S.unitsSum-1,S.unitsSum+2,S.unitsSum-2,S.u1,S.u2],function(){
-      S.step='tens';renderShop();
+      S.step=(S.carry)?'split':'tens';renderShop();
     });
+  }else if(S.step==='split'){
+    q.innerHTML='<span class="r">'+S.unitsSum+'</span> — это много! Свяжи новый десяток!';
+    ch.innerHTML='';
+    var tie=document.createElement('button');
+    tie.className='bigbtn';tie.textContent='🔗 Связать десяток!';
+    tie.onclick=function(){S.step='tens';renderShop();};
+    ch.appendChild(tie);
   }else if(S.step==='tens'){
-    pl.appendChild(plateHtml('red',S.unitsSum,'₽ '+unitWord(S.unitsSum),function(){S.step='units';renderShop();}));
+    if(S.carry){
+      pl.appendChild(plateHtml('blue','1','новый десяток',function(){S.step='units';renderShop();}));
+      pl.appendChild(plateHtml('red',S.unitsLeft,'₽ '+unitWord(S.unitsLeft),function(){S.step='units';renderShop();}));
+    }else{
+      pl.appendChild(plateHtml('red',S.unitsSum,'₽ '+unitWord(S.unitsSum),function(){S.step='units';renderShop();}));
+    }
     q.innerHTML='Теперь рубли-десятки: <span class="b">'+S.t1+' + '+S.t2+'</span> = ?';
-    renderChoices(ch,S.tensSum,[S.tensSum+1,S.tensSum-1,S.tensSum+2],function(){
+    renderChoices(ch,S.tensSum,[S.tensSum+1,S.tensSum-1,S.tensSum+2,S.tensSum-2],function(){
       S.step='combine';renderShop();
     });
   }else if(S.step==='combine'){
-    pl.appendChild(plateHtml('blue',S.tensSum,'₽ '+tenWord(S.tensSum),function(){S.step='tens';renderShop();}));
-    pl.appendChild(plateHtml('red',S.unitsSum,'₽ '+unitWord(S.unitsSum),function(){S.step='units';renderShop();}));
-    var final=S.tensSum*10+S.unitsSum;
+    if(S.carry){
+      pl.appendChild(plateHtml('blue',S.tensSum,'₽ '+tenWord(S.tensSum),function(){S.step='tens';renderShop();}));
+      pl.appendChild(plateHtml('blue','+1','новый десяток',function(){S.step='tens';renderShop();}));
+      pl.appendChild(plateHtml('red',S.unitsLeft,'₽ '+unitWord(S.unitsLeft),function(){S.step='units';renderShop();}));
+    }else{
+      pl.appendChild(plateHtml('blue',S.tensSum,'₽ '+tenWord(S.tensSum),function(){S.step='tens';renderShop();}));
+      pl.appendChild(plateHtml('red',S.unitsSum,'₽ '+unitWord(S.unitsSum),function(){S.step='units';renderShop();}));
+    }
+    var final=S.tensTotal*10+S.unitsLeft;
     q.innerHTML='Сколько стоит вся покупка?';
     var rev=parseInt(String(final).split('').reverse().join(''),10);
     renderChoices(ch,final,[rev,final+10,final-10,final+1,final-1],function(){
-      S.step='done';
+      S.step='done';S.sel=[];
       pl.innerHTML='';
       pl.appendChild(plateHtml('green',final,'₽ всего'));
       el('shMsg').textContent='🛍️ Спасибо за покупку!';
@@ -463,12 +521,11 @@ function renderShop(){
       renderShop();
     });
   }else if(S.step==='done'){
-    q.innerHTML='<span style="color:#16a34a">'+(S.tensSum*10+S.unitsSum)+' ₽</span>';
+    q.innerHTML='<span style="color:#16a34a">'+(S.tensTotal*10+S.unitsLeft)+' ₽</span>';
     ch.innerHTML='';
   }
 }
-el('shNew').onclick=shopNew;
-shopNew();
+renderShop();
 updPurchases();
 
 /* ---------- 5. прыжки ---------- */
