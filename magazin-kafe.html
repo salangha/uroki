@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Магазин и кафе — считаем в пределах 100</title>
+<meta property="og:title" content="Магазин и кафе — считаем в пределах 100">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<!--
+Интерактивная игра «МАГАЗИН + КАФЕ» (дизайн по мотивам лабиринта с сундуком).
+- УРОВЕНЬ 1 — МАГАЗИН: у игрока 100 р. На витрине 12 игрушек, цены у всех РАЗНЫЕ,
+  всегда ДВУЗНАЧНЫЕ и «неровные». Клик по игрушке -> вопрос кассира-мишки:
+  сколько сдачи? (деньги − цена, для 100 р. всегда с переходом через десяток).
+  Игрушка попадает в пакет 🛍, покупать можно несколько, пока хватает денег.
+  Кнопка «Идти в кафе» появляется после первой покупки.
+- УРОВЕНЬ 2 — КАФЕ «Сладкоежка»: 6 напитков и 12 вкусняшек, цены тоже двузначные
+  «неровные». ОБЯЗАТЕЛЬНО купить и напиток, и вкусняшку: сначала считаем сумму
+  (сложение с переходом через десяток), потом оплату и сдачу.
+  Кнопка «👩 Попросить у мамы»: если денег не хватает, мама просит ПОСЧИТАТЬ,
+  сколько рублей не хватает (вычитание), и добавляет ровно эту сумму.
+- За каждый верный ответ — звёздочка (общая копилка sashaStars, как в других играх).
+- После двух неверных попыток появляется подсказка (десятки/единицы, пучок).
+- Куплены игрушка(-ки), напиток и вкусняшка -> чек, фейерверк, конфетти, фанфары.
+- Прогресс сохраняется (localStorage). Кнопка ↺ — новая игра с новыми ценами.
+-->
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;overflow:hidden;-webkit-user-select:none;user-select:none;
+  font-family:"Comic Sans MS","Comic Sans","Segoe UI",Verdana,sans-serif;
+  background:
+    radial-gradient(1200px 800px at 18% 8%, #fff8e2 0%, rgba(255,248,226,0) 60%),
+    radial-gradient(1100px 750px at 85% 92%, #ddeeff 0%, rgba(221,238,255,0) 55%),
+    #f6efdc;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(#d9c9a3 1.2px, rgba(0,0,0,0) 1.3px);
+  background-size:34px 34px;
+}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:820px;overflow:hidden}
+
+/* ---- HUD ---- */
+#hud{position:absolute;top:10px;right:12px;display:flex;gap:8px;align-items:center;z-index:130}
+.pill{background:rgba(255,255,255,.88);border:3px solid #f0b429;border-radius:999px;
+  padding:5px 16px;font-size:24px;font-weight:bold;color:#7a4f05;
+  box-shadow:0 3px 10px rgba(0,0,0,.12)}
+#moneyPill{background:#e9f3ff;border-color:#2f8fff;color:#1c4a7a}
+#hud button{font-size:22px;line-height:1;border:3px solid #d8cba8;background:rgba(255,255,255,.88);
+  border-radius:14px;padding:6px 10px;cursor:pointer}
+#hud button:active{transform:translateY(2px)}
+#fx{position:absolute;left:0;top:0;z-index:50;pointer-events:none}
+
+/* ---- сцены ---- */
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0}}
+.hidden{display:none!important}
+
+.awning{margin-top:8px;border-radius:16px;overflow:hidden;border:4px solid rgba(0,0,0,.10);
+  box-shadow:0 5px 14px rgba(0,0,0,.12)}
+.awning>span{display:block;background:rgba(255,255,255,.93);margin:6px 12px;padding:2px 24px;
+  border-radius:12px;font-size:26px;font-weight:bold;color:#8a4a00;text-align:center}
+.awning.toy{background:repeating-linear-gradient(90deg,#ff6b6b 0 46px,#fff3e6 46px 92px)}
+.awning.cafe{background:repeating-linear-gradient(90deg,#ff5da2 0 46px,#fff0f6 46px 92px)}
+.awning.cafe>span{color:#a12a62}
+
+.mascotRow{display:flex;align-items:center;gap:12px;min-height:54px}
+.mascot{font-size:46px;line-height:1}
+.said{background:#fffdf4;border:4px solid #f0b429;border-radius:16px;padding:4px 14px;
+  font-size:18px;font-weight:bold;color:#7a4f05;max-width:680px;min-height:42px;
+  display:flex;align-items:center}
+
+.secHead{font-size:20px;font-weight:bold;color:#5a4632;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(6,182px);gap:12px;justify-content:center}
+#drinkGrid,#treatGrid{grid-template-columns:repeat(6,166px);gap:10px}
+.item{position:relative;background:#fffdf6;border:5px solid var(--c,#999);border-radius:18px;
+  padding:8px 6px 10px;text-align:center;cursor:pointer;box-shadow:0 5px 0 rgba(90,70,40,.10);
+  transition:transform .15s ease}
+.item:hover{transform:translateY(-4px)}
+.item .em{font-size:50px;line-height:1.2}
+.item .nm{font-size:17px;font-weight:bold;color:#2c3a66;line-height:1.15;margin:3px 0 6px;
+  min-height:39px;display:flex;align-items:center;justify-content:center}
+.item .tag{display:inline-block;background:#fff3c4;border:3px solid #f0b429;color:#7a4f05;
+  font-weight:bold;font-size:20px;padding:1px 13px;border-radius:999px}
+.item.small{padding:5px 4px 7px}
+.item.small .em{font-size:38px}
+.item.small .nm{font-size:15px;min-height:34px;margin:2px 0 4px}
+.item.small .tag{font-size:16px;padding:0 10px;border-width:3px}
+.item.sel{border-color:#2fbf71;background:#f2fff6}
+.item.sel::after{content:"✓";position:absolute;top:-13px;right:-13px;width:38px;height:38px;
+  border-radius:50%;background:#2fbf71;border:3px solid #fff;color:#fff;font-size:24px;
+  font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.item.sold{cursor:default;filter:grayscale(.85);opacity:.6}
+.item.sold:hover{transform:none}
+.item.sold::before{content:"ПРОДАНО";position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-12deg);background:#e5484d;color:#fff;font-size:16px;
+  font-weight:bold;letter-spacing:1px;padding:3px 12px;border-radius:8px;border:2px solid #fff;
+  box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.item.wig{animation:wig .4s}
+@keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+#shopBottom{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:space-between;
+  align-items:center;padding:0 22px;gap:14px}
+#bagBar{background:rgba(255,255,255,.9);border:4px solid #f0b429;border-radius:16px;
+  padding:6px 16px;font-size:20px;font-weight:bold;color:#7a4f05;display:flex;align-items:center;gap:10px}
+#bagItems{font-size:27px;min-width:60px;text-align:left}
+
+#cartBar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;
+  gap:12px;background:rgba(255,255,255,.93);border:4px solid #f0b429;border-radius:18px;
+  padding:8px 14px;z-index:40}
+#cartInfo{font-size:17px;font-weight:bold;color:#2c3a66;max-width:480px;line-height:1.3}
+button.big{font-size:20px;font-weight:bold;font-family:inherit;padding:11px 20px;border:none;
+  border-radius:16px;cursor:pointer;color:#fff;white-space:nowrap}
+button.big:active{transform:translateY(3px)}
+#payBtn{background:#2fbf71;box-shadow:0 5px 0 #1d8b50}
+#payBtn.dim{opacity:.55}
+#momBtn{background:#ff5da2;box-shadow:0 5px 0 #c23a78}
+#cafeBtn{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
+.pulseBtn{animation:pb 1s ease-in-out infinite}
+@keyframes pb{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* ---- карточка с вопросом ---- */
+#overlay{position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:rgba(59,40,10,.45);backdrop-filter:blur(3px)}
+#qcard{background:#fffdf4;border:6px solid #f0b429;border-radius:28px;
+  padding:22px 34px 26px;box-shadow:0 18px 60px rgba(0,0,0,.35);text-align:center;
+  max-width:800px;position:relative;animation:cardIn .3s ease}
+@keyframes cardIn{from{transform:scale(.7);opacity:0}}
+#qcard.ok{border-color:#2fbf71;background:#f2fff6}
+#qcard.err{border-color:#e5484d;background:#fff1f0}
+#qcard.shake{animation:shakeX .45s}
+@keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}
+  40%{transform:translateX(12px)}60%{transform:translateX(-9px)}80%{transform:translateX(6px)}}
+#qclose{position:absolute;top:8px;right:14px;font-size:26px;border:none;background:none;
+  cursor:pointer;color:#b3a37e}
+#qnum{font-size:20px;color:#a08c5f;font-weight:bold;margin-bottom:2px}
+#topline{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px}
+#qmascot{font-size:54px;display:inline-block;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+#praise{font-size:28px;font-weight:bold;color:#8a5a00}
+#equation{font-size:84px;font-weight:bold;color:#2b2b3b;letter-spacing:3px;
+  margin:4px 0 8px;white-space:nowrap}
+#eqAns{display:inline-block;min-width:2.1ch;border-bottom:10px solid #2fbf71;color:#157a3c;
+  padding:0 10px;text-align:center}
+#eqAns.empty{color:#c2b49a;border-bottom-color:#d8cba8}
+#hint{margin:10px auto 2px;background:#fff3c4;border:3px dashed #e8b93c;color:#7a4f05;
+  font-size:23px;font-weight:bold;padding:10px 18px;border-radius:16px;max-width:660px}
+#keypad{display:grid;grid-template-columns:repeat(3,112px);gap:12px;justify-content:center;margin-top:16px}
+#keypad button{height:84px;font-size:44px;font-weight:bold;font-family:inherit;border:none;
+  border-radius:18px;background:#eef3ff;color:#2c3a66;cursor:pointer;box-shadow:0 5px 0 #c4cfec}
+#keypad button:active{transform:translateY(3px);box-shadow:0 2px 0 #c4cfec}
+#keypad button.fn{background:#fff0d3;color:#8a5a00;box-shadow:0 5px 0 #e2c189}
+#keypad button.okb{background:#2fbf71;color:#fff;box-shadow:0 5px 0 #1d8b50}
+
+/* ---- финал ---- */
+#banner{position:absolute;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding-bottom:20px}
+#bcard{background:linear-gradient(#fffdf4,#fff3d6);border:6px solid #f0b429;border-radius:26px;
+  padding:16px 30px 22px;text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.35);
+  animation:fpop .55s cubic-bezier(.2,1.4,.4,1);max-width:660px}
+@keyframes fpop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+#bcard .e{font-size:44px}
+#bcard h1{font-size:50px;margin:4px 0;color:#e07b00;text-shadow:2px 3px 0 #ffd98a}
+#bcard p{font-size:22px;color:#6b4a08;font-weight:bold;margin:6px 0}
+#receipt{background:#fff;border:3px dashed #cbb27f;border-radius:12px;padding:10px 18px;
+  margin:10px auto 4px;text-align:left;font-size:20px;color:#4a3820;max-width:470px}
+.rline{display:flex;justify-content:space-between;gap:36px;padding:1px 0}
+.rsep{border-top:2px dashed #d8c396;margin:6px 0}
+#againBtn{font-size:24px;font-weight:bold;font-family:inherit;padding:12px 26px;margin-top:10px;
+  border:none;border-radius:18px;background:#2fbf71;color:#fff;cursor:pointer;box-shadow:0 5px 0 #1d8b50}
+#againBtn:active{transform:translateY(4px);box-shadow:0 2px 0 #1d8b50}
+
+/* ---- подтверждение ---- */
+#confirmBox{position:absolute;inset:0;z-index:140;display:flex;align-items:center;justify-content:center;
+  background:rgba(59,40,10,.45)}
+.ccard{background:#fffdf4;border:6px solid #f0b429;border-radius:24px;padding:26px 34px;
+  text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.35)}
+.ccard p{font-size:24px;font-weight:bold;color:#6b4a08;margin:0 0 18px}
+.ccard button{font-size:24px;font-weight:bold;font-family:inherit;padding:12px 26px;margin:0 8px;
+  border:none;border-radius:16px;cursor:pointer;color:#fff}
+#cfYes{background:#e5484d;box-shadow:0 5px 0 #b93338}
+#cfNo{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
+.ccard button:active{transform:translateY(3px);box-shadow:none}
+</style>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(114071811, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:false
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</head>
+<body>
+<div id="stage">
+  <div id="hud">
+    <div class="pill" id="moneyPill">💰 <span id="moneyVal">100</span> р.</div>
+    <div class="pill">⭐ <span id="starCnt">0</span></div>
+    <button id="soundBtn" title="Звук вкл/выкл">🔊</button>
+    <button id="resetBtn" title="Новая игра">↺</button>
+  </div>
+
+  <!-- УРОВЕНЬ 1: МАГАЗИН -->
+  <section id="shopScene" class="scene">
+    <div class="awning toy"><span>🧸 МАГАЗИН ИГРУШЕК 🧸</span></div>
+    <div class="mascotRow"><div class="mascot">🐻</div><div class="said" id="bearSaid"></div></div>
+    <div class="grid" id="toyGrid"></div>
+    <div id="shopBottom">
+      <div id="bagBar">🛍 Покупки: <span id="bagItems">—</span></div>
+      <button id="cafeBtn" class="big hidden">Идти в кафе ☕ →</button>
+    </div>
+  </section>
+
+  <!-- УРОВЕНЬ 2: КАФЕ -->
+  <section id="cafeScene" class="scene hidden">
+    <div class="awning cafe"><span>☕ КАФЕ «СЛАДКОЕЖКА» ☕</span></div>
+    <div class="mascotRow"><div class="mascot">🦊</div><div class="said" id="foxSaid"></div></div>
+    <div class="secHead">🥤 Напитки — выбери один:</div>
+    <div class="grid" id="drinkGrid"></div>
+    <div class="secHead">🧁 Вкусняшки — выбери одну:</div>
+    <div class="grid" id="treatGrid"></div>
+    <div id="cartBar">
+      <div id="cartInfo"></div>
+      <button id="momBtn" class="big" title="Если денег не хватает — мама даст, но сначала посчитай, сколько!">👩 Попросить у мамы</button>
+      <button id="payBtn" class="big">💳 Оплатить</button>
+    </div>
+  </section>
+
+  <canvas id="fx" width="1280" height="820"></canvas>
+
+  <div id="overlay" class="hidden">
+    <div id="qcard">
+      <button id="qclose" title="Закрыть">✕</button>
+      <div id="qnum"></div>
+      <div id="topline"><span id="qmascot">🐻</span><span id="praise"></span></div>
+      <div id="equation"><span id="eqA">0</span> <span id="eqOp">+</span> <span id="eqB">0</span> = <span id="eqAns" class="empty">?</span></div>
+      <div id="hint" class="hidden"></div>
+      <div id="keypad"></div>
+    </div>
+  </div>
+
+  <div id="banner" class="hidden">
+    <div id="bcard">
+      <div class="e" id="bemo">🧸 🍋 🧁</div>
+      <h1>МОЛОДЕЦ!</h1>
+      <p>Ты прошла магазин и кафе —<br>настоящая хозяйка кошелька!</p>
+      <div id="receipt"></div>
+      <p id="bstars">⭐</p>
+      <button id="againBtn">🔁 Играть ещё раз</button>
+    </div>
+  </div>
+
+  <div id="confirmBox" class="hidden">
+    <div class="ccard">
+      <p>Начать новую игру?<br>Все покупки и звёздочки в ней сотрутся.</p>
+      <button id="cfYes">Да, заново</button>
+      <button id="cfNo">Нет</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ================= данные ================= */
+var DKEY='sasha2-shop-v1';
+var PAL=['#7c5cff','#2f8fff','#ff9f1c','#ff5da2','#12b5cb','#97b900'];
+var PRAISE=['Молодец! 🎉','Отлично! ⭐','Супер! 💪','Здорово! 🌟','Умница! 🏆','В точку! ✨'];
+var ENC=['Подумай ещё! 🤔','Почти-почти! 💫','Попробуй снова! 🙂','Ещё разок, внимательно! 🔍'];
+var BUY_THANKS=['Носи на здоровье!','Отличный выбор!','Спасибо за покупку!','Прекрасная игрушка!'];
+var BEAR_DEF='Здравствуйте! Выбирайте игрушку! 🧸';
+var FOX_DEF='Выбери напиток и вкусняшку! ☕🧁';
+var TOYS=[{e:'🧸',n:'Мишка'},{e:'🪆',n:'Матрёшка'},{e:'🚂',n:'Паровозик'},{e:'🦄',n:'Единорог'},
+ {e:'🚗',n:'Машинка'},{e:'🐰',n:'Зайка'},{e:'🎨',n:'Краски'},{e:'🪀',n:'Йо-йо'},
+ {e:'⚽',n:'Мяч'},{e:'🧩',n:'Пазл'},{e:'🪁',n:'Воздушный змей'},{e:'🎀',n:'Заколки'}];
+var DRINKS=[{e:'🍋',n:'Лимонад'},{e:'🥤',n:'Апельсиновый сок'},{e:'☕',n:'Какао'},
+ {e:'🥛',n:'Молочный коктейль'},{e:'🍹',n:'Тропический коктейль'},{e:'🍒',n:'Вишнёвый морс'}];
+var TREATS=[{e:'🧁',n:'Капкейк'},{e:'🍩',n:'Пончик'},{e:'🍪',n:'Печенье'},{e:'🍰',n:'Торт'},
+ {e:'🍫',n:'Шоколадка'},{e:'🍭',n:'Леденец'},{e:'🍦',n:'Мороженое'},{e:'🥐',n:'Круассан'},
+ {e:'🍓',n:'Клубника'},{e:'🍬',n:'Конфеты'},{e:'🧇',n:'Вафля'},{e:'🥞',n:'Блинчик'}];
+
+/* ================= утилиты ================= */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function pick(arr){return arr[(Math.random()*arr.length)|0];}
+var stageEl=document.getElementById('stage'),curScale=1;
+function fit(){
+  curScale=Math.min(window.innerWidth/1280,window.innerHeight/820);
+  stageEl.style.transform='translate(-50%,-50%) scale('+curScale+')';
+}
+function toStage(el){
+  var r=el.getBoundingClientRect(),s=stageEl.getBoundingClientRect();
+  return {x:(r.left+r.width/2-s.left)/curScale,y:(r.top+r.height/2-s.top)/curScale};
+}
+/* цены: двузначные, «неровные», у всех разные */
+function genPrices(n,lo,hi,used,units){
+  var out=[],guard=0;
+  while(out.length<n&&guard++<5000){
+    var p=rnd(lo,hi);
+    if(p%10===0)continue;
+    if(units&&units.indexOf(p%10)<0)continue;
+    if(used[p])continue;
+    used[p]=1;out.push(p);
+  }
+  return out;
+}
+
+/* ================= состояние ================= */
+var S=null;
+function newState(){
+  var used={},i;
+  /* сначала узкие пулы (напитки, вкусняшки), потом игрушки — чтобы цен хватило всем */
+  var dp=genPrices(6,16,38,used,[6,7,8]);
+  var xp=genPrices(12,14,49,used,[4,5,6,7,8,9]);
+  var tp=genPrices(12,12,89,used,null);
+  var toys=[],drinks=[],treats=[];
+  for(i=0;i<12;i++)toys.push({e:TOYS[i].e,n:TOYS[i].n,p:tp[i],sold:false});
+  for(i=0;i<6;i++)drinks.push({e:DRINKS[i].e,n:DRINKS[i].n,p:dp[i]});
+  for(i=0;i<12;i++)treats.push({e:TREATS[i].e,n:TREATS[i].n,p:xp[i]});
+  return {scene:'shop',money:100,toys:toys,drinks:drinks,treats:treats,bag:[],
+    drink:-1,treat:-1,total:0,totalKnown:false,momGiven:0,stars:0,muted:false,done:false};
+}
+function save(){try{localStorage.setItem(DKEY,JSON.stringify(S));}catch(e){}}
+function loadState(){
+  try{
+    var j=JSON.parse(localStorage.getItem(DKEY)||'null');
+    if(!j||typeof j!=='object')return null;
+    if(!Array.isArray(j.toys)||j.toys.length!==12)return null;
+    if(!Array.isArray(j.drinks)||j.drinks.length!==6)return null;
+    if(!Array.isArray(j.treats)||j.treats.length!==12)return null;
+    if(typeof j.money!=='number'||j.money<0||j.money>250)return null;
+    if(j.scene!=='shop'&&j.scene!=='cafe')return null;
+    if(!Array.isArray(j.bag))j.bag=[];
+    if(typeof j.stars!=='number'||j.stars<0)j.stars=0;
+    if(typeof j.total!=='number')j.total=0;
+    j.totalKnown=!!j.totalKnown;
+    if(typeof j.momGiven!=='number')j.momGiven=0;
+    j.done=!!j.done;j.muted=!!j.muted;
+    if(typeof j.drink!=='number'||j.drink<-1||j.drink>5)j.drink=-1;
+    if(typeof j.treat!=='number'||j.treat<-1||j.treat>11)j.treat=-1;
+    return j;
+  }catch(e){return null;}
+}
+function addSharedStar(){ /* общая копилка звёздочек, как в других играх серии */
+  try{
+    var s=parseInt(localStorage.getItem('sashaStars')||'0',10)||0;
+    localStorage.setItem('sashaStars',String(s+1));
+  }catch(e){}
+}
+
+/* ================= подсказки ================= */
+function hintAdd(a,b){
+  var tA=a-a%10,tB=b-b%10,uA=a%10,uB=b%10,u=uA+uB,tS=tA+tB,ans=a+b;
+  if(u>=10)return 'Десятки: '+tA+' + '+tB+' = '+tS+'; единицы: '+uA+' + '+uB+' = '+u+
+    ' = 10 и '+(u-10)+'. Пучок переходит к десяткам: '+tS+' + 10 + '+(u-10)+' = '+ans;
+  return 'Десятки: '+tA+' + '+tB+' = '+tS+'; единицы: '+uA+' + '+uB+' = '+u+
+    '. Ответ: '+tS+' + '+u+' = '+ans;
+}
+function hintSub(a,b){
+  var ans=a-b,tA=a-a%10,uA=a%10,tB=b-b%10,uB=b%10;
+  if(a===100)return '100 — это 90 и 10: единицы: 10 − '+uB+' = '+(10-uB)+
+    '; десятки: 90 − '+tB+' = '+(90-tB)+'. Ответ: '+(90-tB)+' + '+(10-uB)+' = '+ans;
+  if(uA>=uB)return 'Десятки: '+tA+' − '+tB+' = '+(tA-tB)+'; единицы: '+uA+' − '+uB+
+    ' = '+(uA-uB)+'. Ответ: '+(tA-tB)+' + '+(uA-uB)+' = '+ans;
+  var u2=uA+10-uB,tS=tA-10-tB;
+  return 'Единиц не хватает — открываем пучок: '+(uA+10)+' − '+uB+' = '+u2+
+    '; десятков стало меньше: '+(tA-10)+' − '+tB+' = '+tS+'. Ответ: '+tS+' + '+u2+' = '+ans;
+}
+
+/* ================= звук ================= */
+var AC=null;
+function ac(){
+  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(AC&&AC.state==='suspended')AC.resume();
+  return AC;
+}
+function tone(fr,at,dur,type,vol){
+  if(S&&S.muted)return;
+  var c=ac(); if(!c)return;
+  var t=c.currentTime+(at||0);
+  var o=c.createOscillator(),g=c.createGain();
+  o.type=type||'sine'; o.frequency.value=fr;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol||0.15,t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+function sClick(){tone(640,0,.06,'sine',.06);}
+function sType(){tone(500+Math.random()*300,0,.04,'sine',.05);}
+function sCorrect(){tone(523,0,.14,'sine',.14);tone(659,.09,.14,'sine',.14);tone(784,.18,.22,'sine',.15);}
+function sWrong(){tone(200,0,.18,'triangle',.1);tone(150,.1,.22,'triangle',.1);}
+function sCoins(){for(var i=0;i<7;i++)tone(1400+Math.random()*1300,i*.09,.1,'sine',.08);}
+function sFanfare(){
+  var m=[[523,0,.16],[523,.16,.16],[523,.32,.16],[659,.5,.4],[523,.92,.16],[659,1.08,.16],[784,1.24,.6]];
+  for(var i=0;i<m.length;i++)tone(m[i][0],m[i][1],m[i][2],'triangle',.15);
+}
+
+/* ================= конфетти и фейерверки ================= */
+var fx=document.getElementById('fx'),fctx=fx.getContext('2d'),parts=[],confettiUntil=0;
+var FCOL=['#ffd166','#ff6b6b','#4cc9f0','#ff9f1c','#f72585','#8ac926','#ffb703','#c77dff'];
+function burst(x,y,n,pow){
+  n=n||34;pow=pow||1;
+  for(var i=0;i<n;i++){
+    var a=Math.random()*Math.PI*2,sp=(2+Math.random()*5)*pow;
+    parts.push({t:Math.random()<.45?'star':'spark',x:x,y:y,
+      vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.5,g:.12,
+      r:4+Math.random()*7*pow,rot:Math.random()*6.3,vr:(Math.random()-.5)*.3,
+      col:FCOL[(Math.random()*FCOL.length)|0],life:1,dl:.012+Math.random()*.014});
+  }
+}
+function burstAtEl(el,n,pow){var p=toStage(el);burst(p.x,p.y,n,pow);}
+function confettiRain(ms){confettiUntil=Date.now()+ms;}
+function drawStarC(x,y,r,rot,col,alpha){
+  fctx.save();fctx.translate(x,y);fctx.rotate(rot);fctx.globalAlpha=alpha;fctx.fillStyle=col;
+  fctx.beginPath();
+  for(var i=0;i<10;i++){
+    var rr=(i%2? r*.45:r),an=i*Math.PI/5-Math.PI/2;
+    if(i)fctx.lineTo(Math.cos(an)*rr,Math.sin(an)*rr);else fctx.moveTo(Math.cos(an)*rr,Math.sin(an)*rr);
+  }
+  fctx.closePath();fctx.fill();fctx.restore();
+}
+function fxLoop(){
+  fctx.clearRect(0,0,fx.width,fx.height);
+  if(Date.now()<confettiUntil && parts.length<600){
+    for(var k=0;k<3;k++)parts.push({t:'conf',x:Math.random()*fx.width,y:-30,
+      vx:(Math.random()-.5)*1.6,vy:2+Math.random()*2.5,g:.02,
+      w:8+Math.random()*8,h:10+Math.random()*12,rot:Math.random()*6.3,vr:(Math.random()-.5)*.2,
+      col:FCOL[(Math.random()*FCOL.length)|0],life:1,dl:.004,ph:Math.random()*6.3});
+  }
+  for(var i=parts.length-1;i>=0;i--){
+    var p=parts[i];
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.rot+=p.vr||0;p.life-=p.dl;
+    if(p.t==='conf'){p.ph+=.06;p.x+=Math.sin(p.ph)*1.2;}
+    if(p.life<=0||p.y>fx.height+60){parts.splice(i,1);continue;}
+    var al=Math.max(0,Math.min(1,p.life));
+    if(p.t==='conf'){
+      fctx.save();fctx.translate(p.x,p.y);fctx.rotate(p.rot);
+      fctx.globalAlpha=al;fctx.fillStyle=p.col;fctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      fctx.restore();
+    }else if(p.t==='star'){drawStarC(p.x,p.y,p.r,p.rot,p.col,al);}
+    else{fctx.globalAlpha=al;fctx.fillStyle=p.col;
+      fctx.beginPath();fctx.arc(p.x,p.y,p.r*.5,0,6.3);fctx.fill();}
+  }
+  fctx.globalAlpha=1;
+  requestAnimationFrame(fxLoop);
+}
+
+/* ================= построение витрин ================= */
+var toyEls=[],drinkEls=[],treatEls=[];
+function makeCard(t,small,idx,onClick){
+  var d=document.createElement('div');
+  d.className='item'+(small?' small':'');
+  d.style.setProperty('--c',PAL[idx%PAL.length]);
+  var em=document.createElement('div');em.className='em';em.textContent=t.e;
+  var nm=document.createElement('div');nm.className='nm';nm.textContent=t.n;
+  var tg=document.createElement('div');tg.className='tag';tg.textContent=t.p+' р.';
+  d.appendChild(em);d.appendChild(nm);d.appendChild(tg);
+  d.addEventListener('click',onClick);
+  return d;
+}
+function buildShop(){
+  var g=document.getElementById('toyGrid');g.innerHTML='';toyEls=[];
+  S.toys.forEach(function(t,i){
+    var d=makeCard(t,false,i,function(){buyToy(i);});
+    g.appendChild(d);toyEls.push(d);
+  });
+}
+function buildCafe(){
+  var gd=document.getElementById('drinkGrid');gd.innerHTML='';drinkEls=[];
+  S.drinks.forEach(function(t,i){
+    var d=makeCard(t,true,i,function(){selectDrink(i);});
+    gd.appendChild(d);drinkEls.push(d);
+  });
+  var gx=document.getElementById('treatGrid');gx.innerHTML='';treatEls=[];
+  S.treats.forEach(function(t,i){
+    var d=makeCard(t,true,12+i,function(){selectTreat(i);});
+    gx.appendChild(d);treatEls.push(d);
+  });
+}
+
+/* ================= реплики ================= */
+var bearT=null,foxT=null;
+function bearSay(t){
+  var el=document.getElementById('bearSaid');el.textContent=t;
+  clearTimeout(bearT);bearT=setTimeout(function(){el.textContent=BEAR_DEF;},5000);
+}
+function foxSay(t){
+  var el=document.getElementById('foxSaid');el.textContent=t;
+  clearTimeout(foxT);foxT=setTimeout(function(){el.textContent=FOX_DEF;},5000);
+}
+function cafeAffordable(){
+  for(var i=0;i<S.toys.length;i++)if(!S.toys[i].sold&&S.toys[i].p<=S.money)return true;
+  return false;
+}
+
+/* ================= отрисовка ================= */
+var moneyVal=document.getElementById('moneyVal'),starCnt=document.getElementById('starCnt'),
+    soundBtn=document.getElementById('soundBtn');
+function drawMute(){soundBtn.textContent=S.muted?'🔇':'🔊';}
+function renderAll(){
+  document.getElementById('shopScene').classList.toggle('hidden',S.scene!=='shop');
+  document.getElementById('cafeScene').classList.toggle('hidden',S.scene!=='cafe');
+  moneyVal.textContent=S.money;
+  starCnt.textContent=S.stars;
+  S.toys.forEach(function(t,i){toyEls[i].classList.toggle('sold',t.sold);});
+  S.drinks.forEach(function(t,i){drinkEls[i].classList.toggle('sel',S.drink===i);});
+  S.treats.forEach(function(t,i){treatEls[i].classList.toggle('sel',S.treat===i);});
+  document.getElementById('bagItems').textContent=
+    S.bag.length?S.bag.map(function(b){return b.e;}).join(' '):'—';
+  var cb=document.getElementById('cafeBtn');
+  cb.classList.toggle('hidden',!(S.scene==='shop'&&S.bag.length>0));
+  if(S.scene==='shop'&&S.bag.length>0&&!cafeAffordable())cb.classList.add('pulseBtn');
+  var payBtn=document.getElementById('payBtn'),momBtn=document.getElementById('momBtn'),
+      ci=document.getElementById('cartInfo');
+  if(S.drink<0||S.treat<0){
+    ci.textContent='🛒 Выбери напиток и вкусняшку — и нажми «Оплатить»';
+    payBtn.classList.add('dim');momBtn.classList.remove('pulseBtn');
+  }else{
+    payBtn.classList.remove('dim');
+    var d=S.drinks[S.drink],x=S.treats[S.treat];
+    var txt='🛒 '+d.e+' '+d.p+' р. + '+x.e+' '+x.p+' р. = '+(S.totalKnown?S.total+' р.':'?');
+    if(S.totalKnown&&S.money<S.total&&!S.done){txt+=' — не хватает! 👩';momBtn.classList.add('pulseBtn');}
+    else momBtn.classList.remove('pulseBtn');
+    ci.textContent=txt;
+  }
+  drawMute();
+}
+
+/* ================= карточка с вопросом ================= */
+var overlay=document.getElementById('overlay'),qcard=document.getElementById('qcard'),
+    eqA=document.getElementById('eqA'),eqOp=document.getElementById('eqOp'),
+    eqB=document.getElementById('eqB'),eqAns=document.getElementById('eqAns'),
+    hint=document.getElementById('hint'),praise=document.getElementById('praise'),
+    qnum=document.getElementById('qnum'),qmascot=document.getElementById('qmascot'),
+    keypad=document.getElementById('keypad');
+var curQ=null,buffer='',attempts=0,done=false;
+function setAns(s){
+  if(s===''){eqAns.textContent='?';eqAns.classList.add('empty');}
+  else{eqAns.textContent=s;eqAns.classList.remove('empty');}
+}
+['1','2','3','4','5','6','7','8','9','⌫','0','✓'].forEach(function(t){
+  var b=document.createElement('button');
+  if(t==='⌫')b.className='fn';
+  if(t==='✓')b.className='okb';
+  b.textContent=t;
+  b.addEventListener('click',function(){keyPress(t);});
+  keypad.appendChild(b);
+});
+function keyPress(t){
+  if(!curQ||done)return;
+  if(t==='⌫'){buffer=buffer.slice(0,-1);setAns(buffer);return;}
+  if(t==='✓'){check();return;}
+  if(buffer.length>=2)return;
+  buffer+=t;setAns(buffer);sType();
+}
+function openQ(o){
+  curQ=o;buffer='';attempts=0;done=false;
+  qnum.textContent=o.num;
+  qmascot.textContent=o.mascot;
+  praise.textContent=o.prompt;
+  eqA.textContent=o.a;eqOp.textContent=o.op>0?'+':'−';eqB.textContent=o.b;
+  setAns('');
+  hint.classList.add('hidden');hint.textContent='';
+  qcard.classList.remove('ok','err','shake');
+  overlay.classList.remove('hidden');
+}
+function closeModal(){
+  if(done)return;
+  overlay.classList.add('hidden');curQ=null;
+}
+function check(){
+  if(!curQ||done||buffer==='')return;
+  var ans=parseInt(buffer,10);
+  if(ans===curQ.a+curQ.op*curQ.b){
+    done=true;
+    qcard.classList.remove('err');qcard.classList.add('ok');
+    praise.textContent=PRAISE[(Math.random()*PRAISE.length)|0];
+    sCorrect();
+    S.stars++;starCnt.textContent=S.stars;
+    addSharedStar();
+    var f=curQ.onOk;
+    setTimeout(function(){overlay.classList.add('hidden');curQ=null;f(ans);},650);
+  }else{
+    attempts++;
+    qcard.classList.remove('shake','err');void qcard.offsetWidth;
+    qcard.classList.add('shake','err');
+    setTimeout(function(){qcard.classList.remove('err');},700);
+    praise.textContent=ENC[(Math.random()*ENC.length)|0];
+    sWrong();
+    buffer='';setAns('');
+    if(attempts>=2){
+      hint.textContent='💡 '+curQ.hintFn();
+      hint.classList.remove('hidden');
+    }
+  }
+}
+document.getElementById('qclose').addEventListener('click',closeModal);
+document.addEventListener('keydown',function(e){
+  if(!overlay.classList.contains('hidden')){
+    if(/^[0-9]$/.test(e.key)){keyPress(e.key);e.preventDefault();}
+    else if(e.key==='Backspace'){keyPress('⌫');e.preventDefault();}
+    else if(e.key==='Enter'||e.key===' '){keyPress('✓');e.preventDefault();}
+    else if(e.key==='Escape'){closeModal();}
+  }
+});
+
+/* ================= магазин ================= */
+function buyToy(i){
+  var t=S.toys[i];
+  if(t.sold)return;
+  sClick();
+  if(t.p>S.money){
+    var d=toyEls[i];
+    d.classList.remove('wig');void d.offsetWidth;d.classList.add('wig');
+    setTimeout(function(){d.classList.remove('wig');},450);
+    sWrong();
+    bearSay('На «'+t.n+'» нужно '+t.p+' р., а у тебя только '+S.money+' р. 😅');
+    return;
+  }
+  openQ({num:'🛍 Магазин',mascot:'🐻',
+    prompt:'«'+t.n+'» стоит '+t.p+' р. Сколько сдачи?',
+    a:S.money,op:-1,b:t.p,
+    hintFn:function(){return hintSub(S.money,t.p);},
+    onOk:function(ch){
+      S.money=ch;t.sold=true;
+      S.bag.push({e:t.e,n:t.n,p:t.p});
+      burstAtEl(toyEls[i],40,1);
+      burstAtEl(document.getElementById('moneyPill'),24,.8);
+      if(!cafeAffordable())bearSay('На остальные игрушки не хватает — самое время в кафе! ☕');
+      else bearSay(pick(BUY_THANKS)+' '+t.e);
+      save();renderAll();
+    }});
+}
+
+/* ================= кафе ================= */
+function selectDrink(i){
+  sClick();
+  S.drink=(S.drink===i?-1:i);
+  S.total=0;S.totalKnown=false;
+  save();renderAll();
+}
+function selectTreat(i){
+  sClick();
+  S.treat=(S.treat===i?-1:i);
+  S.total=0;S.totalKnown=false;
+  save();renderAll();
+}
+function startPay(viaMom){
+  if(S.scene!=='cafe'||S.done)return;
+  if(S.drink<0||S.treat<0){
+    foxSay('Сначала выбери и напиток, и вкусняшку! 🙂');
+    sWrong();return;
+  }
+  if(!S.totalKnown){
+    var d=S.drinks[S.drink],x=S.treats[S.treat];
+    openQ({num:'☕ Кафе',mascot:'🦊',
+      prompt:'Сколько стоят вкусняшки вместе?',
+      a:d.p,op:1,b:x.p,
+      hintFn:function(){return hintAdd(d.p,x.p);},
+      onOk:function(sum){
+        S.total=sum;S.totalKnown=true;
+        save();renderAll();
+        afterTotal(viaMom);
+      }});
+  }else afterTotal(viaMom);
+}
+function afterTotal(viaMom){
+  if(S.money>=S.total){
+    if(viaMom){
+      foxSay('👩 Мама: «Да у тебя же хватает! У тебя '+S.money+' р., а покупка всего '+S.total+' р.» 😄');
+      return;
+    }
+    if(S.money===S.total){finishCafe();return;}
+    openQ({num:'☕ Кафе',mascot:'🦊',
+      prompt:'У тебя '+S.money+' р. Сколько сдачи?',
+      a:S.money,op:-1,b:S.total,
+      hintFn:function(){return hintSub(S.money,S.total);},
+      onOk:function(ch){
+        S.money=ch;
+        save();renderAll();
+        finishCafe();
+      }});
+  }else momAsk();
+}
+function momAsk(){
+  openQ({num:'👩 Мама помогает',mascot:'👩',
+    prompt:'Посчитай: на сколько рублей не хватает?',
+    a:S.total,op:-1,b:S.money,
+    hintFn:function(){return hintSub(S.total,S.money);},
+    onOk:function(x){
+      S.money+=x;S.momGiven+=x;
+      save();renderAll();
+      burstAtEl(document.getElementById('moneyPill'),30,.9);
+      sCoins();
+      foxSay('👩 Мама: «Умница! Держи '+x+' р. — теперь денег как раз!» 🥰');
+      setTimeout(finishCafe,1300);
+    }});
+}
+function finishCafe(){
+  if(S.done){showBanner();return;}
+  S.done=true;
+  save();renderAll();
+  burstAtEl(document.getElementById('cartBar'),50,1.1);
+  sCoins();
+  for(var i=0;i<8;i++){
+    (function(i){
+      setTimeout(function(){
+        burst(640+(Math.random()-.5)*900,220+Math.random()*260,55,1.4);
+        tone(700+Math.random()*900,0,.08,'sine',.05);
+      },1000+i*430);
+    })(i);
+  }
+  confettiRain(9000);
+  setTimeout(sFanfare,900);
+  setTimeout(showBanner,2100);
+}
+
+/* ================= финал: чек ================= */
+function rline(a,b){return '<div class="rline"><span>'+a+'</span><b>'+b+'</b></div>';}
+function showBanner(){
+  var bemo=document.getElementById('bemo'),receipt=document.getElementById('receipt');
+  var emos=S.bag.map(function(b){return b.e;}).join(' ');
+  if(S.drink>=0)emos+=' '+S.drinks[S.drink].e;
+  if(S.treat>=0)emos+=' '+S.treats[S.treat].e;
+  bemo.textContent=emos;
+  var h='';
+  S.bag.forEach(function(b){h+=rline(b.e+' '+b.n,b.p+' р.');});
+  if(S.drink>=0)h+=rline(S.drinks[S.drink].e+' '+S.drinks[S.drink].n,S.drinks[S.drink].p+' р.');
+  if(S.treat>=0)h+=rline(S.treats[S.treat].e+' '+S.treats[S.treat].n,S.treats[S.treat].p+' р.');
+  if(S.momGiven>0)h+=rline('👩 Мама добавила',S.momGiven+' р.');
+  h+='<div class="rsep"></div>';
+  h+=rline('Было','100 р.');
+  h+=rline('Осталось',S.money+' р.');
+  document.getElementById('bstars').textContent='⭐ Задач решено: '+S.stars;
+  receipt.innerHTML=h;
+  document.getElementById('banner').classList.remove('hidden');
+}
+
+/* ================= кнопки ================= */
+soundBtn.addEventListener('click',function(){
+  S.muted=!S.muted;drawMute();save();if(!S.muted)sClick();
+});
+document.getElementById('resetBtn').addEventListener('click',function(){
+  document.getElementById('confirmBox').classList.remove('hidden');
+});
+document.getElementById('cfNo').addEventListener('click',function(){
+  document.getElementById('confirmBox').classList.add('hidden');
+});
+document.getElementById('cfYes').addEventListener('click',function(){
+  document.getElementById('confirmBox').classList.add('hidden');
+  newGame();
+});
+document.getElementById('againBtn').addEventListener('click',function(){
+  newGame();
+});
+document.getElementById('cafeBtn').addEventListener('click',function(){
+  sClick();
+  S.scene='cafe';
+  document.getElementById('cafeBtn').classList.remove('pulseBtn');
+  foxSay(FOX_DEF);
+  save();renderAll();
+});
+document.getElementById('payBtn').addEventListener('click',function(){
+  sClick();startPay(false);
+});
+document.getElementById('momBtn').addEventListener('click',function(){
+  sClick();
+  if(S.done)return;
+  if(S.drink<0||S.treat<0){
+    foxSay('Сначала выбери напиток и вкусняшку, потом попросим у мамы! 🙂');
+    return;
+  }
+  startPay(true); /* сначала посчитаем сумму, потом мама */
+});
+function newGame(){
+  document.getElementById('banner').classList.add('hidden');
+  parts.length=0;confettiUntil=0;
+  S=newState();
+  save();
+  buildShop();buildCafe();
+  renderAll();
+  sClick();
+}
+
+/* ================= запуск ================= */
+var savedS=loadState();
+S=savedS||newState();
+if(!savedS)save();
+fit();
+window.addEventListener('resize',fit);
+buildShop();
+buildCafe();
+document.getElementById('bearSaid').textContent=BEAR_DEF;
+document.getElementById('foxSaid').textContent=FOX_DEF;
+renderAll();
+if(S.done)setTimeout(showBanner,800);
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>

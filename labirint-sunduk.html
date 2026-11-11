@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабиринт с сундуком — переход через десяток</title>
+<meta property="og:title" content="Лабиринт с сундуком — переход через десяток">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<!--
+Интерактивный математический лабиринт (по мотивам листочка «ЛАБИРИНТ»).
+- 15 примеров: ДВУЗНАЧНОЕ ± ДВУЗНАЧНОЕ, числа не круглые, всегда с ПЕРЕХОДОМ
+  ЧЕРЕЗ ДЕСЯТОК (у суммы единицы дают 10+, у разности занимаем пучок), всё в пределах 100.
+- Примеры генерируются новые на каждую игру. Идём по дорожке от СТАРТА к сундуку.
+- Клик по подсвеченному примеру -> большая карточка с примером и кнопками-цифрами
+  (работает и обычная клавиатура). Верный ответ: фейерверк-звёздочки, ответ появляется
+  в пустом окошке, +1 звёздочка в общую копилку (sashaStars, как в других играх серии).
+- После двух неверных попыток появляется подсказка (десятки/единицы, пучок переходит).
+- Все 15 решены -> сундук открывается: золото, фейерверк, конфетти, фанфары.
+- Прогресс сохраняется (localStorage). Кнопка ↺ в углу — начать заново (новые примеры).
+- Текст сверху, как на листочке, убран по просьбе.
+-->
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;overflow:hidden;-webkit-user-select:none;user-select:none;
+  font-family:"Comic Sans MS","Comic Sans","Segoe UI",Verdana,sans-serif;
+  background:
+    radial-gradient(1200px 800px at 18% 8%, #fff8e2 0%, rgba(255,248,226,0) 60%),
+    radial-gradient(1100px 750px at 85% 92%, #ddf0ff 0%, rgba(221,240,255,0) 55%),
+    #f6efdc;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(#d9c9a3 1.2px, rgba(0,0,0,0) 1.3px);
+  background-size:34px 34px;
+}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+svg#maze{width:100%;height:100%;display:block}
+svg text{font-family:"Comic Sans MS","Comic Sans","Segoe UI",Verdana,sans-serif;pointer-events:none}
+
+/* ---- дорожки ---- */
+.seg{stroke:#cdbd97;stroke-width:9;stroke-linecap:round}
+.segL{stroke:#ffb62e;stroke-width:10;stroke-linecap:round;filter:url(#glow);
+  transition:stroke-dashoffset .55s ease}
+#maze.noanim *{transition:none !important}
+
+/* ---- клеточки ---- */
+.op{cursor:pointer}
+.op:hover .boxr{filter:brightness(.965)}
+.op.solved{cursor:default}
+.op.solved .boxr{fill:#e9fbef;stroke:#2fbf71}
+.badge{opacity:0;transform:scale(0);transform-box:fill-box;transform-origin:center}
+.op.solved .badge{opacity:1;transform:scale(1);
+  transition:transform .45s cubic-bezier(.2,1.8,.4,1) .1s, opacity .2s .1s}
+.wig{animation:wig .4s}
+@keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+.resr{fill:#fffdf6;stroke:#cdbd97;stroke-width:4;stroke-dasharray:10 8}
+.res.filled .resr{fill:#f1fff5;stroke:#2fbf71;stroke-dasharray:none}
+.rt{opacity:0}
+.res.filled .rt{opacity:1;animation:popIn .5s cubic-bezier(.2,1.7,.4,1);
+  transform-box:fill-box;transform-origin:center}
+@keyframes popIn{0%{transform:scale(.2)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+#arrow.pulse{animation:arrp 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes arrp{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.16);opacity:1}}
+
+#activeHint .ring{animation:ringp 1.15s ease-in-out infinite}
+@keyframes ringp{0%,100%{stroke-opacity:.45;stroke-width:6}50%{stroke-opacity:1;stroke-width:11}}
+#activeHint .st{animation:stb .75s ease-in-out infinite alternate;
+  transform-box:fill-box;transform-origin:center}
+@keyframes stb{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+
+/* ---- сундук ---- */
+.chest{cursor:pointer}
+#lid{transition:transform 1.15s cubic-bezier(.34,1.35,.45,1);transform-origin:680px 521px}
+.chest.open #lid{transform:rotate(-104deg)}
+#lockG{transition:opacity .5s}
+.chest.open #lockG{opacity:0}
+#glowG{opacity:0;transition:opacity 1.2s}
+.chest.open #glowG{opacity:.8;animation:glp 2.4s 1.2s ease-in-out infinite}
+@keyframes glp{0%,100%{opacity:.6}50%{opacity:.95}}
+#goldG{opacity:0;transform:scale(.35);transform-origin:770px 524px;
+  transition:transform .9s cubic-bezier(.2,1.5,.4,1) .5s, opacity .35s .5s}
+.chest.open #goldG{opacity:1;transform:scale(1) translateY(-4px)}
+#qmark{animation:qf 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center;
+  transition:opacity .4s}
+@keyframes qf{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.chest.open #qmark{opacity:0}
+.spk{opacity:0;transform-box:fill-box;transform-origin:center}
+.chest.open .spk{animation:tw 1.7s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
+
+/* ---- HUD ---- */
+#hud{position:fixed;top:10px;right:12px;display:flex;gap:8px;align-items:center;z-index:130}
+.pill{background:rgba(255,255,255,.88);border:3px solid #f0b429;border-radius:999px;
+  padding:5px 16px;font-size:24px;font-weight:bold;color:#7a4f05;
+  box-shadow:0 3px 10px rgba(0,0,0,.12)}
+#hud button{font-size:22px;line-height:1;border:3px solid #d8cba8;background:rgba(255,255,255,.88);
+  border-radius:14px;padding:6px 10px;cursor:pointer}
+#hud button:active{transform:translateY(2px)}
+
+#fx{position:fixed;inset:0;z-index:50;pointer-events:none}
+
+#tip{position:fixed;z-index:60;transform:translateX(-50%);
+  background:#fff3c4;border:3px solid #f0b429;color:#7a4f05;font-size:22px;font-weight:bold;
+  padding:8px 16px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.15);white-space:nowrap}
+#bubble{position:fixed;z-index:126;transform:translate(-50%,-115%);
+  background:#fffdf4;border:4px solid #f0b429;color:#7a4f05;font-size:24px;font-weight:bold;
+  padding:10px 18px;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,.2);white-space:nowrap}
+.hidden{display:none !important}
+
+/* ---- карточка с примером ---- */
+#overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:rgba(59,40,10,.45);backdrop-filter:blur(3px)}
+#qcard{background:#fffdf4;border:6px solid #f0b429;border-radius:28px;
+  padding:22px 34px 26px;box-shadow:0 18px 60px rgba(0,0,0,.35);text-align:center;
+  max-width:min(94vw,780px);position:relative;animation:cardIn .3s ease}
+@keyframes cardIn{from{transform:scale(.7);opacity:0}}
+#qcard.ok{border-color:#2fbf71;background:#f2fff6}
+#qcard.err{border-color:#e5484d;background:#fff1f0}
+#qcard.shake{animation:shakeX .45s}
+@keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}
+  40%{transform:translateX(12px)}60%{transform:translateX(-9px)}80%{transform:translateX(6px)}}
+#qclose{position:absolute;top:8px;right:14px;font-size:26px;border:none;background:none;
+  cursor:pointer;color:#b3a37e}
+#qnum{font-size:20px;color:#a08c5f;font-weight:bold;margin-bottom:2px}
+#topline{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px}
+#parrot{font-size:54px;display:inline-block;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+#praise{font-size:30px;font-weight:bold;color:#8a5a00}
+#equation{font-size:clamp(52px,10vw,92px);font-weight:bold;color:#2b2b3b;letter-spacing:3px;
+  margin:4px 0 8px;white-space:nowrap}
+#eqAns{display:inline-block;min-width:2.1ch;border-bottom:10px solid #2fbf71;color:#157a3c;
+  padding:0 10px;text-align:center}
+#eqAns.empty{color:#c2b49a;border-bottom-color:#d8cba8}
+#hint{margin:10px auto 2px;background:#fff3c4;border:3px dashed #e8b93c;color:#7a4f05;
+  font-size:25px;font-weight:bold;padding:10px 18px;border-radius:16px;max-width:660px}
+#keypad{display:grid;grid-template-columns:repeat(3,112px);gap:12px;justify-content:center;margin-top:16px}
+#keypad button{height:84px;font-size:44px;font-weight:bold;font-family:inherit;border:none;
+  border-radius:18px;background:#eef3ff;color:#2c3a66;cursor:pointer;box-shadow:0 5px 0 #c4cfec}
+#keypad button:active{transform:translateY(3px);box-shadow:0 2px 0 #c4cfec}
+#keypad button.fn{background:#fff0d3;color:#8a5a00;box-shadow:0 5px 0 #e2c189}
+#keypad button.okb{background:#2fbf71;color:#fff;box-shadow:0 5px 0 #1d8b50}
+
+/* ---- финал ---- */
+#banner{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-end;justify-content:flex-start;
+  padding:0 16px 20px 20px}
+#bcard{background:linear-gradient(#fffdf4,#fff3d6);border:6px solid #f0b429;border-radius:26px;
+  padding:18px 30px 22px;text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.35);
+  animation:fpop .55s cubic-bezier(.2,1.4,.4,1);max-width:min(560px,92vw)}
+@keyframes fpop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+#bcard .e{font-size:42px}
+#bcard h1{font-size:clamp(34px,5vw,54px);margin:4px 0;color:#e07b00;text-shadow:2px 3px 0 #ffd98a}
+#bcard p{font-size:clamp(18px,2.4vw,27px);color:#6b4a08;font-weight:bold;margin:6px 0}
+#againBtn{font-size:24px;font-weight:bold;font-family:inherit;padding:12px 26px;margin-top:10px;
+  border:none;border-radius:18px;background:#2fbf71;color:#fff;cursor:pointer;box-shadow:0 5px 0 #1d8b50}
+#againBtn:active{transform:translateY(4px);box-shadow:0 2px 0 #1d8b50}
+
+/* ---- подтверждение ---- */
+#confirmBox{position:fixed;inset:0;z-index:140;display:flex;align-items:center;justify-content:center;
+  background:rgba(59,40,10,.45)}
+.ccard{background:#fffdf4;border:6px solid #f0b429;border-radius:24px;padding:26px 34px;
+  text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.35)}
+.ccard p{font-size:24px;font-weight:bold;color:#6b4a08;margin:0 0 18px}
+.ccard button{font-size:24px;font-weight:bold;font-family:inherit;padding:12px 26px;margin:0 8px;
+  border:none;border-radius:16px;cursor:pointer;color:#fff}
+#cfYes{background:#e5484d;box-shadow:0 5px 0 #b93338}
+#cfNo{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
+.ccard button:active{transform:translateY(3px);box-shadow:none}
+
+@media (max-height:820px){
+  #keypad{grid-template-columns:repeat(3,92px);gap:9px}
+  #keypad button{height:68px;font-size:36px}
+  #equation{font-size:clamp(42px,8.5vw,70px)}
+  #praise{font-size:24px}
+  #parrot{font-size:42px}
+  #hint{font-size:21px}
+}
+</style>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(114071811, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:false
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</head>
+<body>
+<div id="stage"><svg id="maze" viewBox="0 0 1540 1064" preserveAspectRatio="xMidYMid meet"></svg></div>
+<canvas id="fx"></canvas>
+
+<div id="hud">
+  <div class="pill">⭐ <span id="starCnt">0</span> / <span id="starTotal">15</span></div>
+  <button id="soundBtn" title="Звук вкл/выкл">🔊</button>
+  <button id="resetBtn" title="Начать заново">↺</button>
+</div>
+
+<div id="tip" class="hidden">Нажми на подсвеченный пример! 👆</div>
+<div id="bubble" class="hidden"></div>
+
+<div id="overlay" class="hidden">
+  <div id="qcard">
+    <button id="qclose" title="Закрыть">✕</button>
+    <div id="qnum">Пример 1 из 15</div>
+    <div id="topline"><span id="parrot">🦜</span><span id="praise">Реши пример!</span></div>
+    <div id="equation"><span id="eqA">0</span> <span id="eqOp">+</span> <span id="eqB">0</span> = <span id="eqAns" class="empty">?</span></div>
+    <div id="hint" class="hidden"></div>
+    <div id="keypad"></div>
+  </div>
+</div>
+
+<div id="banner" class="hidden">
+  <div id="bcard">
+    <div class="e">🦜💰🎉</div>
+    <h1>МОЛОДЕЦ!</h1>
+    <p>Ты прошёл весь лабиринт —<br>сундук с сокровищами твой!</p>
+    <p id="bstars">⭐⭐⭐</p>
+    <button id="againBtn">🔁 Играть ещё раз</button>
+  </div>
+</div>
+
+<div id="confirmBox" class="hidden">
+  <div class="ccard">
+    <p>Начать лабиринт заново?<br>Все звёздочки в нём сотрутся.</p>
+    <button id="cfYes">Да, заново</button>
+    <button id="cfNo">Нет</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+var SVG_NS='http://www.w3.org/2000/svg';
+var MARG=60,PITCH=110,BOXW=100,BOXH=64,N=15;
+var PRAISE=['Молодец! 🎉','Отлично! ⭐','Супер! 💪','Здорово! 🌟','Умница! 🏆','В точку! ✨'];
+var ENC=['Подумай ещё! 🤔','Почти-почти! 💫','Попробуй снова! 🙂','Ещё разок, внимательно! 🔍'];
+var PAL=['#7c5cff','#2f8fff','#ff9f1c','#ff5da2','#12b5cb','#97b900'];
+var MKEY='sasha2-maze-v2';
+
+/* форма лабиринта: спираль от СТАРТА к сундуку (S — старт, O — пример, R — окошко ответа, C — сундук) */
+var CELLS=[
+ [0,0,'S'],[2,0,'O'],[4,0,'R'],[6,0,'O'],[8,0,'R'],[10,0,'O'],[12,0,'R'],
+ [12,2,'O'],[12,4,'R'],[12,6,'O'],[12,8,'R'],
+ [10,8,'O'],[8,8,'R'],[6,8,'O'],[4,8,'R'],[2,8,'O'],[0,8,'R'],
+ [0,6,'O'],[0,4,'R'],[0,2,'O'],
+ [2,2,'R'],[4,2,'O'],[6,2,'R'],[8,2,'O'],[10,2,'R'],
+ [10,4,'O'],[10,6,'R'],
+ [8,6,'O'],[6,6,'R'],[4,6,'O'],
+ [4,4,'R'],[6,4,'C']
+];
+function center(i){var c=CELLS[i];return {x:MARG+c[0]*PITCH+BOXW/2, y:MARG+c[1]*PITCH+BOXH/2};}
+
+/* ---------- генератор примеров: двузначное ± двузначное, не круглые, всегда с переходом через десяток ---------- */
+var FALLBACK_STEPS=[{s:1,d:17},{s:-1,d:18},{s:1,d:16},{s:-1,d:17},{s:1,d:18},{s:-1,d:14},
+  {s:1,d:16},{s:-1,d:17},{s:1,d:18},{s:-1,d:16},{s:1,d:17},{s:1,d:35},{s:-1,d:34},{s:1,d:36},{s:-1,d:47}];
+function genPuzzle(){
+  for(var outer=0;outer<400;outer++){
+    var cur=11+Math.floor(Math.random()*89);
+    while(cur%10===0||cur%10===9)cur=11+Math.floor(Math.random()*89); // не круглое; x9 — тупик для цепочки
+    var start=cur, seen={}; seen[cur]=1;
+    var steps=[],lastB=0,lastS=0,run=0,plus=0,fail=false;
+    for(var i=0;i<N;i++){
+      var ok=false;
+      for(var t=0;t<600&&!ok;t++){
+        var s=Math.random()<0.5?1:-1;
+        if(run>=2)s=-lastS;                          // не даём 3 плюса/минуса подряд
+        var b=11+Math.floor(Math.random()*89);
+        if(b%10===0)continue;                        // второе число не круглое
+        if(b===lastB)continue;
+        var nxt=cur+s*b;
+        if(nxt<11||nxt>99)continue;                  // всё в пределах 100
+        if(s>0){
+          if(cur%10+b%10<10)continue;                // переход через десяток при сложении
+          if(cur%10+b%10===10)continue;              // и результат не круглый
+        }else{
+          if(cur%10>=b%10)continue;                  // при вычитании занимаем пучок
+        }
+        if(nxt%10===9&&i<N-1)continue;               // x9 — тупик для следующего шага
+        if(seen[nxt])continue;                       // числа не повторяются
+        steps.push({s:s,d:b}); seen[nxt]=1;
+        if(s>0)plus++;
+        run=(s===lastS)?run+1:1; lastS=s; lastB=b;
+        cur=nxt; ok=true;
+      }
+      if(!ok){fail=true;break;}
+    }
+    if(!fail && plus>=5 && plus<=10) return {start:start,steps:steps};
+  }
+  return {start:26,steps:FALLBACK_STEPS};
+}
+function hintFor(c,s,d){
+  var tA=c-c%10,tB=d-d%10,uA=c%10,uB=d%10,ans=c+s*d;
+  if(s>0){
+    var tS=tA+tB,u=uA+uB;
+    return 'Десятки: '+tA+' + '+tB+' = '+tS+'; единицы: '+uA+' + '+uB+' = '+u+
+      ' = 10 и '+(u-10)+'. Пучок переходит к десяткам: '+tS+' + 10 + '+(u-10)+' = '+ans;
+  }
+  var u2=uA+10-uB,tS2=tA-10-tB;
+  return 'Единиц не хватает — открываем пучок: '+(uA+10)+' − '+uB+' = '+u2+
+    '; десятков стало меньше: '+(tA-10)+' − '+tB+' = '+tS2+'. Ответ: '+tS2+' + '+u2+' = '+ans;
+}
+
+/* ---------- состояние ---------- */
+var P=null, state=null;
+function vals(){var v=[P.start];for(var k=0;k<N;k++){var st=P.steps[k];v.push(v[k]+st.s*st.d);}return v;}
+function loadState(){
+  try{
+    var j=JSON.parse(localStorage.getItem(MKEY)||'null');
+    var okSteps=j && j.puzzle && j.puzzle.steps && j.puzzle.steps.length===N &&
+      j.puzzle.steps.every(function(st){
+        return st && (st.s===1||st.s===-1) && typeof st.d==='number' && st.d>=11 && st.d<=99;
+      });
+    if(okSteps && typeof j.puzzle.start==='number' && j.puzzle.start>=11 && j.puzzle.start<=99 &&
+       j.cur>=0 && j.cur<=N)
+      return {puzzle:j.puzzle, cur:j.cur, muted:!!j.muted};
+  }catch(e){}
+  return null;
+}
+function saveState(){
+  try{localStorage.setItem(MKEY,JSON.stringify({puzzle:P,cur:state.cur,muted:state.muted}));}catch(e){}
+}
+function addSharedStar(){ /* общая копилка звёздочек, как в других играх серии */
+  try{
+    var s=parseInt(localStorage.getItem('sashaStars')||'0',10)||0;
+    localStorage.setItem('sashaStars',String(s+1));
+  }catch(e){}
+}
+
+/* ---------- строим SVG ---------- */
+var svg=document.getElementById('maze');
+function sv(name,attrs,parent){
+  var e=document.createElementNS(SVG_NS,name);
+  for(var k in attrs)e.setAttribute(k,attrs[k]);
+  (parent||svg).appendChild(e);return e;
+}
+var segLit=[],opEls=[],opTxt=[],resEls=[],startTxt,chest,arrow,ah;
+function buildAll(){
+  var defs=sv('defs',{});
+  var f=sv('filter',{id:'glow',filterUnits:'userSpaceOnUse',x:'-20',y:'-20',width:'1580',height:'1104'},defs);
+  sv('feGaussianBlur',{stdDeviation:'4',result:'blur'},f);
+  var mg=sv('feMerge',{},f);
+  sv('feMergeNode',{in:'blur'},mg);
+  sv('feMergeNode',{in:'SourceGraphic'},mg);
+  var wg=sv('linearGradient',{id:'wood',x1:'0',y1:'0',x2:'0',y2:'1'},defs);
+  sv('stop',{offset:'0','stop-color':'#b3824a'},wg);
+  sv('stop',{offset:'1','stop-color':'#8a5a2a'},wg);
+  var lg=sv('linearGradient',{id:'lidg',x1:'0',y1:'0',x2:'0',y2:'1'},defs);
+  sv('stop',{offset:'0','stop-color':'#c9955c'},lg);
+  sv('stop',{offset:'1','stop-color':'#96622f'},lg);
+  var gr=sv('radialGradient',{id:'goldRad'},defs);
+  sv('stop',{offset:'0','stop-color':'#ffd970','stop-opacity':'.9'},gr);
+  sv('stop',{offset:'.55','stop-color':'#ffc533','stop-opacity':'.4'},gr);
+  sv('stop',{offset:'1','stop-color':'#ffc533','stop-opacity':'0'},gr);
+
+  for(var i=0;i<CELLS.length-1;i++){
+    var a=center(i),b=center(i+1);
+    sv('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,'class':'seg'});
+    var L=sv('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,'class':'segL'});
+    L.style.strokeDasharray='220';L.style.strokeDashoffset='220';
+    segLit.push(L);
+  }
+
+  /* сундук */
+  chest=sv('g',{'class':'chest',id:'chest'});
+  sv('circle',{id:'glowG',cx:770,cy:532,r:235,fill:'url(#goldRad)'},chest);
+  var goldG=sv('g',{id:'goldG'},chest);
+  sv('ellipse',{cx:770,cy:520,rx:82,ry:26,fill:'#ffb703'},goldG);
+  [[730,506,14],[770,497,16],[808,506,14],[748,491,11],[792,491,11]].forEach(function(q){
+    sv('circle',{cx:q[0],cy:q[1],r:q[2],fill:'#ffd166',stroke:'#e0980a','stroke-width':3},goldG);
+  });
+  sv('rect',{x:756,y:478,width:16,height:16,rx:4,fill:'#f72585',transform:'rotate(15 764 486)'},goldG);
+  sv('rect',{x:784,y:484,width:14,height:14,rx:4,fill:'#4cc9f0',transform:'rotate(-20 791 491)'},goldG);
+  sv('rect',{x:680,y:521,width:180,height:82,rx:12,fill:'url(#wood)',stroke:'#5a3a18','stroke-width':5},chest);
+  sv('line',{x1:694,y1:549,x2:846,y2:549,stroke:'#7d5124','stroke-width':4,opacity:.6},chest);
+  sv('line',{x1:694,y1:577,x2:846,y2:577,stroke:'#7d5124','stroke-width':4,opacity:.6},chest);
+  sv('rect',{x:700,y:521,width:16,height:82,fill:'#4a4a55',rx:4},chest);
+  sv('rect',{x:824,y:521,width:16,height:82,fill:'#4a4a55',rx:4},chest);
+  var lid=sv('g',{id:'lid'},chest);
+  sv('path',{d:'M680,521 L680,495 Q680,463 712,463 L828,463 Q860,463 860,495 L860,521 Z',
+    fill:'url(#lidg)',stroke:'#5a3a18','stroke-width':5},lid);
+  sv('rect',{x:700,y:463,width:16,height:58,fill:'#4a4a55',rx:4},lid);
+  sv('rect',{x:824,y:463,width:16,height:58,fill:'#4a4a55',rx:4},lid);
+  var lockG=sv('g',{id:'lockG'},chest);
+  sv('rect',{x:756,y:518,width:28,height:30,rx:7,fill:'#f0b429',stroke:'#b98208','stroke-width':4},lockG);
+  sv('path',{d:'M762,518 v-7 a8,8 0 0 1 16,0 v7',fill:'none',stroke:'#b98208','stroke-width':6},lockG);
+  sv('circle',{cx:770,cy:531,r:4,fill:'#7a4f05'},lockG);
+  sv('rect',{x:768,y:531,width:4,height:9,rx:2,fill:'#7a4f05'},lockG);
+  var qm=sv('g',{id:'qmark'},chest);
+  sv('circle',{cx:770,cy:428,r:27,fill:'#fff3c4',stroke:'#f0b429','stroke-width':5},qm);
+  sv('text',{x:770,y:430,'text-anchor':'middle','dominant-baseline':'central','font-size':36,
+    'font-weight':'bold',fill:'#c07b00'},qm).textContent='?';
+  [[660,470,34,''],[872,458,30,'.45s'],[826,646,28,'.9s']].forEach(function(q){
+    var t=sv('text',{x:q[0],y:q[1],'font-size':q[2],'class':'spk',
+      style:'animation-delay:'+q[3]},chest);
+    t.textContent='✨';
+  });
+  chest.addEventListener('click',onChest);
+
+  /* старт */
+  var c0=center(0);
+  var sg=sv('g',{});
+  sv('rect',{x:c0.x-50,y:c0.y-32,width:BOXW,height:BOXH,rx:16,fill:'#2fbf71',stroke:'#1d8b50','stroke-width':5},sg);
+  startTxt=sv('text',{x:c0.x,y:c0.y+2,'text-anchor':'middle','dominant-baseline':'central',
+    'font-size':44,'font-weight':'bold',fill:'#fff'},sg);
+
+  /* примеры и окошки */
+  for(var k=0;k<N;k++){
+    var co=center(2*k+1);
+    var g=sv('g',{'class':'op'});
+    sv('rect',{x:co.x-50,y:co.y-32,width:BOXW,height:BOXH,rx:16,'class':'boxr',
+      fill:'#fffdf6',stroke:PAL[k%PAL.length],'stroke-width':6},g);
+    var t=sv('text',{x:co.x,y:co.y+2,'text-anchor':'middle','dominant-baseline':'central',
+      'font-size':36,'font-weight':'bold',fill:'#2c3a66'},g);
+    var bd=sv('text',{x:co.x+42,y:co.y-24,'text-anchor':'middle','dominant-baseline':'central',
+      'font-size':30,'class':'badge'},g);
+    bd.textContent='⭐';
+    (function(kk){g.addEventListener('click',function(){onOp(kk);});})(k);
+    opEls.push(g);opTxt.push(t);
+
+    var cr=center(2*k+2);
+    var rg=sv('g',{'class':'res'});
+    sv('rect',{x:cr.x-50,y:cr.y-32,width:BOXW,height:BOXH,rx:14,'class':'resr'},rg);
+    var rt=sv('text',{x:cr.x,y:cr.y+2,'text-anchor':'middle','dominant-baseline':'central',
+      'font-size':40,'font-weight':'bold',fill:'#157a3c','class':'rt'},rg);
+    resEls.push(rg);resEls[k]._txt=rt;
+  }
+
+  /* стрелка старта */
+  arrow=sv('polygon',{id:'arrow',points:'10,80 34,80 34,64 60,92 34,120 34,104 10,104',
+    fill:'#2fbf71',stroke:'#1d8b50','stroke-width':3});
+
+  /* подсказка-указатель на активный пример */
+  ah=sv('g',{id:'activeHint'});
+  sv('rect',{'class':'ring',x:-62,y:-44,width:124,height:88,rx:20,fill:'none',
+    stroke:'#ffb62e','stroke-width':6},ah);
+  var st=sv('text',{'class':'st',x:0,y:-56,'text-anchor':'middle','font-size':40},ah);
+  st.textContent='⭐';
+}
+
+/* ---------- отрисовка состояния ---------- */
+var starCnt=document.getElementById('starCnt');
+document.getElementById('starTotal').textContent=N;
+function renderAll(instant){
+  if(instant)svg.classList.add('noanim');
+  startTxt.textContent=P.start;
+  var v=vals();
+  for(var k=0;k<N;k++){
+    var st=P.steps[k];
+    opTxt[k].textContent=(st.s>0?'+':'−')+st.d;
+    opEls[k].classList.toggle('solved',k<state.cur);
+    opEls[k].classList.remove('wig');
+    var filled=k<state.cur;
+    var rg=resEls[k];
+    rg.classList.toggle('filled',filled);
+    rg._txt.textContent=filled? v[k+1] : '';
+  }
+  var upto=2*state.cur;
+  for(var i=0;i<31;i++){
+    var on=(i<upto)||(state.cur===N && i===30);
+    segLit[i].style.strokeDashoffset=on?'0':'220';
+  }
+  if(state.cur<N){
+    var c=center(2*state.cur+1);
+    ah.setAttribute('transform','translate('+c.x+','+c.y+')');
+    ah.style.display='';
+  } else ah.style.display='none';
+  chest.classList.toggle('open',state.cur===N);
+  arrow.classList.toggle('pulse',state.cur===0);
+  starCnt.textContent=state.cur;
+  positionTip();
+  if(instant){
+    svg.getBoundingClientRect();
+    requestAnimationFrame(function(){svg.classList.remove('noanim');});
+  }
+}
+
+/* ---------- звук ---------- */
+var AC=null;
+function ac(){
+  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(AC&&AC.state==='suspended')AC.resume();
+  return AC;
+}
+function tone(fr,at,dur,type,vol){
+  if(state&&state.muted)return;
+  var c=ac(); if(!c)return;
+  var t=c.currentTime+(at||0);
+  var o=c.createOscillator(),g=c.createGain();
+  o.type=type||'sine'; o.frequency.value=fr;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol||0.15,t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);
+  o.start(t);o.stop(t+dur+0.05);
+}
+function sClick(){tone(640,0,.06,'sine',.06);}
+function sType(){tone(500+Math.random()*300,0,.04,'sine',.05);}
+function sCorrect(){tone(523,0,.14,'sine',.14);tone(659,.09,.14,'sine',.14);tone(784,.18,.22,'sine',.15);}
+function sWrong(){tone(200,0,.18,'triangle',.1);tone(150,.1,.22,'triangle',.1);}
+function sOpen(){tone(392,0,.15,'triangle',.14);tone(523,.15,.15,'triangle',.14);
+  tone(659,.3,.15,'triangle',.14);tone(784,.45,.3,'triangle',.16);}
+function sCoins(){for(var i=0;i<7;i++)tone(1400+Math.random()*1300,i*.09,.1,'sine',.08);}
+function sFanfare(){
+  var m=[[523,0,.16],[523,.16,.16],[523,.32,.16],[659,.5,.4],[523,.92,.16],[659,1.08,.16],[784,1.24,.6]];
+  for(var i=0;i<m.length;i++)tone(m[i][0],m[i][1],m[i][2],'triangle',.15);
+}
+
+/* ---------- конфетти и фейерверки ---------- */
+var fx=document.getElementById('fx'),fctx=fx.getContext('2d'),parts=[],confettiUntil=0;
+function fxSize(){fx.width=window.innerWidth;fx.height=window.innerHeight;}
+window.addEventListener('resize',function(){fxSize();positionTip();});
+fxSize();
+var FCOL=['#ffd166','#ff6b6b','#4cc9f0','#ff9f1c','#f72585','#8ac926','#ffb703','#c77dff'];
+function burst(x,y,n,pow){
+  n=n||34;pow=pow||1;
+  for(var i=0;i<n;i++){
+    var a=Math.random()*Math.PI*2,sp=(2+Math.random()*5)*pow;
+    parts.push({t:Math.random()<.45?'star':'spark',x:x,y:y,
+      vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.5,g:.12,
+      r:4+Math.random()*7*pow,rot:Math.random()*6.3,vr:(Math.random()-.5)*.3,
+      col:FCOL[(Math.random()*FCOL.length)|0],life:1,dl:.012+Math.random()*.014});
+  }
+}
+function confettiRain(ms){confettiUntil=Date.now()+ms;}
+function drawStarC(x,y,r,rot,col,alpha){
+  fctx.save();fctx.translate(x,y);fctx.rotate(rot);fctx.globalAlpha=alpha;fctx.fillStyle=col;
+  fctx.beginPath();
+  for(var i=0;i<10;i++){
+    var rr=(i%2? r*.45:r),an=i*Math.PI/5-Math.PI/2;
+    if(i)fctx.lineTo(Math.cos(an)*rr,Math.sin(an)*rr);else fctx.moveTo(Math.cos(an)*rr,Math.sin(an)*rr);
+  }
+  fctx.closePath();fctx.fill();fctx.restore();
+}
+function fxLoop(){
+  fctx.clearRect(0,0,fx.width,fx.height);
+  if(Date.now()<confettiUntil && parts.length<600){
+    for(var k=0;k<3;k++)parts.push({t:'conf',x:Math.random()*fx.width,y:-30,
+      vx:(Math.random()-.5)*1.6,vy:2+Math.random()*2.5,g:.02,
+      w:8+Math.random()*8,h:10+Math.random()*12,rot:Math.random()*6.3,vr:(Math.random()-.5)*.2,
+      col:FCOL[(Math.random()*FCOL.length)|0],life:1,dl:.004,ph:Math.random()*6.3});
+  }
+  for(var i=parts.length-1;i>=0;i--){
+    var p=parts[i];
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.rot+=p.vr||0;p.life-=p.dl;
+    if(p.t==='conf'){p.ph+=.06;p.x+=Math.sin(p.ph)*1.2;}
+    if(p.life<=0||p.y>fx.height+60){parts.splice(i,1);continue;}
+    var al=Math.max(0,Math.min(1,p.life));
+    if(p.t==='conf'){
+      fctx.save();fctx.translate(p.x,p.y);fctx.rotate(p.rot);
+      fctx.globalAlpha=al;fctx.fillStyle=p.col;fctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      fctx.restore();
+    }else if(p.t==='star'){drawStarC(p.x,p.y,p.r,p.rot,p.col,al);}
+    else{fctx.globalAlpha=al;fctx.fillStyle=p.col;
+      fctx.beginPath();fctx.arc(p.x,p.y,p.r*.5,0,6.3);fctx.fill();}
+  }
+  fctx.globalAlpha=1;
+  requestAnimationFrame(fxLoop);
+}
+requestAnimationFrame(fxLoop);
+
+/* ---------- карточка с примером ---------- */
+var overlay=document.getElementById('overlay'),qcard=document.getElementById('qcard'),
+    eqA=document.getElementById('eqA'),eqOp=document.getElementById('eqOp'),
+    eqB=document.getElementById('eqB'),eqAns=document.getElementById('eqAns'),
+    hint=document.getElementById('hint'),praise=document.getElementById('praise'),
+    qnum=document.getElementById('qnum'),keypad=document.getElementById('keypad'),
+    banner=document.getElementById('banner'),bstars=document.getElementById('bstars'),
+    tip=document.getElementById('tip'),bubble=document.getElementById('bubble');
+var cur=null,buffer='',attempts=0,done=false,modalOpen=false,bubbleT=null;
+function setAns(s){
+  if(s===''){eqAns.textContent='?';eqAns.classList.add('empty');}
+  else{eqAns.textContent=s;eqAns.classList.remove('empty');}
+}
+['1','2','3','4','5','6','7','8','9','⌫','0','✓'].forEach(function(t){
+  var b=document.createElement('button');
+  if(t==='⌫')b.className='fn';
+  if(t==='✓')b.className='okb';
+  b.textContent=t;
+  b.addEventListener('click',function(){keyPress(t);});
+  keypad.appendChild(b);
+});
+function keyPress(t){
+  if(!cur||done)return;
+  if(t==='⌫'){buffer=buffer.slice(0,-1);setAns(buffer);return;}
+  if(t==='✓'){check();return;}
+  if(buffer.length>=2)return;
+  buffer+=t;setAns(buffer);sType();
+}
+function openModal(k){
+  var v=vals();
+  cur={k:k,c:v[k],st:P.steps[k]};
+  buffer='';attempts=0;done=false;modalOpen=true;
+  qnum.textContent='Пример '+(k+1)+' из '+N;
+  eqA.textContent=cur.c;
+  eqOp.textContent=cur.st.s>0?'+':'−';
+  eqB.textContent=cur.st.d;
+  setAns('');
+  praise.textContent='Реши пример!';
+  hint.classList.add('hidden');hint.textContent='';
+  qcard.classList.remove('ok','err','shake');
+  overlay.classList.remove('hidden');
+  positionTip();
+}
+function closeModal(){
+  if(done)return;
+  overlay.classList.add('hidden');modalOpen=false;cur=null;
+  positionTip();
+}
+function check(){
+  if(!cur||done||!buffer)return;
+  var ans=parseInt(buffer,10);
+  if(ans===cur.c+cur.st.s*cur.st.d){
+    done=true;
+    qcard.classList.remove('err');qcard.classList.add('ok');
+    praise.textContent=PRAISE[(Math.random()*PRAISE.length)|0];
+    sCorrect();
+    var k=cur.k;
+    setTimeout(function(){
+      overlay.classList.add('hidden');modalOpen=false;cur=null;
+      onSolved(k);
+    },650);
+  }else{
+    attempts++;
+    qcard.classList.remove('shake','err');void qcard.offsetWidth;
+    qcard.classList.add('shake','err');
+    setTimeout(function(){qcard.classList.remove('err');},700);
+    praise.textContent=ENC[(Math.random()*ENC.length)|0];
+    sWrong();
+    buffer='';setAns('');
+    if(attempts>=2){
+      hint.textContent='💡 '+hintFor(cur.c,cur.st.s,cur.st.d);
+      hint.classList.remove('hidden');
+    }
+  }
+}
+document.getElementById('qclose').addEventListener('click',closeModal);
+document.addEventListener('keydown',function(e){
+  if(!overlay.classList.contains('hidden')){
+    if(/^[0-9]$/.test(e.key)){keyPress(e.key);e.preventDefault();}
+    else if(e.key==='Backspace'){keyPress('⌫');e.preventDefault();}
+    else if(e.key==='Enter'||e.key===' '){keyPress('✓');e.preventDefault();}
+    else if(e.key==='Escape'){closeModal();}
+  }
+});
+
+/* ---------- решение ---------- */
+function onOp(k){
+  if(state.cur>=N)return;
+  if(k===state.cur){sClick();openModal(k);}
+  else{
+    var g=opEls[k];
+    g.classList.remove('wig');void g.getBoundingClientRect();g.classList.add('wig');
+    setTimeout(function(){g.classList.remove('wig');},450);
+    if(k>state.cur){ /* подмигиваем правильной клеткой */
+      ah.style.display='none';void ah.getBoundingClientRect();ah.style.display='';
+    }
+  }
+}
+function onSolved(k){
+  state.cur=k+1;
+  var v=vals();
+  var rg=resEls[k];
+  rg.classList.add('filled');
+  rg._txt.textContent=v[k+1];
+  opEls[k].classList.add('solved');
+  segLit[2*k].style.strokeDashoffset='0';
+  segLit[2*k+1].style.strokeDashoffset='0';
+  var r=opEls[k].getBoundingClientRect();
+  burst(r.left+r.width/2,r.top+r.height/2,40,1);
+  addSharedStar();
+  if(state.cur===N)finishSeq();
+  else renderAll(false);
+  saveState();
+}
+function finishSeq(){
+  renderAll(false);
+  setTimeout(function(){segLit[30].style.strokeDashoffset='0';},350);
+  setTimeout(function(){
+    chest.classList.add('open');
+    sOpen();sCoins();
+    var r=chest.getBoundingClientRect();
+    burst(r.left+r.width/2,r.top+r.height/2,60,1.3);
+    setTimeout(function(){burst(r.left+r.width*.3,r.top+r.height*.5,40,1);},300);
+    setTimeout(function(){burst(r.left+r.width*.7,r.top+r.height*.5,40,1);},600);
+  },900);
+  for(var i=0;i<8;i++){
+    (function(i){
+      setTimeout(function(){
+        burst(fx.width*(0.15+Math.random()*0.7),fx.height*(0.12+Math.random()*0.45),55,1.4);
+        tone(700+Math.random()*900,0,.08,'sine',.05);
+      },1200+i*430);
+    })(i);
+  }
+  confettiRain(9000);
+  setTimeout(sFanfare,1000);
+  setTimeout(function(){
+    bstars.textContent='⭐ '+N+' звёздочек собрано! ⭐';
+    banner.classList.remove('hidden');
+  },2300);
+  saveState();
+}
+function onChest(){
+  if(state.cur<N){
+    chest.classList.remove('wig');void chest.getBoundingClientRect();chest.classList.add('wig');
+    setTimeout(function(){chest.classList.remove('wig');},450);
+    sClick();
+    var r=chest.getBoundingClientRect();
+    bubble.textContent='Сначала реши все примеры! Осталось: '+(N-state.cur)+' ⭐';
+    bubble.style.left=(r.left+r.width/2)+'px';
+    bubble.style.top=r.top+'px';
+    bubble.classList.remove('hidden');
+    clearTimeout(bubbleT);
+    bubbleT=setTimeout(function(){bubble.classList.add('hidden');},2300);
+  }else{
+    banner.classList.remove('hidden');
+    confettiRain(3000);
+    sFanfare();
+  }
+}
+function positionTip(){
+  if(state.cur===0 && modalOpen===false){
+    var r=opEls[0].getBoundingClientRect();
+    tip.style.left=(r.left+r.width/2)+'px';
+    tip.style.top=(r.bottom+12)+'px';
+    tip.classList.remove('hidden');
+  }else tip.classList.add('hidden');
+}
+
+/* ---------- кнопки ---------- */
+var soundBtn=document.getElementById('soundBtn');
+function drawMute(){soundBtn.textContent=state.muted?'🔇':'🔊';}
+soundBtn.addEventListener('click',function(){
+  state.muted=!state.muted;drawMute();saveState();if(!state.muted)sClick();
+});
+document.getElementById('resetBtn').addEventListener('click',function(){
+  document.getElementById('confirmBox').classList.remove('hidden');
+});
+document.getElementById('cfNo').addEventListener('click',function(){
+  document.getElementById('confirmBox').classList.add('hidden');
+});
+document.getElementById('cfYes').addEventListener('click',function(){
+  document.getElementById('confirmBox').classList.add('hidden');
+  newGame();
+});
+document.getElementById('againBtn').addEventListener('click',function(){
+  banner.classList.add('hidden');
+  parts.length=0;confettiUntil=0;
+  newGame();
+});
+function newGame(){
+  banner.classList.add('hidden');
+  parts.length=0;confettiUntil=0;
+  P=genPuzzle();state.cur=0;
+  renderAll(true);
+  saveState();
+  sClick();
+}
+
+/* ---------- запуск ---------- */
+var saved=loadState();
+if(saved){P=saved.puzzle;state={cur:saved.cur,muted:saved.muted};}
+else{P=genPuzzle();state={cur:0,muted:false};saveState();}
+buildAll();
+drawMute();
+renderAll(true);
+if(state.cur===N){ /* открыли уже пройденный лабиринт — показываем поздравление */ 
+  setTimeout(function(){
+    bstars.textContent='⭐ '+N+' звёздочек собрано! ⭐';
+    banner.classList.remove('hidden');
+  },1000);
+}
+</script>
+<a href="index.html" title="Все уроки" style="position:fixed;right:14px;bottom:14px;z-index:9999;width:54px;height:54px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠</a>
+</body>
+</html>
