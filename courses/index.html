@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Курсы — Репетитор Иванова</title>
+<meta property="og:title" content="Курсы — Репетитор Иванова">
+<meta property="og:description" content="Интерактивные курсы: физика, география, история, английский, олимпиадная математика. Доступ по персональному коду после оплаты.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef4fb;color:#1c2a3a;line-height:1.5;padding:24px 16px 48px}
@@ -18,19 +22,39 @@ h1{font-size:28px;margin:8px 0 4px}
 .card .em{font-size:34px;line-height:1.2}
 .card h3{font-size:17px;line-height:1.3}
 .card p{font-size:13.5px;color:#5a6b80}
-.card .go{margin-top:auto;font-size:13px;font-weight:bold;color:#7c3aed}
+.card .price{font-size:14px;font-weight:bold;color:#1c2a3a;margin-top:4px}
+.card .go{margin-top:auto;font-size:13px;font-weight:bold;color:#7c3aed;padding-top:6px}
+.lockchip{display:inline-block;font-size:11px;font-weight:bold;color:#7c3aed;background:#f1e9ff;border-radius:99px;padding:2px 10px;margin-top:4px}
 .soon{opacity:.55}
-.note{margin-top:24px;font-size:13px;color:#5a6b80}
+.how{margin-top:28px;background:#fff;border-radius:16px;border:1px solid #e4ebf5;padding:20px;box-shadow:0 2px 10px rgba(20,40,80,.08)}
+.how h2{font-size:18px;margin-bottom:10px}
+.how ol{margin:0 0 8px 20px;font-size:14px;color:#3a4a60}
+.how li{margin-bottom:6px}
+.how .tg{font-size:14px;color:#1c2a3a;background:#f1e9ff;border-radius:10px;padding:10px 14px;display:inline-block}
+.note{margin-top:20px;font-size:13px;color:#5a6b80}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="../index.html">← На главную</a>
   <h1>🎓 Курсы</h1>
-  <div class="sub">Интерактивные курсы-тропы: параграфы один за другим, тесты, словарь, прогресс сохраняется в браузере</div>
+  <div class="sub">Интерактивные курсы: теория и задания открываются по шагам, тесты проверяют сразу, прогресс сохраняется в браузере.<br>Доступ к каждому курсу — по персональному коду, который выдаётся после оплаты.</div>
   <div class="grid">
-    <a class="card" href="fizika-7/index.html"><div class="em">⚛️</div><h3>Физика 7 · Тропа уроков</h3><p>Углублённый уровень («Инженеры будущего»), часть 1: §1–§9 — 9 параграфов, 192 экрана теории и 152 задания из учебника и задачника. Словарь терминов, режим учителя (кнопка 🎓).</p><div class="go">Открыть курс →</div></a>
+    <a class="card" href="fizika-7/index.html"><div class="em">⚛️</div><h3>Физика 7 · Тропа уроков</h3><p>Углублённый уровень («Инженеры будущего»), часть 1: §1–§9 — 9 параграфов, 192 экрана теории и 152 задания из учебника и задачника. Словарь терминов, режим учителя (кнопка 🎓).</p><div class="price">__PRICE_FIZIKA__</div><span class="lockchip">🔒 доступ по коду</span><div class="go">Открыть курс →</div></a>
+    <a class="card" href="geografiya-5-6/index.html"><div class="em">🌍</div><h3>География 5–6 · Тропа уроков</h3><p>Полный курс «Тропа уроков»: 55 параграфов, 591 тест, словарь 183 термина, карта открытий, режим учителя (кнопка 🎓).</p><div class="price">__PRICE_GEO__</div><span class="lockchip">🔒 доступ по коду</span><div class="go">Открыть курс →</div></a>
+    <a class="card" href="istoriya-5/index.html"><div class="em">🏺</div><h3>История Древнего мира · 5 класс</h3><p>Интерактивные уроки-тренажёры по теме «Древний Египет»: «Жизнь египетского вельможи» и «Вечер земледельца».</p><div class="price">__PRICE_IST__</div><span class="lockchip">🔒 доступ по коду</span><div class="go">Открыть курс →</div></a>
+    <a class="card" href="test-your-grammar/index.html"><div class="em">🇬🇧</div><h3>Test your grammar · Английский</h3><p>38 тестов-уроков по грамматике английского с картой прогресса: времена, артикли, предлоги и многое другое.</p><div class="price">__PRICE_ENG__</div><span class="lockchip">🔒 доступ по коду</span><div class="go">Открыть курс →</div></a>
+    <a class="card" href="kosmos/index.html"><div class="em">🚀</div><h3>Космический курс · Математика</h3><p>Олимпиадные задачи по математике для 4 класса: 6 космических миссий — от лунной станции «Селена» до орбитальной теплицы.</p><div class="price">__PRICE_KOSMOS__</div><span class="lockchip">🔒 доступ по коду</span><div class="go">Открыть курс →</div></a>
     <div class="card soon"><div class="em">🧱</div><h3>Физика 7 · Строение вещества</h3><p>Глава 2 (§11–§19) — готовится.</p></div>
+  </div>
+  <div class="how">
+    <h2>Как получить доступ</h2>
+    <ol>
+      <li>Выберите курс и напишите мне в Telegram <b>__TELEGRAM__</b> — уточню детали оплаты.</li>
+      <li>После оплаты я выдаю вам <b>персональный код доступа</b> (выглядит так: <b>KOSM-XXXX-XXXX-XXXX</b>).</li>
+      <li>Откройте курс и введите код один раз — курс откроется и будет доступен на этом устройстве всегда.</li>
+    </ol>
+    <div class="tg">💬 Telegram: <b>__TELEGRAM__</b></div>
   </div>
   <div class="note">Новые курсы будут появляться на этой странице.</div>
 </div>

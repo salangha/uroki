@@ -1,0 +1,80 @@
+{
+ "course": "fizika-7",
+ "title": "Физика 7 · Тропа уроков",
+ "ver": "33d3ed8d7f98",
+ "entry": "course.html",
+ "files": [
+  {
+   "path": "course.html",
+   "bin": "course.html.bin",
+   "size": 1550,
+   "sha": "dd4119da0c7a68e7e94e9268f105170cddc383159d6c5002552ebf9f4864a4a4"
+  },
+  {
+   "path": "js/app.js",
+   "bin": "js__app.js.bin",
+   "size": 42115,
+   "sha": "bc90ecc9a78d9a79cd62d4235391ffa8bb0caeece88cca94c2eec65f71f65ce3"
+  },
+  {
+   "path": "js/data.js",
+   "bin": "js__data.js.bin",
+   "size": 6728,
+   "sha": "1f238a9f269f96db68f9583895a9bc2df9709c52492a23ebb1ff9d1a0ead7f06"
+  },
+  {
+   "path": "js/topic-01.js",
+   "bin": "js__topic-01.js.bin",
+   "size": 40019,
+   "sha": "67011faff979cea48bfeb21873eceac6d36afe3f174267518781f9f39a944f40"
+  },
+  {
+   "path": "js/topic-02.js",
+   "bin": "js__topic-02.js.bin",
+   "size": 31515,
+   "sha": "ebc0bc5c690fc8d5040c639c89e7422a29d7ccb94d6d1d1a1ca1483a526f059c"
+  },
+  {
+   "path": "js/topic-03.js",
+   "bin": "js__topic-03.js.bin",
+   "size": 35290,
+   "sha": "ab14a63d611dcf756eb975c3b2666353f919490305b379ee34ca5f9f1bee2865"
+  },
+  {
+   "path": "js/topic-04.js",
+   "bin": "js__topic-04.js.bin",
+   "size": 35600,
+   "sha": "93c55089999058bfb40bd7c9a2312958154895c442903472e3c47bb794d3a253"
+  },
+  {
+   "path": "js/topic-05.js",
+   "bin": "js__topic-05.js.bin",
+   "size": 33244,
+   "sha": "4e290c538121f394e66a9c8bb2e1592b7fc391512a0c3b0ec7beddca629600d2"
+  },
+  {
+   "path": "js/topic-06.js",
+   "bin": "js__topic-06.js.bin",
+   "size": 28051,
+   "sha": "ed3809ba4d43748db72f404122869464bc7273e31b42ea50964af41f0aa9c2d6"
+  },
+  {
+   "path": "js/topic-07.js",
+   "bin": "js__topic-07.js.bin",
+   "size": 36740,
+   "sha": "e7426bf00ede66ee0a765bb3e5470acf0a5b2b094e3153c36c004015c58ef042"
+  },
+  {
+   "path": "js/topic-08.js",
+   "bin": "js__topic-08.js.bin",
+   "size": 39483,
+   "sha": "fa605a1ea62ce398f50eba69f79329610039e91f6cd9f54031a679212b373bbd"
+  },
+  {
+   "path": "js/topic-09.js",
+   "bin": "js__topic-09.js.bin",
+   "size": 21350,
+   "sha": "6127fb0f7cbfe7f5eead521e52abdbf8e8025fdecf02c704d04f55b5ed7382a6"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "course": "test-your-grammar",
+ "title": "Test your grammar · Английский язык",
+ "ver": "6c3c539d06f7",
+ "entry": "course.html",
+ "files": [
+  {
+   "path": "course.html",
+   "bin": "course.html.bin",
+   "size": 437360,
+   "sha": "9e14d57a7aafc8ecd7830c41ec047adb7492f1d0878a0db89d91afd2e85a1b90"
+  }
+ ]
+}

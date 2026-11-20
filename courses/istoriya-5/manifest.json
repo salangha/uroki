@@ -1,0 +1,26 @@
+{
+ "course": "istoriya-5",
+ "title": "История Древнего мира · 5 класс",
+ "ver": "4d04ed6cf7da",
+ "entry": "start.html",
+ "files": [
+  {
+   "path": "start.html",
+   "bin": "start.html.bin",
+   "size": 2177,
+   "sha": "6a409af6afaffee5ae16e3b3b6ca493cd6c583f968ec9f4fae304926434062ae"
+  },
+  {
+   "path": "velmozha.html",
+   "bin": "velmozha.html.bin",
+   "size": 675716,
+   "sha": "0483c341ffb349203e6374e8c616a9fcd97680ba510036ff0c7e5bf21658a514"
+  },
+  {
+   "path": "zemledelets.html",
+   "bin": "zemledelets.html.bin",
+   "size": 2417700,
+   "sha": "09422ec91c14432e1ff00e55953482828cfffffcd817ba300c200aa8316f07f3"
+  }
+ ]
+}

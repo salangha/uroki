@@ -1,0 +1,50 @@
+{
+ "course": "kosmos",
+ "title": "Космический курс · Олимпиадная математика, 4 класс",
+ "ver": "3cbc9ce2dfe4",
+ "entry": "start.html",
+ "files": [
+  {
+   "path": "m01.html",
+   "bin": "m01.html.bin",
+   "size": 21448,
+   "sha": "8ac037bbc9c0790fd674c84870ba63c889090d50c3fdf4184cd38529f127e7a5"
+  },
+  {
+   "path": "m02.html",
+   "bin": "m02.html.bin",
+   "size": 24489,
+   "sha": "199315e3f8a538b8a308a8fc1af58a2371e2df54722325749a98859f58f036f1"
+  },
+  {
+   "path": "m03.html",
+   "bin": "m03.html.bin",
+   "size": 25064,
+   "sha": "0d8dfa838f617ce709856ced39a308d085676250fc4e2ce4874558312af43f10"
+  },
+  {
+   "path": "m04.html",
+   "bin": "m04.html.bin",
+   "size": 22417,
+   "sha": "616429bc47376a119766b3a1289687b58b794af9ca2f595778c3db91d30da59c"
+  },
+  {
+   "path": "m05.html",
+   "bin": "m05.html.bin",
+   "size": 32030,
+   "sha": "f2c113b22a30d8024c0fc16a78f729acebf6ae11ba765b1791f0fb37c8aeb506"
+  },
+  {
+   "path": "m06.html",
+   "bin": "m06.html.bin",
+   "size": 24382,
+   "sha": "09fd73db5367b27c321cca1a37796112934198c3a200f9ede1fddd509661b331"
+  },
+  {
+   "path": "start.html",
+   "bin": "start.html.bin",
+   "size": 3446,
+   "sha": "324984a371127d55358a1a9ee531763d043318c3d57b22e0b462ac4e0d0d7a23"
+  }
+ ]
+}

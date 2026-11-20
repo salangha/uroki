@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>История Древнего мира · 5 класс — доступ по коду</title>
+<meta property="og:title" content="История Древнего мира · 5 класс — курс репетитора Ивановой">
+<meta property="og:description" content="Интерактивный курс. Открывается по персональному коду доступа, который выдаёт преподаватель после оплаты.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef4fb;color:#1c2a3a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px 16px;line-height:1.5}
+.card{background:#fff;border-radius:20px;padding:28px 24px;max-width:420px;width:100%;box-shadow:0 6px 24px rgba(20,40,80,.12);border:1px solid #e4ebf5;text-align:center;position:relative}
+.back{position:absolute;top:14px;left:16px;font-size:12.5px;color:#5a6b80;text-decoration:none}
+.lock{font-size:44px;line-height:1;margin-bottom:8px}
+h1{font-size:20px;margin-bottom:6px}
+.hint{font-size:13.5px;color:#5a6b80;margin-bottom:18px}
+.row{display:flex;flex-direction:column;gap:10px}
+input{width:100%;padding:13px 14px;font-size:18px;letter-spacing:2px;text-align:center;border:2px solid #d7dfee;border-radius:12px;outline:none;background:#f7f9fe;text-transform:uppercase}
+input:focus{border-color:#7c3aed;background:#fff}
+button{padding:13px;font-size:16px;font-weight:bold;color:#fff;background:#7c3aed;border:none;border-radius:12px;cursor:pointer;transition:background .15s}
+button:hover{background:#6a28d8}
+button:disabled{background:#b79aec;cursor:wait}
+#status{font-size:13.5px;color:#5a6b80;margin-top:12px;min-height:20px}
+#status.err{color:#c0262e;font-weight:bold}
+.bar{height:5px;background:#e4e9f5;border-radius:99px;margin-top:10px;overflow:hidden;opacity:0;transition:opacity .2s}
+.bar.on{opacity:1}
+#fill{height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#4f46e5);border-radius:99px;transition:width .2s}
+.tg{font-size:12.5px;color:#5a6b80;margin-top:18px}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <a class="back" href="../index.html">← Все курсы</a>
+  <div class="lock">🔒</div>
+  <h1>История Древнего мира · 5 класс</h1>
+  <p class="hint">Курс открывается по персональному коду доступа.<br>Код выдаёт преподаватель после оплаты.</p>
+  <div class="row">
+    <input id="code" placeholder="XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <button id="go">Открыть курс</button>
+  </div>
+  <div id="status"></div>
+  <div class="bar" id="bar"><div id="fill"></div></div>
+  <p class="tg">Вопросы по оплате и доступу: Telegram <b>@TELEGRAM_NICK</b></p>
+</div>
+<noscript><p style="text-align:center">Для открытия курса включите JavaScript.</p></noscript>
+<script>
+"use strict";
+window.__errs = [];
+window.addEventListener("error", e => window.__errs.push(String(e.error || e.message)));
+window.addEventListener("unhandledrejection", e => window.__errs.push("REJ: " + String(e.reason)));
+const COURSE = { id: "istoriya-5", title: "История Древнего мира · 5 класс", entry: "start.html", telegram: "@TELEGRAM_NICK" };
+const CACHE = "course-" + COURSE.id;
+const $ = s => document.querySelector(s);
+const enc = new TextEncoder();
+
+/* ---------- мелкие помощники ---------- */
+const ls = {
+  get k() { return "pw-" + COURSE.id + "-"; },
+  get: n => { try { return localStorage.getItem(ls.k + n); } catch (e) { return null; } },
+  set: (n, v) => { try { localStorage.setItem(ls.k + n, v); } catch (e) {} },
+  del: n => { try { localStorage.removeItem(ls.k + n); } catch (e) {} }
+};
+function hexBytes(h) { const a = new Uint8Array(h.length / 2); for (let i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; }
+function b64Bytes(b) { const s = atob(b); const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
+function normalizeCode(s) { return (s || "").toUpperCase().replace(/[^0-9A-Z]/g, ""); }
+const MIME = { html: "text/html; charset=utf-8", js: "text/javascript; charset=utf-8", css: "text/css; charset=utf-8", json: "application/json" };
+function mimeOf(path) { const m = path.match(/\.([a-z0-9]+)$/i); return (m && MIME[m[1].toLowerCase()]) || "application/octet-stream"; }
+function setStatus(msg, isErr) { const el = $("#status"); el.textContent = msg || ""; el.className = isErr ? "err" : ""; }
+function setProgress(frac) { $("#bar").classList.add("on"); $("#fill").style.width = Math.round(frac * 100) + "%"; }
+
+/* ---------- сеть ---------- */
+const noStore = { cache: "no-store" };
+async function fetchJSON(f) { const r = await fetch(f, noStore); if (!r.ok) throw new Error("файл " + f + " недоступен"); return r.json(); }
+
+/* ---------- проверка кода по лицензиям ---------- */
+async function tryLicenses(code) {
+  const { licenses } = await fetchJSON("licenses.json");
+  if (!licenses.length) return null;
+  const km = await crypto.subtle.importKey("raw", enc.encode(code), "PBKDF2", false, ["deriveKey"]);
+  for (const lic of licenses) {
+    try {
+      const key = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt: hexBytes(lic.salt), iterations: lic.iterations || 200000, hash: "SHA-256" },
+        km, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      const raw = b64Bytes(lic.wrap);
+      const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
+      return new Uint8Array(pt);
+    } catch (e) { /* не та лицензия — пробуем следующую */ }
+  }
+  return null;
+}
+
+/* ---------- расшифровка курса в кэш ---------- */
+async function unlock(keyBytes, manifest) {
+  const cache = await caches.open(CACHE);
+  await cache.keys().then(keys => Promise.all(keys.map(k => cache.delete(k))));
+  const aes = await crypto.subtle.importKey("raw", keyBytes, "AES-GCM", false, ["decrypt"]);
+  let done = 0;
+  for (const f of manifest.files) {
+    const r = await fetch("enc/" + f.bin, noStore);
+    if (!r.ok) throw new Error("не удалось загрузить " + f.bin);
+    const buf = await r.arrayBuffer();
+    const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: new Uint8Array(buf.slice(0, 12)) }, aes, buf.slice(12));
+    const digest = await crypto.subtle.digest("SHA-256", pt);
+    const sha = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+    if (sha !== f.sha) throw new Error("файл повреждён: " + f.path);
+    const url = new URL(f.path, location.href).origin + new URL(f.path, location.href).pathname;
+    await cache.put(url, new Response(pt, { headers: { "Content-Type": mimeOf(f.path) } }));
+    done++; setProgress(done / manifest.files.length);
+  }
+  ls.set("ver", manifest.ver);
+}
+
+/* ---------- сервис-воркер ---------- */
+async function ensureSW(code) {
+  if (!("serviceWorker" in navigator)) throw new Error("Браузер не поддерживает автономный доступ. Откройте курс в обычном (не приватном) режиме браузера.");
+  const reg = await navigator.serviceWorker.register("sw.js", { updateViaCache: "none" });
+  await navigator.serviceWorker.ready;
+  if (reg.active && code) reg.active.postMessage({ type: "code", code: code });
+  return reg;
+}
+
+/* ---------- цель перехода ---------- */
+function resolveTarget(manifest) {
+  const p = new URLSearchParams(location.search).get("p");
+  const names = new Set(manifest.files.map(f => f.path));
+  if (p) {
+    const cand = p.endsWith(".html") ? p : p + ".html";
+    if (names.has(cand)) return cand;
+  }
+  return manifest.entry || COURSE.entry;
+}
+
+/* ---------- запуск ---------- */
+async function boot() {
+  try {
+    const manifest = await fetchJSON("manifest.json");
+    const target = resolveTarget(manifest);
+    const code = normalizeCode(ls.get("code"));
+    if (!code) { showForm(); return; }
+    setStatus("Проверяем код доступа…");
+    const key = await tryLicenses(code);
+    if (!key) {
+      ls.del("code"); ls.del("ver");
+      showForm("Код недействителен. Введите код заново.");
+      return;
+    }
+    await ensureSW(code);
+    if (ls.get("ver") === manifest.ver && await cacheHasFiles(manifest)) {
+      location.replace(target);
+      return;
+    }
+    setStatus("Загружаем курс…");
+    await unlock(key, manifest);
+    location.replace(target);
+  } catch (e) {
+    window.__errs.push("boot: " + (e && e.message));
+    showForm("Не удалось открыть курс: " + e.message + ". Проверьте интернет и попробуйте ещё раз.");
+  }
+}
+
+async function cacheHasFiles(manifest) {
+  try {
+    const cache = await caches.open(CACHE);
+    const first = manifest.files[0];
+    if (!first) return false;
+    const u = new URL(first.path, location.href);
+    return !!(await cache.match(u.origin + u.pathname));
+  } catch (e) { return false; }
+}
+
+function showForm(presetErr) {
+  const input = $("#code"), btn = $("#go");
+  btn.disabled = false;
+  input.addEventListener("input", () => setStatus(""));
+  btn.addEventListener("click", submit);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+  if (presetErr) setStatus(presetErr, true);
+}
+
+async function submit() {
+  const input = $("#code"), btn = $("#go");
+  const code = normalizeCode(input.value);
+  if (code.length < 8) { setStatus("Введите код полностью", true); return; }
+  btn.disabled = true;
+  setStatus("Проверяем код…");
+  try {
+    const key = await tryLicenses(code);
+    if (!key) {
+      $("#card").classList.remove("shake"); void $("#card").offsetWidth; $("#card").classList.add("shake");
+      setStatus("Код не найден. Проверьте код (регистр не важен) или напишите преподавателю.", true);
+      btn.disabled = false;
+      return;
+    }
+    ls.set("code", code);
+    const manifest = await fetchJSON("manifest.json");
+    setStatus("Загружаем курс…");
+    await unlock(key, manifest);
+    await ensureSW(code);
+    location.replace(resolveTarget(manifest));
+  } catch (e) {
+    setStatus("Ошибка: " + e.message + ". Проверьте интернет и попробуйте ещё раз.", true);
+    btn.disabled = false;
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
