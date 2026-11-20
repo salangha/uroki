@@ -859,18 +859,38 @@ function payFor(label,mascot,thing,quoted,total,onDone){
   }
 }
 function momAsk(total,onDone){
-  openQ({num:'👩 Мама помогает',mascot:'👩',
-    prompt:'Посчитай: на сколько рублей не хватает?',
-    a:total,op:-1,b:S.money,
-    hintFn:function(){return hintSub(total,S.money);},
-    onOk:function(x){
-      S.money+=x;S.momGiven+=x;
-      save();renderAll();
-      burstAtEl(document.getElementById('moneyPill'),30,.9);
-      sCoins();
-      momSay('Держи '+x+' р. — теперь денег как раз! 🥰');
-      setTimeout(onDone,1200);
-    }});
+  /* мама доводит оплату до конца: после onDone покупка УЖЕ оплачена,
+     и в кошельке остаются живые деньги (сдача), а не ноль */
+  if(S.money===0){
+    /* пусто: мама даёт купюру до десятков сверху и спрашивает сдачу */
+    var give=Math.ceil(total/10)*10;
+    openQ({num:'👩 Мама помогает',mascot:'👩',
+      prompt:'У тебя 0 р.! Мама дала '+give+' р. На билет нужно '+total+' р. Сколько сдачи останется?',
+      a:give,op:-1,b:total,
+      hintFn:function(){return hintSub(give,total);},
+      onOk:function(ch){
+        S.money=ch;S.momGiven+=give;
+        save();renderAll();
+        burstAtEl(document.getElementById('moneyPill'),30,.9);
+        sCoins();
+        momSay('Умница! Держи '+ch+' р. сдачи — потрать на мороженое! 🍦');
+        setTimeout(onDone,1200);
+      }});
+  }else{
+    var bonus=pick([10,15,20]);
+    openQ({num:'👩 Мама помогает',mascot:'👩',
+      prompt:'Посчитай: на сколько рублей не хватает?',
+      a:total,op:-1,b:S.money,
+      hintFn:function(){return hintSub(total,S.money);},
+      onOk:function(x){
+        S.money=bonus;S.momGiven+=x+bonus;
+        save();renderAll();
+        burstAtEl(document.getElementById('moneyPill'),30,.9);
+        sCoins();
+        momSay('Держи '+(x+bonus)+' р.! '+x+' р. — на покупку, а '+bonus+' р. — твои, на сдачу! 😊');
+        setTimeout(onDone,1200);
+      }});
+  }
 }
 
 /* ================= магазин ================= */
@@ -956,7 +976,7 @@ function afterTotal(viaMom){
       return;
     }
     payFor('☕ Кафе','🦊','Покупка',false,S.total,function(){finishCafe();});
-  }else momAsk(S.total,function(){S.money-=S.total;finishCafe();});
+  }else momAsk(S.total,function(){finishCafe();});
 }
 function finishCafe(){
   S.scene='map';
@@ -971,7 +991,7 @@ function buyRide(i){
   var r=S.rides[i];
   sClick();
   if(S.money<r.p){
-    momAsk(r.p,function(){payFor('🎡 Парк','🐵',r.n,true,r.p,function(){doRide(i);});});
+    momAsk(r.p,function(){doRide(i);});
     return;
   }
   payFor('🎡 Парк','🐵',r.n,true,r.p,function(){doRide(i);});
@@ -1004,7 +1024,7 @@ function feedAnimal(i){
 }
 function payFeed(i,total){
   if(S.money<total){
-    momAsk(total,function(){S.money-=total;doFeed(i,total);});
+    momAsk(total,function(){doFeed(i,total);});
   }else payFor('🦁 Зоопарк','🦜','Угощение',false,total,function(){doFeed(i,total);});
 }
 function doFeed(i,total){
