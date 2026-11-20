@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Интервалы вверх и вниз — урок сольфеджио</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#f5f2ea;color:#2a251e;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto}
+header{text-align:center;padding:8px 0 4px}
+h1{font-size:32px;margin:.2em 0;color:#1c4f8f}
+.sub{color:#7a7263;margin:0 0 10px}
+.plan{background:#eef4fb;border:1.5px solid #cfe0f4;border-radius:14px;padding:12px 18px;margin:12px 0;font-size:16px}
+.card{background:#fff;border-radius:18px;padding:20px 24px;margin:16px 0;box-shadow:0 3px 14px rgba(60,50,30,.08)}
+h2{font-size:23px;margin:.1em 0 .5em;color:#1c4f8f}
+h3{font-size:19px;margin:.6em 0 .3em;color:#544c40}
+p{margin:.5em 0}
+.note{background:#fff8e6;border-left:5px solid #e7b432;padding:10px 14px;border-radius:8px;margin:12px 0}
+.warnbox{background:#fdeeee;border-left:5px solid #c43d3d;padding:10px 14px;border-radius:8px;margin:12px 0}
+.staffbox{background:#fffef9;border:1.5px solid #e2dccd;border-radius:12px;padding:6px 10px;display:inline-block}
+svg.clickable{cursor:crosshair}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px;align-items:center;justify-content:center}
+.btn{font-size:17px;padding:10px 16px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;color:#2a251e}
+.btn:hover{background:#f0ead9}
+.btn.primary{background:#0b6bcb;border-color:#0b6bcb;color:#fff}
+.btn.primary:hover{background:#0a5cb0}
+.btn.good{background:#23843c;border-color:#23843c;color:#fff}
+.btn.tiny{font-size:15px;padding:4px 10px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:default}
+.accbtn{font-size:22px;min-width:46px}
+.accbtn.active{background:#0b6bcb;color:#fff;border-color:#0b6bcb}
+.tasktabs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+.tasktab{font-size:17px;padding:10px 18px;border-radius:14px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.tasktab.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.rowchips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.rowchip{font-size:16px;padding:8px 14px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.rowchip.active{background:#0b6bcb;color:#fff;border-color:#0b6bcb}
+.rowchip.full{background:#e7f6ec;border-color:#7cc08e;color:#23843c}
+.rowchip.active.full{background:#23843c;color:#fff;border-color:#23843c}
+.strip{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0;justify-content:center}
+.slot{font-size:15px;padding:8px 10px;border-radius:10px;border:2px dashed #b9b2a0;background:#fbfaf5;cursor:pointer;min-width:56px;text-align:center;color:#6f6858}
+.slot.solid{border-style:solid;border-color:#c9c2b2}
+.slot.given{background:#f0ede2;border-style:solid;border-color:#c9c2b2;color:#544c40}
+.slot.ok{background:#e7f6ec;border-color:#7cc08e;color:#23843c;font-weight:700}
+.slot.seen{background:#fff3c4;border-color:#d9b84a;color:#8a6d1f;font-weight:700}
+.slot.cur{outline:3px solid #0b6cb5;outline-offset:1px}
+.slot .b{display:block;font-size:11px;line-height:1.2;margin-top:2px;color:#8a8378}
+.slot.ok .b{color:#23843c}
+.ladder{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0}
+.lcell{border:2px solid #c9c2b2;border-radius:10px;padding:6px 10px;text-align:center;min-width:60px;background:#fbfaf5}
+.lcell b{display:block;font-size:17px}
+.lcell span{display:block;font-size:13px;color:#8a8378}
+.lcell.gap{background:#fdeeee;border-color:#e0a2a2;color:#b06464;font-size:13px;display:flex;align-items:center;justify-content:center}
+.fb{border-radius:12px;padding:12px 16px;margin:10px 0;min-height:22px}
+.fb.empty{background:#f4f1e8;color:#6f6858}
+.fb.ok{background:#e7f6ec;border:1.5px solid #a9d8b6}
+.fb.err{background:#fdeaea;border:1.5px solid #efb9b9}
+.fb.hint{background:#fff6df;border:1.5px solid #ecd39a}
+.trainer-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+#progress{font-size:16px;color:#5f584a}
+.stage{max-width:340px;margin:0 auto;text-align:center}
+.exHead{font-size:18px;text-align:center;margin:6px 0}
+#selName{text-align:center;color:#5f584a;margin-top:2px}
+.namewrap{text-align:center;margin:8px 0}
+.namebtn{font-size:16px;padding:8px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;margin:3px}
+.namebtn:hover{background:#f0ead9}
+table.simple{border-collapse:collapse;margin:10px 0}
+table.simple th,table.simple td{border:1.5px solid #d8d2c4;padding:5px 10px;text-align:center;font-size:16px}
+table.simple th{background:#f2ede1}
+.ex{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin:14px 0;border-top:1px dashed #ddd;padding-top:14px}
+.exstaff{flex:0 0 300px}
+.exsteps{flex:1 1 340px;min-width:280px}
+.exsteps ol{margin:.3em 0 .3em 1.25em;padding:0}
+.ansline{font-size:18px;margin-top:6px}
+table.ans{border-collapse:collapse}
+table.ans th,table.ans td{border:1.5px solid #d8d2c4;padding:5px 10px;text-align:center;font-size:16px}
+table.ans td.acc{background:#fff3c4;font-weight:700}
+table.ans td.lbl{background:#f2ede1;font-weight:700}
+.answrap{overflow-x:auto;margin:8px 0}
+details{margin:10px 0}
+summary{cursor:pointer;font-weight:700;font-size:18px;color:#1c4f8f}
+footer{text-align:center;color:#8a8378;font-size:14px;padding:18px}
+footer a{color:#1c4f8f}
+.piano-wrap{overflow-x:auto;margin:8px 0}
+@media (max-width:640px){body{font-size:16px}h1{font-size:26px}.card{padding:16px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🎵 Интервалы вверх и вниз</h1>
+  <p class="sub">Урок сольфеджио. Разберём новые приёмы — и потренируемся строить интервалы в обе стороны.</p>
+</header>
+
+<div class="plan">
+  <b>План урока:</b>
+  1️⃣ повтори алгоритм из прошлого урока и разбери новое: прима ч.1, «лестница» интервалов, построение <b>вниз</b> →
+  2️⃣ <a href="#trainer">в тренажёре</a> пройди задания 1, 2 и 3 →
+  3️⃣ проверь себя по таблице ответов и закрепи слова в <a href="solfege-terminy.html">тренажёре терминов</a>.
+</div>
+
+<!-- ================= 1. ПОВТОРЕНИЕ ================= -->
+<section class="card">
+<h2>1. Два вопроса — как в прошлом уроке</h2>
+<p>Название интервала — шифровка из двух подсказок:</p>
+<p><b>Вопрос 1 — «Сколько ступенек?»</b> Число в названии: секунда — 2, терция — 3, кварта — 4, квинта — 5, секста — 6, септима — 7, октава — 8. Сама данная нота — ступенька № 1, дальше считаем каждую линейку и каждый промежуток.</p>
+<p><b>Вопрос 2 — «Сколько полутонов?»</b> Буква в названии: <b>м</b> — малая (поуже), <b>б</b> — большая (пошире), <b>ч</b> — чистая. Полутон — соседние клавиши без промежутка; среди белых клавиш полутоны только <b>МИ–ФА</b> и <b>СИ–ДО</b>, остальные шаги — тоны (2 полутона).</p>
+<div class="note">📌 В прошлом уроке мы строили интервалы <b>вверх</b>: данная нота была нижней, мы дописывали верхнюю. Сегодня появится и обратная работа: строить <b>вниз</b> — данная нота будет верхней, а мы допишем нижнюю.</div>
+</section>
+
+<!-- ================= 2. ПРИМА ================= -->
+<section class="card">
+<h2>2. Новое название: ч.1 — прима</h2>
+<p>В строках первого задания первая карточка подписана <b>ч.1</b> («чистая прима»). Прима — это <b>1 ступенька</b>: интервал ноты… с самой собой. Две одинаковые ноты — это и есть ч.1, расстояние равно нулю (0 полутонов).</p>
+<p>Поэтому в первой карточке каждой строки ответ уже стоит: сама нота. Дописывать ничего не нужно — это пример-образец.</p>
+<div class="note">💡 В задании 3 прима нарисована как две одинаковые ноты на одной линейке — запомни, как она выглядит.</div>
+</section>
+
+<!-- ================= 3. ЛЕСТНИЦА ================= -->
+<section class="card">
+<h2>3. «Лестница» интервалов — как восстановить пропущенное название</h2>
+<p>Все 12 интервалов можно выстроить в одну «лестницу» — от самой узкой к самой широкой. Каждый следующий интервал шире предыдущего на полутон:</p>
+<div class="ladder" id="ladder"></div>
+<p>Смотри: ширина в полутонах привязана к номеру клетки. Клетка № 1 — 0 полутонов (ч.1), клетка № 2 — 1 полутон (м.2), клетка № 6 — 5 полутонов (ч.4), а дальше — сразу клетка № 7 с 7 полутонами (ч.5)… клетка № 12 — 12 полутонов (ч.8).</p>
+<div class="note">🕳️ Между ч.4 и ч.5 есть пустое место: интервала шириной 6 полутонов среди наших названий не существует. Поэтому ч.4 — это всегда «5», а ч.5 — всегда «7». Это самое удобное место, чтобы проверить себя.</div>
+<h3>Как дописать пропущенное название</h3>
+<ol>
+  <li>Сосчитай номер пустой клетки (слева направо).</li>
+  <li>Вспомни по лестнице, сколько полутонов в этой клетке (или какие названия стоят вокруг).</li>
+  <li>Найди на лестнице название с такой шириной — это и есть ответ.</li>
+</ol>
+<p>Например: в строке ч.1, м.2, <b>[пусто]</b>, м.3. Пустая клетка — № 3, значит, ширина 2 полутона. На лестнице 2 полутона у <b>б.2</b> — пропущено б.2.</p>
+</section>
+
+<!-- ================= 4. ВНИЗ ================= -->
+<section class="card">
+<h2>4. Строим интервалы ВНИЗ</h2>
+<p>В задании 2 всё наоборот: данная нота — <b>верхняя</b>, а мы дописываем <b>нижнюю</b>. Алгоритм тот же, только ступеньки считаем вниз:</p>
+<p><b>Вопрос 1 — сколько ступенек?</b> Отсчитай нужное число ступенек <b>вниз</b> от данной ноты (сама она — № 1). Поставь ноту, пока без знака.</p>
+<p><b>Вопрос 2 — сколько полутонов?</b> Посчитай полутоны между нотами и сверься с лестницей. Если шаг вышел <b>пошире</b>, чем нужно — подними нижнюю ноту на полутон знаком <b>♯</b>. Если <b>поуже</b> — опусти её знаком <b>♭</b>.</p>
+<div class="warnbox">⚠️ Главная разница: при построении вниз знак ставится у <b>нижней</b> ноты — той, которую мы дописываем. Данная верхняя нота не трогается!</div>
+
+<h3>Разберём три примера</h3>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="d1"></div>
+  <div class="exsteps">
+    <b>Пример 1. м.2 вниз от СОЛЬ</b>
+    <ol>
+      <li><b>Ступеньки:</b> секунда — 2 ступеньки вниз: СОЛЬ (№1) → <b>ФА</b> (№2). Ставим ФА.</li>
+      <li><b>Полутоны:</b> СОЛЬ–ФА — тон, то есть 2 полутона.</li>
+      <li><b>Сверяем:</b> м.2 = 1 полутон. Шаг пошире, чем нужно → поднимаем нижнюю ноту: <b>ФА♯</b>.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>СОЛЬ–ФА♯ вниз</b> <button class="btn tiny" data-sound="d1">🔊 послушать</button></div>
+  </div>
+</div>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="d2"></div>
+  <div class="exsteps">
+    <b>Пример 2. ч.4 вниз от РЕ</b>
+    <ol>
+      <li><b>Ступеньки:</b> кварта — 4 ступеньки вниз: РЕ (№1) → ДО (№2) → СИ (№3) → <b>ЛЯ</b> (№4). Ставим ЛЯ.</li>
+      <li><b>Полутоны:</b> считаем по белым клавишам сверху вниз: РЕ–ДО — тон (2), ДО–СИ — полутон (1) (та самая пара СИ–ДО!), СИ–ЛЯ — тон (2). Всего 2 + 1 + 2 = <b>5 полутонов</b>.</li>
+      <li><b>Сверяем:</b> ч.4 = 5 полутонов — совпало, знак не нужен.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>РЕ–ЛЯ вниз</b> <button class="btn tiny" data-sound="d2">🔊 послушать</button></div>
+    <p style="color:#8a6d1f">При счёте вниз не забывай: полутоны среди белых клавиш те же самые — МИ–ФА и СИ–ДО, просто идут в обратном порядке (ФА–МИ, ДО–СИ).</p>
+  </div>
+</div>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="d3"></div>
+  <div class="exsteps">
+    <b>Пример 3. б.7 вниз от СОЛЬ — с бемолем!</b>
+    <ol>
+      <li><b>Ступеньки:</b> септима — 7 ступенек вниз: СОЛЬ → ФА → МИ → РЕ → ДО → СИ → <b>ЛЯ</b>. Ставим ЛЯ.</li>
+      <li><b>Полутоны:</b> СОЛЬ–ЛЯ вниз = 10 полутонов — это была бы малая септима.</li>
+      <li><b>Сверяем:</b> б.7 = 11 полутонов. Шаг поуже, чем нужно → опускаем нижнюю ноту: <b>ЛЯ♭</b>.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>СОЛЬ–ЛЯ♭ вниз</b> <button class="btn tiny" data-sound="d3">🔊 послушать</button></div>
+  </div>
+</div>
+</section>
+
+<!-- ================= 5. ПО ДВУМ НОТАМ ================= -->
+<section class="card">
+<h2>5. Как узнать интервал по двум нотам (задание 3)</h2>
+<p>В третьем задании в некоторых тактах нарисованы пары нот, а подпись пропущена. Определить интервал можно теми же двумя вопросами — считаем <b>между двумя данными нотами</b>:</p>
+<ol>
+  <li><b>Ступеньки:</b> на каких ступеньках стоят ноты (нижнюю считаем за № 1)? Получаешь число — секунда, терция…</li>
+  <li><b>Полутоны:</b> сколько между ними полутонов? Ищи название с такой шириной на лестнице.</li>
+</ol>
+<p>Пример: даны <b>ЛЯ</b> и <b>ДО</b> над ней. Ступеньки: ЛЯ (№1) → СИ (№2) → ДО (№3) — это терция. Полутоны: ЛЯ–СИ тон (2) + СИ–ДО полутон (1) = 3. Терция шириной 3 полутона — это <b>м.3</b>.</p>
+<div class="note">💡 <b>Почему так?</b> Интервал — это расстояние, и оно не зависит от того, какую ноту считать первой: у пары ЛЯ–ДО название одно — м.3.</div>
+<p>А в пустых тактах нужно придумать свой пример: выбери любую нижнюю ноту и построй от неё интервал вверх, как в прошлом уроке. Важно не то, какие именно ноты ты выбрал, а чтобы расстояние точно соответствовало названию.</p>
+</section>
+
+<!-- ================= ПРАКТИКА ================= -->
+<section class="card" style="background:#f3f8ff;border:2px solid #cfe0f4">
+<h2>🎯 Практика</h2>
+<p><b>1.</b> Построй <b>все интервалы</b> от указанных звуков <b>вверх</b>. Строки: от ДО, от РЕ, от МИ, от ФА. Первая карточка каждой строки — ч.1 (сама нота, образец), в остальных достраивай верхнюю ноту и допиывай пропущенные названия в пустых карточках.</p>
+<p><b>2.</b> Построй <b>все интервалы</b> от указанных звуков <b>вниз</b>. Строки: от СОЛЬ, от ЛЯ, от РЕ — ноты даны высоко, теперь они верхние. Дописывай нижние ноты и пропущенные названия.</p>
+<p><b>3.</b> Напиши пропущенные интервалы и их обозначения. Две строки по 12 тактов. Под напечатанными подписями стоят пары-примеры (на них просто посмотри). В пустых клетках впиши пропущенные названия, а в тактах придумай свои примеры.</p>
+</section>
+
+<!-- ================= ТРЕНАЖЁР ================= -->
+<section class="card" id="trainer">
+<h2>🎧 Тренажёр</h2>
+<div class="trainer-top">
+  <span>Выбери задание:</span>
+  <span id="progress"></span>
+</div>
+<div class="tasktabs" id="taskTabs"></div>
+<div id="rowsWrap"></div>
+<div id="stripWrap"></div>
+<div class="exHead" id="exHead"></div>
+<div id="quizWrap" style="display:none"></div>
+<div id="buildWrap" style="display:none">
+  <div class="stage">
+    <div class="staffbox" id="staffBox"></div>
+    <div id="selName"></div>
+  </div>
+  <div class="controls">
+    <button class="btn" id="btnUp">⬆ выше</button>
+    <button class="btn" id="btnDown">⬇ ниже</button>
+    <span style="color:#8a8378">знак:</span>
+    <button class="btn accbtn" id="accNat">♮</button>
+    <button class="btn accbtn" id="accSh">♯</button>
+    <button class="btn accbtn" id="accFl">♭</button>
+    <button class="btn primary" id="btnCheck">Проверить</button>
+    <button class="btn" id="btnSound">🔊</button>
+    <button class="btn" id="btnHint">Подсказка</button>
+    <button class="btn" id="btnAnswer">Показать ответ</button>
+    <button class="btn good" id="btnNext" style="display:none">Следующее →</button>
+  </div>
+</div>
+<div class="fb empty" id="fb"></div>
+<div class="fb hint" id="hint" style="display:none"></div>
+<div style="text-align:center;margin-top:10px">
+  <button class="btn tiny" id="btnReset">Сбросить прогресс</button>
+</div>
+<p style="color:#8a8378;font-size:15px">Вторую ноту ставим кликом по нотному стану или кнопками ↑/↓. 🔊 — послушать. В задании 2 интервал строится вниз; в задании 3 нижнюю ноту выбираешь сам.</p>
+</section>
+
+<!-- ================= ОТВЕТЫ ================= -->
+<details class="card">
+<summary>🔑 Ответы (для самопроверки — открывай, когда всё сделал!)</summary>
+<h3>Задание 1 — вверх</h3>
+<div class="answrap" id="ansT2"></div>
+<h3>Задание 2 — вниз</h3>
+<div class="answrap" id="ansT3"></div>
+<h3>Задание 3 — пропущенные названия</h3>
+<p>Строка 1: ч.8, б.7, <b>м.7</b>, б.6, <b>м.6</b>, ч.5, ч.4, <b>б.3</b>, <b>м.3</b>, б.2, <b>м.2</b>, ч.1.</p>
+<p>Строка 2: ч.8, <b>б.7</b>, м.7, <b>б.6</b>, м.6, <b>ч.5</b>, <b>ч.4</b>, б.3, м.3, <b>б.2</b>, м.2, <b>ч.1</b>.</p>
+<p>Примеры в пустых тактах могут быть любыми — сверяй расстояния (тренажёр и 🔊 помогут).</p>
+</details>
+
+<details class="card">
+<summary>👶 Родителям: как помогать</summary>
+<ul>
+<li>Страница большая (137 шагов в тренажёре). Занимайтесь по 10–15 минут: например, одно задание или одна-две строки за раз.</li>
+<li>Задание 2 (вниз) — новое: следите, чтобы знак ставился у дописываемой нижней ноты, а не у данной.</li>
+<li>Пропущенные названия восстанавливайте через лестницу: «карточка № такая-то — сколько в ней полутонов?»</li>
+<li>В задании 3 примеры могут быть любыми: важна не конкретная нота, а верное расстояние.</li>
+</ul>
+</details>
+
+<footer>
+<a href="index.html">🏠 Все уроки</a> · <a href="solfege-interval-vverh.html">← Интервалы: строим вверх</a> · <a href="solfege-akkordy.html">Аккорды →</a> · <a href="solfege-terminy.html">🧠 Тренажёр терминов</a>
+</footer>
+
+</div>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var L=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ'];
+var SEMI=[0,2,4,5,7,9,11];
+var ACCS={'-1':'♭','0':'','1':'♯'};
+var NUMNAME={1:'прима',2:'секунда',3:'терция',4:'кварта',5:'квинта',6:'секста',7:'септима',8:'октава'};
+var CAPN={2:'Секунда',3:'Терция',4:'Кварта',5:'Квинта',6:'Секста',7:'Септима',8:'Октава'};
+var LADDER=[
+ {n:'ч.1',semi:0},{n:'м.2',semi:1},{n:'б.2',semi:2},{n:'м.3',semi:3},{n:'б.3',semi:4},
+ {n:'ч.4',semi:5},{n:'ч.5',semi:7},{n:'м.6',semi:8},{n:'б.6',semi:9},{n:'м.7',semi:10},
+ {n:'б.7',semi:11},{n:'ч.8',semi:12}
+];
+var QUAL={1:'малая секунда (м.2)',2:'большая секунда (б.2)',3:'малая терция (м.3)',4:'большая терция (б.3)',5:'чистая кварта (ч.4)',6:'«широкая» кварта (увеличенная) — таких интервалов в наших заданиях не бывает',7:'чистая квинта (ч.5)',8:'малая секста (м.6)',9:'большая секста (б.6)',10:'малая септима (м.7)',11:'большая септима (б.7)',12:'чистая октава (ч.8)'};
+var LADDER=[
+ {n:'ч.1',semi:0},{n:'м.2',semi:1},{n:'б.2',semi:2},{n:'м.3',semi:3},{n:'б.3',semi:4},
+ {n:'ч.4',semi:5},{n:'ч.5',semi:7},{n:'м.6',semi:8},{n:'б.6',semi:9},{n:'м.7',semi:10},
+ {n:'б.7',semi:11},{n:'ч.8',semi:12}
+];
+var BYNAME={'ч.1':{num:1,semi:0},'м.2':{num:2,semi:1},'б.2':{num:2,semi:2},'м.3':{num:3,semi:3},'б.3':{num:3,semi:4},'ч.4':{num:4,semi:5},'ч.5':{num:5,semi:7},'м.6':{num:6,semi:8},'б.6':{num:6,semi:9},'м.7':{num:7,semi:10},'б.7':{num:7,semi:11},'ч.8':{num:8,semi:12}};
+
+function midi(l,o,a){return 12+o*12+SEMI[l]+a;}
+function solUp(li,oUp,it){var ui=li+it.num-1;var carry=Math.floor(ui/7);var ul=ui%7;
+ var dist=midi(ul,oUp+carry,0)-midi(li,oUp,0);
+ return {l:ul,o:oUp+carry,a:it.semi-dist};}
+function solDown(liUp,oUp,it){var steps=it.num-1;var idx=liUp-steps;var o=oUp;
+ while(idx<0){idx+=7;o-=1;}
+ var dist=midi(liUp,oUp,0)-midi(idx,o,0);
+ return {l:idx,o:o,a:dist-it.semi};}
+function nameOf(n){return L[n.l]+ACCS[String(n.a)];}
+function pl(n,one,few,many){var a=n%10,b=n%100;if(a===1&&b!==11)return one;if(a>=2&&a<=4&&(b<12||b>14))return few;return many;}
+function semiStr(n){return n+' '+pl(n,'полутон','полутона','полутонов');}
+function chainUp(li,num){var s='';for(var i=0;i<num;i++){s+=(i?' → ':'')+L[(li+i)%7]+'('+(i+1)+')';}return s;}
+function chainDown(li,num){var s='';for(var i=0;i<num;i++){var k=((li-i)%7+7)%7;s+=(i?' → ':'')+L[k]+'('+(i+1)+')';}return s;}
+
+/* ---------- данные заданий ---------- */
+var T2={id:'t2',dir:1,own:false,title:'Задание 1 — строим вверх',rows:[
+ {lab:'от ДО', li:0,o:4,hidden:[]},
+ {lab:'от РЕ', li:1,o:4,hidden:[1,2,5,6,9,10]},
+ {lab:'от МИ', li:2,o:4,hidden:[0,3,4,7,8,11]},
+ {lab:'от ФА', li:3,o:4,hidden:[1,2,3,4,5,6,7,8,9,10]}
+]};
+var T3={id:'t3',dir:-1,own:false,title:'Задание 2 — строим вниз',rows:[
+ {lab:'от СОЛЬ', li:4,o:5,hidden:[]},
+ {lab:'от ЛЯ', li:5,o:5,hidden:[7,8,9,10,11]},
+ {lab:'от РЕ', li:1,o:5,hidden:[0,1,2,3,4,5,6,7,8,9,10]}
+]};
+var T4={id:'t4',dir:1,own:true,title:'Задание 3 — названия и свои примеры',rows:[
+ {lab:'Строка 1',
+  printed:{0:1,1:1,3:1,5:1,6:1,9:1,11:1},
+  hidden:{2:'м.7',4:'м.6',7:'б.3',8:'м.3',10:'м.2'}},
+ {lab:'Строка 2',
+  printed:{0:1,2:1,4:1,7:1,8:1,10:1},
+  hidden:{1:'б.7',3:'б.6',5:'ч.5',6:'ч.4',9:'б.2',11:'ч.1'}}
+]};
+var TASKS={t2:T2,t3:T3,t4:T4};
+var ORDER=['t2','t3','t4'];
+function itByName(n){var L2=[['ч.1',1,0],['м.2',2,1],['б.2',2,2],['м.3',3,3],['б.3',3,4],['ч.4',4,5],['ч.5',5,7],['м.6',6,8],['б.6',6,9],['м.7',7,10],['б.7',7,11],['ч.8',8,12]];
+ for(var i=0;i<L2.length;i++)if(L2[i][0]===n)return {name:n,num:L2[i][1],semi:L2[i][2]};
+ return null;}
+function kU(tid,ri,s,suf){return tid+':'+ri+':'+s+':'+suf;}
+function slotGiven(t,r,s){return t.own&&r.printed&&r.printed[s];}
+function slotHidden(t,r,s){return t.own?r.hidden.hasOwnProperty(s):(r.hidden.indexOf(s)>=0);}
+function slotNeedsBuild(t,r,s){return t.own?true:(s>=1);}
+function expectedName(t,r,s){return t.own?r.hidden[s]:LADDER[s].n;}
+function expectedName(t,r,s){return t.own?r.hidden[s]:LADDER[s].n;}
+
+/* ---------- рисование стана ---------- */
+var S=13,TOP=52,BOT=TOP+4*S,W_EX=280,H_EX=200;
+function di(l,o){return o*7+l;}
+function yOf(d){return BOT-(d-30)*S/2;}
+function ledger(d,x){var s='';var rel=d-30;var e,y;
+ if(rel<=-2){var last=(rel%2===0)?rel:rel+1;for(e=-2;e>=last;e-=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ if(rel>=10){var last2=(rel%2===0)?rel:rel-1;for(e=10;e<=last2;e+=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ return s;}
+function noteSvg(n,x,color,o){o=o||{};var d=di(n.l,n.o),y=yOf(d);var s=ledger(d,x);
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="#fff" stroke="'+color+'" stroke-width="3.6" transform="rotate(-12 '+x+' '+y+')"/>';
+ if(n.a===1)s+='<text x="'+(x-19)+'" y="'+(y+11)+'" font-size="34" text-anchor="middle" fill="'+color+'">♯</text>';
+ if(n.a===-1)s+='<text x="'+(x-19)+'" y="'+(y+9)+'" font-size="34" text-anchor="middle" fill="'+color+'">♭</text>';
+ if(o.label)s+='<text x="'+x+'" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="'+(o.labelColor||color)+'">'+o.label+'</text>';
+ if(o.top)s+='<text x="'+x+'" y="34" font-size="14" font-weight="600" text-anchor="middle" fill="#8a8378">'+o.top+'</text>';
+ if(o.num)s+='<text x="'+x+'" y="'+(BOT+27)+'" font-size="17" font-weight="800" text-anchor="middle" fill="#b97e12">'+o.num+'</text>';
+ return s;}
+function staffSvg(w,h,inner,clickable){
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" style="width:100%;max-width:'+w+'px;display:block"'+(clickable?' class="clickable"':'')+'>';
+ for(var i=0;i<5;i++){var y=TOP+i*S;s+='<line x1="4" y1="'+y+'" x2="'+(w-4)+'" y2="'+y+'" stroke="#40382e" stroke-width="1.3"/>';}
+ s+='<text x="8" y="'+(BOT+14)+'" font-size="58" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';
+ s+=inner+'</svg>';
+ return s;}
+
+/* ---------- лестница ---------- */
+(function(){
+ var h='';
+ for(var i=0;i<12;i++){
+  h+='<div class="lcell"><b>'+LADDER[i].n+'</b><span>'+LADDER[i].semi+' '+pl(LADDER[i].semi,'полутон','полутона','полутонов')+'</span></div>';
+  if(i===5)h+='<div class="lcell gap">6 пол. —<br>не бывает</div>';
+ }
+ $('ladder').innerHTML=h;
+})();
+
+/* ---------- звук ---------- */
+var AC=null;
+function playNotes(seq){
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(AC.state==='suspended'){try{AC.resume();}catch(e){}}
+ var t=AC.currentTime+0.03;
+ for(var i=0;i<seq.length;i++){(function(nn,tt){
+  var f=440*Math.pow(2,(midi(nn)-69)/12);
+  var o=AC.createOscillator(),g=AC.createGain();
+  if(!isFinite(f))return;
+  o.type='triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,tt);g.gain.linearRampToValueAtTime(0.25,tt+0.02);g.gain.exponentialRampToValueAtTime(0.0001,tt+0.55);
+  o.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+0.6);
+ })(seq[i],t);t+=0.6;}
+}
+
+/* ---------- примеры вниз ---------- */
+function renderDuo(id,up,low,color,labUp,labLow){
+ var inner=noteSvg(up,118,'#26221c',{label:labUp,labelColor:'#26221c'})+noteSvg(low,208,color||'#23843c',{label:labLow,labelColor:color||'#23843c'});
+ $(id).innerHTML=staffSvg(W_EX,H_EX,inner,false);
+}
+renderDuo('d1',{l:4,o:5,a:0},{l:3,o:5,a:1},'#23843c','СОЛЬ','ФА♯');
+renderDuo('d2',{l:1,o:5,a:0},{l:5,o:4,a:0},'#23843c','РЕ','ЛЯ');
+renderDuo('d3',{l:4,o:5,a:0},{l:5,o:4,a:-1},'#23843c','СОЛЬ','ЛЯ♭');
+
+var DSOUNDS={d1:[{l:4,o:5,a:0},{l:3,o:5,a:1}],d2:[{l:1,o:5,a:0},{l:5,o:4,a:0}],d3:[{l:4,o:5,a:0},{l:5,o:4,a:-1}]};
+var sndBtns=document.querySelectorAll('[data-sound]');
+for(var i0=0;i0<sndBtns.length;i0++){(function(b){b.addEventListener('click',function(){playNotes(DSOUNDS[b.getAttribute('data-sound')]);});})(sndBtns[i0]);}
+
+/* ---------- таблицы ответов ---------- */
+(function(){
+ function table(t,dir){
+  var h='<table class="ans"><tr><th>От ноты</th>';
+  for(var s=0;s<12;s++)h+='<th>'+LADDER[s].n+'</th>';
+  h+='</tr>';
+  t.rows.forEach(function(r){
+   h+='<tr><td class="lbl">'+L[r.li]+(r.o===5?' (высокая)':'')+'</td>';
+   for(var s=0;s<12;s++){
+    var nm=LADDER[s].n;
+    var it={num:BYNAME[nm].num,semi:BYNAME[nm].semi};
+    var n=dir===1?solUp(r.li,r.o,it):solDown(r.li,r.o,it);
+    h+='<td class="'+(n.a!==0?'acc':'')+'">'+nameOf(n)+'</td>';
+   }
+   h+='</tr>';
+  });
+  h+='</table>';
+  return h;
+ }
+ $('ansT2').innerHTML=table(T2,1);
+ $('ansT3').innerHTML=table(T3,-1);
+})();
+var BYNAME={'ч.1':{num:1,semi:0},'м.2':{num:2,semi:1},'б.2':{num:2,semi:2},'м.3':{num:3,semi:3},'б.3':{num:3,semi:4},'ч.4':{num:4,semi:5},'ч.5':{num:5,semi:7},'м.6':{num:6,semi:8},'б.6':{num:6,semi:9},'м.7':{num:7,semi:10},'б.7':{num:7,semi:11},'ч.8':{num:8,semi:12}};
+
+/* ---------- тренажёр ---------- */
+var KEY='interval_updown_v1';
+var RES={};
+try{RES=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){RES={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(RES));}catch(e){}}
+function res(k){return RES[k]?RES[k].st:null;}
+function isOk(k){return res(k)==='ok';}
+var TOTAL=0;
+[T2,T3].forEach(function(t){t.rows.forEach(function(r){
+ for(var s=0;s<12;s++){
+  if(slotHidden(t,r,s))TOTAL++;
+  if(slotNeedsBuild(t,r,s))TOTAL++;
+ }
+});});
+T4.rows.forEach(function(r){for(var key in r.hidden)TOTAL+=2;});
+function countOk(){var n=0;for(var key in RES)if(RES[key].st==='ok')n++;return n;}
+function updProgress(){$('progress').innerHTML='Выполнено: <b>'+countOk()+'</b> из '+TOTAL+(countOk()===TOTAL?' — 🎉 всё!':'');}
+
+var ST={task:'t2',row:0,slot:1,off:1,a:0,lowLi:0,tries:0,reveal:true};
+function task(){return TASKS[ST.task];}
+function row(){return task().rows[ST.row];}
+function setFb(cls,html){var f=$('fb');f.className='fb '+cls;f.innerHTML=html;}
+T2.rows.forEach(function(r,i){r._i=i;});
+T3.rows.forEach(function(r,i){r._i=i;});
+T4.rows.forEach(function(r,i){r._i=i;});
+
+function renderTaskTabs(){
+ var h='';
+ [{id:'t2',t:'1 · вверх'},{id:'t3',t:'2 · вниз'},{id:'t4',t:'3 · названия и примеры'}].forEach(function(x){
+  h+='<button class="tasktab'+(ST.task===x.id?' active':'')+'" data-task="'+x.id+'">'+x.t+'</button>';
+ });
+ $('taskTabs').innerHTML=h;
+}
+function renderRows(){
+ var t=task();var h='<div class="rowchips">';
+ t.rows.forEach(function(r,i){
+  var total=0,done=0;
+  for(var s=0;s<12;s++){
+   if(slotGiven(t,r,s))continue;
+   if(slotHidden(t,r,s)){total++;var ls=res(kU(t.id,i,s,'L'));if(ls==='ok'||ls==='seen')done++;}
+   if(slotNeedsBuild(t,r,s)){total++;var bs=res(kU(t.id,i,s,'B'));if(bs==='ok'||bs==='seen')done++;}
+  }
+  h+='<button class="rowchip'+(i===ST.row?' active':'')+(total>0&&done===total?' full':'')+'" data-row="'+i+'">'+r.lab+' <span style="font-size:13px;opacity:.8">'+(total>0&&done===total?'✓':done+'/'+total)+'</span></button>';
+ });
+ h+='</div>';
+ $('rowsWrap').innerHTML=h;
+}
+function renderStrip(){
+ var t=task();var r=row();var h='<div class="strip">';
+ for(var s=0;s<12;s++){
+  var cls='slot';
+  var given=slotGiven(t,r,s);
+  cls+=given?' given':' solid';
+  var kL=kU(t.id,ST.row,s,'L'),kB=kU(t.id,ST.row,s,'B');
+  var needL=slotHidden(t,r,s),needB=slotNeedsBuild(t,r,s)&&!given;
+  var lOk=needL&&res(kL)==='ok', lSeen=needL&&res(kL)==='seen';
+  var bOk=needB&&res(kB)==='ok', bSeen=needB&&res(kB)==='seen';
+  if(!given){
+   if((!needL||lOk)&&(!needB||bOk))cls+=' ok';
+   else if(lSeen||bSeen||((needL&&lOk)!==(!needB||bOk)))cls+=' seen';
+  }
+  if(s===ST.slot)cls+=' cur';
+  var labName=t.own?LADDER[11-s].n:LADDER[s].n;
+  var solvedL=slotHidden(t,r,s)&&(res(kL)==='ok'||res(kL)==='seen');
+  var shownLab=given?labName:(solvedL?labName:'?');
+  var mark='';
+  if(!given){
+   if(needL)mark+=(res(kL)==='ok'?'н ✓':(res(kL)==='seen'?'н 👀':''));
+   if(needB)mark+=(mark?' ':'')+(res(kB)==='ok'?'строим ✓':(res(kB)==='seen'?'строим 👀':''));
+  }
+  h+='<button class="'+cls+'" data-slot="'+s+'" title="'+(given?'Образец':'')+'">'+shownLab+(mark?'<span class="b">'+mark+'</span>':'')+'</button>';
+ }
+ h+='</div>';
+ $('stripWrap').innerHTML=h;
+}
+function givenNote(){
+ var t=task();
+ if(t.own)return {l:ST.lowLi,o:4,a:0};
+ var r=row();return {l:r.li,o:r.o,a:0};
+}
+function placedNote(){
+ var t=task();var g=givenNote();
+ if(t.dir===1){
+  var ui=g.l+ST.off;
+  return {l:ui%7,o:g.o+Math.floor(ui/7),a:ST.a};
+ }else{
+  var idx=g.l-ST.off,o=g.o;
+  while(idx<0){idx+=7;o-=1;}
+  return {l:idx,o:o,a:ST.a};
+ }
+}
+function solvePair(){var it=curIt();var g=givenNote();return task().dir===1?solUp(g.l,g.o,it):solDown(g.l,g.o,it);}
+function curName(){var s=ST.slot;return task().own?LADDER[11-s].n:LADDER[s].n;}
+function curIt(){var n=curName();return {num:BYNAME[n].num,semi:BYNAME[n].semi,name:n};}
+
+function renderQuiz(){
+ var t=task();var r=row();var s=ST.slot;
+ $('quizWrap').style.display='block';$('buildWrap').style.display='none';
+ var html;
+ if(t.own){
+  html='<div class="namewrap" style="text-align:center"><b>Карточка №'+(s+1)+'</b> — какое название пропущено? Выбери:</div><div class="namewrap" style="text-align:center">';
+ }else{
+  html='<div class="namewrap" style="text-align:center"><b>Карточка №'+(s+1)+'</b> пуста. Какое название должно стоять между «'+(s>0?LADDER[s-1].n:'—')+'» и «'+(s<11?LADDER[s+1].n:'—')+'»?</div><div class="namewrap" style="text-align:center">';
+ }
+ for(var k2=0;k2<12;k2++)html+='<button class="namebtn" data-name="'+LADDER[k2].n+'">'+LADDER[k2].n+'</button>';
+ html+='</div>';
+ $('quizWrap').innerHTML=html;
+}
+function renderBuild(){
+ var t=task();var r=row();var it=curIt();
+ $('quizWrap').style.display='none';$('buildWrap').style.display='block';
+ var g=givenNote();
+ var keyB=kU(t.id,ST.row,ST.slot,'B');
+ var seen=res(keyB)==='seen';
+ var soln=solvePair();
+ var p=(isSolvedKey(keyB)||(seen&&ST.reveal))?soln:placedNote();
+ var col=isSolvedKey(keyB)?'#23843c':(seen?'#b97e12':'#0b6bcb');
+ var inner=noteSvg(g,118,'#26221c',{label:nameOf(g),labelColor:'#26221c'});
+ var showLabel=(seen||isSolvedKey(keyB))?nameOf(soln):nameOf(p)+' ?';
+ inner+=noteSvg(p,208,col,{label:showLabel,labelColor:col});
+ $('staffBox').innerHTML=staffSvg(W_EX,H_EX,inner,true);
+ var dirTxt=t.own?'от выбранной нижней ноты вверх':(t.dir===1?'вверх от ноты':'вниз от ноты');
+ $('exHead').innerHTML=t.title+': строка «'+r.lab+'». Строим <b>'+curName()+'</b> ('+NUMNAME[it.num]+' — '+it.semi+' '+pl(it.semi,'полутон','полутона','полутонов')+') '+dirTxt+' <b>'+nameOf(g)+'</b>.';
+ $('selName').innerHTML='Вторая нота сейчас: <b>'+(seen?nameOf(soln):nameOf(placedNote()))+'</b>';
+ $('accNat').classList.toggle('active',ST.a===0);
+ $('accSh').classList.toggle('active',ST.a===1);
+ $('accFl').classList.toggle('active',ST.a===-1);
+ $('btnCheck').disabled=seen;
+ $('btnNext').style.display='inline-block';
+ if(seen){setFb('hint','🔽 Ответ: '+nameOf(g)+' → <b>'+nameOf(soln)+'</b>. Разбери подсказку.');showHint();}
+ else{$('hint').style.display='none';}
+}
+function isSolvedKey(k){return res(k)==='ok';}
+function renderExercise(){
+ var t=task();var r=row();var s=ST.slot;
+ if(slotGiven(t,r,s)){
+  $('quizWrap').style.display='none';$('buildWrap').style.display='none';
+  $('exHead').innerHTML='Строка «'+r.lab+'», карточка «'+curName()+'» — это образец.';
+  setFb('empty','Эта карточка готовая: посмотри на пару нот и выбери в полоске пустую карточку.');
+  $('hint').style.display='none';
+  renderStrip();return;
+ }
+ var kL=kU(t.id,ST.row,s,'L');
+ if(slotHidden(t,r,s)&&!res(kL)){
+  ST.phase='label';
+  renderQuiz();
+  $('exHead').innerHTML='Строка «'+r.lab+'», карточка №'+(s+1)+': допиши пропущенное название.';
+  setFb('empty','Сначала допиши название — потом построим этот интервал.');
+  $('hint').style.display='none';
+  renderStrip();renderRows();return;
+ }
+ if(!slotNeedsBuild(t,r,s)){
+  $('quizWrap').style.display='none';$('buildWrap').style.display='none';
+  $('exHead').innerHTML='Строка «'+r.lab+'», карточка «ч.1» — прима: сама нота.';
+  setFb('ok','✅ ч.1 — это нота сама с собой (0 полутонов). В первой карточке ответ уже стоит — образец.');
+  $('hint').style.display='none';
+  renderStrip();renderRows();return;
+ }
+ ST.phase='build';
+ renderBuild();
+ setFb('empty','Поставь вторую ноту: кликни по нотному стану (или ↑/↓), выбери знак ♮/♯/♭ и нажми «Проверить».');
+ renderStrip();renderRows();
+}
+function renderAll(){renderTaskTabs();renderRows();renderStrip();renderExercise();updProgress();}
+
+function firstPendingSlotInRow(tid,ri){
+ var t=TASKS[tid];var r=t.rows[ri];
+ for(var s=0;s<12;s++){
+  if(slotGiven(t,r,s))continue;
+  var kL=kU(tid,ri,s,'L'),kB=kU(tid,ri,s,'B');
+  var needL=slotHidden(t,r,s),needB=slotNeedsBuild(t,r,s);
+  if(needL&&res(kL)!=='ok'&&res(kL)!=='seen')return s;
+  if(needB&&res(kB)!=='ok'&&res(kB)!=='seen')return s;
+ }
+ return null;
+}
+function firstPendingInTask(tid){
+ var t=TASKS[tid];
+ for(var i=0;i<t.rows.length;i++){
+  var s=firstPendingSlotInRow(tid,i);
+  if(s!==null)return {row:i,slot:s};
+ }
+ return null;
+}
+function firstPendingAnywhere(startIdx){
+ for(var k=0;k<ORDER.length;k++){
+  var ti=(startIdx+k)%ORDER.length;
+  var f=firstPendingInTask(ORDER[ti]);
+  if(f)return {task:ORDER[ti],row:f.row,slot:f.slot};
+ }
+ return null;
+}
+function goTo(tid,ri){
+ ST.task=tid;ST.row=ri;ST.off=1;ST.a=0;ST.lowLi=0;ST.tries=0;
+ var f=firstPendingSlotInRow(tid,ri);
+ if(f===null){var ft=firstPendingInTask(tid);f=ft?ft.slot:1;}
+ ST.slot=f;ST.reveal=true;
+ renderAll();
+}
+
+$('taskTabs').addEventListener('click',function(e){
+ var b=e.target.closest('[data-task]');if(!b)return;
+ var tid=b.getAttribute('data-task');
+ var f=firstPendingInTask(tid);
+ ST.task=tid;ST.row=f?f.row:0;ST.slot=f?f.slot:1;
+ ST.off=1;ST.a=0;ST.lowLi=0;ST.tries=0;
+ renderAll();
+});
+$('rowsWrap').addEventListener('click',function(e){
+ var b=e.target.closest('[data-row]');if(!b)return;
+ goTo(ST.task,+b.getAttribute('data-row'));
+});
+$('stripWrap').addEventListener('click',function(e){
+ var b=e.target.closest('[data-slot]');if(!b)return;
+ ST.slot=+b.getAttribute('data-slot');ST.off=1;ST.a=0;ST.tries=0;
+ renderExercise();renderStrip();
+});
+
+$('quizWrap').addEventListener('click',function(e){
+ var b=e.target.closest('[data-name]');if(!b)return;
+ var t=task();var s=ST.slot;
+ if(!slotHidden(t,row(),s))return;
+ var expect=expectedName(t,row(),s);
+ var pick=b.getAttribute('data-name');
+ var key=kU(t.id,ST.row,s,'L');
+ if(pick===expect){
+  RES[key]={st:'ok'};save();
+  var semi=t.own?BYNAME[expect].semi:LADDER[s].semi;
+  setFb('ok','✅ Верно! Карточка №'+(s+1)+' — это <b>'+expect+'</b>: '+semi+' '+pl(semi,'полутон','полутона','полутонов')+' в лестнице.');
+  renderStrip();renderRows();updProgress();
+  setTimeout(function(){renderExercise();},600);
+ }else{
+  var expName=expectedName(t,row(),s);
+  setFb('err','❌ '+pick+' не подходит: у '+pick+' другая ширина. '+(t.own?'Эта карточка — <b>'+expName+'</b>.':'Карточка №'+(s+1)+' — это '+semiStr(BYNAME[expName].semi)+'.')+' Смотри лестницу ниже 👇');
+  showLadderHint(s);
+ }
+});
+function showLadderHint(s){
+ var el=$('hint');el.style.display='block';
+ var h='<b>Лестница:</b> ';
+ for(var i=0;i<12;i++){
+  h+=(i?' → ':'')+'<b>'+LADDER[i].n+'</b> ('+LADDER[i].semi+')';
+  if(i===5)h+=' → [6 — не бывает]';
+ }
+ h+='<br>'+(task().own
+  ?'В задании 3 строка идёт в обратную сторону: ч.8 → б.7 → … → ч.1. Карточка №'+(s+1)+' слева — это <b>'+expectedName(task(),row(),s)+'</b> ('+semiStr(BYNAME[expectedName(task(),row(),s)].semi)+').'
+  :'Карточка №'+(s+1)+' → '+semiStr(LADDER[s].semi)+' → это <b>'+LADDER[s].n+'</b>.');
+ el.innerHTML=h;
+}
+
+function buildLocked(){var kB=kU(task().id,ST.row,ST.slot,'B');return res(kB)==='ok'||res(kB)==='seen';}
+function interact(){if(buildLocked())return true;ST.reveal=false;return false;}
+$('btnUp').addEventListener('click',function(){
+ if(interact())return;
+ if(task().dir===-1){if(ST.off>1)ST.off--;}
+ else{if(ST.off<7)ST.off++;}
+ renderBuild();
+});
+$('btnDown').addEventListener('click',function(){
+ if(interact())return;
+ if(task().dir===-1){if(ST.off<7)ST.off++;}
+ else{if(ST.off>(task().own?0:1))ST.off--;}
+ renderBuild();
+});
+$('accNat').addEventListener('click',function(){if(interact())return;ST.a=0;renderBuild();});
+$('accSh').addEventListener('click',function(){if(interact())return;ST.a=1;renderBuild();});
+$('accFl').addEventListener('click',function(){if(interact())return;ST.a=-1;renderBuild();});
+$('staffBox').addEventListener('click',function(e){
+ if(interact())return;
+ var svg=e.target.closest('svg');if(!svg)return;
+ var rc=svg.getBoundingClientRect();
+ var x=(e.clientX-rc.left)*(W_EX/rc.width);
+ if(x<75)return;
+ var y=(e.clientY-rc.top)*(H_EX/rc.height);
+ var rel=Math.round((BOT-y)/(S/2));
+ var g=givenNote();
+ var off=rel-(di(g.l,g.o)-30);
+ if(task().dir===-1)off=-off;
+ var min=task().own?0:1;
+ off=Math.max(min,Math.min(7,off));
+ ST.off=off;renderBuild();
+});
+$('btnSound').addEventListener('click',function(){
+ var g=givenNote();
+ var s=buildLocked()?solvePair():placedNote();
+ playNotes([g,s]);
+});
+
+function hintText(){
+ var it=curIt();var g=givenNote();var t=task();
+ var dir=t.dir===1?1:-1;
+ var soln=dir===1?solUp(g.l,g.o,it):solDown(g.l,g.o,it);
+ var natDist=dir===1?(midi(soln.l,soln.o,0)-midi(g.l,g.o,0)):(midi(g.l,g.o,0)-midi(soln.l,soln.o,0));
+ var low=nameOf(g);
+ var stepWord=it.num<5?'ступеньку':'ступенек';
+ var stepWord2=it.num<5?'ступеньки':'ступеней';
+ var dirWord=dir===1?'вверх':'вниз';
+ var h='<b>Разбор: '+it.name+' — '+dirWord+' от '+low+'</b><br>';
+ h+='<b>Шаг 1 — ступеньки.</b> '+CAPN[it.num]+' — это '+it.num+' '+stepWord+' '+dirWord+'. Считаем (сама нота — № 1): '+(dir===1?chainUp(g.l,it.num):chainDown(g.l,it.num))+'. Вторая нота — <b>'+L[soln.l]+'</b>. Пока ставим её без знака.<br>';
+ h+='<b>Шаг 2 — полутоны.</b> '+low+'–'+L[soln.l]+' без знака = '+semiStr(natDist)+', это '+QUAL[natDist]+'.<br>';
+ if(soln.a===0){
+  h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+' — ровно столько и получилось. Знак не нужен.<br><b>Ответ: '+low+'–'+L[soln.l]+(dir===-1?' вниз':'')+'</b>';
+ }else if(soln.a===1){
+  if(dir===1)h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+', а без знака '+semiStr(natDist)+' — на полутон поуже. Поднимем верхнюю ноту: <b>♯ (диез)</b>.<br><b>Ответ: '+low+'–'+L[soln.l]+'♯</b>';
+  else h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+', а без знака '+semiStr(natDist)+' — на полутон пошире. При построении вниз знак ставим у нижней ноты: <b>♯ (диез)</b> — она поднимется, шаг станет уже.<br><b>Ответ: '+low+'–'+L[soln.l]+'♯ вниз</b>';
+ }else{
+  if(dir===1)h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+', а без знака '+semiStr(natDist)+' — на полутон пошире. Опустим верхнюю ноту: <b>♭ (бемоль)</b>.<br><b>Ответ: '+low+'–'+L[soln.l]+'♭</b>';
+  else h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+', а без знака '+semiStr(natDist)+' — на полутон поуже. Знак у нижней ноты: <b>♭ (бемоль)</b> — она опустится, шаг станет шире.<br><b>Ответ: '+low+'–'+L[soln.l]+'♭ вниз</b>';
+ }
+ return h;
+}
+function showHint(){var el=$('hint');el.style.display='block';el.innerHTML=hintText();}
+$('btnHint').addEventListener('click',function(){showHint();});
+
+$('btnCheck').addEventListener('click',function(){
+ var t=task();var it=curIt();
+ if(slotGiven(t,row(),ST.slot))return;
+ if(!slotNeedsBuild(t,row(),ST.slot))return;
+ var key=kU(t.id,ST.row,ST.slot,'B');
+ if(buildLocked())return;
+ var g=givenNote();var child=placedNote();
+ var childOff=t.dir===1?(di(child.l,child.o)-di(g.l,g.o)):(di(g.l,g.o)-di(child.l,child.o));
+ var needOff=it.num-1;
+ if(childOff!==needOff){
+  ST.tries++;
+  var gotNum=Math.abs(childOff)+1;
+  setFb('err','❌ Ступеньки не те. Вторая нота получилась ступенькой №'+gotNum+((gotNum>1&&gotNum<=8)?' ('+NUMNAME[gotNum]+')':'')+' от данной, а <b>'+curName()+'</b> — это ступенька №'+it.num+' ('+NUMNAME[it.num]+').'+(ST.tries>=2?' Разбор ниже 👇':' Считай от данной ноты: она сама — № 1, дальше каждая линейка и каждый промежуток '+(t.dir===-1?'вниз.':'вверх.')));
+  if(ST.tries>=2)showHint();
+  return;
+ }
+ var soln=solvePair();
+ var childSemi=Math.abs(midi(child.l,child.o,child.a)-midi(g.l,g.o,0));
+ if(child.a!==soln.a){
+  ST.tries++;
+  var msg;
+  if(soln.a===0)msg='Знак не нужен — верни ♮.';
+  else if(t.dir===1)msg=(soln.a===1)?'Шаг должен быть чуть пошире — поставь <b>♯ (диез)</b> у верхней ноты.':'Шаг должен быть чуть поуже — поставь <b>♭ (бемоль)</b> у верхней ноты.';
+  else msg=(soln.a===1)?'Шаг должен быть чуть поуже — подними нижнюю ноту знаком <b>♯ (диез)</b>.':'Шаг должен быть чуть пошире — опусти нижнюю ноту знаком <b>♭ (бемоль)</b>.';
+  setFb('err','❌ Ступенька верная ('+L[soln.l]+'), но ширина не та: сейчас '+semiStr(childSemi)+', а для <b>'+curName()+'</b> нужно '+semiStr(it.semi)+'. '+msg+(ST.tries>=2?' Или открой разбор ниже 👇':''));
+  if(ST.tries>=2)showHint();
+  return;
+ }
+ RES[key]={st:'ok'};save();
+ setFb('ok','✅ <b>Верно!</b> '+nameOf(g)+' → <b>'+nameOf(soln)+'</b> ('+(t.dir===-1?'вниз':'вверх')+'): '+it.num+' '+pl(it.num,'ступеньку','ступеньки','ступенек')+' и '+semiStr(it.semi)+' — это '+it.name+'. 🎉');
+ playNotes([g,soln]);
+ renderStrip();renderRows();updProgress();
+ $('btnCheck').disabled=true;
+});
+
+$('btnAnswer').addEventListener('click',function(){
+ var key=kU(task().id,ST.row,ST.slot,'B');
+ if(res(key)==='ok')return;
+ RES[key]={st:'seen'};save();
+ ST.reveal=true;ST.tries=0;
+ renderBuild();renderStrip();renderRows();updProgress();
+});
+
+$('btnNext').addEventListener('click',function(){
+ var startIdx=ORDER.indexOf(ST.task);
+ var f=firstPendingAnywhere(startIdx);
+ if(f){
+  ST.task=f.task;ST.row=f.row;ST.slot=f.slot;
+  ST.off=1;ST.a=0;ST.lowLi=0;ST.tries=0;
+  renderAll();
+  if(countOk()===TOTAL)setFb('ok','🎉 <b>Всё выполнено!</b> Отличная работа!');
+ }else{
+  setFb('ok','🎉 <b>Всё выполнено!</b> Отличная работа!');
+ }
+});
+$('btnReset').addEventListener('click',function(){
+ if(!confirm('Сбросить весь прогресс тренажёра?'))return;
+ RES={};save();
+ ST={task:'t2',row:0,slot:1,off:1,a:0,lowLi:0,tries:0,reveal:true};
+ renderAll();
+});
+
+/* ---------- старт ---------- */
+(function(){
+ var f=firstPendingAnywhere(0);
+ if(f){ST.task=f.task;ST.row=f.row;ST.slot=f.slot;}
+ else{ST.task='t2';ST.row=0;ST.slot=1;}
+ renderAll();
+})();
+})();
+</script>
+</body>
+</html>

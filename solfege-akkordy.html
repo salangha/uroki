@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Аккорды: трезвучия и обращения — урок сольфеджио</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#f5f2ea;color:#2a251e;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto}
+header{text-align:center;padding:8px 0 4px}
+h1{font-size:32px;margin:.2em 0;color:#7a4b9d}
+.sub{color:#7a7263;margin:0 0 10px}
+.plan{background:#f3edfa;border:1.5px solid #ddd0ee;border-radius:14px;padding:12px 18px;margin:12px 0;font-size:16px}
+.card{background:#fff;border-radius:18px;padding:20px 24px;margin:16px 0;box-shadow:0 3px 14px rgba(60,50,30,.08)}
+h2{font-size:23px;margin:.1em 0 .5em;color:#5b3390}
+h3{font-size:19px;margin:.6em 0 .3em;color:#544c40}
+p{margin:.5em 0}
+.note{background:#fff8e6;border-left:5px solid #e7b432;padding:10px 14px;border-radius:8px;margin:12px 0}
+.warnbox{background:#fdeeee;border-left:5px solid #c43d3d;padding:10px 14px;border-radius:8px;margin:12px 0}
+.staffbox{background:#fffef9;border:1.5px solid #e2dccd;border-radius:12px;padding:6px 10px;display:inline-block}
+svg.clickable{cursor:crosshair}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px;align-items:center;justify-content:center}
+.btn{font-size:17px;padding:10px 16px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;color:#2a251e}
+.btn:hover{background:#f0ead9}
+.btn.primary{background:#7a4b9d;border-color:#7a4b9d;color:#fff}
+.btn.primary:hover{background:#6a3f8a}
+.btn.good{background:#23843c;border-color:#23843c;color:#fff}
+.btn.tiny{font-size:15px;padding:4px 10px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:default}
+.accbtn{font-size:22px;min-width:46px}
+.accbtn.active{background:#7a4b9d;color:#fff;border-color:#7a4b9d}
+.tasktabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.tasktab{font-size:16px;padding:9px 16px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.tasktab.active{background:#5b3390;color:#fff;border-color:#5b3390}
+.strip{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0;justify-content:center}
+.slot{font-size:16px;padding:7px 9px;border-radius:10px;border:2px solid #c9c2b2;background:#fbfaf5;cursor:pointer;min-width:52px;text-align:center;line-height:1.25}
+.slot.cur{outline:3px solid #7a4b9d;outline-offset:1px}
+.slot.ok{background:#e8f3ec;border-color:#7cc08e;color:#23843c;font-weight:700}
+.slot.seen{background:#fff3c4;border-color:#d9b84a;color:#8a6d1f;font-weight:700}
+.slot .d{display:block;font-size:12px;color:#8a8378}
+.selwrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.seltab{font-size:16px;padding:8px 14px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.seltab.active{background:#0b6bcb;color:#fff;border-color:#0b6bcb}
+.fb{border-radius:12px;padding:12px 16px;margin:10px 0;min-height:22px}
+.fb.empty{background:#f4f1e8;color:#6f6858}
+.fb.ok{background:#e7f6ec;border:1.5px solid #a9d8b6}
+.fb.err{background:#fdeaea;border:1.5px solid #efb9b9}
+.fb.hint{background:#fff6df;border:1.5px solid #ecd39a}
+.trainer-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+#progress{font-size:16px;color:#5f584a}
+.stage{max-width:360px;margin:0 auto;text-align:center}
+.exHead{font-size:17px;text-align:center;margin:6px 0}
+#selName{text-align:center;color:#5f584a;margin-top:2px;font-size:15px}
+.namebtn{font-size:16px;padding:8px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;margin:3px}
+.namebtn:hover{background:#f0ead9}
+.ex{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin:14px 0;border-top:1px dashed #ddd;padding-top:14px}
+.exstaff{flex:0 0 300px}
+.exsteps{flex:1 1 340px;min-width:280px}
+.exsteps ol{margin:.3em 0 .3em 1.25em;padding:0}
+.ansline{font-size:18px;margin-top:6px}
+table.simple{border-collapse:collapse;margin:10px 0}
+table.simple th,table.simple td{border:1.5px solid #d8d2c4;padding:5px 10px;text-align:center;font-size:16px}
+table.simple th{background:#f2ede1}
+.answrap{overflow-x:auto;margin:8px 0}
+table.ans{border-collapse:collapse}
+table.ans th,table.ans td{border:1.5px solid #d8d2c4;padding:5px 9px;text-align:center;font-size:15px}
+table.ans td.acc{background:#fff3c4;font-weight:700}
+table.ans td.lbl{background:#f2ede1;font-weight:700}
+details{margin:10px 0}
+summary{cursor:pointer;font-weight:700;font-size:18px;color:#5b3390}
+footer{text-align:center;color:#8a8378;font-size:14px;padding:18px}
+footer a{color:#5b3390}
+@media (max-width:640px){body{font-size:16px}h1{font-size:26px}.card{padding:16px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🎵 Аккорды: трезвучия и обращения</h1>
+  <p class="sub">Урок сольфеджио. Разберём, как устроены трезвучия T⁵₃, T₆, T⁶₄ — и построим их в четырёх тональностях.</p>
+</header>
+
+<div class="plan">
+  <b>План урока:</b>
+  1️⃣ разбери, что такое трезвучие и его обращения (это проще, чем звучит!) →
+  2️⃣ <a href="#trainer">в тренажёре</a> построй аккорды в Соль мажоре, ми миноре, Си♭ мажоре и соль миноре →
+  3️⃣ проверь себя по ответам и закрепи слова в <a href="solfege-terminy.html">тренажёре терминов</a>.
+</div>
+
+<!-- ================= 1. ТРЕЗВУЧИЕ ================= -->
+<section class="card">
+<h2>1. Трезвучие — три звука через терцию</h2>
+<p><b>Трезвучие</b> — это аккорд из трёх звуков, которые стоят друг над другом <b>по терциям</b> («через ступеньку»).</p>
+<p>Например, в До мажоре тоническое трезвучие: <b>ДО–МИ–СОЛЬ</b>. От нижнего звука ДО вверх: МИ — терция, СОЛЬ — ещё терция. А от ДО до самого верхнего звука — квинта.</p>
+<p>Поэтому его обозначение — <b>⁵₃</b>: циферки показывают, какие интервалы образует с басом средний и верхний звук (терция = 3, квинта = 5).</p>
+<div class="staffbox" id="v1"></div>
+<p style="max-width:420px;display:inline-block;vertical-align:top;margin-left:14px">Трезвучие строится на ступени лада: тоническое трезвучие (T) — на I ступени, и в До мажоре это ДО–МИ–СОЛЬ.</p>
+<div class="note">📌 <b>Почему цифры именно такие.</b> Нижний звук трезвучия называется <b>основным</b> (он — «корень»). Средний звук отстоит от него на терцию, верхний — на квинту: 3 + 5 → «⁵₃».</div>
+</section>
+
+<!-- ================= 2. ОБРАЩЕНИЯ ================= -->
+<section class="card">
+<h2>2. Обращения: ₆ и ⁶₄</h2>
+<p>Если нижний звук трезвучия «переложить» на октаву наверх, наверху окажутся те же три звука, но внизу будет уже другой. Получаются <b>обращения</b>:</p>
+<div class="staffbox" id="v2"></div>
+<table class="simple">
+<tr><th>Вид</th><th>Что внизу (бас)</th><th>Над басом (сверху вниз)</th><th>Запись</th></tr>
+<tr><td><b>⁵₃</b> трезвучие</td><td>основной звук</td><td>терция, потом квинта</td><td>5 и 3 ступеньки</td></tr>
+<tr><td><b>₆</b> секстаккорд</td><td>терция трезвучия (средний звук)</td><td>терция, потом секста</td><td>6 ступенька до верха</td></tr>
+<tr><td><b>⁶₄</b> квартсекстаккорд</td><td>квинта трезвучия (верхний звук)</td><td>кварта, потом секста</td><td>6 и 4 ступеньки</td></tr>
+</table>
+<div class="note">💡 <b>Почему так.</b> Звуки одни и те же (например, ДО–МИ–СОЛЬ), меняется только то, какой из них оказался внизу. Расстояния «по ступенькам» от баса: у ⁵₃ — 2 и 4 ступеньки, у ₆ — 2 и 5, у ⁶₄ — 3 и 5. Это и есть твой строительный комплект.</div>
+<div class="warnbox">⚠️ Не путай: у ₆ внизу — <b>средний</b> звук трезвучия, а у ⁶₄ — <b>самый верхний</b>. Хитрость для запоминания: «⁶₄» читается как «6−4»: сначала к нижнему звуку прыгнуть на кварту (4), а сверху добить секстой (6).</div>
+</section>
+
+<!-- ================= 3. ФУНКЦИИ ================= -->
+<section class="card">
+<h2>3. T, S и D: три главных трезвучия лада</h2>
+<p>В каждой тональности есть три «главных» трезвучия — по одному на важной ступени:</p>
+<table class="simple">
+<tr><th>Обозначение</th><th>Название</th><th>Ступени звуков</th><th>В мажоре</th></tr>
+<tr><td><b>T</b> (в миноре — <b>t</b>)</td><td>тоника (домик музыки)</td><td>I + III + V</td><td>например, в До мажоре: ДО–МИ–СОЛЬ</td></tr>
+<tr><td><b>S</b> (в миноре — <b>s</b>)</td><td>субдоминанта</td><td>IV + VI + I</td><td>ФА–ЛЯ–ДО</td></tr>
+<tr><td><b>D</b></td><td>доминанта</td><td>V + VII + II</td><td>СОЛЬ–СИ–РЕ</td></tr>
+</table>
+<p>Обрати внимание: ступени у каждого трезвучия идут «через одну» — как раз по терциям.</p>
+<div class="note">📌 <b>Маленькие и большие буквы.</b> В минорных строках тоника и субдоминанта пишутся маленькими буквами: <b>t</b> и <b>s</b>. Доминанта всегда большая — <b>D</b>. А слово «(гарм.)» напоминает: в миноре у доминанты VII ступень повышена знаком ♯ — так доминанта звучит «побуждающе» и тянет обратно в тонику.</div>
+</section>
+
+<!-- ================= 4. СТУПЕНИ И НОТЫ ================= -->
+<section class="card">
+<h2>4. Ступени наших тональностей</h2>
+<p>В каждой рабочей строке над тактом подписана ступень баса (I, III, V…). Чтобы найти ноту, отсчитай ступеньки от тоники. Вот все четыре тональности урока:</p>
+<table class="simple">
+<tr><th>Ступень</th><th>I</th><th>II</th><th>III</th><th>IV</th><th>V</th><th>VI</th><th>VII</th></tr>
+<tr><td><b>Соль мажор</b></td><td>СОЛЬ</td><td>ЛЯ</td><td>СИ</td><td>ДО</td><td>РЕ</td><td>МИ</td><td>ФА♯</td></tr>
+<tr><td><b>ми минор</b> (гарм.)</td><td>МИ</td><td>ФА♯</td><td>СОЛЬ</td><td>ЛЯ</td><td>СИ</td><td>ДО</td><td>РЕ♯</td></tr>
+<tr><td><b>Си♭ мажор</b></td><td>СИ♭</td><td>ДО</td><td>РЕ</td><td>МИ♭</td><td>ФА</td><td>СОЛЬ</td><td>ЛЯ</td></tr>
+<tr><td><b>соль минор</b> (гарм.)</td><td>СОЛЬ</td><td>ЛЯ</td><td>СИ♭</td><td>ДО</td><td>РЕ</td><td>МИ♭</td><td>ФА♯</td></tr>
+</table>
+<div class="note">💡 В таблице уже видны знаки: у Си♭ мажора — си♭ и ми♭ (его ключевые знаки), у гармонических миноров — повышенная VII (ре♯ в ми миноре, фа♯ в соль миноре). Рисуя аккорд, не забудь поставить эти знаки перед нотами.</div>
+</section>
+
+<!-- ================= 5. АЛГОРИТМ ================= -->
+<section class="card">
+<h2>5. Алгоритм: три шага</h2>
+<p><b>Шаг 1 — найди бас.</b> Прочитай ступень над тактом и найди ноту по таблице (шаг 4). Поставь её — это нижний звук.</p>
+<p><b>Шаг 2 — пойми, какой это аккорд.</b> Буква (T/t, S/s, D) говорит, из каких ступеней звуки; цифра (⁵₃, ₆, ⁶₄) — какой из звуков оказался внизу.</p>
+<p><b>Шаг 3 — дострой вверх.</b> Над басом добавь два звука по комплекту из таблицы в шаге 2: у ⁵₃ — терция и квинта, у ₆ — терция и секста, у ⁶₄ — кварта и секста. Не забудь знаки!</p>
+
+<h3>Разберём три примера</h3>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="ex1"></div>
+  <div class="exsteps">
+    <b>Пример 1. Соль мажор: T₆ на ступени III</b>
+    <ol>
+      <li><b>Бас:</b> ступень III в Соль мажоре — <b>СИ</b>. Ставим СИ внизу.</li>
+      <li><b>Аккорд:</b> T — звуки ступеней I, III, V = СОЛЬ, СИ, РЕ. Внизу СИ (средний звук трезвучия) — значит, это обращение ₆, секстаккорд.</li>
+      <li><b>Достраиваем:</b> над СИ — терция вверх (РЕ), а сверху секста — СОЛЬ.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>СИ–РЕ–СОЛЬ</b> <button class="btn tiny" data-sound="ex1">🔊 послушать</button></div>
+  </div>
+</div>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="ex2"></div>
+  <div class="exsteps">
+    <b>Пример 2. ми минор (гарм.): D⁵₃ на ступени V</b>
+    <ol>
+      <li><b>Бас:</b> ступень V — <b>СИ</b>.</li>
+      <li><b>Аккорд:</b> D — звуки ступеней V, VII, II = СИ, <b>РЕ♯</b> (гармоническая VII — с диезом!), <b>ФА♯</b>. Внизу основной звук — ⁵₃.</li>
+      <li><b>Достраиваем:</b> над СИ — терция вверх РЕ♯, ещё терция — ФА♯.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>СИ–РЕ♯–ФА♯</b> <button class="btn tiny" data-sound="ex2">🔊 послушать</button></div>
+    <p style="color:#8a6d1f">Здесь два диеза! Без ре♯ аккорд был бы не доминантой, а «просто трезвучием» — гармонический минор обязан звучать тянущимся к тонике.</p>
+  </div>
+</div>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="ex3"></div>
+  <div class="exsteps">
+    <b>Пример 3. Си♭ мажор: S⁶₄ на ступени I</b>
+    <ol>
+      <li><b>Бас:</b> ступень I — <b>СИ♭</b>.</li>
+      <li><b>Аккорд:</b> S — звуки ступеней IV, VI, I = МИ♭, СОЛЬ, СИ♭. Внизу СИ♭ — самый верхний звук трезвучия — обращение ⁶₄, квартсекстаккорд.</li>
+      <li><b>Достраиваем:</b> над СИ♭ — кварта вверх (МИ♭), сверху секста — СОЛЬ.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>СИ♭–МИ♭–СОЛЬ</b> <button class="btn tiny" data-sound="ex3">🔊 послушать</button></div>
+  </div>
+</div>
+</section>
+
+<!-- ================= ПРАКТИКА ================= -->
+<section class="card" style="background:#f8f3fd;border:2px solid #ddd0ee">
+<h2>🎯 Практика</h2>
+<p>В четырёх строках — <b>Соль мажор, ми минор (гарм.), Си♭ мажор, соль минор (гарм.)</b> — под каждым тактом подписаны аккорд и ступень баса. Построй в каждом такте трёхзвучный аккорд. В Си♭ мажоре заодно вспомни, как называются обращения, — перед каждым построением будет маленькая викторина.</p>
+</section>
+
+<!-- ================= ТРЕНАЖЁР ================= -->
+<section class="card" id="trainer">
+<h2>🎧 Тренажёр</h2>
+<div class="trainer-top">
+  <span>Выбери тональность:</span>
+  <span id="progress"></span>
+</div>
+<div class="tasktabs" id="taskTabs"></div>
+<div id="stripWrap"></div>
+<div class="exHead" id="exHead"></div>
+<div id="quizWrap" style="display:none"></div>
+<div id="buildWrap" style="display:none">
+  <div class="selwrap" id="selWrap">
+    <span style="color:#8a8378">редактируем:</span>
+    <button class="seltab" id="selMid">средняя нота</button>
+    <button class="seltab" id="selTop">верхняя нота</button>
+  </div>
+  <div class="stage">
+    <div class="staffbox" id="staffBox"></div>
+    <div id="selName"></div>
+  </div>
+  <div class="controls">
+    <button class="btn" id="btnUp">⬆ выше</button>
+    <button class="btn" id="btnDown">⬇ ниже</button>
+    <span style="color:#8a8378">знак:</span>
+    <button class="btn accbtn" id="accNat">♮</button>
+    <button class="btn accbtn" id="accSh">♯</button>
+    <button class="btn accbtn" id="accFl">♭</button>
+    <button class="btn primary" id="btnCheck">Проверить</button>
+    <button class="btn" id="btnSound">🔊</button>
+    <button class="btn" id="btnHint">Подсказка</button>
+    <button class="btn" id="btnAnswer">Показать ответ</button>
+    <button class="btn good" id="btnNext" style="display:none">Следующее →</button>
+  </div>
+</div>
+<div class="fb empty" id="fb"></div>
+<div class="fb hint" id="hint" style="display:none"></div>
+<div style="text-align:center;margin-top:10px">
+  <button class="btn tiny" id="btnReset">Сбросить прогресс</button>
+</div>
+<p style="color:#8a8378;font-size:15px">Выбери, какую ноту редактируешь (средняя или верхняя), и поставь её кликом по нотному стану или кнопками ↑/↓. Знак ставится той же кнопкой для выбранной ноты. 🔊 — послушать аккорд.</p>
+</section>
+
+<!-- ================= ОТВЕТЫ ================= -->
+<details class="card">
+<summary>🔑 Ответы (для самопроверки — открывай, когда всё сделано)</summary>
+<div class="answrap" id="ansAll"></div>
+<p>Аккорды записаны снизу вверх: бас → средний звук → верхний.</p>
+</details>
+
+<details class="card">
+<summary>👶 Родителям: как помогать</summary>
+<ul>
+<li>Урок большой (48 шагов в тренажёре): делайте одну тональность за раз.</li>
+<li>Главные вопросы, которые стоит задавать: «какая ступень подписана?» и «какой звук трезвучия оказался внизу — основной, средний или верхний?».</li>
+<li>В минорах следите за знаками: у ми минора — фа♯ (ключ) и ре♯ (гармоническая VII в доминанте); у соль минора — си♭, ми♭ и фа♯.</li>
+<li>Прогресс сохраняется в этом браузере (кнопка «Сбросить прогресс» начинает заново).</li>
+</ul>
+</details>
+
+<footer>
+<a href="index.html">🏠 Все уроки</a> · <a href="solfege-interval-vniz.html">← Интервалы вверх и вниз</a> · <a href="solfege-terminy.html">🧠 Тренажёр терминов</a>
+</footer>
+
+</div>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var L=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ'];
+var SEMI=[0,2,4,5,7,9,11];
+var ACCS={'-1':'♭','0':'','1':'♯'};
+var ROMAN=['I','II','III','IV','V','VI','VII'];
+var FIG=['⁵₃','₆','⁶₄'];
+var FNWORD={T:'тоника',t:'тоника',S:'субдоминанта',s:'субдоминанта',D:'доминанта'};
+
+/* ---------- данные: тональности ---------- */
+var ROWS=[
+ {id:'G', lab:'Соль мажор', fn:['T','T','T','S','S','S','D','D','D'],
+  deg:[[4,0],[5,0],[6,0],[0,0],[1,0],[2,0],[3,1]], labelQuiz:false},
+ {id:'em', lab:'ми минор (гарм.)', fn:['t','t','t','s','s','s','D','D','D'],
+  deg:[[2,0],[3,1],[4,0],[5,0],[6,0],[0,0],[1,1]], labelQuiz:false},
+ {id:'Bb', lab:'Си♭ мажор', fn:['T','T','T','S','S','S','D','D','D'],
+  deg:[[6,-1],[0,0],[1,0],[2,-1],[3,0],[4,0],[5,0]], labelQuiz:true},
+ {id:'gm', lab:'соль минор (гарм.)', fn:['t','t','t','s','s','s','D','D','D'],
+  deg:[[4,0],[5,0],[6,-1],[0,0],[1,0],[2,-1],[3,1]], labelQuiz:false}
+];
+var ROOT={T:0,t:0,S:3,s:3,D:4};
+function slotInfo(row,s){
+ var fn=row.fn[s];var inv=s%3;var root=ROOT[fn];
+ var bassDeg=(root+2*inv)%7;
+ var d=root;
+ var ls=[row.deg[d][0],row.deg[(d+2)%7][0],row.deg[(d+4)%7][0]];
+ var as=[row.deg[d][1],row.deg[(d+2)%7][1],row.deg[(d+4)%7][1]];
+ var bass=row.deg[bassDeg][0];
+ var bassAcc=row.deg[bassDeg][1];
+ function oct(letter){var sd=(letter-bass+7)%7;return 4+Math.floor((bass+sd)/7);}
+ var notes=[
+  {l:ls[0],o:oct(ls[0]),a:as[0]},
+  {l:ls[1],o:oct(ls[1]),a:as[1]},
+  {l:ls[2],o:oct(ls[2]),a:as[2]}
+ ];
+ notes.sort(function(a,b){return midi(a)-midi(b);});
+ var bassNote=null;
+ for(var i=0;i<3;i++){if(notes[i].l===bass&&notes[i].a===bassAcc)bassNote=notes[i];}
+ var rest=notes.filter(function(n){return n!==bassNote;});
+ return {bass:{l:bassNote.l,o:bassNote.o,a:bassNote.a},
+   mid:{l:rest[0].l,o:rest[0].o,a:rest[0].a}, top:{l:rest[1].l,o:rest[1].o,a:rest[1].a},
+   fn:fn, inv:inv, fig:FIG[inv], degIdx:bassDeg, name:L[bassNote.l]+ACCS[String(bassNote.a)]};
+}
+
+/* ---------- рисование стана ---------- */
+var S=13,TOP=52,BOT=TOP+4*S,W_EX=280,H_EX=200;
+function di(l,o){return o*7+l;}
+function yOf(d){return BOT-(d-30)*S/2;}
+function ledger(d,x){var s='';var rel=d-30;var e,y;
+ if(rel<=-2){var last=(rel%2===0)?rel:rel+1;for(e=-2;e>=last;e-=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ if(rel>=10){var last2=(rel%2===0)?rel:rel-1;for(e=10;e<=last2;e+=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ return s;}
+function noteSvg(n,x,color,o){o=o||{};var d=di(n.l,n.o),y=yOf(d);var s=ledger(d,x);
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="#fff" stroke="'+color+'" stroke-width="'+(o.thin?2.8:3.6)+'" transform="rotate(-12 '+x+' '+y+')"/>';
+ if(n.a===1)s+='<text x="'+(x-19)+'" y="'+(y+11)+'" font-size="34" text-anchor="middle" fill="'+color+'">♯</text>';
+ if(n.a===-1)s+='<text x="'+(x-19)+'" y="'+(y+9)+'" font-size="34" text-anchor="middle" fill="'+color+'">♭</text>';
+ return s;}
+function staffSvg(inner,clickable,width){
+ var w=width||W_EX;
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+H_EX+'" style="width:100%;max-width:'+w+'px;display:block"'+(clickable?' class="clickable"':'')+'>';
+ for(var i=0;i<5;i++){var y=TOP+i*S;s+='<line x1="4" y1="'+y+'" x2="'+(w-4)+'" y2="'+y+'" stroke="#40382e" stroke-width="1.3"/>';}
+ s+='<text x="8" y="'+(BOT+14)+'" font-size="58" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';
+ s+=inner+'</svg>';
+ return s;}
+function nameOf(n){return L[n.l]+ACCS[String(n.a)];}
+function midi(n){return 12+n.o*12+SEMI[n.l]+n.a;}
+function pl(n,one,few,many){var a=n%10,b=n%100;if(a===1&&b!==11)return one;if(a>=2&&a<=4&&(b<12||b>14))return few;return many;}
+
+/* ---------- иллюстрации ---------- */
+(function(){
+ var t53=[{l:0,o:4,a:0},{l:2,o:4,a:0},{l:4,o:4,a:0}];
+ var t6=[{l:2,o:4,a:0},{l:4,o:4,a:0},{l:0,o:5,a:0}];
+ var t64=[{l:4,o:4,a:0},{l:0,o:5,a:0},{l:2,o:5,a:0}];
+ var inner='';
+ t53.forEach(function(n){inner+=noteSvg(n,170,'#26221c',{});});
+ inner+='<text x="170" y="26" font-size="13" text-anchor="middle" fill="#8a8378">ДО–МИ–СОЛЬ</text>';
+ inner+='<text x="170" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="#7a4b9d">⁵₃</text>';
+ $('v1').innerHTML=staffSvg(inner,false);
+ var inner2='';
+ var invs=[t53,t6,t64];
+ [80,240,400].forEach(function(x,ci){
+  invs[ci].forEach(function(n){inner2+=noteSvg(n,x,'#26221c',{});});
+ });
+ inner2+='<text x="80" y="26" font-size="13" text-anchor="middle" fill="#8a8378">ДО–МИ–СОЛЬ</text>';
+ inner2+='<text x="240" y="26" font-size="13" text-anchor="middle" fill="#8a8378">МИ–СОЛЬ–ДО</text>';
+ inner2+='<text x="400" y="26" font-size="13" text-anchor="middle" fill="#8a8378">СОЛЬ–ДО–МИ</text>';
+ inner2+='<text x="80" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="#7a4b9d">⁵₃</text>';
+ inner2+='<text x="240" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="#7a4b9d">₆</text>';
+ inner2+='<text x="400" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="#7a4b9d">⁶₄</text>';
+ $('v2').innerHTML=staffSvg(inner2,false,480);
+})();
+
+function renderChord(id,notes,color,labels){
+ var inner='';
+ notes.forEach(function(n,idx){inner+=noteSvg(n,170,idx===0?'#26221c':color,{});});
+ var lbl=labels.join('–');
+ inner+='<text x="170" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="'+color+'">'+lbl+'</text>';
+ $(id).innerHTML=staffSvg(inner,false);
+}
+renderChord('ex1',[{l:6,o:4,a:0},{l:1,o:5,a:0},{l:4,o:5,a:0}],'#23843c',['СИ','РЕ','СОЛЬ']);
+renderChord('ex2',[{l:6,o:4,a:0},{l:1,o:5,a:1},{l:3,o:5,a:1}],'#23843c',['СИ','РЕ♯','ФА♯']);
+renderChord('ex3',[{l:6,o:4,a:-1},{l:2,o:4,a:-1},{l:4,o:4,a:0}],'#23843c',['СИ♭','МИ♭','СОЛЬ']);
+
+/* ---------- звук ---------- */
+var AC=null;
+function playNotes(seq){
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(AC.state==='suspended'){try{AC.resume();}catch(e){}}
+ var t=AC.currentTime+0.03;
+ for(var i=0;i<seq.length;i++){(function(nn,tt){
+  var f=440*Math.pow(2,(midi(nn)-69)/12);
+  var o=AC.createOscillator(),g=AC.createGain();
+  if(!isFinite(f))return;
+  o.type='triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,tt);g.gain.linearRampToValueAtTime(0.25,tt+0.02);g.gain.exponentialRampToValueAtTime(0.0001,tt+0.5);
+  o.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+0.55);
+ })(seq[i],t);t+=0.45;}
+}
+var SOUNDS={
+ ex1:[{l:6,o:4,a:0},{l:1,o:5,a:0},{l:4,o:5,a:0}],
+ ex2:[{l:6,o:4,a:0},{l:1,o:5,a:1},{l:3,o:5,a:1}],
+ ex3:[{l:6,o:4,a:-1},{l:2,o:4,a:-1},{l:4,o:4,a:0}]
+};
+var sndBtns=document.querySelectorAll('[data-sound]');
+for(var i0=0;i0<sndBtns.length;i0++){(function(b){b.addEventListener('click',function(){playNotes(SOUNDS[b.getAttribute('data-sound')]);});})(sndBtns[i0]);}
+
+/* ---------- таблицы ответов ---------- */
+(function(){
+ var h='';
+ ROWS.forEach(function(row){
+  var figs=['T⁵₃','T₆','T⁶₄','S⁵₃','S₆','S⁶₄','D⁵₃','D₆','D⁶₄'];
+  if(row.fn[0]==='t'){figs=['t⁵₃','t₆','t⁶₄','s⁵₃','s₆','s⁶₄','D⁵₃','D₆','D⁶₄'];}
+  h+='<h3>'+row.lab+'</h3><table class="ans"><tr><th>Такт</th>';
+  for(var s=0;s<9;s++)h+='<th>'+figs[s]+'</th>';
+  h+='</tr><tr><td class="lbl">Ступень баса</td>';
+  for(var s2=0;s2<9;s2++){var inf=slotInfo(row,s2);h+='<td>'+ROMAN[inf.degIdx]+'</td>';}
+  h+='</tr><tr><td class="lbl">Аккорд</td>';
+  for(var s3=0;s3<9;s3++){var inf2=slotInfo(row,s3);
+   var txt=nameOf(inf2.bass)+'–'+nameOf(inf2.mid)+'–'+nameOf(inf2.top);
+   var hasAcc=inf2.bass.a!==0||inf2.mid.a!==0||inf2.top.a!==0;
+   h+='<td class="'+(hasAcc?'acc':'')+'">'+txt+'</td>';}
+  h+='</tr></table>';
+ });
+ $('ansAll').innerHTML=h;
+})();
+
+/* ---------- тренажёр ---------- */
+var KEY='chords_v1';
+var RES={};
+try{RES=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){RES={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(RES));}catch(e){}}
+function res(k){return RES[k]?RES[k].st:null;}
+var TOTAL=ROWS.length*9+6;
+function countOk(){var n=0;for(var k in RES)if(RES[k].st==='ok')n++;return n;}
+function updProgress(){$('progress').innerHTML='Выполнено: <b>'+countOk()+'</b> из '+TOTAL+(countOk()===TOTAL?' — 🎉 всё!':'');}
+
+var ST={row:0,slot:1,phase:'label',sel:0,mid:{off:1,a:0},top:{off:2,a:0},tries:0};
+function row(){return ROWS[ST.row];}
+function slot(){return slotInfo(row(),ST.slot);}
+function setFb(cls,html){var f=$('fb');f.className='fb '+cls;f.innerHTML=html;}
+function kLab(s){return row().id+':'+s+':L';}
+function kBld(s){return row().id+':'+s+':B';}
+function slotNeedsLabel(){return row().labelQuiz&&ST.slot%3!==0;}
+
+function renderTaskTabs(){
+ var h='';
+ ROWS.forEach(function(r,i){h+='<button class="tasktab'+(i===ST.row?' active':'')+'" data-task="'+i+'">'+r.lab+'</button>';});
+ $('taskTabs').innerHTML=h;
+}
+function renderStrip(){
+ var r=row();var h='<div class="strip">';
+ for(var s=0;s<9;s++){
+  var inf=slotInfo(r,s);
+  var cls='slot';
+  var labState=res(kLab(s)),bldState=res(kBld(s));
+  var needL=r.labelQuiz&&s%3!==0;
+  var done=(needL?(labState==='ok'||labState==='seen'):true)&&(bldState==='ok'||bldState==='seen');
+  if(done)cls+=' ok';else if(labState==='seen'||bldState==='seen')cls+=' seen';
+  if(s===ST.slot)cls+=' cur';
+  var shown=(needL&&!(labState==='ok'||labState==='seen'))?'?':(r.fn[s]+FIG[inf.inv]);
+  h+='<button class="'+cls+'" data-slot="'+s+'">'+shown+'<span class="d">'+ROMAN[inf.degIdx]+'</span></button>';
+ }
+ h+='</div>';
+ $('stripWrap').innerHTML=h;
+}
+
+function givenNote(){var inf=slot();return {l:inf.bass.l,o:inf.bass.o,a:inf.bass.a};}
+function notesFromState(){
+ var g=givenNote();var res1={};
+ [0,1].forEach(function(k){
+  var st=k===0?ST.mid:ST.top;
+  var L2=(g.l+st.off)%7;
+  var o=g.o+Math.floor((g.l+st.off)/7);
+  res1[k]={l:L2,o:o,a:st.a};
+ });
+ return {mid:res1[0],top:res1[1]};
+}
+function buildLocked(){var kB=kBld(ST.slot);return res(kB)==='ok'||res(kB)==='seen';}
+
+function renderQuiz(){
+ var r=row();var inf=slot();
+ $('quizWrap').style.display='block';$('buildWrap').style.display='none';
+ var html='<div class="namewrap" style="text-align:center"><b>'+r.fn[ST.slot]+
+  '</b> с басом на ступени <b>'+ROMAN[inf.degIdx]+'</b>. Какой это вид обращения?</div><div class="namewrap" style="text-align:center">';
+ for(var k=0;k<3;k++)html+='<button class="namebtn" data-fig="'+k+'">'+FIG[k]+'</button>';
+ html+='</div>';
+ $('quizWrap').innerHTML=html;
+}
+function renderBuild(){
+ var r=row();var inf=slot();
+ $('quizWrap').style.display='none';$('buildWrap').style.display='block';
+ var g=givenNote();
+ var seen=res(kBld(ST.slot))==='seen';
+ var okd=res(kBld(ST.slot))==='ok';
+ var notes=okd||seen?{mid:inf.mid,top:inf.top}:notesFromState();
+ var col=okd?'#23843c':(seen?'#b97e12':'#0b6bcb');
+ var xs=[162,170,178];
+ var inner=noteSvg(g,xs[0],'#26221c',{});
+ inner+=noteSvg(notes.mid,xs[1],(okd||seen)?col:'#9fb7d8',{thin:true});
+ inner+=noteSvg(notes.top,xs[2],col,{thin:true});
+ if(!okd&&!seen){
+  var ys=[notes.mid,notes.top];
+  var sel=ys[ST.sel];
+  inner+='<circle cx="'+(xs[ST.sel+1])+'" cy="'+(yOf(di(sel.l,sel.o))-14)+'" r="4" fill="'+col+'"/>';
+ }
+ $('staffBox').innerHTML=staffSvg(inner,true);
+ $('exHead').innerHTML=row().lab+': такт <b>'+r.fn[ST.slot]+FIG[inf.inv]+'</b> ('+FNWORD[r.fn[ST.slot]]+'), бас — ступень <b>'+ROMAN[inf.degIdx]+'</b>. Дострой два верхних звука.';
+ $('selName').innerHTML=(okd||seen)?('Ответ: <b>'+nameOf(g)+'–'+nameOf(inf.mid)+'–'+nameOf(inf.top)+'</b>'):(('редактируем: <b>'+(ST.sel===0?'среднюю':'верхнюю')+' ноту</b> — сейчас это '+nameOf(ST.sel===0?notes.mid:notes.top)));
+ $('accNat').classList.toggle('active',ST.sel===0?ST.mid.a===0:ST.top.a===0);
+ $('accSh').classList.toggle('active',ST.sel===0?ST.mid.a===1:ST.top.a===1);
+ $('accFl').classList.toggle('active',ST.sel===0?ST.mid.a===-1:ST.top.a===-1);
+ $('selMid').classList.toggle('active',ST.sel===0);
+ $('selTop').classList.toggle('active',ST.sel===1);
+ $('btnCheck').disabled=(okd||seen);
+ $('btnNext').style.display='inline-block';
+ if(seen||okd){setFb(seen?'hint':'ok',(seen?'🔽 Ответ: ':'✅ Верно! ')+'<b>'+nameOf(g)+'–'+nameOf(inf.mid)+'–'+nameOf(inf.top)+'</b>. '+(seen?'Разбери подсказку.':''));if(seen)showHint();}
+ else{$('hint').style.display='none';}
+}
+function renderExercise(){
+ var r=row();var s=ST.slot;
+ if(r.labelQuiz&&r.printed&&r.printed[s]){
+  $('quizWrap').style.display='none';$('buildWrap').style.display='none';
+  $('exHead').innerHTML='Строка «'+r.lab+'», карточка «'+r.fn[s]+FIG[slotInfo(r,s).inv]+'» — это образец.';
+  setFb('empty','Эта карточка — образец: посмотри на аккорд и выбери в полоске пустую карточку.');
+  $('hint').style.display='none';
+  renderStrip();return;
+ }
+ if(slotNeedsLabel()&&!res(kLab(s))){
+  ST.phase='label';
+  renderQuiz();
+  $('exHead').innerHTML=row().lab+': такт №'+(s+1)+'. Допиши цифру обращения.';
+  setFb('empty','Сначала вспомни название обращения — потом построим аккорд.');
+  $('hint').style.display='none';
+  renderStrip();return;
+ }
+ ST.phase='build';
+ renderBuild();
+ setFb('empty','Выбери среднюю или верхнюю ноту и поставь её: клик по стану или ↑/↓, знак ♮/♯/♭. Потом вторую. И нажми «Проверить».');
+ renderStrip();
+}
+function renderAll(){renderTaskTabs();renderStrip();renderExercise();updProgress();}
+
+function firstPendingInRow(ri){
+ var r=ROWS[ri];
+ for(var s=0;s<9;s++){
+  var needL=r.labelQuiz&&s%3!==0;
+  var lSt=needL?res(r.id+':'+s+':L'):null;
+  var bSt=res(r.id+':'+s+':B');
+  if(needL&&lSt!=='ok'&&lSt!=='seen')return s;
+  if(bSt!=='ok'&&bSt!=='seen')return s;
+ }
+ return null;
+}
+function firstPendingAnywhere(startIdx){
+ for(var k=0;k<ROWS.length;k++){
+  var i=(startIdx+k)%ROWS.length;
+  var f=firstPendingInRow(i);
+  if(f!==null)return {row:i,slot:f};
+ }
+ return null;
+}
+
+$('taskTabs').addEventListener('click',function(e){
+ var b=e.target.closest('[data-task]');if(!b)return;
+ var i=+b.getAttribute('data-task');
+ var f=firstPendingInRow(i);
+ ST.row=i;ST.slot=f!==null?f:1;resetBuild();renderAll();
+});
+$('stripWrap').addEventListener('click',function(e){
+ var b=e.target.closest('[data-slot]');if(!b)return;
+ ST.slot=+b.getAttribute('data-slot');resetBuild();renderExercise();renderStrip();
+});
+function resetBuild(){ST.mid={off:1,a:0};ST.top={off:2,a:0};ST.sel=0;ST.tries=0;}
+
+$('quizWrap').addEventListener('click',function(e){
+ var b=e.target.closest('[data-fig]');if(!b)return;
+ var inf=slot();
+ var expect=inf.inv;
+ var pick=+b.getAttribute('data-fig');
+ var key=kLab(ST.slot);
+ if(pick===expect){
+  RES[key]={st:'ok'};save();
+  var who=expect===0?'основной (сам корень)':(expect===1?'средний звук (терция)':'верхний звук (квинта)');
+  setFb('ok','✅ Верно! Внизу — '+who+' трезвучия, значит это <b>'+FIG[expect]+'</b>.');
+  renderStrip();
+  setTimeout(function(){renderExercise();},600);
+ }else{
+  var w=expect===0?'основной звук — это трезвучие ⁵₃':(expect===1?'средний звук — это секстаккорд ₆':'верхний звук — это квартсекстаккорд ⁶₄');
+  setFb('err','❌ Внизу не он. Бас '+inf.name+' — это '+w+'. Смотри таблицу обращений выше 👇');
+  var el=$('hint');el.style.display='block';
+  el.innerHTML='<b>Таблица обращений:</b> ⁵₃ — внизу основной звук · ₆ — внизу средний (терция) · ⁶₄ — внизу верхний (квинта).<br>У нас '+FNWORD[inf.fn]+' = трезвучие на '+(inf.fn==='D'?'V':(inf.fn==='T'||inf.fn==='t')?'I':'IV')+' ступени. Бас на '+ROMAN[inf.degIdx]+' ступени → внизу '+w+'.';
+ }
+});
+
+$('selMid').addEventListener('click',function(){if(buildLocked())return;ST.sel=0;renderBuild();});
+$('selTop').addEventListener('click',function(){if(buildLocked())return;ST.sel=1;renderBuild();});
+function selState(){return ST.sel===0?ST.mid:ST.top;}
+$('btnUp').addEventListener('click',function(){if(buildLocked())return;var s=selState();var max=ST.sel===0?7:12;if(s.off<max)s.off++;renderBuild();});
+$('btnDown').addEventListener('click',function(){if(buildLocked())return;var s=selState();var min=ST.sel===0?1:2;if(s.off>min)s.off--;renderBuild();});
+$('accNat').addEventListener('click',function(){if(buildLocked())return;selState().a=0;renderBuild();});
+$('accSh').addEventListener('click',function(){if(buildLocked())return;selState().a=1;renderBuild();});
+$('accFl').addEventListener('click',function(){if(buildLocked())return;selState().a=-1;renderBuild();});
+$('staffBox').addEventListener('click',function(e){
+ if(buildLocked())return;
+ var svg=e.target.closest('svg');if(!svg)return;
+ var rc=svg.getBoundingClientRect();
+ var x=(e.clientX-rc.left)*(W_EX/rc.width);
+ if(x<60)return;
+ var y=(e.clientY-rc.top)*(H_EX/rc.height);
+ var rel=Math.round((BOT-y)/(S/2));
+ var g=givenNote();
+ var off=Math.max(ST.sel===0?1:2,Math.min(ST.sel===0?7:12,rel-(di(g.l,g.o)-30)));
+ selState().off=off;renderBuild();
+});
+$('btnSound').addEventListener('click',function(){
+ var inf=slot();
+ if(buildLocked()){playNotes([inf.bass,inf.mid,inf.top]);}
+ else{var n=notesFromState();playNotes([givenNote(),n.mid,n.top]);}
+});
+
+function hintText(){
+ var inf=slot();var r=row();
+ var figTxt=inf.inv===0?'над басом терция и квинта':(inf.inv===1?'над басом терция и секста':'над басом кварта и секста');
+ var root=ROOT[r.fn[ST.slot]];
+ var degTxt='звуки ступеней: '+ROMAN[root]+', '+ROMAN[(root+2)%7]+', '+ROMAN[(root+4)%7];
+ var h='<b>Разбор: '+r.fn[ST.slot]+FIG[inf.inv]+' ('+FNWORD[r.fn[ST.slot]]+') в тональности «'+r.lab+'»</b><br>';
+ h+='<b>Шаг 1 — бас.</b> Ступень '+ROMAN[inf.degIdx]+' — это <b>'+inf.name+'</b>. Она уже стоит внизу.<br>';
+ h+='<b>Шаг 2 — какие звуки.</b> '+degTxt+' → ноты <b>'+nameOf(inf.bass)+', '+nameOf(inf.mid)+', '+nameOf(inf.top)+'</b>.<br>';
+ h+='<b>Шаг 3 — обращение.</b> У '+FIG[inf.inv]+' '+figTxt+': средняя — <b>'+nameOf(inf.mid)+'</b>, верхняя — <b>'+nameOf(inf.top)+'</b>.<br><b>Ответ: '+nameOf(inf.bass)+'–'+nameOf(inf.mid)+'–'+nameOf(inf.top)+'</b>';
+ return h;
+}
+function showHint(){var el=$('hint');el.style.display='block';el.innerHTML=hintText();}
+$('btnHint').addEventListener('click',function(){showHint();});
+
+$('btnCheck').addEventListener('click',function(){
+ var r=row();var inf=slot();var key=kBld(ST.slot);
+ if(res(key)==='ok'||res(key)==='seen')return;
+ var n=notesFromState();
+ function eq(a,b){return a.l===b.l&&a.o===b.o&&a.a===b.a;}
+ if(!eq(n.mid,inf.mid)){
+  ST.tries++;
+  if(n.mid.l===inf.mid.l&&n.mid.o===inf.mid.o){
+   setFb('err','❌ Ступенька верная ('+nameOf(n.mid)+'), но знак не тот: нужна <b>'+nameOf(inf.mid)+'</b>.'+(ST.tries>=2?' Разбор ниже 👇':''));
+  }else{
+   var need=inf.inv===0?'терция над басом (2 ступеньки)':(inf.inv===1?'терция над басом (2 ступеньки)':'кварта над басом (3 ступеньки)');
+   setFb('err','❌ Средняя нота не та. У обращения <b>'+FIG[inf.inv]+'</b> '+need+'. Сейчас у тебя '+nameOf(n.mid)+', а нужна '+nameOf(inf.mid)+'.'+(ST.tries>=2?' Разбор ниже 👇':''));
+  }
+  if(ST.tries>=2)showHint();
+  return;
+ }
+ if(!eq(n.top,inf.top)){
+  ST.tries++;
+  if(n.top.l===inf.top.l&&n.top.o===inf.top.o){
+   setFb('err','❌ Ступенька верная ('+nameOf(n.top)+'), но знак не тот: нужна <b>'+nameOf(inf.top)+'</b>.'+(ST.tries>=2?' Разбор ниже 👇':''));
+  }else{
+   var need2=inf.inv===0?'квинта над басом (4 ступеньки)':'секста над басом (5 ступенек)';
+   setFb('err','❌ Верхняя нота не та. Над средней должна быть '+need2+'. Сейчас у тебя '+nameOf(n.top)+', а нужна '+nameOf(inf.top)+'. Средняя — молодец!'+(ST.tries>=2?' Разбор ниже 👇':''));
+  }
+  if(ST.tries>=2)showHint();
+  return;
+ }
+ RES[key]={st:'ok'};save();
+ setFb('ok','✅ <b>Верно!</b> '+nameOf(inf.bass)+'–'+nameOf(inf.mid)+'–'+nameOf(inf.top)+' — это '+FNWORD[r.fn[ST.slot]]+' ('+FIG[inf.inv]+'). 🎉');
+ playNotes([inf.bass,inf.mid,inf.top]);
+ renderStrip();updProgress();
+ $('btnCheck').disabled=true;
+});
+
+$('btnAnswer').addEventListener('click',function(){
+ var key=kBld(ST.slot);
+ if(res(key)==='ok')return;
+ RES[key]={st:'seen'};save();ST.tries=0;
+ renderBuild();renderStrip();updProgress();
+});
+
+$('btnNext').addEventListener('click',function(){
+ var start=ST.row;
+ var f=firstPendingAnywhere(start);
+ if(f){ST.row=f.row;ST.slot=f.slot;resetBuild();renderAll();}
+ else setFb('ok','🎉 <b>Всё выполнено!</b> Отличная работа!');
+});
+$('btnReset').addEventListener('click',function(){
+ if(!confirm('Сбросить весь прогресс тренажёра?'))return;
+ RES={};save();ST={row:0,slot:0,phase:'build',sel:0,mid:{off:1,a:0},top:{off:2,a:0},tries:0};
+ renderAll();
+});
+
+/* старт */
+(function(){
+ var f=firstPendingAnywhere(0);
+ if(f){ST.row=f.row;ST.slot=f.slot;}
+ else{ST.row=0;ST.slot=0;}
+ renderAll();
+})();
+})();
+</script>
+</body>
+</html>

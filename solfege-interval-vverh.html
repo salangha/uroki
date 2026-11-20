@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Интервалы: строим вверх — урок сольфеджио</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#f5f2ea;color:#2a251e;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:940px;margin:0 auto}
+header{text-align:center;padding:8px 0 4px}
+h1{font-size:34px;margin:.2em 0;color:#1c4f8f}
+.sub{color:#7a7263;margin:0 0 10px}
+.plan{background:#eef4fb;border:1.5px solid #cfe0f4;border-radius:14px;padding:12px 18px;margin:12px 0;font-size:16px}
+.card{background:#fff;border-radius:18px;padding:20px 24px;margin:16px 0;box-shadow:0 3px 14px rgba(60,50,30,.08)}
+h2{font-size:24px;margin:.1em 0 .5em;color:#1c4f8f}
+h3{font-size:19px;margin:.6em 0 .3em;color:#544c40}
+p{margin:.5em 0}
+table.simple{border-collapse:collapse;margin:10px 0}
+table.simple th,table.simple td{border:1.5px solid #d8d2c4;padding:6px 12px;text-align:center}
+table.simple th{background:#f2ede1}
+.note{background:#fff8e6;border-left:5px solid #e7b432;padding:10px 14px;border-radius:8px;margin:12px 0}
+.warnbox{background:#fdeeee;border-left:5px solid #c43d3d;padding:10px 14px;border-radius:8px;margin:12px 0}
+.staffbox{background:#fffef9;border:1.5px solid #e2dccd;border-radius:12px;padding:6px 10px;display:inline-block}
+svg.clickable{cursor:crosshair}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px;align-items:center;justify-content:center}
+.btn{font-size:17px;padding:10px 16px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;color:#2a251e}
+.btn:hover{background:#f0ead9}
+.btn.primary{background:#0b6bcb;border-color:#0b6bcb;color:#fff}
+.btn.primary:hover{background:#0a5cb0}
+.btn.good{background:#23843c;border-color:#23843c;color:#fff}
+.btn.tiny{font-size:15px;padding:4px 10px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:default}
+.accbtn{font-size:22px;min-width:46px}
+.accbtn.active{background:#0b6bcb;color:#fff;border-color:#0b6bcb}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{font-size:16px;padding:8px 12px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.chip:hover{background:#f0ead9}
+.chip.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.chip.full{background:#e7f6ec;border-color:#7cc08e;color:#23843c}
+.chip.active.full{background:#23843c;color:#fff;border-color:#23843c}
+.chip .cnt{font-size:13px;opacity:.85}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;justify-content:center}
+.tab{font-size:16px;padding:8px 14px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.tab.active{background:#0b6bcb;color:#fff;border-color:#0b6bcb}
+.tab .mark{display:inline-block;min-width:15px;font-weight:800;margin-right:5px;color:#23843c}
+.tab.seen .mark{color:#b97e12}
+.tab.active .mark{color:#ffd98a}
+.fb{border-radius:12px;padding:12px 16px;margin:10px 0;min-height:22px}
+.fb.empty{background:#f4f1e8;color:#6f6858}
+.fb.ok{background:#e7f6ec;border:1.5px solid #a9d8b6}
+.fb.err{background:#fdeaea;border:1.5px solid #efb9b9}
+.fb.hint{background:#fff6df;border:1.5px solid #ecd39a}
+.trainer-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+#progress{font-size:16px;color:#5f584a}
+.stage{max-width:340px;margin:0 auto;text-align:center}
+.exHead{font-size:18px;text-align:center;margin:6px 0}
+#selName{text-align:center;color:#5f584a;margin-top:2px}
+.ex{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin:14px 0;border-top:1px dashed #ddd;padding-top:14px}
+.exstaff{flex:0 0 300px}
+.exsteps{flex:1 1 340px;min-width:280px}
+.exsteps ol{margin:.3em 0 .3em 1.25em;padding:0}
+.ansline{font-size:18px;margin-top:6px}
+table.ans{border-collapse:collapse}
+table.ans th,table.ans td{border:1.5px solid #d8d2c4;padding:5px 10px;text-align:center;font-size:16px}
+table.ans td.acc{background:#fff3c4;font-weight:700}
+table.ans td.lbl{background:#f2ede1;font-weight:700}
+.answrap{overflow-x:auto}
+details{margin:10px 0}
+summary{cursor:pointer;font-weight:700;font-size:18px;color:#1c4f8f}
+footer{text-align:center;color:#8a8378;font-size:14px;padding:18px}
+footer a{color:#1c4f8f}
+.piano-wrap{overflow-x:auto;margin:8px 0}
+@media (max-width:640px){body{font-size:16px}h1{font-size:27px}.card{padding:16px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🎵 Интервалы: строим вверх</h1>
+  <p class="sub">Урок сольфеджио. Сначала разберёмся, как строить интервалы и почему именно так, а потом потренируемся.</p>
+</header>
+
+<div class="plan">
+  <b>План урока:</b>
+  1️⃣ прочитай «Как это устроено» (можно вместе со взрослым) →
+  2️⃣ разбери три примера →
+  3️⃣ <a href="#trainer">в тренажёре</a> построй все интервалы →
+  4️⃣ проверь себя по таблице ответов и закрепи слова в <a href="solfege-terminy.html">тренажёре терминов</a>.
+</div>
+
+<!-- ================= 1. ЧТО ТАКОЕ ИНТЕРВАЛ ================= -->
+<section class="card">
+<h2>1. Что такое интервал?</h2>
+<p><b>Интервал</b> — это расстояние между двумя звуками (двумя нотами).</p>
+<p>У нас всегда <b>дана нижняя нота</b>. Твоя работа — <b>дописать верхнюю</b> так, чтобы расстояние между ними получилось ровно то, которое названо.</p>
+<div class="note">📌 Мы будем строить интервалы <b>вверх</b> от данной ноты: данная нота остаётся на месте, мы добавляем ноту выше.</div>
+<div class="staffbox" id="v1"></div>
+<p style="max-width:420px;display:inline-block;vertical-align:top;margin-left:14px">Например: дана нота <b>ДО</b>. Если сверху добавить <b>СОЛЬ</b> — получится интервал <b>ч.5</b> (чистая квинта).</p>
+</section>
+
+<!-- ================= 2. ЧИСЛО ================= -->
+<section class="card">
+<h2>2. Читаем название: число говорит про ступеньки</h2>
+<p>Название вроде <b>м.2</b> или <b>ч.5</b> — это шифровка из двух подсказок. Первая подсказка — <b>число</b>: оно говорит, на какой ступеньке встанет верхняя нота.</p>
+<p><b>Ступеньки</b> — это линейки нотного стана и промежутки между ними. Считаем так: сама данная нота — ступенька <b>№ 1</b>; следующая линейка или промежуток — <b>№ 2</b>; и так далее.</p>
+<p>Названия интервалов пришли из латинского языка, и каждое прячет в себе своё число:</p>
+<table class="simple">
+<tr><th>Название</th><th>Число</th><th>По-латински</th></tr>
+<tr><td>секунда</td><td>2</td><td>secundus — «второй»</td></tr>
+<tr><td>терция</td><td>3</td><td>tertius — «третий»</td></tr>
+<tr><td>кварта</td><td>4</td><td>quartus — «четвёртый»</td></tr>
+<tr><td>квинта</td><td>5</td><td>quintus — «пятый»</td></tr>
+<tr><td>секста</td><td>6</td><td>sextus — «шестой»</td></tr>
+<tr><td>септима</td><td>7</td><td>septimus — «седьмой»</td></tr>
+<tr><td>октава</td><td>8</td><td>octavus — «восьмой»</td></tr>
+</table>
+<div class="warnbox">⚠️ <b>Самая частая ошибка</b> — считать только линейки. Промежутки между линейками — тоже ступеньки! От линейки до соседнего промежутка — уже одна ступенька.</div>
+<div class="staffbox" id="v2"></div>
+<p>Посмотри: от ДО ступенька № 2 — это РЕ, № 3 — МИ… а № 8 — снова ДО, только выше. Восьмая ступенька — это <b>октава</b>.</p>
+</section>
+
+<!-- ================= 3. ПОЛУТОНЫ ================= -->
+<section class="card">
+<h2>3. Вторая подсказка: буква. Ширина в полутонах</h2>
+<p>Число говорит, <b>где</b> стоит верхняя нота. Но одни и те же ступеньки могут быть <b>разной ширины</b>. Например, ДО–РЕ и МИ–ФА — обе секунды, но ДО–РЕ — шире, а МИ–ФА — уже.</p>
+<p>Самый узкий музыкальный шаг — <b>полутон</b>: на клавиатуре это две соседние клавиши, между которыми нет ничего. Два полутона = <b>тон</b>.</p>
+<div class="piano-wrap" id="piano"></div>
+<p>Среди белых клавиш полутонами являются только шаги <b>МИ–ФА</b> и <b>СИ–ДО</b> — они «впритык», чёрной клавиши между ними нет. Все остальные соседние белые клавиши — <b>тоны</b>: между ними прячется чёрная клавиша.</p>
+<h3>Как считать полутоны, если под рукой нет пианино?</h3>
+<p>Иди по белым клавишам и помни: <b>МИ–ФА</b> и <b>СИ–ДО</b> — по полутону, все остальные шаги — по тону (2 полутона).</p>
+<p>Пример: от МИ вверх до СОЛЬ: МИ–ФА — полутон (1), ФА–СОЛЬ — тон (2). Всего 1 + 2 = <b>3 полутона</b>.</p>
+<h3>Буквы в шифровке</h3>
+<table class="simple">
+<tr><th>Буква</th><th>Значение</th><th>Ширина</th></tr>
+<tr><td><b>м</b></td><td>малая</td><td>поуже</td></tr>
+<tr><td><b>б</b></td><td>большая</td><td>пошире</td></tr>
+<tr><td><b>ч</b></td><td>чистая</td><td>единственная «правильная» ширина</td></tr>
+</table>
+<p>У секунды, терции, сексты и септимы есть обе ширины — малая и большая. У кварты, квинты и октавы — только одна, она называется <b>чистой</b>.</p>
+<h3>Таблица размеров (запоминать не надо — просто сверяйся)</h3>
+<table class="simple">
+<tr><th>Шифр</th><th>Название</th><th>Ступенек</th><th>Полутонов</th></tr>
+<tr><td>м.2</td><td>малая секунда</td><td>2</td><td>1</td></tr>
+<tr><td>б.2</td><td>большая секунда</td><td>2</td><td>2</td></tr>
+<tr><td>м.3</td><td>малая терция</td><td>3</td><td>3</td></tr>
+<tr><td>б.3</td><td>большая терция</td><td>3</td><td>4</td></tr>
+<tr><td>ч.4</td><td>чистая кварта</td><td>4</td><td>5</td></tr>
+<tr><td>ч.5</td><td>чистая квинта</td><td>5</td><td>7</td></tr>
+<tr><td>м.6</td><td>малая секста</td><td>6</td><td>8</td></tr>
+<tr><td>б.6</td><td>большая секста</td><td>6</td><td>9</td></tr>
+<tr><td>м.7</td><td>малая септима</td><td>7</td><td>10</td></tr>
+<tr><td>б.7</td><td>большая септима</td><td>7</td><td>11</td></tr>
+<tr><td>ч.8</td><td>чистая октава</td><td>8</td><td>12</td></tr>
+</table>
+<div class="note">💡 Обрати внимание: 6 полутонов — это «ни кварта, ни квинта». Интервалов шириной 6 полутонов в наших заданиях нет и не будет.</div>
+</section>
+
+<!-- ================= 4. АЛГОРИТМ ================= -->
+<section class="card">
+<h2>4. Алгоритм: два вопроса</h2>
+<p>Строй интервал в два шага — отвечай на два вопроса:</p>
+<p><b>Вопрос 1 — «Сколько ступенек?»</b><br>Число в шифровке. Поставь верхнюю ноту на нужную ступеньку — пока <b>без всяких знаков</b>.</p>
+<p><b>Вопрос 2 — «Сколько полутонов?»</b><br>Посчитай полутоны между нотами и сверься с таблицей размеров. Если шаг вышел <b>пошире</b>, чем нужно — поставь у верхней ноты <b>♭ (бемоль)</b>, и она чуть опустится. Если <b>поуже</b> — <b>♯ (диез)</b>, и она чуть поднимется.</p>
+<div class="note">📌 <b>Почему так, а не иначе?</b> Знак не может «перескочить» на другую ступеньку — он только делает ноту чуть ниже или выше. Поэтому сначала ставим ноту на правильную ступеньку (вопрос 1), а потом подгоняем её ширину знаком (вопрос 2). Букву ноты мы не меняем никогда: секунда от ДО — это всегда «РЕ с каким-то знаком», а не МИ.</div>
+<div class="warnbox">⚠️ <b>Частые ошибки:</b>
+<ul style="margin:6px 0">
+<li>считать ступеньки только по линейкам (промежутки тоже считаются!);</li>
+<li>менять ступеньку, чтобы «подогнать» полутоны (нужен знак, а не перескок);</li>
+<li>забывать про кварту от ФА (там СИ♭) и квинту от СИ (там ФА♯);</li>
+<li>строить интервал вниз — в этом уроке все интервалы вверх.</li>
+</ul></div>
+
+<h3>Разберём три примера</h3>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="ex1"></div>
+  <div class="exsteps">
+    <b>Пример 1. м.2 от ДО (малая секунда)</b>
+    <ol>
+      <li><b>Сколько ступенек?</b> Секунда — 2 ступеньки. От ДО ступенька № 2 — это <b>РЕ</b>. Ставим РЕ.</li>
+      <li><b>Сколько полутонов?</b> ДО–РЕ — тон, то есть 2 полутона.</li>
+      <li><b>Сверяем:</b> м.2 = 1 полутон. Шаг вышел пошире, чем нужно → ставим у РЕ знак ♭.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>ДО–РЕ♭</b> <button class="btn tiny" data-sound="ex1">🔊 послушать</button></div>
+  </div>
+</div>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="ex2"></div>
+  <div class="exsteps">
+    <b>Пример 2. б.3 от МИ (большая терция)</b>
+    <ol>
+      <li><b>Сколько ступенек?</b> Терция — 3 ступеньки: МИ (№1) → ФА (№2) → <b>СОЛЬ</b> (№3). Ставим СОЛЬ.</li>
+      <li><b>Сколько полутонов?</b> МИ–СОЛЬ = 3 полутона (МИ–ФА полутон + ФА–СОЛЬ тон). Это была бы малая терция.</li>
+      <li><b>Сверяем:</b> б.3 = 4 полутона. Шаг поуже, чем нужно → ставим у СОЛЬ знак ♯.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>МИ–СОЛЬ♯</b> <button class="btn tiny" data-sound="ex2">🔊 послушать</button></div>
+  </div>
+</div>
+
+<div class="ex">
+  <div class="exstaff staffbox" id="ex3"></div>
+  <div class="exsteps">
+    <b>Пример 3. ч.4 от ФА (чистая кварта) — ловушка! ⚠️</b>
+    <ol>
+      <li><b>Сколько ступенек?</b> Кварта — 4 ступеньки: ФА → СОЛЬ → ЛЯ → <b>СИ</b>. Ставим СИ.</li>
+      <li><b>Сколько полутонов?</b> ФА–СИ = 6 полутонов. А ч.4 = 5!</li>
+      <li><b>Сверяем:</b> шаг пошире, чем нужно → ставим у СИ знак ♭.</li>
+    </ol>
+    <div class="ansline">Ответ: <b>ФА–СИ♭</b> <button class="btn tiny" data-sound="ex3">🔊 послушать</button></div>
+    <p style="color:#8a6d1f">Это единственная кварта, у которой нужен знак. Её все путают — а ты теперь знаешь почему!</p>
+  </div>
+</div>
+</section>
+
+<!-- ================= ПРАКТИКА ================= -->
+<section class="card" style="background:#f3f8ff;border:2px solid #cfe0f4">
+<h2>🎯 Практика</h2>
+<p>В тренажёре — все одиннадцать интервалов: <b>м.2, б.2, м.3, б.3, ч.4, ч.5, м.6, б.6, м.7, б.7, ч.8</b>. В каждой строке строится один интервал, а слева направо идут ноты <b>ДО, РЕ, МИ, ФА, СОЛЬ, ЛЯ, СИ</b>. К каждой ноте дострой интервал вверх.</p>
+</section>
+
+<!-- ================= ТРЕНАЖЁР ================= -->
+<section class="card" id="trainer">
+<h2>🎧 Тренажёр</h2>
+<div class="trainer-top">
+  <span>Выбери строку (интервал):</span>
+  <span id="progress"></span>
+</div>
+<div class="chips" id="chips"></div>
+<p style="margin-bottom:4px">Теперь ноту, от которой строим:</p>
+<div class="tabs" id="tabs"></div>
+<div class="exHead" id="exHead"></div>
+<div class="stage">
+  <div class="staffbox" id="staffBox"></div>
+  <div id="selName"></div>
+</div>
+<div class="controls">
+  <button class="btn" id="btnUp" title="На ступеньку выше">⬆ выше</button>
+  <button class="btn" id="btnDown" title="На ступеньку ниже">⬇ ниже</button>
+  <span style="color:#8a8378">знак:</span>
+  <button class="btn accbtn" id="accNat" title="без знака">♮</button>
+  <button class="btn accbtn" id="accSh" title="диез — на полутон выше">♯</button>
+  <button class="btn accbtn" id="accFl" title="бемоль — на полутон ниже">♭</button>
+  <button class="btn primary" id="btnCheck">Проверить</button>
+  <button class="btn" id="btnSound">🔊</button>
+  <button class="btn" id="btnHint">Подсказка</button>
+  <button class="btn" id="btnAnswer">Показать ответ</button>
+  <button class="btn good" id="btnNext" style="display:none">Следующее →</button>
+</div>
+<div class="fb empty" id="fb"></div>
+<div class="fb hint" id="hint" style="display:none"></div>
+<div style="text-align:center;margin-top:10px">
+  <button class="btn tiny" id="btnReset">Сбросить прогресс</button>
+</div>
+<p style="color:#8a8378;font-size:15px">Ноту можно ставить кликом по нотному стану (стан кликабельный выше нижней ноты). 🔊 — послушать, что получилось.</p>
+</section>
+
+<!-- ================= ОТВЕТЫ ================= -->
+<details class="card">
+<summary>🔑 Ответы (для самопроверки — открывай, когда всё сделал!)</summary>
+<p>Жёлтые клетки — там, где нужен знак. ⚠️ — знаменитые «ловушки»: ч.4 от ФА (СИ♭) и ч.5 от СИ (ФА♯).</p>
+<div class="answrap" id="ansTable"></div>
+</details>
+
+<details class="card">
+<summary>👶 Родителям: как помогать</summary>
+<ul>
+<li>Занимайтесь короткими сессиями: 10–15 минут, 1–3 строки за раз.</li>
+<li>Пусть ребёнок отвечает вслух на два вопроса алгоритма: «сколько ступенек?» и «сколько полутонов?». Не называйте ответ, пока он не назвал ступеньку сам.</li>
+<li>Если ошибка повторяется — вернитесь к примерам в разделе 4 и решите похожий пример вместе.</li>
+<li>Прогресс тренажёра сохраняется в этом браузере (кнопка «Сбросить прогресс» начинает заново).</li>
+</ul>
+</details>
+
+<footer>
+<a href="index.html">🏠 Все уроки</a> · <a href="solfege-interval-vniz.html">Урок: интервалы вверх и вниз →</a> · <a href="solfege-terminy.html">🧠 Тренажёр терминов</a>
+</footer>
+
+</div>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var L=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ'];
+var SEMI=[0,2,4,5,7,9,11];
+var ACCS={'-1':'♭','0':'','1':'♯'};
+var NUMNAME={2:'секунда',3:'терция',4:'кварта',5:'квинта',6:'секста',7:'септима',8:'октава'};
+var INTS=[
+ {id:'m2',label:'м.2',name:'малая секунда',num:2,semi:1},
+ {id:'b2',label:'б.2',name:'большая секунда',num:2,semi:2},
+ {id:'m3',label:'м.3',name:'малая терция',num:3,semi:3},
+ {id:'b3',label:'б.3',name:'большая терция',num:3,semi:4},
+ {id:'p4',label:'ч.4',name:'чистая кварта',num:4,semi:5},
+ {id:'p5',label:'ч.5',name:'чистая квинта',num:5,semi:7},
+ {id:'m6',label:'м.6',name:'малая секста',num:6,semi:8},
+ {id:'M6',label:'б.6',name:'большая секста',num:6,semi:9},
+ {id:'m7',label:'м.7',name:'малая септима',num:7,semi:10},
+ {id:'M7',label:'б.7',name:'большая септима',num:7,semi:11},
+ {id:'p8',label:'ч.8',name:'чистая октава',num:8,semi:12}
+];
+var QUAL={1:'малая секунда (м.2)',2:'большая секунда (б.2)',3:'малая терция (м.3)',4:'большая терция (б.3)',5:'чистая кварта (ч.4)',6:'«широкая» кварта (увеличенная) — таких интервалов в наших заданиях не бывает',7:'чистая квинта (ч.5)',8:'малая секста (м.6)',9:'большая секста (б.6)',10:'малая септима (м.7)',11:'большая септима (б.7)',12:'чистая октава (ч.8)'};
+
+function midi(l,o,a){return 12+o*12+SEMI[l]+a;}
+function sol(l,it){var ui=l+it.num-1;var carry=Math.floor(ui/7);var ul=ui%7;
+ var diff=midi(ul,4+carry,0)-midi(l,4,0);
+ return {l:ul,o:4+carry,a:it.semi-diff};}
+function nameOf(n){return L[n.l]+ACCS[String(n.a)];}
+function pl(n,one,few,many){var a=n%10,b=n%100;if(a===1&&b!==11)return one;if(a>=2&&a<=4&&(b<12||b>14))return few;return many;}
+function semiStr(n){return n+' '+pl(n,'полутон','полутона','полутонов');}
+function chain(li,num){var s='';for(var i=0;i<num;i++){s+=(i?' → ':'')+L[(li+i)%7]+'('+(i+1)+')';}return s;}
+var CAPN={2:'Секунда',3:'Терция',4:'Кварта',5:'Квинта',6:'Секста',7:'Септима',8:'Октава'};
+
+/* ---------- рисование нотного стана ---------- */
+var S=13,TOP=52,BOT=TOP+4*S,W_EX=280,H_EX=200;
+function di(l,o){return o*7+l;}
+function yOf(d){return BOT-(d-30)*S/2;}
+function ledger(d,x){var s='';var rel=d-30;var e,y;
+ if(rel<=-2){var last=(rel%2===0)?rel:rel+1;for(e=-2;e>=last;e-=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ if(rel>=10){var last2=(rel%2===0)?rel:rel-1;for(e=10;e<=last2;e+=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ return s;}
+function noteSvg(n,x,color,o){o=o||{};var d=di(n.l,n.o),y=yOf(d);var s=ledger(d,x);
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="#fff" stroke="'+color+'" stroke-width="3.6" transform="rotate(-12 '+x+' '+y+')"/>';
+ if(n.a===1)s+='<text x="'+(x-19)+'" y="'+(y+11)+'" font-size="34" text-anchor="middle" fill="'+color+'">♯</text>';
+ if(n.a===-1)s+='<text x="'+(x-19)+'" y="'+(y+9)+'" font-size="34" text-anchor="middle" fill="'+color+'">♭</text>';
+ if(o.label)s+='<text x="'+x+'" y="'+(BOT+37)+'" font-size="15" font-weight="700" text-anchor="middle" fill="'+(o.labelColor||color)+'">'+o.label+'</text>';
+ return s;}
+function staffSvg(w,h,inner,clickable){
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" style="width:100%;max-width:'+w+'px;display:block"'+(clickable?' class="clickable"':'')+'>';
+ for(var i=0;i<5;i++){var y=TOP+i*S;s+='<line x1="4" y1="'+y+'" x2="'+(w-4)+'" y2="'+y+'" stroke="#40382e" stroke-width="1.3"/>';}
+ s+='<text x="8" y="'+(BOT+14)+'" font-size="58" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';
+ s+=inner+'</svg>';
+ return s;}
+
+/* ---------- иллюстрация 1: интервал = расстояние ---------- */
+(function(){
+ var a={l:0,o:4,a:0},b={l:4,o:4,a:0};
+ var ya=yOf(di(a.l,a.o)),yb=yOf(di(b.l,b.o));
+ var inner=noteSvg(a,118,'#26221c',{label:'ДО',labelColor:'#26221c'})+noteSvg(b,195,'#26221c',{label:'СОЛЬ',labelColor:'#26221c'});
+ inner+='<line x1="240" y1="'+ya+'" x2="240" y2="'+yb+'" stroke="#0b6bcb" stroke-width="2.5"/>';
+ inner+='<line x1="234" y1="'+ya+'" x2="246" y2="'+ya+'" stroke="#0b6bcb" stroke-width="2.5"/>';
+ inner+='<line x1="234" y1="'+yb+'" x2="246" y2="'+yb+'" stroke="#0b6bcb" stroke-width="2.5"/>';
+ inner+='<text x="250" y="'+((ya+yb)/2+6)+'" font-size="17" font-weight="700" fill="#0b6bcb">ч.5</text>';
+ $('v1').innerHTML=staffSvg(290,H_EX,inner,false);
+})();
+
+/* ---------- иллюстрация 2: ступеньки 1–8 ---------- */
+(function(){
+ var inner='';var names=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ','ДО'];
+ for(var i=0;i<8;i++){var l=i%7,o=i<7?4:5;
+  inner+=noteSvg({l:l,o:o,a:0},66+i*49,'#26221c',{num:String(i+1),top:names[i]});}
+ $('v2').innerHTML=staffSvg(470,190,inner,false);
+})();
+
+/* ---------- клавиатура ---------- */
+(function(){
+ var W=40,H=118,BW=24,BH=72;
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+(8*W+8)+' '+(H+52)+'" style="width:100%;max-width:560px;display:block">';
+ var wn=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ','ДО'];
+ var i,x;
+ for(i=0;i<8;i++){x=4+i*W;
+  s+='<rect x="'+x+'" y="4" width="'+W+'" height="'+H+'" rx="4" fill="#fffdf6" stroke="#544c40" stroke-width="1.5"/>';
+  s+='<text x="'+(x+W/2)+'" y="'+(H-10)+'" font-size="15" font-weight="700" text-anchor="middle" fill="#544c40">'+wn[i]+'</text>';}
+ var blacks=[0,1,3,4,5];
+ for(i=0;i<blacks.length;i++){x=4+(blacks[i]+1)*W-BW/2;
+  s+='<rect x="'+x+'" y="4" width="'+BW+'" height="'+BH+'" rx="3" fill="#37322b"/>';}
+ function brace(i1,i2,color,label){var x1=4+i1*W,x2=4+(i2+1)*W,y=H+8;
+  s+='<path d="M '+x1+' '+y+' v8 H '+x2+' v-8" fill="none" stroke="'+color+'" stroke-width="2.5"/>';
+  s+='<text x="'+((x1+x2)/2)+'" y="'+(y+24)+'" font-size="15" font-weight="700" text-anchor="middle" fill="'+color+'">'+label+'</text>';}
+ brace(0,1,'#23843c','ТОН');
+ brace(2,3,'#c43d3d','ПОЛУТОН');
+ brace(6,7,'#c43d3d','ПОЛУТОН');
+ s+='</svg>';
+ $('piano').innerHTML=s;
+})();
+
+/* ---------- примеры ---------- */
+function renderEx(id,li,it,color){
+ var low={l:li,o:4,a:0},up=sol(li,it);
+ var inner=noteSvg(low,118,'#26221c',{label:L[li],labelColor:'#26221c'})+noteSvg(up,208,color||'#23843c',{label:nameOf(up),labelColor:color||'#23843c'});
+ $(id).innerHTML=staffSvg(W_EX,H_EX,inner,false);
+}
+renderEx('ex1',0,INTS[0]);
+renderEx('ex2',2,INTS[3]);
+renderEx('ex3',3,INTS[4],'#c43d3d');
+
+/* ---------- звук ---------- */
+var AC=null;
+function playNotes(seq){
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(AC.state==='suspended'){try{AC.resume();}catch(e){}}
+ var t=AC.currentTime+0.03;
+ for(var i=0;i<seq.length;i++){(function(nn,tt){
+  var f=440*Math.pow(2,(midi(nn)-69)/12);
+  var o=AC.createOscillator(),g=AC.createGain();
+  if(!isFinite(f))return;
+  o.type='triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,tt);g.gain.linearRampToValueAtTime(0.25,tt+0.02);g.gain.exponentialRampToValueAtTime(0.0001,tt+0.55);
+  o.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+0.6);
+ })(seq[i],t);t+=0.6;}
+}
+var SOUNDS={
+ ex1:[{l:0,o:4,a:0},{l:1,o:4,a:-1}],
+ ex2:[{l:2,o:4,a:0},{l:4,o:4,a:1}],
+ ex3:[{l:3,o:4,a:0},{l:6,o:4,a:-1}]
+};
+var sndBtns=document.querySelectorAll('[data-sound]');
+for(var i=0;i<sndBtns.length;i++){(function(b){b.addEventListener('click',function(){playNotes(SOUNDS[b.getAttribute('data-sound')]);});})(sndBtns[i]);}
+
+/* ---------- таблица ответов ---------- */
+(function(){
+ var h='<table class="ans"><tr><th>Интервал</th>';
+ for(var l=0;l<7;l++)h+='<th>'+L[l]+'</th>';
+ h+='</tr>';
+ INTS.forEach(function(it){
+  h+='<tr><td class="lbl">'+it.label+'</td>';
+  for(var l=0;l<7;l++){var s=sol(l,it);
+   var warn=(it.num===4&&l===3)||(it.num===5&&l===6);
+   h+='<td class="'+(s.a!==0?'acc':'')+'">'+nameOf(s)+(warn?' ⚠️':'')+'</td>';}
+  h+='</tr>';});
+ h+='</table>';
+ $('ansTable').innerHTML=h;
+})();
+
+/* ---------- тренажёр ---------- */
+var KEY='interval_up_v1';
+var RES={};
+try{RES=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){RES={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(RES));}catch(e){}}
+function countOk(){var n=0;for(var k in RES)if(RES[k]&&RES[k].st==='ok')n++;return n;}
+var ST={it:0,li:0,off:1,a:0,tries:0,reveal:true};
+function exKey(i,l){return INTS[i].id+':'+l;}
+function upFromSel(){var ui=ST.li+ST.off;return {l:ui%7,o:4+Math.floor(ui/7),a:ST.a};}
+function isSolved(){var r=RES[exKey(ST.it,ST.li)];return !!(r&&r.st==='ok');}
+function isSeen(){var r=RES[exKey(ST.it,ST.li)];return !!(r&&r.st==='seen');}
+function setFb(cls,html){var f=$('fb');f.className='fb '+cls;f.innerHTML=html;}
+
+function renderChips(){
+ var h='';INTS.forEach(function(it,i){
+  var done=0;for(var l=0;l<7;l++){var r=RES[exKey(i,l)];if(r&&r.st==='ok')done++;}
+  h+='<button class="chip'+(i===ST.it?' active':'')+(done===7?' full':'')+'" data-chip="'+i+'">'+it.label+' <span class="cnt">'+(done===7?'✓':(done>0?done:''))+'</span></button>';});
+ $('chips').innerHTML=h;
+}
+function renderTabs(){
+ var h='';for(var l=0;l<7;l++){var r=RES[exKey(ST.it,l)];var st=r?r.st:'';
+  h+='<button class="tab'+(l===ST.li?' active':'')+(st==='seen'?' seen':'')+'" data-tab="'+l+'"><span class="mark">'+(st==='ok'?'✓':(st==='seen'?'•':''))+'</span>'+L[l]+'</button>';}
+ $('tabs').innerHTML=h;
+}
+function drawStaff(){
+ var it=INTS[ST.it],li=ST.li,soln=sol(li,it);
+ var showSol=isSolved()||(isSeen()&&ST.reveal);
+ var up,color,label;
+ if(showSol){up=soln;color=isSolved()?'#23843c':'#b97e12';label=nameOf(up);}
+ else{up=upFromSel();color='#0b6bcb';label=nameOf(up)+' ?';}
+ var inner=noteSvg({l:li,o:4,a:0},118,'#26221c',{label:L[li],labelColor:'#26221c'});
+ inner+=noteSvg(up,208,color,{label:label,labelColor:color});
+ $('staffBox').innerHTML=staffSvg(W_EX,H_EX,inner,true);
+ $('selName').innerHTML='Сейчас выбрано: <b>'+(showSol?nameOf(soln):nameOf(upFromSel()))+'</b>';
+ $('accNat').classList.toggle('active',ST.a===0);
+ $('accSh').classList.toggle('active',ST.a===1);
+ $('accFl').classList.toggle('active',ST.a===-1);
+}
+function renderTrainer(){
+ renderChips();renderTabs();drawStaff();
+ var it=INTS[ST.it],li=ST.li,soln=sol(li,it);
+ $('exHead').innerHTML='Строка <b>'+it.label+'</b> — '+it.name+'. Дана нижняя нота <b>'+L[li]+'</b>. Строим интервал вверх.';
+ $('progress').innerHTML='Решено: <b>'+countOk()+'</b> из 77'+(countOk()===77?' — 🎉 всё!':'');
+ $('btnCheck').disabled=isSolved();
+ $('btnNext').style.display=(isSolved()||isSeen())?'inline-block':'none';
+ if(isSolved()){
+  setFb('ok','✅ Решено! '+L[li]+' → <b>'+nameOf(soln)+'</b> ('+it.name+'). Послушай 🔊, как он звучит.');
+  $('hint').style.display='none';
+ }else if(isSeen()&&ST.reveal){
+  setFb('hint','🔽 Ответ был показан: '+L[li]+' → <b>'+nameOf(soln)+'</b>. Разбери его ниже. Или попробуй решить сам — тогда засчитается!');
+  showHint();
+ }else{
+  setFb('empty','Поставь верхнюю ноту: кликни по нотному стану (или ↑/↓), выбери знак ♮/♯/♭ и нажми «Проверить».');
+  $('hint').style.display='none';
+ }
+}
+function hintText(){
+ var it=INTS[ST.it],li=ST.li,s=sol(li,it);
+ var natDiff=midi(s.l,s.o,0)-midi(li,4,0);
+ var low=L[li];
+ var stepWord=it.num<5?'ступени':'ступеней';
+ var h='<b>Разбор: '+it.label+' ('+it.name+') от ноты '+low+'</b><br>';
+ h+='<b>Шаг 1 — считаем ступеньки.</b> '+CAPN[it.num]+' — это '+it.num+' '+stepWord+'. Считаем от '+low+' вверх (сама нота — № 1): '+chain(li,it.num)+'. Значит, верхняя нота — <b>'+L[s.l]+'</b>. Пока ставим её без знака.<br>';
+ h+='<b>Шаг 2 — считаем полутоны.</b> '+low+'–'+L[s.l]+' без знака = '+semiStr(natDiff)+', это '+QUAL[natDiff]+'.<br>';
+ if(s.a===0){h+='<b>Шаг 3 — знак.</b> Нам как раз нужен '+it.label+' — '+semiStr(it.semi)+', и получилось ровно столько. Знак не нужен.<br><b>Ответ: '+low+'–'+L[s.l]+'</b>';}
+ else if(s.a===1){h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+', а без знака получилось '+semiStr(natDiff)+' — на полутон поуже. Поднимем верхнюю ноту знаком ♯ (диез).<br><b>Ответ: '+low+'–'+L[s.l]+'♯</b>';}
+ else{h+='<b>Шаг 3 — знак.</b> Нужно '+semiStr(it.semi)+', а без знака получилось '+semiStr(natDiff)+' — на полутон пошире. Опустим верхнюю ноту знаком ♭ (бемоль).<br><b>Ответ: '+low+'–'+L[s.l]+'♭</b>';}
+ return h;
+}
+function showHint(){var el=$('hint');el.style.display='block';el.innerHTML=hintText();}
+
+$('chips').addEventListener('click',function(e){
+ var b=e.target.closest('[data-chip]');if(!b)return;
+ ST.it=+b.getAttribute('data-chip');ST.li=0;ST.off=1;ST.a=0;ST.tries=0;
+ ST.reveal=isSeen();renderTrainer();
+});
+$('tabs').addEventListener('click',function(e){
+ var b=e.target.closest('[data-tab]');if(!b)return;
+ ST.li=+b.getAttribute('data-tab');ST.off=1;ST.a=0;ST.tries=0;
+ ST.reveal=isSeen();renderTrainer();
+});
+function interact(){
+ if(isSolved())return true;
+ ST.reveal=false;
+ return false;
+}
+$('btnUp').addEventListener('click',function(){if(interact())return;ST.off=Math.min(7,ST.off+1);renderTrainer();});
+$('btnDown').addEventListener('click',function(){if(interact())return;ST.off=Math.max(1,ST.off-1);renderTrainer();});
+$('accNat').addEventListener('click',function(){if(interact())return;ST.a=0;renderTrainer();});
+$('accSh').addEventListener('click',function(){if(interact())return;ST.a=1;renderTrainer();});
+$('accFl').addEventListener('click',function(){if(interact())return;ST.a=-1;renderTrainer();});
+$('staffBox').addEventListener('click',function(e){
+ if(interact())return;
+ var svg=e.target.closest('svg');if(!svg)return;
+ var rc=svg.getBoundingClientRect();
+ var x=(e.clientX-rc.left)*(W_EX/rc.width);
+ if(x<75)return;
+ var y=(e.clientY-rc.top)*(H_EX/rc.height);
+ var rel=Math.round((BOT-y)/(S/2));
+ var lowRel=di(ST.li,4)-30;
+ ST.off=Math.max(1,Math.min(7,rel-lowRel));
+ ST.tries=0;renderTrainer();
+});
+$('btnSound').addEventListener('click',function(){
+ var li=ST.li,up;
+ if(isSolved()||(isSeen()&&ST.reveal))up=sol(li,INTS[ST.it]);
+ else up=upFromSel();
+ playNotes([{l:li,o:4,a:0},up]);
+});
+$('btnCheck').addEventListener('click',function(){
+ var it=INTS[ST.it],li=ST.li,key=exKey(ST.it,li);
+ if(isSolved())return;
+ var soln=sol(li,it);
+ var child=upFromSel();
+ var childSemi=midi(child.l,child.o,child.a)-midi(li,4,0);
+ var needOff=it.num-1;
+ if(ST.off!==needOff){
+  ST.tries++;
+  var gotNum=ST.off+1;
+  setFb('err','❌ Ступеньки не те. Ты поставил ноту на ступеньку №'+gotNum+' ('+NUMNAME[gotNum]+'), а <b>'+it.label+'</b> — это ступенька №'+it.num+' ('+NUMNAME[it.num]+').'+(ST.tries>=2?' Разбор ниже 👇':' Считай от данной ноты: она сама — № 1, дальше каждая линейка и каждый промежуток.'));
+  if(ST.tries>=2)showHint();
+ }else if(child.a!==soln.a){
+  ST.tries++;
+  var msg;
+  if(soln.a===0)msg='Знак не нужен — верни ♮.';
+  else if(soln.a===1)msg='Шаг должен быть чуть пошире — поставь <b>♯ (диез)</b>, он поднимет верхнюю ноту на полутон.';
+  else msg='Шаг должен быть чуть поуже — поставь <b>♭ (бемоль)</b>, он опустит верхнюю ноту на полутон.';
+  setFb('err','❌ Ступенька верная ('+L[soln.l]+'), но ширина не та: сейчас '+semiStr(childSemi)+', а для <b>'+it.label+'</b> нужно '+semiStr(it.semi)+'. '+msg+(ST.tries>=2?' Или открой разбор ниже 👇':''));
+  if(ST.tries>=2)showHint();
+ }else{
+  RES[key]={st:'ok'};save();
+  setFb('ok','✅ <b>Верно!</b> '+L[li]+' → <b>'+nameOf(soln)+'</b>: '+it.num+' '+(it.num<5?'ступени':'ступеней')+' и '+semiStr(it.semi)+' — это '+it.name+'. 🎉');
+  playNotes([{l:li,o:4,a:0},soln]);
+  renderChips();renderTabs();
+  var inner=noteSvg({l:li,o:4,a:0},118,'#26221c',{label:L[li],labelColor:'#26221c'})
+   +noteSvg(soln,208,'#23843c',{label:nameOf(soln),labelColor:'#23843c'});
+  $('staffBox').innerHTML=staffSvg(W_EX,H_EX,inner,true);
+  $('selName').innerHTML='Сейчас выбрано: <b>'+nameOf(soln)+'</b> — верно!';
+  $('progress').innerHTML='Решено: <b>'+countOk()+'</b> из 77'+(countOk()===77?' — 🎉 всё!':'');
+  $('btnCheck').disabled=true;
+  $('btnNext').style.display='inline-block';
+ }
+});
+$('btnHint').addEventListener('click',function(){showHint();});
+$('btnAnswer').addEventListener('click',function(){
+ if(isSolved())return;
+ var key=exKey(ST.it,ST.li);
+ RES[key]={st:'seen'};save();
+ ST.reveal=true;ST.tries=0;
+ renderTrainer();
+});
+$('btnNext').addEventListener('click',function(){
+ var i=ST.it,l=ST.li+1;
+ if(l>6){l=0;i=(i+1)%INTS.length;}
+ ST.it=i;ST.li=l;ST.off=1;ST.a=0;ST.tries=0;
+ ST.reveal=isSeen();renderTrainer();
+ if(countOk()===77)setFb('ok','🎉 <b>Все 77 интервалов построены!</b> Переходи к следующему уроку или закрепи слова в тренажёре терминов.');
+});
+$('btnReset').addEventListener('click',function(){
+ if(!confirm('Сбросить весь прогресс тренажёра?'))return;
+ RES={};save();ST={it:0,li:0,off:1,a:0,tries:0,reveal:true};renderTrainer();
+});
+
+renderTrainer();
+})();
+</script>
+</body>
+</html>
