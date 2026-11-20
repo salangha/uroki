@@ -2,28 +2,30 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Магазин и кафе — считаем в пределах 100</title>
-<meta property="og:title" content="Магазин и кафе — считаем в пределах 100">
-<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
-<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
-<meta property="og:type" content="website">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>День покупок: магазин, кафе, парк и зоопарк — считаем в пределах 100</title>
+<meta name="description" content="Интерактивная игра-урок по математике, 2 класс: считаем в пределах 100 — магазин игрушек, кафе, парк аттракционов и зоопарк. Сложение и вычитание с переходом через десяток.">
+<meta property="og:title" content="День покупок: магазин, кафе, парк и зоопарк">
+<meta property="og:description" content="Считаем в пределах 100: выбираем игрушки, заказываем обед, катаемся на аттракционах и кормим зверей. 2 класс.">
 <!--
-Интерактивная игра «МАГАЗИН + КАФЕ» (дизайн по мотивам лабиринта с сундуком).
-- УРОВЕНЬ 1 — МАГАЗИН: у игрока 100 р. На витрине 12 игрушек, цены у всех РАЗНЫЕ,
-  всегда ДВУЗНАЧНЫЕ и «неровные». Клик по игрушке -> вопрос кассира-мишки:
-  сколько сдачи? (деньги − цена, для 100 р. всегда с переходом через десяток).
-  Игрушка попадает в пакет 🛍, покупать можно несколько, пока хватает денег.
-  Кнопка «Идти в кафе» появляется после первой покупки.
-- УРОВЕНЬ 2 — КАФЕ «Сладкоежка»: 6 напитков и 12 вкусняшек, цены тоже двузначные
-  «неровные». ОБЯЗАТЕЛЬНО купить и напиток, и вкусняшку: сначала считаем сумму
-  (сложение с переходом через десяток), потом оплату и сдачу.
-  Кнопка «👩 Попросить у мамы»: если денег не хватает, мама просит ПОСЧИТАТЬ,
-  сколько рублей не хватает (вычитание), и добавляет ровно эту сумму.
-- За каждый верный ответ — звёздочка (общая копилка sashaStars, как в других играх).
-- После двух неверных попыток появляется подсказка (десятки/единицы, пучок).
-- Куплены игрушка(-ки), напиток и вкусняшка -> чек, фейерверк, конфетти, фанфары.
-- Прогресс сохраняется (localStorage). Кнопка ↺ — новая игра с новыми ценами.
+Интерактивная игра «ДЕНЬ ПОКУПОК» (магазин + кафе + парк + зоопарк).
+- СТАРТ: игрок выбирает конверт — сколько денег взять на день (100 / 150 / 200 р.).
+- МАГАЗИН ИГРУШЕК: 12 игрушек, цены двузначные «неровные», все разные. Клик по игрушке ->
+  вопрос кассира-мишки: сколько сдачи? Покупать можно несколько, пока хватает денег.
+- КАФЕ «Сладкоежка»: 1 напиток + НЕСКОЛЬКО (хотя бы две) вкусняшки. При оплате сумма
+  считается по порядку: напиток + первая вкусняшка, + вторая... каждое сложение — задача
+  со звёздочкой. Потом сдача. Если денег не хватает — мама просит посчитать, на сколько.
+- КАРТА: после кафе игрок сам выбирает маршрут — парк, зоопарк или домой (свобода выбора).
+- ПАРК АТТРАКЦИОНОВ: 8 аттракционов, билет = задача на сдачу. Кататься можно многократно.
+- ЗООПАРК: 8 зверят, у каждого угощение (у некоторых — два: сначала сумма, потом оплата).
+  Накормил — зверёнок счастлив, сердечки.
+- Мотивация: карта путешествия (задача = «ворота» в следующее место), серия верных
+  ответов 🔥 (каждые 3 подряд — бонусная звезда), медали в финале, процессная похвала.
+- За каждый верный ответ — звёздочка (общая копилка mathStars). После двух неверных
+  попыток — полная подсказка (десятки/единицы, пучок). Закрыть вопрос можно всегда.
+- Финал «Домой»: чек по всем местам, сколько потрачено/осталось, медали, статистика.
+- Прогресс сохраняется (localStorage). ↺ — новая игра (снова выбор конверта).
+- Вёрстка «резиновая»: удобно и на компьютере, и на телефоне (в любой ориентации).
 -->
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -41,178 +43,248 @@ body::before{
   background-image:radial-gradient(#d9c9a3 1.2px, rgba(0,0,0,0) 1.3px);
   background-size:34px 34px;
 }
-#stage{position:absolute;left:50%;top:50%;width:1280px;height:820px;overflow:hidden}
+#stage{position:fixed;inset:0;overflow:hidden}
 
 /* ---- HUD ---- */
-#hud{position:absolute;top:10px;right:12px;display:flex;gap:8px;align-items:center;z-index:130}
+#hud{position:fixed;top:8px;left:10px;right:10px;display:flex;gap:8px;align-items:center;
+  justify-content:flex-end;flex-wrap:wrap;z-index:130;pointer-events:none}
+#hud>*{pointer-events:auto}
 .pill{background:rgba(255,255,255,.88);border:3px solid #f0b429;border-radius:999px;
-  padding:5px 16px;font-size:24px;font-weight:bold;color:#7a4f05;
+  padding:6px 18px;font-size:clamp(19px,2.6vw,27px);font-weight:bold;color:#7a4f05;
   box-shadow:0 3px 10px rgba(0,0,0,.12)}
 #moneyPill{background:#e9f3ff;border-color:#2f8fff;color:#1c4a7a}
-#hud button{font-size:22px;line-height:1;border:3px solid #d8cba8;background:rgba(255,255,255,.88);
-  border-radius:14px;padding:6px 10px;cursor:pointer}
+.pill.fire{background:#fff0e6;border-color:#ff6b35;color:#a13c00}
+#hud button{font-size:clamp(19px,2.4vw,24px);line-height:1;border:3px solid #d8cba8;
+  background:rgba(255,255,255,.88);border-radius:14px;padding:7px 11px;cursor:pointer}
 #hud button:active{transform:translateY(2px)}
-#fx{position:absolute;left:0;top:0;z-index:50;pointer-events:none}
+#fx{position:fixed;inset:0;z-index:50;pointer-events:none;width:100%;height:100%}
 
 /* ---- сцены ---- */
-.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeIn .35s ease}
+.scene{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:60px 14px 116px;animation:fadeIn .35s ease}
+.scene>*{margin:10px auto;width:fit-content;max-width:100%}
+#shopBottom,.bottomBar{width:auto;max-width:none}
 @keyframes fadeIn{from{opacity:0}}
 .hidden{display:none!important}
 
-.awning{margin-top:8px;border-radius:16px;overflow:hidden;border:4px solid rgba(0,0,0,.10);
-  box-shadow:0 5px 14px rgba(0,0,0,.12)}
-.awning>span{display:block;background:rgba(255,255,255,.93);margin:6px 12px;padding:2px 24px;
-  border-radius:12px;font-size:26px;font-weight:bold;color:#8a4a00;text-align:center}
+.titleBig{font-size:clamp(30px,5vw,44px);font-weight:bold;color:#e07b00;
+  text-shadow:2px 3px 0 #ffd98a;margin-top:8px;text-align:center}
+.planRow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px;
+  font-size:clamp(17px,2.4vw,23px);font-weight:bold;color:#5a4632;align-items:center;
+  background:rgba(255,255,255,.85);border-radius:999px;padding:8px 22px;border:3px solid #f0b429}
+
+.awning{margin-top:6px;border-radius:16px;overflow:hidden;border:4px solid rgba(0,0,0,.10);
+  box-shadow:0 5px 14px rgba(0,0,0,.12);max-width:100%}
+.awning>span{display:block;background:rgba(255,255,255,.93);margin:6px 12px;padding:3px 24px;
+  border-radius:12px;font-size:clamp(19px,2.6vw,27px);font-weight:bold;color:#8a4a00;text-align:center}
 .awning.toy{background:repeating-linear-gradient(90deg,#ff6b6b 0 46px,#fff3e6 46px 92px)}
 .awning.cafe{background:repeating-linear-gradient(90deg,#ff5da2 0 46px,#fff0f6 46px 92px)}
 .awning.cafe>span{color:#a12a62}
+.awning.park{background:repeating-linear-gradient(90deg,#2f8fff 0 46px,#eaf4ff 46px 92px)}
+.awning.park>span{color:#1c4a7a}
+.awning.zoo{background:repeating-linear-gradient(90deg,#2fbf71 0 46px,#eafff3 46px 92px)}
+.awning.zoo>span{color:#0d6b3f}
 
-.mascotRow{display:flex;align-items:center;gap:12px;min-height:54px}
-.mascot{font-size:46px;line-height:1}
-.said{background:#fffdf4;border:4px solid #f0b429;border-radius:16px;padding:4px 14px;
-  font-size:18px;font-weight:bold;color:#7a4f05;max-width:680px;min-height:42px;
-  display:flex;align-items:center}
+.mascotRow{display:flex;align-items:center;gap:12px;min-height:56px;max-width:100%}
+.mascot{font-size:clamp(38px,5vw,50px);line-height:1}
+.said{background:#fffdf4;border:4px solid #f0b429;border-radius:16px;padding:6px 16px;
+  font-size:clamp(18px,2.6vw,22px);font-weight:bold;color:#7a4f05;
+  max-width:min(680px,92vw);min-height:44px;display:flex;align-items:center}
 
-.secHead{font-size:20px;font-weight:bold;color:#5a4632;margin-top:0}
-.grid{display:grid;grid-template-columns:repeat(6,182px);gap:12px;justify-content:center}
-#drinkGrid,#treatGrid{grid-template-columns:repeat(6,166px);gap:10px}
+.secHead{font-size:clamp(19px,2.6vw,24px);font-weight:bold;color:#5a4632;margin-top:0;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;
+  justify-content:center;width:100%;max-width:1180px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(164px,1fr));gap:14px;
+  justify-content:center;width:100%;max-width:800px;margin-top:6px}
+#drinkGrid,#treatGrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;max-width:1080px}
 .item{position:relative;background:#fffdf6;border:5px solid var(--c,#999);border-radius:18px;
-  padding:8px 6px 10px;text-align:center;cursor:pointer;box-shadow:0 5px 0 rgba(90,70,40,.10);
+  padding:10px 8px 12px;text-align:center;cursor:pointer;box-shadow:0 5px 0 rgba(90,70,40,.10);
   transition:transform .15s ease}
 .item:hover{transform:translateY(-4px)}
-.item .em{font-size:50px;line-height:1.2}
-.item .nm{font-size:17px;font-weight:bold;color:#2c3a66;line-height:1.15;margin:3px 0 6px;
-  min-height:39px;display:flex;align-items:center;justify-content:center}
+.item .em{font-size:clamp(44px,6vw,58px);line-height:1.2}
+.item .nm{font-size:clamp(17px,2.2vw,20px);font-weight:bold;color:#2c3a66;line-height:1.15;
+  margin:4px 0 7px;min-height:44px;display:flex;align-items:center;justify-content:center}
 .item .tag{display:inline-block;background:#fff3c4;border:3px solid #f0b429;color:#7a4f05;
-  font-weight:bold;font-size:20px;padding:1px 13px;border-radius:999px}
-.item.small{padding:5px 4px 7px}
-.item.small .em{font-size:38px}
-.item.small .nm{font-size:15px;min-height:34px;margin:2px 0 4px}
-.item.small .tag{font-size:16px;padding:0 10px;border-width:3px}
+  font-weight:bold;font-size:clamp(19px,2.4vw,23px);padding:2px 14px;border-radius:999px}
+.item.small{padding:7px 5px 9px}
+.item.small .em{font-size:clamp(38px,5vw,46px)}
+.item.small .nm{font-size:clamp(16px,2vw,18px);min-height:40px;margin:2px 0 5px}
+.item.small .tag{font-size:clamp(17px,2.2vw,19px);padding:1px 10px;border-width:3px}
 .item.sel{border-color:#2fbf71;background:#f2fff6}
-.item.sel::after{content:"✓";position:absolute;top:-13px;right:-13px;width:38px;height:38px;
-  border-radius:50%;background:#2fbf71;border:3px solid #fff;color:#fff;font-size:24px;
+.item.sel::after{content:"✓";position:absolute;top:-13px;right:-13px;width:40px;height:40px;
+  border-radius:50%;background:#2fbf71;border:3px solid #fff;color:#fff;font-size:25px;
   font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.item.fed{border-color:#2fbf71;background:#f2fff6}
+.item.fed .tag{background:#e4fbef;border-color:#2fbf71;color:#0d6b3f}
 .item.sold{cursor:default;filter:grayscale(.85);opacity:.6}
 .item.sold:hover{transform:none}
 .item.sold::before{content:"ПРОДАНО";position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%) rotate(-12deg);background:#e5484d;color:#fff;font-size:16px;
   font-weight:bold;letter-spacing:1px;padding:3px 12px;border-radius:8px;border:2px solid #fff;
   box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.badge{position:absolute;top:-12px;left:-12px;background:#ff9f1c;border:3px solid #fff;color:#fff;
+  font-size:15px;font-weight:bold;padding:2px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.22)}
 .item.wig{animation:wig .4s}
 @keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
-#shopBottom{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:space-between;
-  align-items:center;padding:0 22px;gap:14px}
-#bagBar{background:rgba(255,255,255,.9);border:4px solid #f0b429;border-radius:16px;
-  padding:6px 16px;font-size:20px;font-weight:bold;color:#7a4f05;display:flex;align-items:center;gap:10px}
-#bagItems{font-size:27px;min-width:60px;text-align:left}
+.bottomBar,#shopBottom{position:fixed;left:0;right:0;bottom:12px;display:flex;
+  justify-content:space-between;align-items:center;padding:0 20px;gap:14px;z-index:40}
+#bagBar,.infobar{background:rgba(255,255,255,.92);border:4px solid #f0b429;border-radius:16px;
+  padding:8px 18px;font-size:clamp(18px,2.4vw,23px);font-weight:bold;color:#7a4f05;
+  display:flex;align-items:center;gap:10px}
+#bagItems{font-size:clamp(24px,3.4vw,30px);min-width:60px;text-align:left}
 
-#cartBar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;
-  gap:12px;background:rgba(255,255,255,.93);border:4px solid #f0b429;border-radius:18px;
-  padding:8px 14px;z-index:40}
-#cartInfo{font-size:17px;font-weight:bold;color:#2c3a66;max-width:480px;line-height:1.3}
-button.big{font-size:20px;font-weight:bold;font-family:inherit;padding:11px 20px;border:none;
-  border-radius:16px;cursor:pointer;color:#fff;white-space:nowrap}
+#cartBar{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;
+  gap:12px;background:rgba(255,255,255,.94);border:4px solid #f0b429;border-radius:18px;
+  padding:10px 16px;z-index:40;max-width:min(1180px,calc(100vw - 20px))}
+#cartInfo{font-size:clamp(16px,2.2vw,20px);font-weight:bold;color:#2c3a66;max-width:640px;line-height:1.3}
+button.big{font-size:clamp(18px,2.4vw,22px);font-weight:bold;font-family:inherit;padding:12px 22px;
+  border:none;border-radius:16px;cursor:pointer;color:#fff;white-space:nowrap}
 button.big:active{transform:translateY(3px)}
 #payBtn{background:#2fbf71;box-shadow:0 5px 0 #1d8b50}
 #payBtn.dim{opacity:.55}
 #momBtn{background:#ff5da2;box-shadow:0 5px 0 #c23a78}
 #cafeBtn{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
+.big.blue{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
 .pulseBtn{animation:pb 1s ease-in-out infinite}
 @keyframes pb{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
+/* ---- узкие экраны (телефон) ---- */
+@media (max-width:700px){
+  .pill{font-size:17px;padding:4px 10px;border-width:2px}
+  #hud button{font-size:16px;padding:5px 7px;border-radius:10px;border-width:2px}
+  .scene{padding:56px 10px 150px}
+  #cartBar{left:8px;right:8px;transform:none;width:auto;flex-direction:column;align-items:stretch;
+    padding:10px 12px;gap:8px}
+  #cartInfo{max-width:none;text-align:center}
+  #cartBar .big{width:100%}
+  #shopBottom,.bottomBar{flex-wrap:wrap;justify-content:center;gap:8px;padding:0 12px}
+  .infobar,#bagBar{font-size:17px;padding:6px 12px}
+}
+
+/* ---- старт: конверты ---- */
+.envRow{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:10px}
+button.env{width:min(236px,42vw);min-width:148px;padding:22px 10px 24px;border-radius:22px;cursor:pointer;
+  font-family:inherit;background:linear-gradient(#fffdf4,#ffefd0);border:5px solid var(--c,#f0b429);
+  box-shadow:0 7px 0 rgba(90,70,40,.16);transition:transform .15s ease}
+button.env:hover{transform:translateY(-6px)}
+button.env:active{transform:translateY(2px)}
+.env .em{font-size:62px;line-height:1.2}
+.env .sum{font-size:clamp(34px,4.6vw,44px);font-weight:bold;color:#7a4f05;margin-top:6px}
+.env .lbl{font-size:17px;color:#a08c5f;font-weight:bold;margin-top:3px}
+
+/* ---- карта ---- */
+.mapBtns{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;margin-top:14px}
+button.mapBtn{width:min(300px,86vw);padding:22px 12px;border-radius:24px;cursor:pointer;font-family:inherit;
+  background:linear-gradient(#fffdf4,#f0f7ff);border:5px solid var(--c,#2f8fff);
+  box-shadow:0 7px 0 rgba(90,70,40,.16);transition:transform .15s ease}
+button.mapBtn:hover{transform:translateY(-6px)}
+button.mapBtn:active{transform:translateY(2px)}
+.mapBtn .em{font-size:clamp(56px,9vw,72px);line-height:1.15}
+.mapBtn .tt{font-size:clamp(20px,3vw,25px);font-weight:bold;color:#2c3a66;margin-top:6px}
+.mapBtn .cnt{font-size:clamp(16px,2.2vw,18px);color:#a08c5f;font-weight:bold;margin-top:5px}
+.mapBtn.home{--c:#ff9f1c;background:linear-gradient(#fffdf4,#fff3d6)}
+
 /* ---- карточка с вопросом ---- */
 #overlay{position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
-  background:rgba(59,40,10,.45);backdrop-filter:blur(3px)}
+  padding:12px;background:rgba(59,40,10,.45);backdrop-filter:blur(3px)}
 #qcard{background:#fffdf4;border:6px solid #f0b429;border-radius:28px;
-  padding:22px 34px 26px;box-shadow:0 18px 60px rgba(0,0,0,.35);text-align:center;
-  max-width:800px;position:relative;animation:cardIn .3s ease}
+  padding:clamp(14px,3vw,24px) clamp(18px,3.4vw,34px) clamp(18px,3.4vw,26px);
+  box-shadow:0 18px 60px rgba(0,0,0,.35);text-align:center;
+  width:min(94vw,800px);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);
+  overflow-y:auto;position:relative;animation:cardIn .3s ease}
 @keyframes cardIn{from{transform:scale(.7);opacity:0}}
 #qcard.ok{border-color:#2fbf71;background:#f2fff6}
 #qcard.err{border-color:#e5484d;background:#fff1f0}
 #qcard.shake{animation:shakeX .45s}
 @keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}
   40%{transform:translateX(12px)}60%{transform:translateX(-9px)}80%{transform:translateX(6px)}}
-#qclose{position:absolute;top:8px;right:14px;font-size:26px;border:none;background:none;
+#qclose{position:absolute;top:8px;right:14px;font-size:28px;border:none;background:none;
   cursor:pointer;color:#b3a37e}
-#qnum{font-size:20px;color:#a08c5f;font-weight:bold;margin-bottom:2px}
+#qnum{font-size:clamp(19px,2.6vw,22px);color:#a08c5f;font-weight:bold;margin-bottom:2px}
 #topline{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px}
-#qmascot{font-size:54px;display:inline-block;animation:bob 1.6s ease-in-out infinite}
+#qmascot{font-size:clamp(46px,6vw,56px);display:inline-block;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(5deg)}}
-#praise{font-size:28px;font-weight:bold;color:#8a5a00}
-#equation{font-size:84px;font-weight:bold;color:#2b2b3b;letter-spacing:3px;
+#praise{font-size:clamp(21px,3.4vw,30px);font-weight:bold;color:#8a5a00}
+#equation{font-size:clamp(44px,10vw,92px);font-weight:bold;color:#2b2b3b;letter-spacing:3px;
   margin:4px 0 8px;white-space:nowrap}
 #eqAns{display:inline-block;min-width:2.1ch;border-bottom:10px solid #2fbf71;color:#157a3c;
   padding:0 10px;text-align:center}
 #eqAns.empty{color:#c2b49a;border-bottom-color:#d8cba8}
 #hint{margin:10px auto 2px;background:#fff3c4;border:3px dashed #e8b93c;color:#7a4f05;
-  font-size:23px;font-weight:bold;padding:10px 18px;border-radius:16px;max-width:660px}
-#keypad{display:grid;grid-template-columns:repeat(3,112px);gap:12px;justify-content:center;margin-top:16px}
-#keypad button{height:84px;font-size:44px;font-weight:bold;font-family:inherit;border:none;
-  border-radius:18px;background:#eef3ff;color:#2c3a66;cursor:pointer;box-shadow:0 5px 0 #c4cfec}
+  font-size:clamp(19px,3vw,26px);font-weight:bold;padding:10px 18px;border-radius:16px;max-width:min(660px,94%)}
+#keypad{display:grid;grid-template-columns:repeat(3,minmax(84px,118px));gap:12px;
+  justify-content:center;margin-top:16px}
+#keypad button{height:clamp(64px,12vw,88px);font-size:clamp(34px,9vw,46px);font-weight:bold;
+  font-family:inherit;border:none;border-radius:18px;background:#eef3ff;color:#2c3a66;
+  cursor:pointer;box-shadow:0 5px 0 #c4cfec}
 #keypad button:active{transform:translateY(3px);box-shadow:0 2px 0 #c4cfec}
 #keypad button.fn{background:#fff0d3;color:#8a5a00;box-shadow:0 5px 0 #e2c189}
 #keypad button.okb{background:#2fbf71;color:#fff;box-shadow:0 5px 0 #1d8b50}
 
 /* ---- финал ---- */
-#banner{position:absolute;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding-bottom:20px}
+#banner{position:absolute;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  padding:64px 14px 16px}
 #bcard{background:linear-gradient(#fffdf4,#fff3d6);border:6px solid #f0b429;border-radius:26px;
-  padding:16px 30px 22px;text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.35);
-  animation:fpop .55s cubic-bezier(.2,1.4,.4,1);max-width:660px}
+  padding:16px clamp(16px,3vw,30px) 22px;text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.35);
+  animation:fpop .55s cubic-bezier(.2,1.4,.4,1);max-width:min(680px,96vw);max-height:100%;overflow:auto}
 @keyframes fpop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
-#bcard .e{font-size:44px}
-#bcard h1{font-size:50px;margin:4px 0;color:#e07b00;text-shadow:2px 3px 0 #ffd98a}
-#bcard p{font-size:22px;color:#6b4a08;font-weight:bold;margin:6px 0}
+#bcard .e{font-size:clamp(34px,5vw,44px)}
+#bcard h1{font-size:clamp(36px,6vw,50px);margin:4px 0;color:#e07b00;text-shadow:2px 3px 0 #ffd98a}
+#bcard p{font-size:clamp(19px,2.6vw,22px);color:#6b4a08;font-weight:bold;margin:6px 0}
+#bsub{font-size:clamp(17px,2.4vw,20px)!important;color:#8a6a2a!important}
 #receipt{background:#fff;border:3px dashed #cbb27f;border-radius:12px;padding:10px 18px;
-  margin:10px auto 4px;text-align:left;font-size:20px;color:#4a3820;max-width:470px}
-.rline{display:flex;justify-content:space-between;gap:36px;padding:1px 0}
+  margin:10px auto 4px;text-align:left;font-size:clamp(18px,2.4vw,22px);color:#4a3820;max-width:min(500px,90vw)}
+.rline{display:flex;justify-content:space-between;gap:24px;padding:1px 0}
+.rhead{font-weight:bold;color:#b3862a;font-size:16px;letter-spacing:1px;margin-top:7px}
 .rsep{border-top:2px dashed #d8c396;margin:6px 0}
-#againBtn{font-size:24px;font-weight:bold;font-family:inherit;padding:12px 26px;margin-top:10px;
+.medRow{font-size:clamp(30px,4.4vw,36px);letter-spacing:6px;margin:8px 0 0!important}
+#bmedalNames{font-size:clamp(15px,2.2vw,17px);color:#a08c5f;font-weight:bold;margin:2px 0 0!important}
+#bstars{margin-top:6px!important}
+#againBtn{font-size:clamp(20px,3vw,24px);font-weight:bold;font-family:inherit;padding:12px 26px;margin-top:10px;
   border:none;border-radius:18px;background:#2fbf71;color:#fff;cursor:pointer;box-shadow:0 5px 0 #1d8b50}
 #againBtn:active{transform:translateY(4px);box-shadow:0 2px 0 #1d8b50}
+#backBtn{font-size:clamp(17px,2.4vw,18px);font-weight:bold;font-family:inherit;padding:10px 18px;margin:6px 0 0 12px;
+  border:none;border-radius:14px;background:#2f8fff;color:#fff;cursor:pointer;box-shadow:0 4px 0 #1f66b3}
+#backBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #1f66b3}
 
 /* ---- подтверждение ---- */
 #confirmBox{position:absolute;inset:0;z-index:140;display:flex;align-items:center;justify-content:center;
-  background:rgba(59,40,10,.45)}
+  padding:14px;background:rgba(59,40,10,.45)}
 .ccard{background:#fffdf4;border:6px solid #f0b429;border-radius:24px;padding:26px 34px;
-  text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.35)}
-.ccard p{font-size:24px;font-weight:bold;color:#6b4a08;margin:0 0 18px}
-.ccard button{font-size:24px;font-weight:bold;font-family:inherit;padding:12px 26px;margin:0 8px;
+  text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.35);max-width:94vw}
+.ccard p{font-size:clamp(20px,3vw,25px);font-weight:bold;color:#6b4a08;margin:0 0 18px}
+.ccard button{font-size:clamp(20px,3vw,24px);font-weight:bold;font-family:inherit;padding:12px 26px;margin:6px 8px 0;
   border:none;border-radius:16px;cursor:pointer;color:#fff}
 #cfYes{background:#e5484d;box-shadow:0 5px 0 #b93338}
 #cfNo{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
 .ccard button:active{transform:translateY(3px);box-shadow:none}
 </style>
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-   ym(114071811, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:false
-   });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
-<!-- /Yandex.Metrika counter -->
 </head>
 <body>
 <div id="stage">
   <div id="hud">
-    <div class="pill" id="moneyPill">💰 <span id="moneyVal">100</span> р.</div>
+    <div class="pill" id="moneyPill">💰 <span id="moneyVal">—</span> р.</div>
+    <div class="pill fire hidden" id="firePill">🔥 <span id="fireCnt">0</span></div>
     <div class="pill">⭐ <span id="starCnt">0</span></div>
     <button id="soundBtn" title="Звук вкл/выкл">🔊</button>
     <button id="resetBtn" title="Новая игра">↺</button>
   </div>
 
-  <!-- УРОВЕНЬ 1: МАГАЗИН -->
-  <section id="shopScene" class="scene">
+  <!-- СТАРТ: выбор конверта -->
+  <section id="startScene" class="scene">
+    <div class="titleBig">💰 ДЕНЬ ПОКУПОК 💰</div>
+    <div class="planRow">🏪 Магазин → ☕ Кафе → 🎡 Парк → 🦁 Зоопарк → 🏠 Итоги</div>
+    <div class="mascotRow"><div class="mascot">👩</div><div class="said" id="momStartSaid"></div></div>
+    <div class="envRow">
+      <button class="env" data-v="100" style="--c:#2f8fff"><div class="em">💌</div><div class="sum">100 р.</div><div class="lbl">в кошелёк</div></button>
+      <button class="env" data-v="150" style="--c:#2fbf71"><div class="em">💌</div><div class="sum">150 р.</div><div class="lbl">в кошелёк</div></button>
+      <button class="env" data-v="200" style="--c:#ff5da2"><div class="em">💌</div><div class="sum">200 р.</div><div class="lbl">в кошелёк</div></button>
+    </div>
+  </section>
+
+  <!-- МАГАЗИН -->
+  <section id="shopScene" class="scene hidden">
     <div class="awning toy"><span>🧸 МАГАЗИН ИГРУШЕК 🧸</span></div>
     <div class="mascotRow"><div class="mascot">🐻</div><div class="said" id="bearSaid"></div></div>
     <div class="grid" id="toyGrid"></div>
@@ -222,13 +294,13 @@ button.big:active{transform:translateY(3px)}
     </div>
   </section>
 
-  <!-- УРОВЕНЬ 2: КАФЕ -->
+  <!-- КАФЕ -->
   <section id="cafeScene" class="scene hidden">
     <div class="awning cafe"><span>☕ КАФЕ «СЛАДКОЕЖКА» ☕</span></div>
     <div class="mascotRow"><div class="mascot">🦊</div><div class="said" id="foxSaid"></div></div>
     <div class="secHead">🥤 Напитки — выбери один:</div>
     <div class="grid" id="drinkGrid"></div>
-    <div class="secHead">🧁 Вкусняшки — выбери одну:</div>
+    <div class="secHead">🧁 Вкусняшки — выбери сколько хочешь (хотя бы две!):</div>
     <div class="grid" id="treatGrid"></div>
     <div id="cartBar">
       <div id="cartInfo"></div>
@@ -237,7 +309,40 @@ button.big:active{transform:translateY(3px)}
     </div>
   </section>
 
-  <canvas id="fx" width="1280" height="820"></canvas>
+  <!-- КАРТА: выбор маршрута -->
+  <section id="mapScene" class="scene hidden">
+    <div class="titleBig">🗺 КУДА ТЕПЕРЬ?</div>
+    <div class="mascotRow"><div class="mascot">👩</div><div class="said" id="momSaid"></div></div>
+    <div class="mapBtns">
+      <button id="goPark" class="mapBtn" style="--c:#2f8fff"><div class="em">🎡</div><div class="tt">Парк аттракционов</div><div class="cnt" id="parkCnt">катаний пока нет</div></button>
+      <button id="goZoo" class="mapBtn" style="--c:#2fbf71"><div class="em">🦁</div><div class="tt">Зоопарк</div><div class="cnt" id="zooCnt">зверята ждут угощения</div></button>
+      <button id="goHome" class="mapBtn home"><div class="em">🏠</div><div class="tt">Домой</div><div class="cnt">подвести итоги дня</div></button>
+    </div>
+  </section>
+
+  <!-- ПАРК -->
+  <section id="parkScene" class="scene hidden">
+    <div class="awning park"><span>🎡 ПАРК АТТРАКЦИОНОВ 🎡</span></div>
+    <div class="mascotRow"><div class="mascot">🐵</div><div class="said" id="monSaid"></div></div>
+    <div class="grid4" id="rideGrid"></div>
+    <div class="bottomBar">
+      <div class="infobar">🎟 Билеты: <span id="ticketCnt">0</span></div>
+      <button id="parkMapBtn" class="big blue">🗺 Куда дальше?</button>
+    </div>
+  </section>
+
+  <!-- ЗООПАРК -->
+  <section id="zooScene" class="scene hidden">
+    <div class="awning zoo"><span>🦁 ЗООПАРК «ХВОСТИКИ» 🦁</span></div>
+    <div class="mascotRow"><div class="mascot">🦜</div><div class="said" id="kesSaid"></div></div>
+    <div class="grid4" id="zooGrid"></div>
+    <div class="bottomBar">
+      <div class="infobar">❤️ Накормлено: <span id="fedCnt">0</span></div>
+      <button id="zooMapBtn" class="big blue">🗺 Куда дальше?</button>
+    </div>
+  </section>
+
+  <canvas id="fx"></canvas>
 
   <div id="overlay" class="hidden">
     <div id="qcard">
@@ -254,10 +359,13 @@ button.big:active{transform:translateY(3px)}
     <div id="bcard">
       <div class="e" id="bemo">🧸 🍋 🧁</div>
       <h1>МОЛОДЕЦ!</h1>
-      <p>Ты прошла магазин и кафе —<br>настоящая хозяйка кошелька!</p>
+      <p id="bsub">Весь день удался — кошелёк в надёжных руках!</p>
       <div id="receipt"></div>
+      <p id="bmedals" class="medRow"></p>
+      <p id="bmedalNames"></p>
       <p id="bstars">⭐</p>
       <button id="againBtn">🔁 Играть ещё раз</button>
+      <button id="backBtn">← Вернуться на карту</button>
     </div>
   </div>
 
@@ -273,13 +381,20 @@ button.big:active{transform:translateY(3px)}
 <script>
 'use strict';
 /* ================= данные ================= */
-var DKEY='sasha2-shop-v1';
+var DKEY='shop-day-v2';
 var PAL=['#7c5cff','#2f8fff','#ff9f1c','#ff5da2','#12b5cb','#97b900'];
-var PRAISE=['Молодец! 🎉','Отлично! ⭐','Супер! 💪','Здорово! 🌟','Умница! 🏆','В точку! ✨'];
+var PRAISE=['Молодец! 🎉','Отлично! ⭐','Супер! 💪','Здорово! 🌟','Умница! 🏆','В точку! ✨',
+ 'Ты считаешь как настоящий кассир! 💼','Голова-математик! 🧠','Мама гордится! 👩','Отличный устный счёт! 🎓'];
 var ENC=['Подумай ещё! 🤔','Почти-почти! 💫','Попробуй снова! 🙂','Ещё разок, внимательно! 🔍'];
 var BUY_THANKS=['Носи на здоровье!','Отличный выбор!','Спасибо за покупку!','Прекрасная игрушка!'];
 var BEAR_DEF='Здравствуйте! Выбирайте игрушку! 🧸';
-var FOX_DEF='Выбери напиток и вкусняшку! ☕🧁';
+var FOX_DEF='Выбери напиток и хотя бы две вкусняшки! ☕🧁';
+var MOM_MAP_DEF='Куда пойдём дальше? Я рядом! 👩';
+var MOM_AFTER_CAFE='Сытно получилось! Куда теперь: на карусели или к зверятам?';
+var MOM_START_DEF='Вот деньги на весь день! Выбери конверт — и отправимся в путь! 💌';
+var MON_DEF='Привет! Бери билет — и вперёд, на аттракцион! 🎟';
+var KES_DEF='Попугай Кеша на связи! Зверята голодные — покорми их! 🦜';
+var MAX_TREATS=6;
 var TOYS=[{e:'🧸',n:'Мишка'},{e:'🪆',n:'Матрёшка'},{e:'🚂',n:'Паровозик'},{e:'🦄',n:'Единорог'},
  {e:'🚗',n:'Машинка'},{e:'🐰',n:'Зайка'},{e:'🎨',n:'Краски'},{e:'🪀',n:'Йо-йо'},
  {e:'⚽',n:'Мяч'},{e:'🧩',n:'Пазл'},{e:'🪁',n:'Воздушный змей'},{e:'🎀',n:'Заколки'}];
@@ -288,29 +403,46 @@ var DRINKS=[{e:'🍋',n:'Лимонад'},{e:'🥤',n:'Апельсиновый 
 var TREATS=[{e:'🧁',n:'Капкейк'},{e:'🍩',n:'Пончик'},{e:'🍪',n:'Печенье'},{e:'🍰',n:'Торт'},
  {e:'🍫',n:'Шоколадка'},{e:'🍭',n:'Леденец'},{e:'🍦',n:'Мороженое'},{e:'🥐',n:'Круассан'},
  {e:'🍓',n:'Клубника'},{e:'🍬',n:'Конфеты'},{e:'🧇',n:'Вафля'},{e:'🥞',n:'Блинчик'}];
+var RIDES=[{e:'🎡',n:'Колесо обозрения'},{e:'🎠',n:'Карусель'},{e:'🚂',n:'Паровозик'},{e:'🚗',n:'Автодром'},
+ {e:'🚀',n:'Ракетка'},{e:'🤸',n:'Батут'},{e:'🎯',n:'Тир'},{e:'🚤',n:'Лодочки'}];
+var RIDE_FUN=['Уииии!','Вжух!','Как здорово!','Ещё-ещё!','Обалдеть!','Класс!'];
+var ANIMALS=[{e:'🐒',n:'Обезьяна',v:'Обезьяну',f:'🍌',fn:'банан',w:'довольна'},
+ {e:'🐘',n:'Слон',v:'Слона',f:'🍎',fn:'яблоко',w:'доволен'},
+ {e:'🦒',n:'Жираф',v:'Жирафа',f:'🌿',fn:'листья',w:'доволен'},
+ {e:'🐧',n:'Пингвин',v:'Пингвина',f:'🐟',fn:'рыбку',w:'доволен'},
+ {e:'🐼',n:'Панда',v:'Панду',f:'🎍',fn:'бамбук',w:'довольна'},
+ {e:'🐿',n:'Белка',v:'Белку',f:'🌰',fn:'орешки',w:'довольна'},
+ {e:'🐢',n:'Черепаха',v:'Черепаху',f:'🥬',fn:'капустку',w:'довольна'},
+ {e:'🦁',n:'Львёнок',v:'Львёнка',f:'🍖',fn:'котлетку',w:'доволен'}];
+var EXTRA_FOODS=[{e:'🥕',n:'Морковка'},{e:'🍓',n:'Ягоды'},{e:'🌽',n:'Кукуруза'},
+ {e:'🍇',n:'Виноград'},{e:'🍯',n:'Мёд'},{e:'🌻',n:'Семечки'}];
 
 /* ================= утилиты ================= */
 function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1));}
 function pick(arr){return arr[(Math.random()*arr.length)|0];}
-var stageEl=document.getElementById('stage'),curScale=1;
-function fit(){
-  curScale=Math.min(window.innerWidth/1280,window.innerHeight/820);
-  stageEl.style.transform='translate(-50%,-50%) scale('+curScale+')';
-}
+function plural(n,a,b,c){var m10=n%10,m100=n%100;
+  if(m10===1&&m100!==11)return a;
+  if(m10>=2&&m10<=4&&(m100<12||m100>14))return b;return c;}
 function toStage(el){
-  var r=el.getBoundingClientRect(),s=stageEl.getBoundingClientRect();
-  return {x:(r.left+r.width/2-s.left)/curScale,y:(r.top+r.height/2-s.top)/curScale};
+  var r=el.getBoundingClientRect();
+  return {x:r.left+r.width/2,y:r.top+r.height/2};
 }
-/* цены: двузначные, «неровные», у всех разные */
-function genPrices(n,lo,hi,used,units){
-  var out=[],guard=0;
-  while(out.length<n&&guard++<5000){
-    var p=rnd(lo,hi);
-    if(p%10===0)continue;
-    if(units&&units.indexOf(p%10)<0)continue;
-    if(used[p])continue;
-    used[p]=1;out.push(p);
+/* цены: двузначные, «неровные», у всех разные; если узкого диапазона не хватило —
+   добираем из широкого, чтобы НИ ОДНА цена не осталась undefined */
+function genPrices(n,lo,hi,used,units,hi2){
+  var out=[];
+  function tryRange(a,b){
+    var g=0;
+    while(out.length<n&&g++<5000){
+      var p=rnd(a,b);
+      if(p%10===0)continue;
+      if(units&&units.indexOf(p%10)<0)continue;
+      if(used[p])continue;
+      used[p]=1;out.push(p);
+    }
   }
+  tryRange(lo,hi);
+  if(out.length<n&&hi2&&hi2>hi)tryRange(lo,hi2);
   return out;
 }
 
@@ -318,44 +450,73 @@ function genPrices(n,lo,hi,used,units){
 var S=null;
 function newState(){
   var used={},i;
-  /* сначала узкие пулы (напитки, вкусняшки), потом игрушки — чтобы цен хватило всем */
+  /* сначала узкие пулы (напитки, вкусняшки), потом широкие — чтобы цен хватило всем */
   var dp=genPrices(6,16,38,used,[6,7,8]);
   var xp=genPrices(12,14,49,used,[4,5,6,7,8,9]);
   var tp=genPrices(12,12,89,used,null);
-  var toys=[],drinks=[],treats=[];
+  var rp=genPrices(8,14,45,used,null,89);
+  var zp=genPrices(16,12,68,used,null,89);
+  if(zp.length<16){ /* теоретически недостижимо, но подстрахуемся широким пулом */
+    var extra=genPrices(16-zp.length,12,89,used,null);
+    zp=zp.concat(extra);
+  }
+  var toys=[],drinks=[],treats=[],rides=[],zoo=[];
   for(i=0;i<12;i++)toys.push({e:TOYS[i].e,n:TOYS[i].n,p:tp[i],sold:false});
   for(i=0;i<6;i++)drinks.push({e:DRINKS[i].e,n:DRINKS[i].n,p:dp[i]});
   for(i=0;i<12;i++)treats.push({e:TREATS[i].e,n:TREATS[i].n,p:xp[i]});
-  return {scene:'shop',money:100,toys:toys,drinks:drinks,treats:treats,bag:[],
-    drink:-1,treat:-1,total:0,totalKnown:false,momGiven:0,stars:0,muted:false,done:false};
+  for(i=0;i<8;i++)rides.push({e:RIDES[i].e,n:RIDES[i].n,p:rp[i],cnt:0});
+  for(i=0;i<8;i++){
+    var foods=[{e:ANIMALS[i].f,n:ANIMALS[i].fn,p:zp[i]}];
+    if(Math.random()<0.45){
+      var ex=EXTRA_FOODS[rnd(0,EXTRA_FOODS.length-1)];
+      foods.push({e:ex.e,n:ex.n,p:zp[8+i]});
+    }
+    zoo.push({e:ANIMALS[i].e,n:ANIMALS[i].n,v:ANIMALS[i].v,w:ANIMALS[i].w,foods:foods,fed:false});
+  }
+  return {scene:'start',money:null,startMoney:0,toys:toys,bag:[],drinks:drinks,drink:-1,
+    treats:treats,tsel:[],total:0,totalKnown:false,momGiven:0,rides:rides,zoo:zoo,
+    stars:0,streak:0,bestStreak:0,solved:0,muted:false};
 }
 function save(){try{localStorage.setItem(DKEY,JSON.stringify(S));}catch(e){}}
+function validZoo(z){
+  if(!z||!Array.isArray(z.foods)||z.foods.length<1||z.foods.length>2)return false;
+  for(var k=0;k<z.foods.length;k++)if(typeof z.foods[k].p!=='number')return false;
+  return true;
+}
 function loadState(){
   try{
     var j=JSON.parse(localStorage.getItem(DKEY)||'null');
     if(!j||typeof j!=='object')return null;
+    if(['start','shop','cafe','map','park','zoo'].indexOf(j.scene)<0)return null;
     if(!Array.isArray(j.toys)||j.toys.length!==12)return null;
     if(!Array.isArray(j.drinks)||j.drinks.length!==6)return null;
     if(!Array.isArray(j.treats)||j.treats.length!==12)return null;
-    if(typeof j.money!=='number'||j.money<0||j.money>250)return null;
-    if(j.scene!=='shop'&&j.scene!=='cafe')return null;
+    if(!Array.isArray(j.rides)||j.rides.length!==8)return null;
+    if(!Array.isArray(j.zoo)||j.zoo.length!==8||!j.zoo.every(validZoo))return null;
+    if(j.money!==null&&(typeof j.money!=='number'||j.money<0||j.money>400))return null;
+    if([0,100,150,200].indexOf(j.startMoney)<0)return null;
     if(!Array.isArray(j.bag))j.bag=[];
     if(typeof j.stars!=='number'||j.stars<0)j.stars=0;
+    if(typeof j.streak!=='number'||j.streak<0)j.streak=0;
+    if(typeof j.bestStreak!=='number'||j.bestStreak<0)j.bestStreak=0;
+    if(typeof j.solved!=='number'||j.solved<0)j.solved=0;
     if(typeof j.total!=='number')j.total=0;
     j.totalKnown=!!j.totalKnown;
     if(typeof j.momGiven!=='number')j.momGiven=0;
-    j.done=!!j.done;j.muted=!!j.muted;
     if(typeof j.drink!=='number'||j.drink<-1||j.drink>5)j.drink=-1;
-    if(typeof j.treat!=='number'||j.treat<-1||j.treat>11)j.treat=-1;
+    if(!Array.isArray(j.tsel))j.tsel=[];
+    j.tsel=j.tsel.filter(function(i){return typeof i==='number'&&i>=0&&i<12;});
     return j;
   }catch(e){return null;}
 }
-function addSharedStar(){ /* общая копилка звёздочек, как в других играх серии */
+function addSharedStar(){ /* общая копилка звёздочек для всех игр на сайте */
   try{
-    var s=parseInt(localStorage.getItem('sashaStars')||'0',10)||0;
-    localStorage.setItem('sashaStars',String(s+1));
+    var s=parseInt(localStorage.getItem('mathStars')||'0',10)||0;
+    localStorage.setItem('mathStars',String(s+1));
   }catch(e){}
 }
+function totalRides(){var n=0;S.rides.forEach(function(r){n+=r.cnt;});return n;}
+function fedCount(){var n=0;S.zoo.forEach(function(z){if(z.fed)n++;});return n;}
 
 /* ================= подсказки ================= */
 function hintAdd(a,b){
@@ -367,8 +528,6 @@ function hintAdd(a,b){
 }
 function hintSub(a,b){
   var ans=a-b,tA=a-a%10,uA=a%10,tB=b-b%10,uB=b%10;
-  if(a===100)return '100 — это 90 и 10: единицы: 10 − '+uB+' = '+(10-uB)+
-    '; десятки: 90 − '+tB+' = '+(90-tB)+'. Ответ: '+(90-tB)+' + '+(10-uB)+' = '+ans;
   if(uA>=uB)return 'Десятки: '+tA+' − '+tB+' = '+(tA-tB)+'; единицы: '+uA+' − '+uB+
     ' = '+(uA-uB)+'. Ответ: '+(tA-tB)+' + '+(uA-uB)+' = '+ans;
   var u2=uA+10-uB,tS=tA-10-tB;
@@ -408,6 +567,7 @@ function sFanfare(){
 /* ================= конфетти и фейерверки ================= */
 var fx=document.getElementById('fx'),fctx=fx.getContext('2d'),parts=[],confettiUntil=0;
 var FCOL=['#ffd166','#ff6b6b','#4cc9f0','#ff9f1c','#f72585','#8ac926','#ffb703','#c77dff'];
+function resizeFX(){fx.width=window.innerWidth;fx.height=window.innerHeight;}
 function burst(x,y,n,pow){
   n=n||34;pow=pow||1;
   for(var i=0;i<n;i++){
@@ -456,7 +616,7 @@ function fxLoop(){
 }
 
 /* ================= построение витрин ================= */
-var toyEls=[],drinkEls=[],treatEls=[];
+var toyEls=[],drinkEls=[],treatEls=[],rideEls=[],zooEls=[];
 function makeCard(t,small,idx,onClick){
   var d=document.createElement('div');
   d.className='item'+(small?' small':'');
@@ -487,17 +647,49 @@ function buildCafe(){
     gx.appendChild(d);treatEls.push(d);
   });
 }
+function buildPark(){
+  var g=document.getElementById('rideGrid');g.innerHTML='';rideEls=[];
+  S.rides.forEach(function(r,i){
+    var d=document.createElement('div');
+    d.className='item small';
+    d.style.setProperty('--c',PAL[i%PAL.length]);
+    var bd=document.createElement('div');bd.className='badge hidden';
+    var em=document.createElement('div');em.className='em';em.textContent=r.e;
+    var nm=document.createElement('div');nm.className='nm';nm.textContent=r.n;
+    var tg=document.createElement('div');tg.className='tag';tg.textContent=r.p+' р.';
+    d.appendChild(bd);d.appendChild(em);d.appendChild(nm);d.appendChild(tg);
+    d.addEventListener('click',function(){buyRide(i);});
+    g.appendChild(d);rideEls.push({box:d,badge:bd});
+  });
+}
+function buildZoo(){
+  var g=document.getElementById('zooGrid');g.innerHTML='';zooEls=[];
+  S.zoo.forEach(function(z,i){
+    var d=document.createElement('div');
+    d.className='item small';
+    d.style.setProperty('--c',PAL[(i+2)%PAL.length]);
+    var em=document.createElement('div');em.className='em';em.textContent=z.e;
+    var nm=document.createElement('div');nm.className='nm';nm.textContent=z.n;
+    var tg=document.createElement('div');tg.className='tag';
+    tg.textContent=z.foods.map(function(f){return f.e+' '+f.p+' р.';}).join(' + ');
+    d.appendChild(em);d.appendChild(nm);d.appendChild(tg);
+    d.addEventListener('click',function(){feedAnimal(i);});
+    g.appendChild(d);zooEls.push({box:d,tag:tg});
+  });
+}
 
 /* ================= реплики ================= */
-var bearT=null,foxT=null;
-function bearSay(t){
-  var el=document.getElementById('bearSaid');el.textContent=t;
-  clearTimeout(bearT);bearT=setTimeout(function(){el.textContent=BEAR_DEF;},5000);
+var bearT=null,foxT=null,momT=null,monT=null,kesT=null;
+function sayTo(id,def,timer,t){
+  var el=document.getElementById(id);el.textContent=t;
+  clearTimeout(timer);
+  return setTimeout(function(){el.textContent=def;},5000);
 }
-function foxSay(t){
-  var el=document.getElementById('foxSaid');el.textContent=t;
-  clearTimeout(foxT);foxT=setTimeout(function(){el.textContent=FOX_DEF;},5000);
-}
+function bearSay(t){bearT=sayTo('bearSaid',BEAR_DEF,bearT,t);}
+function foxSay(t){foxT=sayTo('foxSaid',FOX_DEF,foxT,t);}
+function momSay(t){momT=sayTo('momSaid',MOM_MAP_DEF,momT,t);}
+function monSay(t){monT=sayTo('monSaid',MON_DEF,monT,t);}
+function kesSay(t){kesT=sayTo('kesSaid',KES_DEF,kesT,t);}
 function cafeAffordable(){
   for(var i=0;i<S.toys.length;i++)if(!S.toys[i].sold&&S.toys[i].p<=S.money)return true;
   return false;
@@ -505,31 +697,54 @@ function cafeAffordable(){
 
 /* ================= отрисовка ================= */
 var moneyVal=document.getElementById('moneyVal'),starCnt=document.getElementById('starCnt'),
+    firePill=document.getElementById('firePill'),fireCnt=document.getElementById('fireCnt'),
     soundBtn=document.getElementById('soundBtn');
 function drawMute(){soundBtn.textContent=S.muted?'🔇':'🔊';}
 function renderAll(){
-  document.getElementById('shopScene').classList.toggle('hidden',S.scene!=='shop');
-  document.getElementById('cafeScene').classList.toggle('hidden',S.scene!=='cafe');
-  moneyVal.textContent=S.money;
+  var scenes=['start','shop','cafe','map','park','zoo'];
+  scenes.forEach(function(s){
+    document.getElementById(s+'Scene').classList.toggle('hidden',S.scene!==s);
+  });
+  moneyVal.textContent=(S.money===null)?'—':S.money;
   starCnt.textContent=S.stars;
+  fireCnt.textContent=S.streak;
+  firePill.classList.toggle('hidden',S.streak<2);
   S.toys.forEach(function(t,i){toyEls[i].classList.toggle('sold',t.sold);});
   S.drinks.forEach(function(t,i){drinkEls[i].classList.toggle('sel',S.drink===i);});
-  S.treats.forEach(function(t,i){treatEls[i].classList.toggle('sel',S.treat===i);});
+  S.treats.forEach(function(t,i){treatEls[i].classList.toggle('sel',S.tsel.indexOf(i)>=0);});
+  S.rides.forEach(function(r,i){
+    rideEls[i].badge.classList.toggle('hidden',r.cnt===0);
+    rideEls[i].badge.textContent='🎟×'+r.cnt;
+  });
+  S.zoo.forEach(function(z,i){
+    zooEls[i].box.classList.toggle('fed',z.fed);
+    zooEls[i].tag.textContent=z.fed
+      ?(z.w==='довольна'?'Сыта ❤️':'Сыт ❤️')
+      :z.foods.map(function(f){return f.e+' '+f.p+' р.';}).join(' + ');
+  });
   document.getElementById('bagItems').textContent=
     S.bag.length?S.bag.map(function(b){return b.e;}).join(' '):'—';
   var cb=document.getElementById('cafeBtn');
   cb.classList.toggle('hidden',!(S.scene==='shop'&&S.bag.length>0));
   if(S.scene==='shop'&&S.bag.length>0&&!cafeAffordable())cb.classList.add('pulseBtn');
+  document.getElementById('ticketCnt').textContent=totalRides();
+  document.getElementById('fedCnt').textContent=fedCount();
+  document.getElementById('parkCnt').textContent=
+    totalRides()>0?('катаний: '+totalRides()):'катаний пока нет';
+  document.getElementById('zooCnt').textContent=
+    fedCount()>0?('накормлено: '+fedCount()):'зверята ждут угощения';
   var payBtn=document.getElementById('payBtn'),momBtn=document.getElementById('momBtn'),
       ci=document.getElementById('cartInfo');
-  if(S.drink<0||S.treat<0){
-    ci.textContent='🛒 Выбери напиток и вкусняшку — и нажми «Оплатить»';
+  if(S.drink<0||S.tsel.length<2){
+    ci.textContent='🛒 Выбери напиток и хотя бы две вкусняшки — и жми «Оплатить»';
     payBtn.classList.add('dim');momBtn.classList.remove('pulseBtn');
   }else{
     payBtn.classList.remove('dim');
-    var d=S.drinks[S.drink],x=S.treats[S.treat];
-    var txt='🛒 '+d.e+' '+d.p+' р. + '+x.e+' '+x.p+' р. = '+(S.totalKnown?S.total+' р.':'?');
-    if(S.totalKnown&&S.money<S.total&&!S.done){txt+=' — не хватает! 👩';momBtn.classList.add('pulseBtn');}
+    var parts=[];
+    parts.push(S.drinks[S.drink].e+' '+S.drinks[S.drink].p+' р.');
+    S.tsel.forEach(function(i){parts.push(S.treats[i].e+' '+S.treats[i].p+' р.');});
+    var txt='🛒 '+parts.join(' + ')+' = '+(S.totalKnown?S.total+' р.':'?');
+    if(S.totalKnown&&S.money<S.total){txt+=' — не хватает! 👩';momBtn.classList.add('pulseBtn');}
     else momBtn.classList.remove('pulseBtn');
     ci.textContent=txt;
   }
@@ -560,7 +775,7 @@ function keyPress(t){
   if(!curQ||done)return;
   if(t==='⌫'){buffer=buffer.slice(0,-1);setAns(buffer);return;}
   if(t==='✓'){check();return;}
-  if(buffer.length>=2)return;
+  if(buffer.length>=3)return;
   buffer+=t;setAns(buffer);sType();
 }
 function openQ(o){
@@ -572,26 +787,42 @@ function openQ(o){
   setAns('');
   hint.classList.add('hidden');hint.textContent='';
   qcard.classList.remove('ok','err','shake');
+  qcard.scrollTop=0;
   overlay.classList.remove('hidden');
 }
 function closeModal(){
   if(done)return;
   overlay.classList.add('hidden');curQ=null;
 }
+function onRight(){
+  done=true;
+  qcard.classList.remove('err');qcard.classList.add('ok');
+  var p=PRAISE[(Math.random()*PRAISE.length)|0];
+  S.solved++;S.streak++;
+  if(S.streak>S.bestStreak)S.bestStreak=S.streak;
+  if(S.streak>0&&S.streak%3===0){
+    S.stars++;addSharedStar();
+    p+=' 🔥 Серия '+S.streak+' — бонусная звезда! ⭐';
+    sCoins();
+  }
+  praise.textContent=p;
+  sCorrect();
+  S.stars++;starCnt.textContent=S.stars;
+  addSharedStar();
+  fireCnt.textContent=S.streak;
+  firePill.classList.toggle('hidden',S.streak<2);
+  var f=curQ.onOk;
+  setTimeout(function(){overlay.classList.add('hidden');curQ=null;f(parseInt(buffer,10));},650);
+}
 function check(){
   if(!curQ||done||buffer==='')return;
   var ans=parseInt(buffer,10);
   if(ans===curQ.a+curQ.op*curQ.b){
-    done=true;
-    qcard.classList.remove('err');qcard.classList.add('ok');
-    praise.textContent=PRAISE[(Math.random()*PRAISE.length)|0];
-    sCorrect();
-    S.stars++;starCnt.textContent=S.stars;
-    addSharedStar();
-    var f=curQ.onOk;
-    setTimeout(function(){overlay.classList.add('hidden');curQ=null;f(ans);},650);
+    onRight();
   }else{
     attempts++;
+    S.streak=0;firePill.classList.add('hidden');
+    save();
     qcard.classList.remove('shake','err');void qcard.offsetWidth;
     qcard.classList.add('shake','err');
     setTimeout(function(){qcard.classList.remove('err');},700);
@@ -613,6 +844,34 @@ document.addEventListener('keydown',function(e){
     else if(e.key==='Escape'){closeModal();}
   }
 });
+
+/* ================= оплата: сдача / мама ================= */
+function payFor(label,mascot,thing,quoted,total,onDone){
+  if(S.money>total){
+    var head=quoted?('«'+thing+'»'):thing;
+    openQ({num:label,mascot:mascot,
+      prompt:head+' стоит '+total+' р. У тебя '+S.money+' р. Сколько сдачи?',
+      a:S.money,op:-1,b:total,
+      hintFn:function(){return hintSub(S.money,total);},
+      onOk:function(ch){S.money=ch;save();renderAll();onDone();}});
+  }else{ /* money === total */
+    S.money=0;save();renderAll();onDone();
+  }
+}
+function momAsk(total,onDone){
+  openQ({num:'👩 Мама помогает',mascot:'👩',
+    prompt:'Посчитай: на сколько рублей не хватает?',
+    a:total,op:-1,b:S.money,
+    hintFn:function(){return hintSub(total,S.money);},
+    onOk:function(x){
+      S.money+=x;S.momGiven+=x;
+      save();renderAll();
+      burstAtEl(document.getElementById('moneyPill'),30,.9);
+      sCoins();
+      momSay('Держи '+x+' р. — теперь денег как раз! 🥰');
+      setTimeout(onDone,1200);
+    }});
+}
 
 /* ================= магазин ================= */
 function buyToy(i){
@@ -643,35 +902,51 @@ function buyToy(i){
 }
 
 /* ================= кафе ================= */
+function resetCafeTotal(){S.total=0;S.totalKnown=false;}
 function selectDrink(i){
   sClick();
   S.drink=(S.drink===i?-1:i);
-  S.total=0;S.totalKnown=false;
+  resetCafeTotal();
   save();renderAll();
 }
 function selectTreat(i){
   sClick();
-  S.treat=(S.treat===i?-1:i);
-  S.total=0;S.totalKnown=false;
+  var k=S.tsel.indexOf(i);
+  if(k>=0){S.tsel.splice(k,1);}
+  else{
+    if(S.tsel.length>=MAX_TREATS){
+      foxSay('Хватит-хватит! Больше '+MAX_TREATS+' вкусняшек — животик заболеет! 😄');
+      return;
+    }
+    S.tsel.push(i);
+  }
+  resetCafeTotal();
   save();renderAll();
 }
 function startPay(viaMom){
-  if(S.scene!=='cafe'||S.done)return;
-  if(S.drink<0||S.treat<0){
-    foxSay('Сначала выбери и напиток, и вкусняшку! 🙂');
+  if(S.scene!=='cafe')return;
+  if(S.drink<0||S.tsel.length<2){
+    foxSay('Сначала выбери напиток и хотя бы две вкусняшки! 🙂');
     sWrong();return;
   }
   if(!S.totalKnown){
-    var d=S.drinks[S.drink],x=S.treats[S.treat];
-    openQ({num:'☕ Кафе',mascot:'🦊',
-      prompt:'Сколько стоят вкусняшки вместе?',
-      a:d.p,op:1,b:x.p,
-      hintFn:function(){return hintAdd(d.p,x.p);},
-      onOk:function(sum){
-        S.total=sum;S.totalKnown=true;
+    var prices=[S.drinks[S.drink].p];
+    S.tsel.forEach(function(i){prices.push(S.treats[i].p);});
+    var run=prices[0],idx=1;
+    function step(){
+      if(idx<prices.length){
+        openQ({num:'☕ Кафе',mascot:'🦊',
+          prompt:'Складываем по порядку! Сколько всего?',
+          a:run,op:1,b:prices[idx],
+          hintFn:function(){return hintAdd(run,prices[idx]);},
+          onOk:function(s){run=s;idx++;step();}});
+      }else{
+        S.total=run;S.totalKnown=true;
         save();renderAll();
         afterTotal(viaMom);
-      }});
+      }
+    }
+    step();
   }else afterTotal(viaMom);
 }
 function afterTotal(viaMom){
@@ -680,69 +955,125 @@ function afterTotal(viaMom){
       foxSay('👩 Мама: «Да у тебя же хватает! У тебя '+S.money+' р., а покупка всего '+S.total+' р.» 😄');
       return;
     }
-    if(S.money===S.total){finishCafe();return;}
-    openQ({num:'☕ Кафе',mascot:'🦊',
-      prompt:'У тебя '+S.money+' р. Сколько сдачи?',
-      a:S.money,op:-1,b:S.total,
-      hintFn:function(){return hintSub(S.money,S.total);},
-      onOk:function(ch){
-        S.money=ch;
-        save();renderAll();
-        finishCafe();
-      }});
-  }else momAsk();
-}
-function momAsk(){
-  openQ({num:'👩 Мама помогает',mascot:'👩',
-    prompt:'Посчитай: на сколько рублей не хватает?',
-    a:S.total,op:-1,b:S.money,
-    hintFn:function(){return hintSub(S.total,S.money);},
-    onOk:function(x){
-      S.money+=x;S.momGiven+=x;
-      save();renderAll();
-      burstAtEl(document.getElementById('moneyPill'),30,.9);
-      sCoins();
-      foxSay('👩 Мама: «Умница! Держи '+x+' р. — теперь денег как раз!» 🥰');
-      setTimeout(finishCafe,1300);
-    }});
+    payFor('☕ Кафе','🦊','Покупка',false,S.total,function(){finishCafe();});
+  }else momAsk(S.total,function(){S.money-=S.total;finishCafe();});
 }
 function finishCafe(){
-  if(S.done){showBanner();return;}
-  S.done=true;
+  S.scene='map';
   save();renderAll();
-  burstAtEl(document.getElementById('cartBar'),50,1.1);
+  burst(fx.width/2,fx.height*0.35,50,1.1);
   sCoins();
-  for(var i=0;i<8;i++){
-    (function(i){
-      setTimeout(function(){
-        burst(640+(Math.random()-.5)*900,220+Math.random()*260,55,1.4);
-        tone(700+Math.random()*900,0,.08,'sine',.05);
-      },1000+i*430);
-    })(i);
+  momSay(MOM_AFTER_CAFE);
+}
+
+/* ================= парк ================= */
+function buyRide(i){
+  var r=S.rides[i];
+  sClick();
+  if(S.money<r.p){
+    momAsk(r.p,function(){payFor('🎡 Парк','🐵',r.n,true,r.p,function(){doRide(i);});});
+    return;
   }
-  confettiRain(9000);
-  setTimeout(sFanfare,900);
-  setTimeout(showBanner,2100);
+  payFor('🎡 Парк','🐵',r.n,true,r.p,function(){doRide(i);});
+}
+function doRide(i){
+  var r=S.rides[i];
+  r.cnt++;
+  save();renderAll();
+  burstAtEl(rideEls[i].box,40,1);
+  burstAtEl(document.getElementById('moneyPill'),18,.7);
+  sCoins();
+  monSay(pick(RIDE_FUN)+' '+r.e+' Билетик за '+r.p+' р. — в чек!');
+}
+
+/* ================= зоопарк ================= */
+function feedAnimal(i){
+  var z=S.zoo[i];
+  sClick();
+  if(z.fed){
+    kesSay(z.e+' '+z.n+' уже '+(z.w==='довольна'?'сыта':'сыт')+' и машет тебе хвостиком! ❤️');
+    return;
+  }
+  if(z.foods.length===2){
+    openQ({num:'🦁 Зоопарк',mascot:'🦜',
+      prompt:'Кормим '+z.v+'! Сколько стоят оба угощения вместе?',
+      a:z.foods[0].p,op:1,b:z.foods[1].p,
+      hintFn:function(){return hintAdd(z.foods[0].p,z.foods[1].p);},
+      onOk:function(s){payFeed(i,s);}});
+  }else payFeed(i,z.foods[0].p);
+}
+function payFeed(i,total){
+  if(S.money<total){
+    momAsk(total,function(){S.money-=total;doFeed(i,total);});
+  }else payFor('🦁 Зоопарк','🦜','Угощение',false,total,function(){doFeed(i,total);});
+}
+function doFeed(i,total){
+  var z=S.zoo[i];
+  z.fed=true;
+  save();renderAll();
+  burstAtEl(zooEls[i].box,40,1);
+  burstAtEl(document.getElementById('moneyPill'),18,.7);
+  sCoins();
+  kesSay('Ням-ням! '+z.e+' '+z.n+' очень '+z.w+'! Угощение за '+total+' р. ❤️');
 }
 
 /* ================= финал: чек ================= */
 function rline(a,b){return '<div class="rline"><span>'+a+'</span><b>'+b+'</b></div>';}
+function rhead(t){return '<div class="rhead">'+t+'</div>';}
 function showBanner(){
   var bemo=document.getElementById('bemo'),receipt=document.getElementById('receipt');
   var emos=S.bag.map(function(b){return b.e;}).join(' ');
   if(S.drink>=0)emos+=' '+S.drinks[S.drink].e;
-  if(S.treat>=0)emos+=' '+S.treats[S.treat].e;
-  bemo.textContent=emos;
+  S.tsel.forEach(function(i){emos+=' '+S.treats[i].e;});
+  var tr=totalRides(),fd=fedCount();
+  if(tr>0)emos+=' 🎟';
+  if(fd>0)emos+=' ❤️';
+  bemo.textContent=emos||'🏠';
   var h='';
-  S.bag.forEach(function(b){h+=rline(b.e+' '+b.n,b.p+' р.');});
-  if(S.drink>=0)h+=rline(S.drinks[S.drink].e+' '+S.drinks[S.drink].n,S.drinks[S.drink].p+' р.');
-  if(S.treat>=0)h+=rline(S.treats[S.treat].e+' '+S.treats[S.treat].n,S.treats[S.treat].p+' р.');
+  var sp=S.startMoney+S.momGiven-S.money;
+  if(S.bag.length){
+    h+=rhead('🛍 МАГАЗИН');
+    S.bag.forEach(function(b){h+=rline(b.e+' '+b.n,b.p+' р.');});
+  }
+  if(S.drink>=0||S.tsel.length>0){
+    h+=rhead('☕ КАФЕ');
+    if(S.drink>=0)h+=rline(S.drinks[S.drink].e+' '+S.drinks[S.drink].n,S.drinks[S.drink].p+' р.');
+    S.tsel.forEach(function(i){h+=rline(S.treats[i].e+' '+S.treats[i].n,S.treats[i].p+' р.');});
+  }
+  if(tr>0){
+    h+=rhead('🎡 ПАРК — '+tr+' '+plural(tr,'билет','билета','билетов'));
+    S.rides.forEach(function(r){
+      if(r.cnt>0)h+=rline(r.e+' '+r.n+' ×'+r.cnt,(r.p*r.cnt)+' р.');
+    });
+  }
+  if(fd>0){
+    h+=rhead('🦁 ЗООПАРК');
+    S.zoo.forEach(function(z){
+      if(z.fed){
+        var s=0;z.foods.forEach(function(f){s+=f.p;});
+        h+=rline(z.e+' '+z.n+': '+z.foods.map(function(f){return f.e+' '+f.p;}).join(' + '),s+' р.');
+      }
+    });
+  }
   if(S.momGiven>0)h+=rline('👩 Мама добавила',S.momGiven+' р.');
   h+='<div class="rsep"></div>';
-  h+=rline('Было','100 р.');
+  h+=rline('Было',S.startMoney+' р.');
+  if(S.momGiven>0)h+=rline('С мамиными всего',(S.startMoney+S.momGiven)+' р.');
+  h+=rline('Потрачено',sp+' р.');
   h+=rline('Осталось',S.money+' р.');
-  document.getElementById('bstars').textContent='⭐ Задач решено: '+S.stars;
   receipt.innerHTML=h;
+  var medals=[];
+  if(S.bag.length)medals.push(['🏅','Первые покупки']);
+  if(S.bestStreak>=3)medals.push(['🔥','Серия '+S.bestStreak+' подряд']);
+  if(fd>=3)medals.push(['❤️','Доброе сердце: '+fd+' зверят']);
+  if(tr>=3)medals.push(['🎢','Мастер парка: '+tr+' катаний']);
+  if(S.money===0&&sp>0)medals.push(['💰','Весь кошелёк — в дело!']);
+  document.getElementById('bmedals').textContent=
+    medals.length?medals.map(function(m){return m[0];}).join(' '):'⭐';
+  document.getElementById('bmedalNames').textContent=
+    medals.map(function(m){return m[1];}).join(' • ');
+  document.getElementById('bstars').textContent=
+    '⭐ Звёздочек: '+S.stars+' • Задач решено: '+S.solved+' • Лучшая серия: '+S.bestStreak;
   document.getElementById('banner').classList.remove('hidden');
 }
 
@@ -763,6 +1094,21 @@ document.getElementById('cfYes').addEventListener('click',function(){
 document.getElementById('againBtn').addEventListener('click',function(){
   newGame();
 });
+document.getElementById('backBtn').addEventListener('click',function(){
+  document.getElementById('banner').classList.add('hidden');
+});
+Array.prototype.forEach.call(document.querySelectorAll('.env'),function(b){
+  b.addEventListener('click',function(){
+    sClick();
+    S.money=parseInt(b.getAttribute('data-v'),10);
+    S.startMoney=S.money;
+    S.scene='shop';
+    bearSay(BEAR_DEF);
+    save();renderAll();
+    burstAtEl(document.getElementById('moneyPill'),30,.9);
+    sCoins();
+  });
+});
 document.getElementById('cafeBtn').addEventListener('click',function(){
   sClick();
   S.scene='cafe';
@@ -775,19 +1121,46 @@ document.getElementById('payBtn').addEventListener('click',function(){
 });
 document.getElementById('momBtn').addEventListener('click',function(){
   sClick();
-  if(S.done)return;
-  if(S.drink<0||S.treat<0){
-    foxSay('Сначала выбери напиток и вкусняшку, потом попросим у мамы! 🙂');
+  if(S.drink<0||S.tsel.length<2){
+    foxSay('Сначала выбери напиток и две вкусняшки, потом попросим у мамы! 🙂');
     return;
   }
   startPay(true); /* сначала посчитаем сумму, потом мама */
+});
+document.getElementById('goPark').addEventListener('click',function(){
+  sClick();
+  S.scene='park';
+  monSay(MON_DEF);
+  save();renderAll();
+});
+document.getElementById('goZoo').addEventListener('click',function(){
+  sClick();
+  S.scene='zoo';
+  kesSay(KES_DEF);
+  save();renderAll();
+});
+document.getElementById('goHome').addEventListener('click',function(){
+  sClick();
+  showBanner();
+});
+document.getElementById('parkMapBtn').addEventListener('click',function(){
+  sClick();
+  S.scene='map';
+  momSay(MOM_MAP_DEF);
+  save();renderAll();
+});
+document.getElementById('zooMapBtn').addEventListener('click',function(){
+  sClick();
+  S.scene='map';
+  momSay(MOM_MAP_DEF);
+  save();renderAll();
 });
 function newGame(){
   document.getElementById('banner').classList.add('hidden');
   parts.length=0;confettiUntil=0;
   S=newState();
   save();
-  buildShop();buildCafe();
+  buildShop();buildCafe();buildPark();buildZoo();
   renderAll();
   sClick();
 }
@@ -796,15 +1169,19 @@ function newGame(){
 var savedS=loadState();
 S=savedS||newState();
 if(!savedS)save();
-fit();
-window.addEventListener('resize',fit);
+resizeFX();
+window.addEventListener('resize',resizeFX);
 buildShop();
 buildCafe();
+buildPark();
+buildZoo();
+document.getElementById('momStartSaid').textContent=MOM_START_DEF;
 document.getElementById('bearSaid').textContent=BEAR_DEF;
 document.getElementById('foxSaid').textContent=FOX_DEF;
+document.getElementById('momSaid').textContent=MOM_MAP_DEF;
+document.getElementById('monSaid').textContent=MON_DEF;
+document.getElementById('kesSaid').textContent=KES_DEF;
 renderAll();
-if(S.done)setTimeout(showBanner,800);
 </script>
-<a href="index.html" title="Вернуться к списку уроков" style="position:fixed;right:14px;bottom:14px;z-index:9999;padding:10px 18px;border-radius:999px;background:#7c3aed;color:#fff;font-size:16px;font-weight:bold;font-family:Verdana,Arial,sans-serif;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠 Все уроки</a>
 </body>
 </html>
