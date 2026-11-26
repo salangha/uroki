@@ -1,7 +1,7 @@
 {
  "course": "geografiya-5-6",
  "title": "География 5–6 · Тропа уроков",
- "ver": "5a710ae48576",
+ "ver": "56161c219d57",
  "entry": "course.html",
  "files": [
   {
@@ -13,14 +13,14 @@
   {
    "path": "js/app.js",
    "bin": "js__app.js.bin",
-   "size": 50965,
-   "sha": "d30d3e6af44a5b7b22f24aee8bf9ea5533f71a65494b072f99cc89237ff41f88"
+   "size": 50790,
+   "sha": "db4b5d76d168c023a3c795819af9ea1355b63a0bded5a6ce8d101e2c6533a0a3"
   },
   {
    "path": "js/data.js",
    "bin": "js__data.js.bin",
-   "size": 701303,
-   "sha": "b02c7007e69e74a410a90d4d5e7b0778f1c23b0a92fb399488efa9cf06e9af8b"
+   "size": 697411,
+   "sha": "a8a47b4a3a2daa7d5e741ec1d04945745d5bd0c68926d827e77bfcf4d22e3924"
   }
  ]
 }
