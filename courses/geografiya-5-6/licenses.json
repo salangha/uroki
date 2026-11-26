@@ -1,5 +1,18 @@
 {
  "v": 1,
  "iterations": 200000,
- "licenses": []
+ "licenses": [
+  {
+   "id": "dfd18dce",
+   "salt": "36a5c0382e373f25174db576291c7927",
+   "wrap": "Q7uW5UDGWCtvI02PW9pP4rvuAcMDoyecrMZxSup+0B++LFoxExVnoDE7nqaQ+5qzJQCPVlqvBPiQCWIT",
+   "iterations": 200000
+  },
+  {
+   "id": "9396474b",
+   "salt": "78bde600345672c5ca20cde983172a37",
+   "wrap": "ku18SWhKKm9ARxTjaxKtpcsYgy/VTZpNnz689Ui4biEvYnJhOxvks/XxaMy/dvt39Ruoglqoa3E8uLN+",
+   "iterations": 200000
+  }
+ ]
 }
