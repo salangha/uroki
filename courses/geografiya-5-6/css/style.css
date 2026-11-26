@@ -523,3 +523,6 @@ body {
 /* ---------- вопрос «точка по координатам» ---------- */
 .grid-label { font-size: 17px; fill: #2b4a6f; font-weight: 700; }
 .coord-tap { cursor: crosshair; }
+
+/* портреты в тестах: показывать целиком, не обрезая лицо */
+.duo.clickable .duo-item img { object-fit: contain; background: #eef4fb; }
