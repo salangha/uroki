@@ -1,0 +1,1490 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>История России, 7 класс · §1–6 — интерактивный урок</title>
+<style>
+:root { --bg:#f7f4ef; --fg:#262019; --card:#ffffff; --muted:#efe9df; --muted-fg:#6f675c;
+  --border:#ddd4c6; --primary:#8b2c2c; --primary-fg:#ffffff; --green:#2e7d4f; --red:#b3402e;
+  --blue:#2b6cb0; --gold:#a8842c; }
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; }
+body { background:var(--bg); color:var(--fg); font:15px/1.55 "Segoe UI", system-ui, sans-serif; }
+#hist-lesson { max-width:920px; margin:0 auto; padding:18px 14px 48px; }
+h1 { font-size:22px; margin:0 0 4px; } h3 { font-size:16px; margin:14px 0 8px; }
+b { font-weight:600; }
+.text-muted { color:var(--muted-fg); } .text-small { font-size:12.5px; }
+.tabular-nums { font-variant-numeric:tabular-nums; }
+.viz-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+@media (min-width:720px){ .viz-grid { grid-template-columns:1.4fr 1fr; } }
+.viz-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:10px; }
+.progress { height:8px; background:var(--muted); border-radius:6px; overflow:hidden; flex:1; min-width:140px; }
+.progress-bar { height:100%; background:var(--primary); width:0%; transition:width .3s; }
+.nav.nav-pills { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 14px; }
+.nav-link { border:1px solid var(--border); background:var(--card); color:var(--fg);
+  border-radius:999px; padding:6px 12px; font:inherit; cursor:pointer; min-height:36px; }
+.nav-link.active { background:var(--primary); border-color:var(--primary); color:var(--primary-fg); }
+.nav-link .new { background:var(--gold); color:#fff; border-radius:6px; font-size:11px; padding:1px 5px; margin-left:4px; vertical-align:1px; }
+.btn { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border);
+  background:var(--card); color:var(--fg); border-radius:8px; padding:7px 14px; font:inherit; cursor:pointer; min-height:38px; }
+.btn:hover { border-color:var(--primary); }
+.btn-primary { background:var(--primary); border-color:var(--primary); color:var(--primary-fg); }
+.btn-ghost { background:transparent; border-color:transparent; color:var(--muted-fg); }
+.btn-sm { padding:4px 10px; font-size:13.5px; min-height:32px; }
+.form-check { display:flex; gap:8px; align-items:flex-start; margin:6px 0; cursor:pointer; }
+.form-check-input { margin-top:3px; width:17px; height:17px; accent-color:var(--primary); }
+.form-control { border:1px solid var(--border); border-radius:8px; padding:8px 10px; font:inherit; background:var(--card); color:var(--fg); }
+.form-select, .form-select-sm { border:1px solid var(--border); border-radius:8px; padding:6px 8px; font:inherit;
+  background:var(--card); color:var(--fg); max-width:100%; }
+.viz-badge { display:inline-block; background:var(--muted); border-radius:999px; padding:3px 10px; font-size:13px; }
+.table { border-collapse:collapse; width:100%; }
+.table td, .table th { padding:5px 8px; border-bottom:1px solid var(--border); vertical-align:top; text-align:left; }
+.table th { font-size:13px; color:var(--muted-fg); }
+.table-responsive { overflow-x:auto; }
+details summary { color:var(--blue); cursor:pointer; }
+details { margin:6px 0; }
+[hidden] { display:none !important; }
+/* карточки фактов */
+.fact { border-left:3px solid var(--primary); padding:6px 10px; margin:5px 0; background:var(--card); border-radius:0 8px 8px 0; }
+.fact.old, .memo.old { opacity:.55; }
+.memo { background:var(--muted); border-radius:8px; padding:8px 12px; margin:8px 0; }
+/* задания */
+.q-item { margin:14px 0; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--card); }
+.q-item.ok { border-color:var(--green); }
+.q-item.err { border-color:var(--red); }
+.fb { margin-top:8px; padding:6px 10px; border-radius:8px; display:none; }
+.fb.ok { display:block; background:color-mix(in srgb, var(--green) 12%, transparent); }
+.fb.err { display:block; background:color-mix(in srgb, var(--red) 10%, transparent); }
+.fb.hint { display:block; background:color-mix(in srgb, var(--gold) 12%, transparent); }
+/* плитки слов и слогов */
+.tiles-pool, .tiles-line, .chips-pool, .chips-line { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; min-height:38px; }
+.tiles-line, .chips-line { border:1px dashed var(--border); border-radius:8px; padding:6px; }
+.chip { font-size:16px; padding:8px 13px; border-radius:8px; }
+.chip .num { color:var(--primary); font-weight:600; margin-right:4px; font-size:13px; }
+.ord-item { display:block; width:100%; text-align:left; margin:4px 0; }
+.ord-item.picked { opacity:.45; }
+.ord-seq { margin:6px 0; }
+.yr { background:var(--gold); color:#fff; border-radius:6px; padding:1px 6px; margin-right:6px;
+  font-variant-numeric:tabular-nums; font-weight:600; font-size:13px; display:inline-block; }
+.syll-title { font-size:16px; font-weight:600; margin-top:14px; }
+/* карточка материала портала */
+.mat-card { background:var(--card); border:1px solid var(--gold); border-left:4px solid var(--gold); border-radius:8px; padding:8px 12px; margin:5px 0; }
+.mat-card.old { opacity:.55; }
+.mat-head { font-weight:600; margin-bottom:4px; }
+.mat-desc { font-size:14.5px; line-height:1.5; }
+.mat-row { margin-top:7px; }
+.mat-row a.btn { text-decoration:none; }
+.mat-src { margin-top:7px; font-size:12px; color:var(--muted-fg); border-top:1px dashed var(--border); padding-top:4px; }
+/* многоугольный выбор и разбор слов */
+.form-check.ok::after { content:' ✓'; color:var(--green); font-weight:600; }
+.form-check.bad::after { content:' ✗'; color:var(--red); font-weight:600; }
+.dict { margin-top:7px; background:var(--muted); border-radius:8px; padding:6px 10px; }
+.dict-h { font-size:12px; font-weight:600; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
+.dict-row { display:flex; gap:8px; padding:2px 0; font-size:14px; }
+.dict-w { font-weight:600; color:var(--primary); min-width:110px; max-width:170px; }
+.dict-d { flex:1; }
+.plain { display:block; margin-top:6px; color:var(--blue); }
+.plain::before { content:'💬 Проще говоря: '; font-weight:600; }
+.ord-badge { cursor:grab; user-select:none; -webkit-user-select:none; touch-action:none; display:inline-block; }
+.ord-badge.pos-ok { background:color-mix(in srgb, var(--green) 20%, var(--muted)); outline:2px solid var(--green); }
+.ord-badge.pos-bad { background:color-mix(in srgb, var(--red) 18%, var(--muted)); outline:2px solid var(--red); }
+.ord-badge.dragging { opacity:.75; box-shadow:0 3px 10px rgba(0,0,0,.25); position:relative; z-index:5; }
+.chips-line { gap:4px; }
+.opt-card { display:block; width:100%; text-align:left; margin:4px 0; border:1px solid var(--border); background:var(--card); border-radius:8px; padding:8px 12px; font:inherit; cursor:pointer; min-height:38px; }
+.opt-card:hover { border-color:var(--primary); }
+.opt-card.ok { border-color:var(--green); background:color-mix(in srgb, var(--green) 12%, var(--card)); color:var(--green); }
+.opt-card.ok::after { content:' ✓'; font-weight:600; }
+.opt-card.bad { border-color:var(--red); background:color-mix(in srgb, var(--red) 10%, var(--card)); color:var(--red); opacity:.6; }
+.opt-card.bad::before { content:'✗ '; }
+.form-check.crossed { opacity:.45; }
+.form-check.crossed span { text-decoration:line-through; }
+.chain-box { margin-top:8px; padding:8px 10px; background:color-mix(in srgb, var(--gold) 10%, transparent); border:1px solid var(--gold); border-radius:8px; display:none; }
+.chain-box:not(:empty) { display:block; }
+.chain-note { margin:2px 0 6px; font-size:14px; }
+.chain-q { font-weight:600; margin:6px 0 2px; }
+.chain-step { margin-bottom:6px; }
+@media (max-width:640px){
+  h1 { font-size:19px; }
+  .btn { min-height:42px; }
+  .nav-link { min-height:40px; padding:8px 13px; }
+  .chip { font-size:17px; padding:10px 14px; }
+  .q-item { padding:9px 10px; }
+}
+</style>
+</head>
+<body>
+<div id="hist-lesson">
+
+<div class="viz-grid" style="align-items:center; margin-bottom:6px;">
+  <div>
+    <h1 style="margin-bottom:2px;">История России, XVI–XVII вв. · §1–6 · 7 класс</h1>
+    <div class="text-muted">По учебнику Мединского — Торкунова (2025): «Россия в 1533–1547 гг.» → «Начало царствования Ивана IV» → «Русское общество в XVI в.». Факты → задания → лента времени → слоги-термины → зачёт. Цель: <b>твёрдая 4+</b>.</div>
+  </div>
+  <div class="goalbar" style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+    <div class="progress" role="progressbar" aria-label="Прогресс заданий" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="flex:1; min-width:140px;"><div class="progress-bar" style="width:0%"></div></div>
+    <div class="tabular-nums text-small" id="hist-score-line">0 / 0 заданий · 0 баллов (0%)</div>
+    <div id="hist-verdict" aria-live="polite" style="font-weight:500;">Начни с §1–2</div>
+    <button class="btn btn-sm btn-ghost" id="hist-reset" type="button">Сбросить прогресс</button>
+  </div>
+</div>
+
+<div class="nav nav-pills" role="tablist" aria-label="Разделы урока">
+  <button class="nav-link active" id="t-u1" role="tab" aria-controls="p-u1" aria-selected="true" type="button">§1–2 · 1533–1547</button>
+  <button class="nav-link" id="t-u2" role="tab" aria-controls="p-u2" aria-selected="false" type="button">§3–4 · Иван IV и реформы</button>
+  <button class="nav-link" id="t-u3" role="tab" aria-controls="p-u3" aria-selected="false" type="button">§5–6 · Общество XVI в.</button>
+  <button class="nav-link" id="t-time" role="tab" aria-controls="p-time" aria-selected="false" type="button">Лента времени</button>
+  <button class="nav-link" id="t-syll" role="tab" aria-controls="p-syll" aria-selected="false" type="button">Слоги · термины<span class="new">новое</span></button>
+  <button class="nav-link" id="t-src" role="tab" aria-controls="p-src" aria-selected="false" type="button">Источник</button>
+  <button class="nav-link" id="t-ref" role="tab" aria-controls="p-ref" aria-selected="false" type="button">Справочник</button>
+  <button class="nav-link" id="t-fin" role="tab" aria-controls="p-fin" aria-selected="false" type="button">Зачёт</button>
+</div>
+
+<!-- ============ §1–2 ============ -->
+<div id="p-u1" role="tabpanel" aria-labelledby="t-u1">
+  <h3>§1–2 · Россия в 1533–1547 гг.: малолетство Ивана IV</h3>
+  <div class="viz-row" style="margin-bottom:10px;">
+    <div class="progress" style="flex:1; min-width:120px;"><div class="progress-bar" data-stepbar="u1" style="width:0%"></div></div>
+    <span class="tabular-nums text-small" data-stepline="u1">Шаг 1 из 27</span>
+    <button class="btn btn-sm btn-ghost" data-restart="u1" type="button">↺ С начала</button>
+  </div>
+  <div data-steps="u1"></div>
+</div>
+
+<!-- ============ §3–4 ============ -->
+<div id="p-u2" role="tabpanel" aria-labelledby="t-u2" hidden>
+  <h3>§3–4 · Начало царствования Ивана IV: царь и реформы</h3>
+  <div class="viz-row" style="margin-bottom:10px;">
+    <div class="progress" style="flex:1; min-width:120px;"><div class="progress-bar" data-stepbar="u2" style="width:0%"></div></div>
+    <span class="tabular-nums text-small" data-stepline="u2">Шаг 1 из 31</span>
+    <button class="btn btn-sm btn-ghost" data-restart="u2" type="button">↺ С начала</button>
+  </div>
+  <div data-steps="u2"></div>
+</div>
+
+<!-- ============ §5–6 ============ -->
+<div id="p-u3" role="tabpanel" aria-labelledby="t-u3" hidden>
+  <h3>§5–6 · Русское общество в XVI в.: сословная лестница</h3>
+  <div class="viz-row" style="margin-bottom:10px;">
+    <div class="progress" style="flex:1; min-width:120px;"><div class="progress-bar" data-stepbar="u3" style="width:0%"></div></div>
+    <span class="tabular-nums text-small" data-stepline="u3">Шаг 1 из 50</span>
+    <button class="btn btn-sm btn-ghost" data-restart="u3" type="button">↺ С начала</button>
+  </div>
+  <div data-steps="u3"></div>
+</div>
+
+<!-- ============ Лента времени ============ -->
+<div id="p-time" role="tabpanel" aria-labelledby="t-time" hidden>
+  <h3>Лента времени: §1–6</h3>
+  <div class="card" style="padding:8px 12px; margin-bottom:10px;">
+    Нажимай события в хронологическом порядке — от раннего к позднему. Год в золотой табличке — подсказка и зацепка: сверься со «Справочником», если сомневаешься.
+  </div>
+  <div data-quiz="time"></div>
+</div>
+
+<!-- ============ Слоги · термины ============ -->
+<div id="p-syll" role="tabpanel" aria-labelledby="t-syll" hidden>
+  <h3>Слоги · термины: слова, которые нужно запомнить</h3>
+  <div class="card" style="padding:8px 12px; margin-bottom:10px;">
+    Прочитай <b>определение</b> и собери сам термин из рассыпанных <b>слогов</b>: нажимай слоги в правильном порядке — они встанут в строку с номерами. Ошибся? Нажми слог в строке — он вернётся назад. Застрял — возьми «Подсказку» (первый слог), а если совсем никак — «Показать слово» (тогда без балла).
+  </div>
+  <div id="syll-list"></div>
+</div>
+
+<!-- ============ Источник ============ -->
+<div id="p-src" role="tabpanel" aria-labelledby="t-src" hidden>
+  <h3>Свидетельства эпохи</h3>
+  <div class="card" style="padding:8px 12px;">
+    <b>Из «Письма царя Ивана Грозного Андрею Курбскому»</b> (написано в 1564 г.)
+    <blockquote style="margin:8px 0 4px; padding:6px 10px; border-left:3px solid var(--gold); background:var(--muted); border-radius:6px;">
+      «Когда мы с братом остались без родителей, нам не на кого было надеяться. Мне тогда кончался восьмой год; …сами они искали только богатства и славы и грызлись с друг другом. Чего они только не сделали; сколько избили бояр и преданных отцу нашему людей и воевод! …Так князья Василий и Иван Шуйские самовольно приняли надо мною опеку и воцарились… С нами обходились не только не по-родительски, но так, как и с рабами не поступают».
+    </blockquote>
+  </div>
+  <div class="card" style="padding:8px 12px; margin-top:10px;">
+    <b>Из записок голландского купца и дипломата И. Массы «Краткое известие о Московии»</b>
+    <blockquote style="margin:8px 0 4px; padding:6px 10px; border-left:3px solid var(--gold); background:var(--muted); border-radius:6px;">
+      «Управление государством некоторое время оставалось в руках знатнейших вельмож, присягнувших народу, что они будут хорошо управлять страною и защищать её от всех врагов до совершеннолетия принца. Но как многие из вельмож оказались весьма несправедливыми, повсюду притесняли невинных, грабили и разоряли всё… и мало заботились об общей пользе, то следовало ожидать дурного конца».
+    </blockquote>
+  </div>
+  <h3 style="margin-top:10px;">Проверка по источникам</h3>
+  <div data-quiz="src"></div>
+  <details>
+    <summary>Подумай и обсуди (без проверки)</summary>
+    <ul>
+      <li>Зачем царь так подробно перечисляет обиды детства? Как это помогало ему оправдать будущую жёсткость к боярам?</li>
+      <li>Масса писал о Москве из-за границы, по рассказам купцов. Почему его запискам нельзя верить полностью, но и игнорировать их нельзя?</li>
+      <li>Сравни два свидетельства: чем слова самого Ивана IV отличаются от оценки иностранца?</li>
+    </ul>
+  </details>
+</div>
+
+<!-- ============ Справочник ============ -->
+<div id="p-ref" role="tabpanel" aria-labelledby="t-ref" hidden>
+  <h3>Справочник по §1–6</h3>
+  <h3>Главные даты</h3>
+  <div class="table-responsive"><table class="table">
+    <tr><td>1533</td><td>Смерть Василия III; Ивану IV — 3 года; начало регентства Елены Глинской</td></tr>
+    <tr><td>1535</td><td>Денежная реформа: рубль = 100 копейкам; единые меры</td></tr>
+    <tr><td>1534–1537</td><td>Русско-литовская война — без изменения границ</td></tr>
+    <tr><td>1538–1547</td><td>Боярское правление: борьба Бельских, Шуйских, Глинских</td></tr>
+    <tr><td>16 января 1547</td><td>Венчание Ивана IV на царство</td></tr>
+    <tr><td>февраль 1547</td><td>Брак Ивана IV и Анастасии Захарьиной-Юрьевой</td></tr>
+    <tr><td>июнь 1547</td><td>Пожар и восстание в Москве</td></tr>
+    <tr><td>1549</td><td>Первый Земский собор («Собор примирения»)</td></tr>
+    <tr><td>1550</td><td>Судебник Ивана IV</td></tr>
+    <tr><td>1551</td><td>Стоглавый церковный собор</td></tr>
+    <tr><td>1550-е</td><td>Создание приказов; налоговая реформа («большая соха»)</td></tr>
+    <tr><td>1556</td><td>Отмена кормлений</td></tr>
+    <tr><td>1564</td><td>«Апостол» — первая датированная печатная книга (Иван Фёдоров)</td></tr>
+    <tr><td>1580–1581</td><td>Острожская Библия</td></tr>
+  </table></div>
+  <div class="memo text-small"><b>В это время в мире:</b> 1517 — Лютер, 95 тезисов, начало Реформации · 1520–1566 — Сулейман I Великолепный в Османской империи · 1534 — Реформация в Англии (Генрих VIII) · 1555 — Аугсбургский религиозный мир · 1556 — раздел державы Карла V.</div>
+  <h3>Термины</h3>
+  <div class="table-responsive"><table class="table">
+    <tr><th>Термин</th><th>Значение</th></tr>
+    <tr><td><b>Регентство</b></td><td>временное правление страной, пока государь несовершеннолетний</td></tr>
+    <tr><td><b>Посад</b></td><td>торгово-ремесленная часть города вне крепостных стен</td></tr>
+    <tr><td><b>Губной староста</b></td><td>выборный судья по делам о разбоях из местных детей боярских</td></tr>
+    <tr><td><b>Целовальник</b></td><td>выборный помощник судьи; целовал крест, клянясь судить честно</td></tr>
+    <tr><td><b>Копейка</b></td><td>монета (с 1535 г.) со всадником с копьём; 100 копеек = рубль</td></tr>
+    <tr><td><b>Царь</b></td><td>титул, принятый Иваном IV в 1547 г.; ранее так звали византийских императоров и ханов Орды</td></tr>
+    <tr><td><b>Доктрина «Москва — Третий Рим»</b></td><td>учение о преемственности: русский царь — наследник Рима и Византии</td></tr>
+    <tr><td><b>Избранная рада</b></td><td>круг ближайших помощников Ивана IV (Адашев, Курбский, Висковатый и др.), проводил реформы 1549–1560 гг.</td></tr>
+    <tr><td><b>Земский собор</b></td><td>высший совещательный сословно-представительный орган (первый — 1549 г.)</td></tr>
+    <tr><td><b>Сословно-представительная монархия</b></td><td>монархия, где при царе действуют органы с выборными от сословий</td></tr>
+    <tr><td><b>Приказы</b></td><td>органы центрального управления (Посольский, Разрядный, Поместный…)</td></tr>
+    <tr><td><b>Большая соха</b></td><td>единица поземельного налогообложения в реформе Избранной рады</td></tr>
+    <tr><td><b>Юрьев день</b></td><td>осенний срок (26 ноября), когда крестьянин мог уйти к другому владельцу</td></tr>
+    <tr><td><b>Пожилое</b></td><td>платёж крестьянина владельцу земли при уходе в Юрьев день</td></tr>
+    <tr><td><b>Сословия</b></td><td>большие группы людей, чьё положение, права и обязанности наследуются</td></tr>
+    <tr><td><b>Служилые «по отечеству»</b></td><td>наследственные служилые люди: князья, бояре, окольничие, дети боярские</td></tr>
+    <tr><td><b>Служилые «по прибору»</b></td><td>служилые из простолюдинов: стрельцы, пушкари, пищальники, городовые казаки</td></tr>
+    <tr><td><b>Вотчина</b></td><td>наследственное землевладение: можно продавать, дарить, делить</td></tr>
+    <tr><td><b>Поместье</b></td><td>земельное держание за службу; могло быть отобрано</td></tr>
+    <tr><td><b>Оброк</b></td><td>плата крестьянина владельцу частью продуктов и изделий</td></tr>
+    <tr><td><b>Барщина</b></td><td>обязательная бесплатная работа крестьянина на владельца</td></tr>
+    <tr><td><b>Холопы</b></td><td>люди в положении, близком к рабскому; обельные (полные) и кабальные</td></tr>
+    <tr><td><b>Гулящие люди</b></td><td>люди без сословия и тягла: наёмные работники, бурлаки, нищие</td></tr>
+    <tr><td><b>Ясак</b></td><td>налог с народов Поволжья, Урала и Сибири, чаще всего мехами</td></tr>
+    <tr><td><b>Служилые иноземцы</b></td><td>западноевропейцы на русской службе: «фрязи» (итальянцы) и «немцы»</td></tr>
+  </table></div>
+  <h3>Персоналии</h3>
+  <div class="table-responsive"><table class="table">
+    <tr><th>Кто</th><th>Чем известен</th></tr>
+    <tr><td><b>Василий III</b></td><td>великий князь всея Руси (†1533); перед смертью принял иночество</td></tr>
+    <tr><td><b>Елена Глинская</b></td><td>вторая жена Василия III, мать Ивана IV; правительница 1533–1538 гг.: денежная реформа, единые меры, начало губной реформы</td></tr>
+    <tr><td><b>Иван IV Грозный</b></td><td>сын Василия III; великий князь с 1533 г., с 1547 г. — царь</td></tr>
+    <tr><td><b>Анастасия Захарьина-Юрьева</b></td><td>первая жена Ивана IV (с февраля 1547 г.)</td></tr>
+    <tr><td><b>Митрополит Макарий</b></td><td>венчал Ивана IV на царство; при нём созданы Четьи-Минеи; поддержал книгопечатание</td></tr>
+    <tr><td><b>Протопоп Сильвестр</b></td><td>обличил царя после пожара 1547 г.; близок к Избранной раде; «Домострой»; в опале сослан на Соловки</td></tr>
+    <tr><td><b>Алексей Адашев</b></td><td>глава Избранной рады, хранитель печати царя; руководил Судебником 1550 г.</td></tr>
+    <tr><td><b>Андрей Курбский</b></td><td>полководец и публицист; дал название «Избранная рада»; адресат писем царя</td></tr>
+    <tr><td><b>Иван Пересветов</b></td><td>публицист, автор «Челобитных»: «Государство без грозы, что конь без узды»</td></tr>
+    <tr><td><b>Иван Висковатый</b></td><td>глава Посольского приказа, участник Избранной рады</td></tr>
+    <tr><td><b>Иван Фёдоров</b></td><td>«первопечатник»: «Апостол» (1564), Острожская Библия (1580–1581)</td></tr>
+    <tr><td><b>Пётр Мстиславец</b></td><td>сподвижник Ивана Фёдорова в типографии</td></tr>
+    <tr><td><b>Владимир Старицкий</b></td><td>двоюродный брат царя; в 1547 г. — единственный реальный удельный князь</td></tr>
+  </table></div>
+  <h3>Сословная лестница XVI в.</h3>
+  <div class="card" style="padding:8px 12px;">
+    <ul style="margin:4px 0; padding-left:20px;">
+      <li><b>Государь всея Руси</b> (с 1547 г. — царь), «наместник Бога на земле»</li>
+      <li><b>«Братья младшие»</b> — удельные и служилые князья (к середине века исчезли)</li>
+      <li><b>Служилые «по отечеству»</b>: титулованные князья и бояре → окольничие → <b>дети боярские</b>; из них же — приказные люди (дьяки, подьячие)</li>
+      <li><b>Служилые «по прибору»</b>: стрельцы, пушкари, пищальники, оружейники, городовые казаки</li>
+      <li><b>Тяглые люди</b>: купцы, чёрные посадские люди, крестьяне (черносошные, дворцовые, частновладельческие, монастырские)</li>
+      <li><b>Особые группы</b>: духовенство (чёрное и белое), холопы, гулящие люди, ясачные люди, служилые иноземцы</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ Зачёт ============ -->
+<div id="p-fin" role="tabpanel" aria-labelledby="t-fin" hidden>
+  <h3>Зачёт по §1–6: все типы заданий вперемешку</h3>
+  <div class="card" style="padding:8px 12px; margin-bottom:10px;">
+    Здесь собраны вопросы сразу по трём параграфам — в том числе ответы на <b>главные вопросы урока</b>. Набери 80% и больше — твёрдая 4+, 92% — «5».
+  </div>
+  <div data-quiz="fin"></div>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('hist-lesson');
+  if (!root) return;
+
+  /* ---------- вкладки ---------- */
+  root.querySelectorAll('.nav-link[role="tab"]').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      root.querySelectorAll('.nav-link[role="tab"]').forEach(function(t){
+        var on = t === tab;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        if(panel) panel.hidden = !on;
+      });
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  /* ---------- реестр заданий и верхняя панель ---------- */
+  var tasks = {}; var order = [];
+  var LS = 'histRu7-16-progress-v1';
+  function reg(id, pts){ if(!tasks[id]){ tasks[id] = {pts:pts, got:0, done:false}; order.push(id); } }
+  function score(id, got){ var t = tasks[id]; if(!t) return;
+    if(got > t.got) t.got = got; t.done = true; renderTop(); save(); revealNext(id); }
+  function totals(){ var T=0,P=0,D=0,E=0;
+    for(var i=0;i<order.length;i++){ var t=tasks[order[i]]; T++; P+=t.pts; if(t.done){D++; E+=t.got;} }
+    return {T:T,P:P,D:D,E:E}; }
+  function verdict(pct){
+    if(pct>=92) return '5! Отлично — так держать!';
+    if(pct>=80) return '4+ — цель достигнута!';
+    if(pct>=65) return '4 — хорошо, но до 4+ ещё немного';
+    if(pct>=50) return '3 — вернись к фактам и справочнику';
+    return 'Пока слабо — пройди уроки ещё раз';
+  }
+  function save(){ try{
+    var o = { _s: { u1: stepIdx.u1, u2: stepIdx.u2, u3: stepIdx.u3 } };
+    order.forEach(function(id){ o[id] = [tasks[id].got, tasks[id].done ? 1 : 0]; });
+    localStorage.setItem(LS, JSON.stringify(o));
+  }catch(e){} }
+  function renderTop(){
+    var t = totals(); var pct = t.P ? Math.round(100*t.E/t.P) : 0;
+    var line = document.getElementById('hist-score-line');
+    var bar = root.querySelector('.progress-bar');
+    var prog = root.querySelector('.progress');
+    var v = document.getElementById('hist-verdict');
+    if(line) line.textContent = t.D + ' / ' + t.T + ' заданий · ' + t.E + ' из ' + t.P + ' баллов (' + pct + '%)';
+    if(bar) bar.style.width = pct + '%';
+    if(prog) prog.setAttribute('aria-valuenow', String(pct));
+    if(v) v.textContent = t.D ? verdict(pct) : 'Начни с §1–2';
+  }
+  document.getElementById('hist-reset').addEventListener('click', function(){
+    if(confirm('Сбросить весь прогресс урока?')){
+      try{ localStorage.removeItem(LS); }catch(e){}
+      location.reload();
+    }
+  });
+
+  /* ---------- утилиты ---------- */
+  function shuffle(a){ var b=a.slice(); for(var i=b.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var x=b[i]; b[i]=b[j]; b[j]=x; } return b; }
+  function norm(s){ return (s||'').toLowerCase().replace(/ё/g,'е').replace(/[!.,;:?"«»()-]/g,' ').replace(/\s+/g,' ').trim(); }
+  function mk(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+  /* ---------- рендеры заданий ---------- */
+  function renderMcq(host, q){
+    reg(q.id, 1);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+q.q+'</b>'));
+    var optsWrap = mk('div');
+    var chainWrap = mk('div','chain-box');
+    var fb = mk('div','fb');
+    var items = q.opts.map(function(o,i){ return {t:o, ok:i===q.ans, bad:(q.bad&&q.bad[i])||null}; });
+    if(q.opts.length > 2) items = shuffle(items);
+    var tried = [];
+    var chainOn = false, chainIdx = 0;
+    function grade(inp){
+      var ok = inp.getAttribute('data-ok') === '1';
+      var txt = inp.getAttribute('data-txt');
+      var badTxt = inp.getAttribute('data-bad');
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      if(ok){
+        fb.className='fb ok';
+        fb.innerHTML = '<b>Верно!</b> ' + (q.why||'');
+        score(q.id, 1);
+        if(!fb.parentNode) box.appendChild(fb);
+        return;
+      }
+      tried.push(txt);
+      score(q.id, 0);
+      fb.className='fb err';
+      fb.innerHTML = '<b>Нет.</b>' + (badTxt ? ' ' + badTxt : ' Попробуй другой вариант — неверные зачёркиваются.');
+      renderOpts();
+      var canChain = q.lead && q.lead.length > 0;
+      if(canChain && !chainOn){
+        chainOn = true; chainIdx = 0;
+        chainWrap.innerHTML = '';
+        chainWrap.appendChild(mk('div','chain-note','<b>Давай разберёмся по шагам.</b> Ответь на пару вопросов — и ты сам придёшь к правильному ответу.'));
+        renderChain();
+      } else if(!canChain){
+        var right = '';
+        items.forEach(function(it){ if(it.ok) right = it.t; });
+        fb.innerHTML += ' Правильный ответ: «'+right+'».';
+      } else if(chainIdx >= q.lead.length){
+        var right2 = '';
+        items.forEach(function(it){ if(it.ok) right2 = it.t; });
+        fb.innerHTML += ' Мы уже разобрали по шагам. Правильный ответ: «'+right2+'». ' + (q.why||'');
+      }
+      if(!fb.parentNode) box.appendChild(fb);
+    }
+    function renderOpts(){
+      optsWrap.innerHTML='';
+      items.forEach(function(it){
+        var crossed = tried.indexOf(it.t) > -1;
+        var lab = mk('label','form-check'+(crossed?' crossed':''));
+        var inp = document.createElement('input'); inp.type='radio'; inp.name=q.id+'_opt'; inp.disabled=crossed; inp.className='form-check-input';
+        inp.setAttribute('data-ok', it.ok?'1':'0');
+        inp.setAttribute('data-bad', it.bad||'');
+        inp.setAttribute('data-txt', it.t);
+        inp.addEventListener('change', function(){ grade(inp); });
+        var sp = mk('span',null, it.t);
+        lab.appendChild(inp); lab.appendChild(sp); optsWrap.appendChild(lab);
+      });
+    }
+    function renderChain(){
+      var step = q.lead[chainIdx];
+      var old = chainWrap.querySelectorAll('.chain-step');
+      for(var i=0;i<old.length;i++) old[i].parentNode.removeChild(old[i]);
+      var wrapStep = mk('div','chain-step');
+      wrapStep.appendChild(mk('div','chain-q','Подсказка ' + (chainIdx+1) + ' из ' + q.lead.length + '. ' + step.q));
+      var cOpts = mk('div');
+      var cItems = step.opts.map(function(o,i){ return {t:o, ok:i===step.ans}; });
+      if(cItems.length > 1) cItems = shuffle(cItems);
+      var cFb = mk('div','fb');
+      var cDone = false;
+      function advanceChain(){
+        chainIdx++;
+        if(chainIdx < q.lead.length) renderChain();
+        else {
+          chainWrap.innerHTML = '<div class="chain-note"><b>Разобрались!</b> Неверные варианты зачёркнуты — теперь выбери правильный ответ сам.</div>';
+          renderOpts();
+        }
+      }
+      cItems.forEach(function(it){
+        var lab = mk('label','form-check');
+        var sp = mk('span',null, it.t);
+        var inp = document.createElement('input'); inp.type='radio'; inp.name=q.id+'_lead'+chainIdx; inp.className='form-check-input';
+        inp.addEventListener('change', function(){
+          if(cDone) return;
+          cDone = true;
+          if(it.ok){
+            cFb.className='fb ok';
+            cFb.innerHTML = '<b>Верно!</b> ' + (step.why||'');
+          } else {
+            var cRight = '';
+            cItems.forEach(function(x){ if(x.ok) cRight = x.t; });
+            cFb.className='fb err';
+            cFb.innerHTML = 'Запомни: ' + cRight + '. ' + (step.why||'');
+          }
+          if(!cFb.parentNode) wrapStep.appendChild(cFb);
+          var nxt = mk('button','btn btn-sm','Дальше ▸'); nxt.type='button';
+          nxt.addEventListener('click', advanceChain);
+          wrapStep.appendChild(nxt);
+        });
+        lab.appendChild(inp); lab.appendChild(sp); cOpts.appendChild(lab);
+      });
+      wrapStep.appendChild(cOpts);
+      chainWrap.appendChild(wrapStep);
+    }
+    renderOpts();
+    box.appendChild(optsWrap);
+    box.appendChild(chainWrap);
+    box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  function renderTf(host, q){
+    renderMcq(host, {id:q.id, n:q.n, q:q.q, opts:['Верно','Неверно'], ans:q.ans?0:1, why:q.why});
+  }
+
+  function renderFill(host, q){
+    reg(q.id, 1);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+'Впиши пропущенное слово: </b>'+q.q));
+    var row = mk('div','viz-row');
+    var inp = document.createElement('input'); inp.type='text'; inp.className='form-control'; inp.style.maxWidth='280px';
+    inp.setAttribute('aria-label','Ответ'); inp.autocomplete='off';
+    var btn = mk('button','btn btn-primary btn-sm','Проверить'); btn.type='button';
+    var fb = mk('div','fb');
+    btn.addEventListener('click', function(){
+      var val = norm(inp.value);
+      var accs = q.acc.map(norm);
+      var ok = accs.indexOf(val) > -1 || (val.length >= 4 && accs.some(function(a){ return a.indexOf(val) === 0; }));
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      fb.className='fb '+(ok?'ok':'err');
+      fb.innerHTML = (ok?'<b>Верно!</b> ':'<b>Мимо.</b> Правильный ответ: <b>'+q.acc[0]+'</b>. ')+(q.why||'');
+      if(!fb.parentNode) box.appendChild(fb);
+      score(q.id, ok?1:0);
+    });
+    row.appendChild(inp); row.appendChild(btn); box.appendChild(row); box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  function itemLabel(q, i){ return q.years ? '<span class="yr">'+q.years[i]+'</span>'+q.items[i] : q.items[i]; }
+
+  function renderOrder(host, q){
+    reg(q.id, q.items.length);
+    var box = mk('div','q-item');
+    var tip = q.years ? 'Нажимай события в хронологическом порядке — от раннего к позднему.' : 'Нажимай пункты в правильном порядке — от первого к последнему.';
+    tip += ' После проверки: зелёное — на месте, красное — перетащи на другое место и проверь снова.';
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+q.q+'</b><div class="text-muted text-small">'+tip+'</div>'));
+    var pool = mk('div');
+    var seq = mk('div','ord-seq');
+    var picked = []; var cur = shuffle(q.items.map(function(t,i){ return i; }));
+    var checked = false;
+    function itemLabel(idx){ return q.years ? '<span class="yr">'+q.years[idx]+'</span>'+q.items[idx] : q.items[idx]; }
+    function drawPool(){
+      pool.innerHTML='';
+      cur.forEach(function(idx){
+        var b = mk('button','btn btn-sm ord-item'+(picked.indexOf(idx)>-1?' picked':''), itemLabel(idx)); b.type='button';
+        b.addEventListener('click', function(){ if(picked.indexOf(idx)>-1) return; picked.push(idx); drawPool(); drawSeq(); });
+        pool.appendChild(b);
+      });
+      if(!cur.length) pool.appendChild(mk('div','text-muted text-small','Все пункты выбраны — можно проверять.'));
+    }
+    function drawSeq(){
+      seq.innerHTML='';
+      picked.forEach(function(idx,i){
+        var b = mk('span','ord-badge', (i+1)+'. '+itemLabel(idx));
+        if(checked) b.classList.add(idx===i ? 'pos-ok' : 'pos-bad');
+        b.addEventListener('pointerdown', function(ev){ startDrag(ev, i, b); });
+        seq.appendChild(b);
+        seq.appendChild(document.createTextNode(' '));
+      });
+      if(!picked.length) seq.appendChild(mk('span','text-muted text-small','Пока ничего не выбрано.'));
+    }
+    function startDrag(ev, fromIdx, badge){
+      if(ev.button !== undefined && ev.button !== 0) return;
+      ev.preventDefault();
+      var startX = ev.clientX, startY = ev.clientY, dragging = false;
+      function onMove(e){
+        if(!dragging && (Math.abs(e.clientX-startX) > 6 || Math.abs(e.clientY-startY) > 6)){
+          dragging = true; badge.classList.add('dragging');
+        }
+        if(dragging) badge.style.transform = 'translate('+(e.clientX-startX)+'px,'+(e.clientY-startY)+'px)';
+      }
+      function onUp(e){
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        badge.classList.remove('dragging'); badge.style.transform = '';
+        if(!dragging) return;
+        var badges = Array.prototype.slice.call(seq.querySelectorAll('.ord-badge'));
+        var insert = badges.length;
+        for(var k=0;k<badges.length;k++){
+          var r = badges[k].getBoundingClientRect();
+          if(e.clientX < r.left + r.width/2){ insert = k; break; }
+        }
+        if(insert > fromIdx) insert--;
+        if(insert < 0) insert = 0;
+        if(insert > picked.length - 1) insert = picked.length - 1;
+        var item = picked.splice(fromIdx, 1)[0];
+        picked.splice(insert, 0, item);
+        checked = false;
+        drawSeq();
+      }
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    }
+    var row = mk('div','viz-row');
+    var btn = mk('button','btn btn-primary btn-sm','Проверить'); btn.type='button';
+    var btnR = mk('button','btn btn-sm','Сбросить'); btnR.type='button';
+    var fb = mk('div','fb');
+    btnR.addEventListener('click', function(){ picked=[]; checked=false; cur=shuffle(q.items.map(function(t,i){ return i; })); fb.style.display='none'; box.classList.remove('ok','err'); drawPool(); drawSeq(); });
+    btn.addEventListener('click', function(){
+      if(picked.length < q.items.length){
+        fb.className='fb hint'; fb.textContent='Сначала выбери все пункты по порядку — потом проверим.';
+        if(!fb.parentNode) box.appendChild(fb);
+        return;
+      }
+      var good = 0;
+      picked.forEach(function(idx,i){ if(idx === i) good++; });
+      checked = true;
+      drawSeq();
+      var ok = good === q.items.length;
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      fb.className='fb '+(ok?'ok':'err');
+      var right = q.items.map(function(it,i){ return (i+1)+'. '+itemLabel(i); }).join('<br>');
+      fb.innerHTML = (ok
+        ? '<b>Идеально!</b> '
+        : '<b>На своих местах '+good+' из '+q.items.length+'.</b> Зелёные — на месте, красные — перетащи их на другие места и проверь снова. Правильный порядок:<br>') + right + ' ' + (q.why||'');
+      if(!fb.parentNode) box.appendChild(fb);
+      score(q.id, good);
+    });
+    drawPool(); drawSeq();
+    box.appendChild(pool); box.appendChild(seq); row.appendChild(btn); row.appendChild(btnR); box.appendChild(row); box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  function renderTiles(host, q){
+    reg(q.id, q.words.length);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+'Собери предложение:</b> '+q.q));
+    var pool = mk('div','tiles-pool');
+    var line = mk('div','tiles-line');
+    var picked = []; var cur = shuffle(q.words);
+    function draw(){
+      pool.innerHTML=''; line.innerHTML='';
+      cur.forEach(function(w){
+        var b = mk('button','btn btn-sm', w); b.type='button';
+        b.addEventListener('click', function(){ picked.push(w); cur=cur.filter(function(x){return x!==w;}); draw(); });
+        pool.appendChild(b);
+      });
+      if(!cur.length && picked.length) pool.appendChild(mk('span','text-muted text-small','Слова закончились — проверяй.'));
+      picked.forEach(function(w,i){
+        var b = mk('button','btn btn-sm btn-ghost', w); b.type='button';
+        b.addEventListener('click', function(){ picked.splice(i,1); cur.push(w); draw(); });
+        line.appendChild(b);
+      });
+    }
+    var row = mk('div','viz-row');
+    var btn = mk('button','btn btn-primary btn-sm','Проверить'); btn.type='button';
+    var btnR = mk('button','btn btn-sm','Сбросить'); btnR.type='button';
+    var fb = mk('div','fb');
+    btnR.addEventListener('click', function(){ picked=[]; cur=shuffle(q.words); fb.style.display='none'; box.classList.remove('ok','err'); draw(); });
+    btn.addEventListener('click', function(){
+      var good = 0;
+      picked.forEach(function(w,i){ if(w === q.words[i]) good++; });
+      var ok = good === q.words.length;
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      fb.className='fb '+(ok?'ok':'err');
+      fb.innerHTML = (ok?'<b>Верно!</b> ':'<b>На своих местах ' + good + ' из ' + q.words.length + '.</b> Правильно: ') + '<b>'+q.words.join(' ')+'</b>. ' + (q.why||'');
+      if(!fb.parentNode) box.appendChild(fb);
+      score(q.id, good);
+    });
+    draw();
+    box.appendChild(pool); box.appendChild(line);
+    row.appendChild(btn); row.appendChild(btnR); box.appendChild(row); box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  function renderMatch(host, q){
+    reg(q.id, q.pairs.length);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+q.q+'</b><div class="text-muted text-small">К каждому пункту в левом столбце выбери подходящее из списка.</div>'));
+    var defs = shuffle(q.pairs.map(function(p){ return p[1]; }));
+    var selMap = [];
+    q.pairs.forEach(function(p){
+      var row = mk('div',null,'<div style="margin:6px 0 2px;"><b>'+p[0]+'</b></div>');
+      var sel = document.createElement('select'); sel.className='form-select form-select-sm'; sel.style.maxWidth='440px';
+      var blank = document.createElement('option'); blank.value=''; blank.textContent='— выбери —'; sel.appendChild(blank);
+      defs.forEach(function(d,i){ var o=document.createElement('option'); o.value=String(i); o.textContent=d; sel.appendChild(o); });
+      row.appendChild(sel); box.appendChild(row); selMap.push({left:p[0], right:p[1], sel:sel});
+    });
+    var row = mk('div','viz-row');
+    var btn = mk('button','btn btn-primary btn-sm','Проверить'); btn.type='button';
+    var fb = mk('div','fb');
+    btn.addEventListener('click', function(){
+      var good = 0; var miss = [];
+      selMap.forEach(function(m){
+        var raw = m.sel.value;
+        var val = raw === '' ? '' : defs[Number(raw)];
+        if(val === m.right) good++; else miss.push('<b>'+m.left+'</b> — «'+m.right+'»');
+      });
+      var ok = good === q.pairs.length;
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      fb.className='fb '+(ok?'ok':'err');
+      fb.innerHTML = (ok?'<b>Все пары верны!</b> ':'<b>Совпало '+good+' из '+q.pairs.length+'.</b> Правильно:<br>'+miss.join('<br>')) + (q.why?' '+(q.why||''):'');
+      if(!fb.parentNode) box.appendChild(fb);
+      score(q.id, good);
+    });
+    row.appendChild(btn); box.appendChild(row); box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  function renderSort(host, q){
+    reg(q.id, q.items.length);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+q.q+'</b><div class="text-muted text-small">Каждому пункту назначь его группу из списка.</div>'));
+    var selMap = [];
+    q.items.forEach(function(it){
+      var row = mk('div',null,'<div style="margin:6px 0 2px;"><b>'+it[0]+'</b></div>');
+      var sel = document.createElement('select'); sel.className='form-select form-select-sm'; sel.style.maxWidth='440px';
+      var blank = document.createElement('option'); blank.value=''; blank.textContent='— выбери группу —'; sel.appendChild(blank);
+      q.cats.forEach(function(c,i){ var o=document.createElement('option'); o.value=String(i); o.textContent=c; sel.appendChild(o); });
+      row.appendChild(sel); box.appendChild(row); selMap.push({name:it[0], cat:it[1], sel:sel});
+    });
+    var row = mk('div','viz-row');
+    var btn = mk('button','btn btn-primary btn-sm','Проверить'); btn.type='button';
+    var fb = mk('div','fb');
+    btn.addEventListener('click', function(){
+      var good = 0; var miss = [];
+      selMap.forEach(function(m){
+        var raw = m.sel.value;
+        var val = raw === '' ? -1 : Number(raw);
+        if(val === m.cat) good++; else miss.push('<b>'+m.name+'</b> — '+q.cats[m.cat]);
+      });
+      var ok = good === q.items.length;
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      fb.className='fb '+(ok?'ok':'err');
+      fb.innerHTML = (ok?'<b>Всё по своим местам!</b> ':'<b>Верно разложено '+good+' из '+q.items.length+'.</b> Правильно:<br>'+miss.join('<br>')) + (q.why?' '+(q.why||''):'');
+      if(!fb.parentNode) box.appendChild(fb);
+      score(q.id, good);
+    });
+    row.appendChild(btn); box.appendChild(row); box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  /* новое: собери термин из слогов */
+  function renderSyll(host, q){
+    reg(q.id, 1);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+'Собери слово из слогов.</b> '+q.def));
+    var objs = q.syl.map(function(t,i){ return {t:t}; });
+    var cur = shuffle(objs);
+    function sameAs(a){ return a.length===q.syl.length && a.every(function(o,i){ return o.t===q.syl[i]; }); }
+    var guard = 0;
+    while(sameAs(cur) && guard++ < 20) cur = shuffle(objs);
+    var pool = mk('div','chips-pool');
+    var line = mk('div','chips-line');
+    var picked = [];
+    function draw(){
+      pool.innerHTML=''; line.innerHTML='';
+      cur.forEach(function(o){
+        var b = mk('button','btn btn-sm chip', o.t); b.type='button';
+        b.addEventListener('click', function(){ picked.push(o); cur = cur.filter(function(x){return x!==o;}); draw(); });
+        pool.appendChild(b);
+      });
+      if(!cur.length && picked.length) pool.appendChild(mk('span','text-muted text-small','Слоги закончились — проверяй.'));
+      picked.forEach(function(o,i){
+        var b = mk('button','btn btn-sm chip btn-ghost', o.t); b.type='button';
+        b.addEventListener('click', function(){ picked.splice(i,1); cur.push(o); draw(); });
+        line.appendChild(b);
+      });
+      if(!picked.length) line.appendChild(mk('span','text-muted text-small','Нажимай слоги в правильном порядке…'));
+    }
+    var row = mk('div','viz-row');
+    var btn = mk('button','btn btn-primary btn-sm','Проверить'); btn.type='button';
+    var btnR = mk('button','btn btn-sm','Сбросить'); btnR.type='button';
+    var btnH = mk('button','btn btn-sm','Подсказка'); btnH.type='button';
+    var btnS = mk('button','btn btn-sm','Показать слово'); btnS.type='button'; btnS.hidden = true;
+    var fb = mk('div','fb');
+    var hinted = false;
+    btnH.addEventListener('click', function(){
+      hinted = true;
+      btnS.hidden = false;
+      fb.className='fb hint';
+      fb.innerHTML = 'Подсказка: слово начинается со слога <b>«'+q.syl[0]+'»</b> и состоит из '+q.syl.length+' слогов.';
+      if(!fb.parentNode) box.appendChild(fb);
+    });
+    btnS.addEventListener('click', function(){
+      picked = q.syl.map(function(t){ return {t:t}; });
+      cur = [];
+      draw();
+      box.classList.remove('ok'); box.classList.add('err');
+      fb.className='fb err';
+      fb.innerHTML = 'Слово собрано за тебя: <b>«'+q.term+'»</b> — '+q.def+' Это задание без балла — собери другие!';
+      score(q.id, 0);
+      btn.hidden = true; btnH.hidden = true;
+    });
+    btnR.addEventListener('click', function(){
+      picked = []; cur = shuffle(objs); guard = 0;
+      while(sameAs(cur) && guard++ < 20) cur = shuffle(objs);
+      fb.style.display='none'; box.classList.remove('ok','err');
+      btn.hidden = false; btnH.hidden = false;
+      draw();
+    });
+    btn.addEventListener('click', function(){
+      var good = 0;
+      picked.forEach(function(o,i){ if(o.t === q.syl[i]) good++; });
+      var ok = good === q.syl.length;
+      box.classList.remove('ok','err'); box.classList.add(ok?'ok':'err');
+      fb.className='fb '+(ok?'ok':'err');
+      fb.innerHTML = (ok
+        ? '<b>Верно!</b> «'+q.term+'» — '+q.def
+        : '<b>Пока нет.</b> Правильный порядок: '+q.syl.join(' · ')+' — это <b>«'+q.term+'»</b> — '+q.def) + (q.why?' '+(q.why||''):'');
+      if(!fb.parentNode) box.appendChild(fb);
+      score(q.id, ok?1:0);
+    });
+    draw();
+    box.appendChild(pool); box.appendChild(line);
+    row.appendChild(btn); row.appendChild(btnR); row.appendChild(btnH); row.appendChild(btnS); box.appendChild(row); box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  function renderMulti(host, q){
+    var correct = q.ans.length;
+    reg(q.id, correct);
+    var box = mk('div','q-item');
+    box.appendChild(mk('div',null,'<b>'+(q.n?q.n+'. ':'')+q.q+'</b><div class="text-muted text-small">Верные подсветятся зелёным, неверные — красным.</div>'));
+    var fb = mk('div','fb');
+    var items = q.opts.map(function(o,i){ return {t:o, ok:q.ans.indexOf(i)>-1}; });
+    items = shuffle(items);
+    var found = 0;
+    var list = mk('div');
+    items.forEach(function(it){
+      var b = mk('button','btn opt-card', it.t); b.type='button';
+      b.addEventListener('click', function(){
+        if(found >= correct || b.disabled) return;
+        if(it.ok){
+          b.classList.add('ok'); b.disabled = true;
+          found++;
+          score(q.id, found);
+          fb.className='fb ok';
+          fb.textContent = found === correct
+            ? 'Верно! Все подходящие найдены.'
+            : 'Верно! Найдено ' + found + ' из ' + correct + '.';
+          if(found === correct) fb.innerHTML += ' ' + (q.why||'');
+          if(!fb.parentNode) box.appendChild(fb);
+        } else {
+          b.classList.add('bad'); b.disabled = true;
+          fb.className='fb err';
+          fb.textContent = 'Нет, этот вариант не подходит. Ищи дальше.';
+          if(!fb.parentNode) box.appendChild(fb);
+        }
+      });
+      list.appendChild(b);
+    });
+    box.appendChild(list);
+    box.appendChild(fb);
+    host.appendChild(box);
+  }
+
+  var RENDER = { mcq:renderMcq, tf:renderTf, fill:renderFill, order:renderOrder, tiles:renderTiles, match:renderMatch, sort:renderSort, syll:renderSyll, multi:renderMulti };
+
+  /* ---------- задания по параграфам ---------- */
+  var QUIZ = {
+  u1: [
+    {type:'mcq', id:'u1q1', q:'Сколько лет было Ивану IV, когда умер его отец Василий III?',
+      opts:['3 года','8 лет','15 лет'], ans:0,
+      bad:{1:'Ивану было меньше: он родился в 1530 г., а отец умер в 1533 г.',2:'В 15 лет служилые уже начинали службу сами — а Иван был ещё ребёнком.'},
+      why:'Иван родился в 1530 г., а Василий III умер в 1533 г. Опеку над малышом поручили боярам, но правила Елена Глинская.'},
+    {type:'mcq', id:'u1q2', q:'Чему был равен рубль после денежной реформы 1535 г.?',
+      opts:['100 деньгам-копейкам','50 деньгам','216 деньгам'], ans:0,
+      bad:{1:'Копейки — мелкие монеты: на рубль их нужно много.',2:'216 — столько денег было в старом новгородском рубле; реформа сделала счёт проще — сто.'},
+      why:'Елена Глинская ввела общерусскую монетную систему: 1 московский рубль = 100 новгородским деньгам, то есть копейкам.'},
+    {type:'mcq', id:'u1q3', q:'Какое событие относится к правлению Елены Глинской?',
+      opts:['Появление единой монеты — копейки','Венчание Ивана IV на царство','Отмена кормлений'], ans:0,
+      bad:{1:'Венчание — 1547 г.: Иван правил уже сам, без регентства.',2:'Кормления отменили в 1556 г. — при Избранной раде.'},
+      why:'Копейка (1535), единые меры и начало губной реформы — её дела. Венчание — 1547 г., отмена кормлений — 1556 г.'},
+    {type:'fill', id:'u1q4', q:'Мелкая монета с изображением всадника с копьём, появившаяся в 1535 г., — это <b>___</b>.',
+      acc:['копейка','копейки','копейку'],
+      why:'От «копья» всадника и пошло имя монеты. Проверяй: именно из копеек потом складывался рубль.'},
+    {type:'fill', id:'u1q5', q:'Судью по делам о разбоях, которого выбирали из местных детей боярских, называли <b>___ староста</b>.',
+      acc:['губной','губный'],
+      why:'Губные старосты и их помощники-целовальники отняли у наместников суд по «лихим» делам.'},
+    {type:'tf', id:'u1q6', q:'Елену Глинскую в Москве не любили и называли «литовкой».', ans:true,
+      why:'Она происходила из рода литовских князей Глинских, а её опалы и казни настроили знать против правительницы.'},
+    {type:'tf', id:'u1q7', q:'После смерти Елены Глинской бояре правили дружно и справедливо.', ans:false,
+      why:'Наоборот: 1538–1547 гг. — вражда Бельских, Шуйских и Глинских, расхищение казны, рост налогов. «Много мятежу и нестроения…»'},
+    {type:'tf', id:'u1q8', q:'В 13 лет Иван IV вынес свой первый смертный приговор — князь Андрей Шуйский был отдан псарям.', ans:true,
+      why:'Летописец заметил: «начали бояре от государя страх имети и послушание». Детство среди интриг сделало царя подозрительным.'},
+    {type:'match', id:'u1q9', q:'Сопоставь термины и определения:', pairs:[
+      ['Регентство','временное правление страной, пока государь несовершеннолетний'],
+      ['Посад','торгово-ремесленная часть города вне крепостных стен'],
+      ['Губной староста','выборный судья по делам о разбоях из детей боярских'],
+      ['Целовальник','выборный помощник судьи, целовавший крест судить честно']]},
+    {type:'order', id:'u1q10', q:'Восстанови события 1533–1547 гг. по порядку:', timeline:true,
+      items:['умер Василий III — Ивану 3 года','денежная реформа Елены Глинской','мятеж Андрея Старицкого','смерть Елены Глинской; начало боярского правления','13-летний Иван приказывает казнить Андрея Шуйского'],
+      years:['1533','1535','1537','1538','1544'],
+      why:'Проверь по «Запоминалке»: 1533 → 1535 → 1537 → 1538 → 1544.'},
+    {type:'tiles', id:'u1q11', q:'итоги деятельности Елены Глинской:',
+      words:['Реформы','Елены','Глинской','укрепили','Русское','государство'],
+      why:'Деньги, меры и выборный суд на местах — шаги к централизации.'},
+    {type:'syll', id:'u1q12', term:'копейка', syl:['ко','пей','ка'],
+      def:'Единая монета 1535 года со всадником с копьём в руке.'}
+  ],
+  u2: [
+    {type:'mcq', id:'u2q1', q:'Где и когда Ивана IV венчали на царство?',
+      opts:['16 января 1547 г. в Успенском соборе Московского Кремля','В 1549 г. на первом Земском соборе','В 1546 г. в Новгороде'], ans:0,
+      bad:{1:'Собор 1549 г. — «Собор примирения», он был позже венчания.',2:'В 1546 г. Иван лишь объявил о намерении — без церемонии.'},
+      why:'В 1546 г. Иван лишь объявил боярам о намерении, а венчание состоялось 16 января 1547 г. в Кремле.'},
+    {type:'mcq', id:'u2q2', q:'Кто возложил на Ивана IV шапку Мономаха?',
+      opts:['Митрополит Макарий','Протопоп Сильвестр','Алексей Адашев'], ans:0,
+      bad:{1:'Сильвестр — протопоп: он обличал царя после пожара 1547 г. и написал «Домострой».',2:'Адашев — глава Избранной рады, он не венчал царя.'},
+      why:'Макарий возложил на голову Ивана венец — шапку Мономаха и вручил скипетр и державу — знаки царской власти.'},
+    {type:'mcq', id:'u2q3', q:'Что стало поводом Московского восстания июня 1547 г.?',
+      opts:['Грандиозный пожар и слух, что город подожгли Глинские','Новый налог с посадских людей','Война с Ливонией'], ans:0,
+      bad:{1:'Голод в этот год не был причиной мятежа.',2:'Ливонская война началась позже — в 1558 г.'},
+      lead:[
+       {q:'Что случилось в Москве в июне 1547 г.?',opts:['Грандиозный пожар — выгорела треть города','Наводнение','Снегопад в июле'],ans:0,why:'Да. После пожара народ искал «виновных» — и услышал про Глинских.'}
+      ],
+      why:'Выгорела треть города; толпа забила камнями Юрия Глинского. После мятежа царь «исправился» — начал реформы.'},
+    {type:'mcq', id:'u2q4', q:'Кто считается главой Избранной рады?',
+      opts:['Алексей Адашев','Андрей Курбский','Иван Висковатый'], ans:0,
+      bad:{1:'Курбский лишь дал название «Избранная рада» — сам он был полководцем.',2:'Висковатый возглавлял Посольский приказ — ведомство по чужим странам.'},
+      lead:[
+       {q:'Кого историк Карамзин назвал «красой века и человечества»?',opts:['Алексея Адашева','Ивана Грозного','митрополита Макария'],ans:0,why:'Да — Адашев: хранитель государственной печати, инициатор реформ.'}
+      ],
+      why:'Адашев — «краса века и человечества» по словам Карамзина; имя «Избранная рада» дал Курбский.'},
+    {type:'tf', id:'u2q5', q:'«Государство без грозы, что конь без узды» — слова публициста Ивана Пересветова.', ans:true,
+      why:'В «Челобитных» Пересветов призывал обуздать боярское самоуправство — многие его идеи легли в реформы.'},
+    {type:'tf', id:'u2q6', q:'Судебник 1550 г. запретил крестьянам уходить от владельца.', ans:false,
+      why:'Право выхода в Юрьев день подтвердили, но «пожилое» увеличили — уходить стало накладнее.'},
+    {type:'tf', id:'u2q7', q:'Первый Земский собор современники называли «Собором примирения».', ans:true,
+      why:'Царь выступил с Лобного места, попросил забыть прежнюю вражду и обещал сам стоять на страже справедливости.'},
+    {type:'fill', id:'u2q8', q:'Высший совещательный сословно-представительный орган, впервые собранный в 1549 г., — <b>___</b>.',
+      acc:['земский собор','земской собор'],
+      why:'В него входили Боярская дума, высшее духовенство и выборные от служилых людей.'},
+    {type:'fill', id:'u2q9', q:'Церковный собор 1551 г., решения которого записали в 100 главах, вошёл в историю как <b>___</b> собор.',
+      acc:['стоглавый','стоглав'],
+      why:'Сто глав — потому «Стоглав». Он признал многих святых общерусскими и укрепил духовное единство страны.'},
+    {type:'match', id:'u2q10', q:'Каким вопросом ведал каждый приказ?', pairs:[
+      ['Посольский приказ','внешняя политика'],
+      ['Разрядный приказ','войско и военная служба'],
+      ['Поместный приказ','наделение служилых людей землёй'],
+      ['Челобитный приказ','жалобы населения'],
+      ['Разбойный приказ','борьба с «лихими людьми»']]},
+    {type:'order', id:'u2q11', q:'Расставь события царствования Ивана IV по порядку:', timeline:true,
+      items:['венчание Ивана IV на царство','пожар и восстание в Москве','первый Земский собор','Судебник Ивана IV','Стоглавый собор','отмена кормлений'],
+      years:['январь 1547','июнь 1547','1549','1550','1551','1556'],
+      why:'Мятеж подтолкнул царя к переменам: собор — Судебник — Стоглав — отмена кормлений.'},
+    {type:'tiles', id:'u2q12', q:'о времени работы Избранной рады:',
+      words:['Избранная','рада','проводила','реформы','до','1560','года'],
+      why:'Реформы шли в 1549–1560 гг., пока царь не охладел к прежним соратникам.'},
+    {type:'syll', id:'u2q13', term:'митрополит', syl:['ми','тро','по','лит'],
+      def:'Глава Русской православной церкви; именно он венчал Ивана IV на царство.'}
+  ],
+  u3: [
+    {type:'mcq', id:'u3q1', q:'Что такое сословие?',
+      opts:['Группа людей, чьи права и обязанности переходят детям по наследству','Люди одной профессии: кузнецы, гончары, торговцы','Жители одного города с общими правилами'], ans:0,
+      bad:{1:'Профессию человек может выбрать и сменить — сословие не сменить: оно от рождения.',2:'Жители одного города — просто соседи; их права не передаются детям автоматически.'},
+      lead:[
+       {q:'Сын крестьянина в XVI веке мог по своему желанию стать боярином?',opts:['Нет — судьба определялась при рождении','Да — сдав особый экзамен','Да — если купить место'],ans:0,why:'Верно: статус человек получал от родителей.'},
+       {q:'Значит, сословие — это группа людей, у которых…',opts:['права и обязанности переходят по наследству','одинаковая фамилия','одинаковый рост'],ans:0,why:'Именно: наследование — главный признак сословия.'}
+      ],
+      why:'В отличие от Западной Европы с её тремя сословиями, в России сословных групп было много.'},
+    {type:'mcq', id:'u3q2', q:'Какую часть населения России в XVI в. составляли тяглые люди?',
+      opts:['Более 90%','Около 50%','2–5%'], ans:0,
+      bad:{1:'Половина — слишком мало: представь, сколько рук нужно, чтобы накормить страну без заводов.',2:'2–5% — это доля служилых людей, а не тяглых.'},
+      lead:[
+       {q:'Основная работа в стране XVI века — это…',opts:['торговля в городах','земледелие','служба в приказах'],ans:1,why:'Да: страна земледельческая, крестьяне — огромное большинство.'},
+       {q:'Крестьяне платят налоги и несут повинности. Как называется эта группа?',opts:['служилые','тяглые','гулящие'],ans:1,why:'Верно: «тянуть тягло» — платить и трудиться на государство.'}
+      ],
+      why:'Служилых людей было не более 2–5%, а более 90% населения — крестьяне и посадские тяглецы.'},
+    {type:'mcq', id:'u3q3', q:'Почему в России объединение земель и централизация не произошли одновременно?',
+      opts:['Угроза Орды: объединяться пришлось раньше, чем созрела экономика','Реформы Елены Глинской затормозили централизацию','Земские соборы запрещали централизацию'], ans:0,
+      bad:{1:'Реформы Елены Глинской и Избранной рады, наоборот, усиливали центр: единые деньги, меры, приказы. Тормозить централизацию они не могли.',2:'Земские соборы — совещательный орган при царе: они обсуждали важные дела и никто из них «запрещал» централизацию.'},
+      lead:[
+       {q:'Вспомни соседей Руси с юга и востока в XV–XVI вв. Кто были наследники Золотой Орды и постоянно угрожали набегами?',opts:['Османская империя','Казанское и Крымское ханства','Дания'],ans:1,bad:{0:'Османы были далеко на юге — опасались и их, но соседом-наследником Орды были ханства Поволжья и Крыма.',2:'Дания — далёкий северный союзник, не угроза.'},why:'Верно! Казань, Крым, Астрахань — осколки Орды: набеги не прекращались.'},
+       {q:'Если набеги повторяются, что делают русские земли?',opts:['разъезжаются дальше друг от друга','объединяются вокруг Москвы для защиты','ждут войска из Европы'],ans:1,bad:{0:'Разъезжаться — значит стать ещё легче для набегов.',2:'Помощи из Европы не ждали: войска были свои.'},why:'Именно так: общая опасность собрала земли вокруг Москвы.'},
+       {q:'Значит, почему объединение случилось раньше централизации?',opts:['Экономика была готова, просто медлили','Ради защиты от Орды объединились «по тревоге», а экономика догнала позже','Елена Глинская запретила централизацию'],ans:1,why:'Точно: защита была срочной, а хозяйство созрело лишь к XVII в.'}
+      ],
+      why:'Внешняя опасность ускорила объединение; хозяйственные предпосылки централизации созрели лишь ко второй половине XVII в.'},
+    {type:'tf', id:'u3q4', q:'Поместье, в отличие от вотчины, можно было продать и передать по наследству.', ans:false,
+      why:'Наоборот: продавать и наследовать можно вотчину. Поместье давалось за службу и могло быть отобрано.'},
+    {type:'tf', id:'u3q5', q:'За убийство обельного (полного) холопа хозяин не нёс наказания.', ans:true,
+      why:'Положение холопов приближалось к рабскому; дети обельных холопов также становились холопами.'},
+    {type:'tf', id:'u3q6', q:'В России XVI в. было три сословия — как в Западной Европе: кто-то молится, кто-то воюет, кто-то работает.', ans:false,
+      why:'В Европе сословий было три, а в России — много мелких групп. Но все светские сословия и правда считались «государевыми холопами» — слугами государя.'},
+    {type:'fill', id:'u3q7', q:'Особый налог мехами, который платили народы Поволжья, Урала и Сибири, — <b>___</b>.',
+      acc:['ясак'],
+      why:'Ясачные люди жили по прежнему укладу, но платили государю, как правило, «мягкой рухлядью» — пушниной.'},
+    {type:'fill', id:'u3q8', q:'Платёж крестьянина владельцу земли при уходе в Юрьев день — <b>___</b>.',
+      acc:['пожилое','пожилое ','пожилого'],
+      why:'Судебники 1497 и 1550 гг. узаконили право перехода в Юрьев день за плату — пожилое.'},
+    {type:'match', id:'u3q9', q:'Сопоставь термин и значение:', pairs:[
+      ['Оброк','плата владельцу частью продуктов и изделий хозяйства'],
+      ['Барщина','обязательная бесплатная работа на владельца'],
+      ['Служилая кабала','грамота о службе за долг, по которой человек становился холопом'],
+      ['Тягло','налоги и повинности в пользу государства']]},
+    {type:'match', id:'u3q10', q:'Какая категория крестьян описана?', pairs:[
+      ['Черносошные крестьяне','лично свободные, жили общинами на государственной «чёрной» земле'],
+      ['Дворцовые крестьяне','приписаны к дворцу государя; работа шла на нужды царской семьи'],
+      ['Частновладельческие крестьяне','жили в поместьях и вотчинах; платили оброк и несли барщину'],
+      ['Монастырские крестьяне','несли повинности в пользу монастыря']]},
+    {type:'sort', id:'u3q11', q:'Разложи служилых людей по группам:', cats:['служилые «по отечеству»','служилые «по прибору»'],
+      items:[['Дети боярские',0],['Стрельцы',1],['Пушкари',1],['Титулованный князь',0],['Городовые казаки',1],['Окольничий',0]],
+      why:'«По отечеству» — наследственная служба знати и детей боярских; «по прибору» — набор из простолюдинов.'},
+    {type:'order', id:'u3q12', q:'Собери сословную лестницу России XVI в. — от вершины к низу:',
+      items:['Государь всея Руси (с 1547 г. — царь)','«Братья младшие» — удельные князья','Титулованные князья и бояре','Дети боярские','Служилые «по прибору» (стрельцы, пушкари)','Тяглые люди (крестьяне, посадские)','Холопы'],
+      why:'Все светские сословия — «государевы холопы», но лестница была длинной и дробной.'},
+    {type:'tiles', id:'u3q13', q:'особенность социальной системы России:',
+      words:['Все','светские','сословия','считались','государевыми','холопами'],
+      why:'На языке XVI в. и бояре, и крестьяне были слугами государя.'},
+    {type:'syll', id:'u3q14', term:'сословия', syl:['со','сло','ви','я'],
+      def:'Большие группы людей, чьё положение, права и обязанности наследуются.'}
+  ],
+  time: [
+    {type:'order', id:'tq1', q:'Лента времени России: §1–6. От раннего к позднему:', timeline:true,
+      items:['смерть Василия III','денежная реформа Елены Глинской','венчание Ивана IV на царство','первый Земский собор','Судебник Ивана IV','Стоглавый собор','отмена кормлений','«Апостол» Ивана Фёдорова'],
+      years:['1533','1535','1547','1549','1550','1551','1556','1564']},
+    {type:'order', id:'tq2', q:'Лента времени Европы. От раннего к позднему:', timeline:true,
+      items:['Лютер выставляет 95 тезисов: начало Реформации в Германии','Реформация в Англии при Генрихе VIII','Аугсбургский религиозный мир','раздел державы Карла V'],
+      years:['1517','1534','1555','1556']},
+    {type:'match', id:'tq3', q:'Соедини событие с датой:', pairs:[
+      ['Венчание Ивана IV на царство','1547 г.'],
+      ['Первый Земский собор','1549 г.'],
+      ['Стоглавый собор','1551 г.'],
+      ['Отмена кормлений','1556 г.'],
+      ['Первая датированная печатная книга в Москве','1564 г.']]},
+    {type:'mcq', id:'tq4', q:'Какое событие произошло раньше всех?',
+      opts:['Выступление Лютера с 95 тезисами','Денежная реформа Елены Глинской','Венчание Ивана IV на царство'], ans:0,
+      bad:{1:'Денежная реформа — 1535 г. Сравни: 1517, 1535, 1547.',2:'Венчание — 1547 г. Оно позже 1517-го.'},
+      lead:[
+       {q:'Лютер выставил 95 тезисов в…',opts:['1517 г.','1547 г.','1564 г.'],ans:0,why:'Да, 1517 год — начало Реформации, это раньше 1535 и 1547.'}
+      ],
+      why:'1517 г. — Реформация в Германии; 1535 и 1547 гг. — события в России.'}
+  ],
+  src: [
+    {type:'mcq', id:'sq1', q:'Письмо Курбскому: сколько лет было Ивану, когда он остался без родителей, «по словам самого царя»?',
+      opts:['«Мне тогда кончался восьмой год»','«Три года»','«Пятнадцать лет»'], ans:0,
+      why:'«Остались без родителей» — это 1538 г., смерть матери Елены Глинской: «мне тогда кончался восьмой год». Далее царь перечисляет обиды боярского правления.'},
+    {type:'mcq', id:'sq2', q:'В чём царь обвиняет бояр в письме Курбскому?',
+      opts:['Грабили казну и сёла, избивали людей отца, «грызлись» друг с другом','Не строили храмов и дорог','Проигрывали войны Орде'], ans:0,
+      why:'Иван вспоминает: казну матери «неистово пихая ногами и тыкая кольями» растащили, а Шуйские «самовольно… воцарились».'},
+    {type:'mcq', id:'sq3', q:'Какое время описывает Исаак Масса в отрывке?',
+      opts:['Боярское правление после смерти Елены Глинской','Реформы Избранной рады','Походы против Казани'], ans:0,
+      why:'«Знатнейшие вельможи» присягнули править до совершеннолетия «принца» — это 1538–1547 гг.'},
+    {type:'tf', id:'sq4', q:'По Массе, вельможи заботились прежде всего об общей пользе.', ans:false,
+      why:'Напротив: «мало заботились об общей пользе», притесняли невинных и грабили — «страшились гибели государства».'}
+  ],
+  fin: [
+    {type:'mcq', id:'fq1', q:'Главный вопрос §1–2: почему несмотря на кризис власти страна продолжала развиваться в 1533–1547 гг.?',
+      opts:['Реформы Елены Глинской укрепили деньги, меры и суд на местах','Стране помогала Золотая Орда','Бояре полностью прекратили споры'], ans:0,
+      bad:{1:'Орда к 1533-м уже не «помогала» — наоборот, угрожала набегами.',2:'Споры бояр как раз продолжались всё десятилетие.'},
+      lead:[
+       {q:'Реформы Елены Глинской — какие?',opts:['Единые деньги, меры, выборный суд на местах','Отмена всех налогов','Роспуск войска'],ans:0,why:'Да — это укрепляло государство даже при малолетнем князе.'}
+      ],
+      why:'Денежная реформа, единые меры, начало губной реформы — продолжение курса на централизацию.'},
+    {type:'mcq', id:'fq2', q:'Главный вопрос §3–4: зачем Иван IV начал реформы?',
+      opts:['Мятеж и пожар 1547 г. показали: старый порядок не работает','Так потребовала Золотая Орда','Царь хотел отменить все налоги'], ans:0,
+      bad:{1:'Орда тогда не «требовала» реформ — она угрожала набегами.',2:'Отмены всех налогов не было: налоги как раз навели в порядок.'},
+      lead:[
+       {q:'Что случилось с Иваном во время пожара 1547 года?',opts:['Он бежал из страны','Он выслушал укор Сильвестра и решил измениться','Он заболел оспой'],ans:1,why:'Да: «вошёл страх в душу мою» — и царь взялся за дела.'}
+      ],
+      why:'Сильвестр призвал царя «исправиться»; вокруг него собралась Избранная рада — и реформы пошли.'},
+    {type:'mcq', id:'fq3', q:'Главный вопрос §5–6: какие изменения произошли в социальной структуре России в XVI в.?',
+      opts:['Старые группы исчезали — складывались сословия единого государства','Общество разделилось ровно на три сословия, как в Европе','Сословия были отменены вовсе'], ans:0,
+      bad:{1:'Ровно три сословия — это Западная Европа, не Россия.',2:'Сословия не отменялись: они складывались.'},
+      lead:[
+       {q:'Что происходило с удельными и служилыми князьями в XVI в.?',opts:['Усиливались и отделялись','Их группы исчезали, а земля — под контролем государства','Уезжали в Литву'],ans:1,why:'Да: старое уходило — новое складывалось.'}
+      ],
+      why:'Служилые князья исчезли, выросло значение детей боярских и служилых «по прибору», оформились тяглые группы.'},
+    {type:'tf', id:'fq4', q:'Основную массу населения России XVI в. составляли служилые люди.', ans:false,
+      why:'Наоборот: служилых было 2–5%, а более 90% населения — тяглые, прежде всего крестьяне.'},
+    {type:'tf', id:'fq5', q:'«Домострой» связывают с именем протопопа Сильвестра.', ans:true,
+      why:'Сборник хозяйственных и нравоучительных советов — мужу, жене, детям и слугам.'},
+    {type:'tf', id:'fq6', q:'Итальянцев на русской службе в XVI в. называли «немцами».', ans:false,
+      why:'Итальянцев звали «фрязями», а «немцами» — выходцев из других стран Западной Европы.'},
+    {type:'fill', id:'fq7', q:'Первую датированную печатную книгу Москвы — «___» — издал Иван Фёдоров в 1564 г.',
+      acc:['апостол'],
+      why:'Типографию создали по приказу царя и с одобрения митрополита Макария; книгу украсили 48 заставок.'},
+    {type:'fill', id:'fq8', q:'Единица поземельного налогообложения в реформе Избранной рады — большая <b>___</b>.',
+      acc:['соха'],
+      why:'Черносошная соха — 400 четвертей (~200 га), монастырская — 600, у служилых людей — 800.'},
+    {type:'fill', id:'fq9', q:'Приказ, принимавший жалобы населения, назывался <b>___</b>.',
+      acc:['челобитный','челобитным'],
+      why:'«Челобитная» — прошение с «поклоном» (челобитьем) государю.'},
+    {type:'order', id:'fq10', q:'Итоговая лента времени. От раннего к позднему:', timeline:true,
+      items:['начало регентства Елены Глинской','Иван IV венчан царством','«Собор примирения» — первый Земский собор','отмена кормлений','«Апостол» Ивана Фёдорова'],
+      years:['1533','1547','1549','1556','1564']},
+    {type:'match', id:'fq11', q:'Кто что сделал?', pairs:[
+      ['Елена Глинская','денежная реформа 1535 г. и единые меры'],
+      ['Алексей Адашев','руководил реформами Избранной рады и Судебником 1550 г.'],
+      ['Иван Пересветов','«Государство без грозы, что конь без узды»'],
+      ['Сильвестр','«Домострой»; обличил царя после пожара 1547 г.'],
+      ['Иван Фёдоров','первая датированная печатная книга «Апостол»']]},
+    {type:'sort', id:'fq12', q:'Кто есть кто? Разложи по группам:', cats:['служилые «по отечеству»','служилые «по прибору»','тяглые люди'],
+      items:[['Окольничий',0],['Пушкарь',1],['Чёрный посадский человек',2],['Дитя боярское',0],['Пищальщик',1],['Монастырский крестьянин',2]],
+      why:'Служба от рожденья — «по отечеству»; набранные из простолюдинов — «по прибору»; платят тягло — тяглые.'},
+    {type:'syll', id:'fq13', term:'Земский собор', syl:['зем','ский','со','бор'],
+      def:'Высший сословно-представительный орган; первый собрался в 1549 г.'},
+    {type:'syll', id:'fq14', term:'целовальник', syl:['це','ло','валь','ник'],
+      def:'Выборный помощник губного старосты; целовал крест судить честно.'},
+    {type:'tiles', id:'fq15', q:'что изменилось в статусе государства:',
+      words:['При','Иване','IV','Россия','стала','царством'],
+      why:'С 1547 г. государь всея Руси носит царский титул — «Москва — Третий Рим».'}
+  ]
+  };
+
+  /* ---------- термины-слоги: отдельный раздел ---------- */
+  var SYLL = [
+    {id:'sy01', term:'регентство', syl:['ре','ген','тство'], def:'Временное правление страной, пока государь несовершеннолетний.'},
+    {id:'sy02', term:'копейка', syl:['ко','пей','ка'], def:'Монета 1535 года со всадником с копьём; 100 копеек — рубль.'},
+    {id:'sy03', term:'староста', syl:['ста','рос','та'], def:'Выборный руководитель; губной староста судил дела о разбоях.'},
+    {id:'sy04', term:'целовальник', syl:['це','ло','валь','ник'], def:'Выборный помощник судьи, целовавший крест судить честно.'},
+    {id:'sy05', term:'Судебник', syl:['су','деб','ник'], def:'Свод законов; новый принят в 1550 г. при Иване IV.'},
+    {id:'sy06', term:'приказы', syl:['при','ка','зы'], def:'Органы центрального управления: Посольский, Разрядный, Поместный…'},
+    {id:'sy07', term:'митрополит', syl:['ми','тро','по','лит'], def:'Глава Русской православной церкви в XVI в.'},
+    {id:'sy08', term:'сословия', syl:['со','сло','ви','я'], def:'Группы населения, чьи права и обязанности наследуются.'},
+    {id:'sy09', term:'стрельцы', syl:['стрель','цы'], def:'Воины из служилых людей «по прибору».'},
+    {id:'sy10', term:'холопы', syl:['хо','ло','пы'], def:'Люди, положение которых приближалось к рабскому.'},
+    {id:'sy11', term:'пожилое', syl:['по','жи','ло','е'], def:'Платёж крестьянина владельцу при уходе в Юрьев день.'},
+    {id:'sy12', term:'вотчина', syl:['вот','чи','на'], def:'Наследственное землевладение: можно продавать и делить.'},
+    {id:'sy13', term:'оброк', syl:['об','рок'], def:'Плата крестьянина владельцу частью продуктов своего хозяйства.'},
+    {id:'sy14', term:'Адашев', syl:['а','да','шев'], def:'Глава Избранной рады, проводник реформ Ивана IV.'},
+    {id:'sy15', term:'ясак', syl:['я','сак'], def:'Налог мехами с народов Поволжья, Урала и Сибири.'}
+  ];
+
+  /* ---------- пошаговые разделы: факт → задание → факт… ---------- */
+  var NEW_TF = {
+    u1q13: {type:'tf', id:'u1q13', q:'Русско-литовская война 1534–1537 гг. вернула Литве Смоленск и Чернигово-Северские города.', ans:false,
+      why:'Литва рассчитывала вернуть земли при малолетнем Иване, но «боевые действия не привели к каким-либо значимым изменениям границ».'},
+    u2q14: {type:'tf', id:'u2q14', q:'По налоговой реформе: самая лёгкая ноша была у черносошных крестьян.', ans:false,
+      why:'Наоборот: их «соха» была самой маленькой — 400 четвертей (~200 га), значит, налог с земли самый большой. Льгота — у монастырей (600) и служилых людей (800).'},
+    u2q15: {type:'tf', id:'u2q15', q:'Первую датированную печатную книгу в Москве издали ещё до венчания Ивана IV на царство.', ans:false,
+      why:'«Апостол» отпечатан в 1564 г. — через 17 лет после венчания (1547). Типографию открыли по приказу царя и с одобрения митрополита Макария.'},
+    u3q15: {type:'tf', id:'u3q15', q:'Митрополита и епископов ставили из чёрного духовенства — монахов.', ans:true,
+      why:'Руководство церкви — митрополит, архиепископы, епископы, настоятели монастырей — формировалось из чёрного (монашествующего) духовенства; белые попы и диаконы жили среди мирян.'},
+    /* вопросы по материалам портала «История.РФ» */
+    matq1: {type:'mcq', id:'matq1', q:'Из статьи портала: чем денежная реформа 1535 г. выделила Московское государство среди европейских стран?',
+      opts:['Первой ввела десятичный счёт: рубль = 100 копейкам','Ввела бумажные деньги','Запретила торговлю с Европой'], ans:0,
+      bad:{1:'Бумажные деньги в Европе появятся гораздо позже.',2:'Торговля после реформы наоборот упростилась.'},
+      why:'Это было первое в Европе десятичное денежное счисление — 1 рубль = 100 «новгородок» (копеек) = 200 «московок». Чеканить монеты могло только государство.'},
+    matq2: {type:'tf', id:'matq2', q:'Материал о Елене Глинской. Верно ли: она стояла во главе государства пять лет — с 1533 по 1538 год?', ans:true,
+      why:'Регентство Елены Глинской — 1533–1538 гг. Умерла она внезапно; современники (и экспертиза XXI века) подозревали отравление.'},
+    matq3: {type:'mcq', id:'matq3', q:'По статье о венчании: почему Ивану был так важен именно царский титул?',
+      opts:['Титул царя ставил его вровень с королями и императорами','Великий князь не мог издавать законы','Без венчания Иван не мог жениться'], ans:0,
+      bad:{1:'Законы издавал и великий князь — титул тут ни при чём.',2:'Свадьба с Анастасией была в том же 1547 г., но титул — не условие брака.'},
+      why:'Титул укреплял положение государя внутри страны и за рубежом. Обряд разработал митрополит Макарий, царя помазали миром, трон осыпали золотыми монетами.'},
+    matq4: {type:'tf', id:'matq4', q:'По видео о регалиях: шапку Мономаху на голову Ивану возложил Алексей Адашев.', ans:false,
+      why:'Венец возложил митрополит Макарий — обряд венчания разработал именно он. Адашев позже руководил реформами Избранной рады.'},
+    matq5: {type:'tf', id:'matq5', q:'По статье о Земском соборе: «Собором примирения» собор назвали потому, что на нём объявили войну Крымскому ханству.', ans:false,
+      why:'Имя — от примирения: царь обещал забыть прежнюю вражду и сам стоять на страже справедливости. Позже соборы решали войну и мир, а в 1613 г. избрали Михаила Романова.'},
+    matq6: {type:'tf', id:'matq6', q:'По статье о земском самоуправлении: за неявку на выборы старост платили штраф — ясаком.', ans:false,
+      why:'Штрафом было не откупиться: участие в выборах было обязательным, и за неявку дворяне могли попасть в тюрьму. А за злоупотребления старостам грозила даже смертная казнь.'},
+    matq7: {type:'mcq', id:'matq7', q:'По статье о дворянстве: с какого возраста дворянских сыновей «верстали» на государеву службу?',
+      opts:['С 15 лет','С 7 лет','С 21 года'], ans:0,
+      bad:{1:'В 7 лет детей учили грамоте и ремеслу, но не службе.',2:'В 21 — уже поздно: служить начинали раньше.'},
+      why:'С 15 лет юноша становился «новиком» и начинал службу — «конно, людно и оружно», получив за неё поместье.'},
+    matq8: {type:'mcq', id:'matq8', q:'По статье о крестьянстве: какую долю населения Русского государства XVI в. составляли крестьяне?',
+      opts:['Около 97%','Около 50%','Около 10%'], ans:0,
+      bad:{1:'Половина — слишком мало для аграрной страны.',2:'10% — сильно занижено: городов-то было мало.'},
+      lead:[
+       {q:'Русь XVI века — страна городская или земледельческая?',opts:['Земледельческая: города небольшие, большинство живёт в сёлах','Городская: почти все живут в городах'],ans:0,why:'Да — отсюда и огромная доля крестьян.'}
+      ],
+      why:'Из примерно 5–6 млн жителей крестьяне — 97%. Своей земли у них не было (пользование оформляли договором-«рядом»), а уход от владельца — только в Юрьев день.'},
+    matq9: {type:'mcq', id:'matq9', q:'Кто собрал воедино «Домострой» в XVI веке?',
+      opts:['Протопоп Сильвестр','Митрополит Макарий','Иван Фёдоров'], ans:0,
+      bad:{1:'Макарий — митрополит: при нём создали Четьи-Минеи, не «Домострой».',2:'Иван Фёдоров — первопечатник, издал «Апостол».'},
+      lead:[
+       {q:'Какой протопоп «сказал царю в глаза» после пожара 1547 г. и связан с «Домостроем»?',opts:['Сильвестр','Адашев','Пересветов'],ans:0,why:'Да — Сильвестр.'}
+      ],
+      why:'«Домострой» — сборник советов о вере, царе, семье и хозяйстве; его составление приписывают Сильвестру.'},
+    s51: {type:'multi', id:'s51', q:'А теперь кликни на те признаки, которые уже можно обнаружить в России XVI в.:',
+      opts:['вся полнота законодательной, исполнительной и судебной власти у монарха','при монархе действуют сословно-представительные органы (Земский собор)','аппарат центральной власти контролирует местную','единообразное устройство местной власти (губные и земские избы)','единое административное деление страны (уезды)','единое законодательство для всей страны (Судебники)','единая система налогообложения («большая соха»)','войско подчинено центру и защищает границы','царя избирают всенародные выборы каждые десять лет','церковь отделена от государства','парламент принимает законы независимо от монарха'], ans:[0,1,2,3,4,5,6,7],
+      why:'Почти все признаки уже появились: Судебники, приказы, губные избы, соха, войско. Не было лишь того, чего в XVI в. быть не могло: выборов царя, отделения церкви и парламента. Полные экономические предпосылки централизации сложились позже — во второй половине XVII в.'},
+    s53: {type:'mcq', id:'s53', q:'как принятие царского титула укрепляло власть Ивана IV?',
+      opts:['Царь — выше великого князя: титул ставил его вровень с королями и императорами','Царь освобождался от налогов','Титул давал право казнить без суда'], ans:0,
+      bad:{1:'Налоги от титула не зависели: платили и до, и после.',2:'Титул не «разрешал» казни — он поднимал статус государя.'},
+      lead:[
+       {q:'Великий князь по западным меркам — по статусу примерно как…',opts:['император','герцог или принц','папа римский'],ans:1,why:'Да. А «царь» — от «цесарь», то есть на уровне императора.'},
+       {q:'Зачем Ивану равняться на императоров?',opts:['Поднять авторитет власти внутри страны и за рубежом','Платить меньше дани','Возглавить католическую церковь'],ans:0,why:'Верно: статус укреплял его власть.'}
+      ],
+      why:'Венчание подняло авторитет власти: Иван — единственный православный царь; развилась доктрина «Москва — Третий Рим».'},
+    s54: {type:'tf', id:'s54', q:'верно ли, что удельные князья исчезали, потому что государство урезало их права?', ans:true,
+      why:'Да: права братьев и служилых князей «неуклонно сокращались». К 1547 г. остался один удельный князь — Владимир Старицкий; в XVII в. удельных князей не было совсем.'},
+    s55: {type:'mcq', id:'s55', q:'чем служилые люди «по отечеству» отличались от «по прибору»?',
+      opts:['«По отечеству» — служба по наследству (бояре, дети боярские); «по прибору» — набор из простолюдинов (стрельцы, пушкари)','«По отечеству» служили пехотой, «по прибору» — конницей','«По отечеству» платили тягло, «по прибору» — нет'], ans:0,
+      bad:{1:'Наоборот: конницу детей боярских набирали «по отечеству».',2:'Тягло платили тяглые люди, а не служилые.'},
+      lead:[
+       {q:'«Отечество» — от слова «отец». Что это значит для службы?',opts:['Служба передаётся по наследству','Служат только вместо отца','Служат на отцовской земле'],ans:0,why:'Да: отец служил — и сын обязан.'},
+       {q:'«Прибор» — как «прибрать на работу». Кого набирали «по прибору»?',opts:['Из простолюдинов — крестьян и посадских','Из князей','Из митрополитов'],ans:0,why:'Верно: стрельцы и пушкари — из простых людей.'}
+      ],
+      why:'«По отечеству» — бояре, дворяне, дети боярские, владевшие землёй с крестьянами; «по прибору» — стрельцы, пушкари, городовые казаки, набиравшиеся из крестьян и посадских.'},
+    s56: {type:'sort', id:'s56', q:'Схема управления церковью : к какой части духовенства относится каждый чин?',
+      cats:['чёрное духовенство (монашество)','белое духовенство'],
+      items:[['Митрополит',0],['Епископ',0],['Архимандрит — настоятель монастыря',0],['Поп',1],['Диакон',1]],
+      why:'Из чёрного (монашествующего) духовенства формировалось руководство церкви; белые попы и диаконы жили среди мирян и имели семьи.'},
+    s57: {type:'mcq', id:'s57', q:'кто составлял основное население города в XVI в.?',
+      opts:['Чёрные посадские люди — ремесленники и мелкие торговцы','Бояре со слугами','Стрельцы'], ans:0,
+      bad:{1:'Бояре жили в кремлях и вотчинах, их было совсем немного.',2:'Стрельцы — служилые «по прибору», а не основная масса горожан.'},
+      lead:[
+       {q:'Кто такой «посадский человек»?',opts:['Горожанин посада: ремесленник или мелкий торговец','Князь','Монах'],ans:0,why:'Да. А «чёрные» — потому что несут тягло.'}
+      ],
+      why:'Основную массу горожан — чёрные посадские люди: «чёрные» — потому что несут тягло, то есть налоги и повинности.'},
+    s58: {type:'fill', id:'s58', q:'Работаем с понятием : сословие — большая группа людей, положение, права и обязанности которых <b>___</b>. Приведи факт: дети боярские наследовали службу отца.',
+      acc:['наследуются','передаются по наследству','наследуются детьми','передаются детям'],
+      why:'Пример: сын детей боярских с 15 лет сам становился служилым — служба переходила по наследству.'},
+    s59: {type:'sort', id:'s59', q:'Таблица «Сословные группы в России XVI в.». Разложи признаки по группам:',
+      cats:['служилые «по отечеству»','служилые «по прибору»','тяглые люди','холопы'],
+      items:[['Бессрочная военная служба с 15 лет',0],['Поместье или вотчина за службу',0],['Набираются из простолюдинов — по найму',1],['Стрельцы, пушкари, городовые казаки',1],['Платят налоги и несут повинности государству',2],['Крестьяне и посадские',2],['Положение близко к рабскому',3],['Обельных (полных) можно продавать',3]],
+      why:'Это интерактивная версия таблицы: у каждой группы — свои права и обязанности. Служилые служат, тяглые платят, холопы почти рабы.'},
+    s510: {type:'multi', id:'s510', q:'Какие реформы Елены Глинской и Избранной рады работали на централизацию?',
+      opts:['Денежная реформа и единые меры (Елена Глинская)','Губные старосты — выборный суд на местах','Приказы — единые органы управления','«Большая соха» — единая система налогов','Отмена кормлений','Подушная подать с каждой души'], ans:[0,1,2,3,4],
+      why:'Все перечисленные реформы XVI в. усиливали центр. Подушная подать появилась лишь при Петре I, в XVIII в.'},
+    s511: {type:'mcq', id:'s511', q:'На миниатюре «Работа кузнецов и чеканщика» — мастера у горна с молотами и клещами. Кто они по сословию?',
+      opts:['Посадские люди — городские ремесленники','Служилые люди «по отечеству»','Монастырские крестьяне'], ans:0,
+      bad:{1:'«По отечеству» — это воины: они не куют металл в кузнице.',2:'Монастырские крестьяне трудились в монастырских сёлах, а не в городских кузницах.'},
+      why:'Кузнец и чеканщик — ремесленники посада: работают в городе и несут тягло. Служилые «по отечеству» ремеслом не занимались — они служат.'},
+    s512: {type:'mcq', id:'s512', q:'Чем сословная лестница России отличалась от западноевропейской?',
+      opts:['В России групп было намного больше: служилые делились на «отечество» и «прибор», тяглые — на разряды','В России сословий не было вовсе','В Европе сословия не наследовались'], ans:0,
+      bad:{1:'Сословия были — просто их группы в России многочисленнее.',2:'В Европе сословия наследовались так же, как в России.'},
+      why:'В Европе — три сословия; в России — десятки групп, и все светские считались «государевыми холопами».'},
+    s513: {type:'mcq', id:'s513', q:'Задание 6*: кому из неправославных Иван IV разрешил построить в Москве кирху?',
+      opts:['Протестантам — служилым иноземцам','Католикам-иезуитам','Мусульманам Поволжья'], ans:0,
+      bad:{1:'Католиков-иезуитов на Русь не пускали.',2:'Мусульманам Поволжья строили мечети, а не кирху.'},
+      why:'Католикам и протестантам разрешали сохранять веру, а протестантам Иван Грозный разрешил построить кирху.'},
+    s514: {type:'multi', id:'s514', q:'Главный вопрос параграфа: «Какие изменения социальной структуры России произошли в XVI в.?» Какие аргументы верны?',
+      opts:['Удельные и служилые князья исчезли — их место заняло титулованное боярство','Выросло значение детей боярских и появились служилые «по прибору»','Ясачные и гулящие люди заняли свои места в структуре; холопы делились на обельных и кабальных','Крестьяне окончательно потеряли право перехода — закрепощение','Сословия были отменены вовсе','Россия первой в Европе ввела десятичный денежный счёт'], ans:[0,1,2],
+      why:'Верны первые три. Право перехода в Юрьев день ещё действовало (закрепощение — конец XVI–XVII вв.), сословия не отменялись, а денежная реформа — из §1–2 и не про сословия.'}
+  };
+
+  var STEPS = {
+  u1: [
+    {f:'<b>👑 1533 год: страна без правителя</b><ul><li>Умер <b>Василий III</b>. Его сыну <b>Ивану IV — всего 3 года</b>: сам он править не может.</li><li>Править должна была боярская опека. Но вдова — <b>Елена Глинская</b> — оттеснила бояр и встала во главе государства сама (регентство 1533–1538).</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Бояре</span><span class="dict-d">знатные и богатые вельможи, приближённые князя.</span></div><div class="dict-row"><span class="dict-w">Регентство</span><span class="dict-d">когда вместо маленького государя страной правит кто-то «за него».</span></div></div><span class="plain">Представь: отец умер, сыну 3 года — и править вместо него стала мама.</span>'},
+    {t:'u1q1'},
+    {f:'<b>💰 1535 год: единые деньги и меры</b><ul><li>Раньше в разных землях ходили разные монеты; их даже <b>обрезали</b> — торговля и казна страдали.</li><li>Теперь одна монета для всей страны — <b>копейка</b> (всадник с копьём), и <b>1 рубль = 100 копейкам</b>, как сегодня.</li><li>Введены и <b>единые меры</b>: аршин (длина), золотник (вес), локоть. Они прослужили до 1899 года!</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Реформа</span><span class="dict-d">большое изменение правил в стране.</span></div><div class="dict-row"><span class="dict-w">Аршин, золотник</span><span class="dict-d">старинные меры длины и веса — «метр» и «килограмм» того времени.</span></div></div><span class="plain">Елена сделала деньги и мерки одинаковыми везде — чтобы никто никого не обманывал.</span>'},
+    {t:'u1q2'},
+    {t:'u1q3'},
+    {t:'u1q4'},
+    {mat:{icon:'📄', title:'Статья: «Роль денег в собирании русских земель: реформа Елены Глинской»',
+      desc:'Реформа началась в марте 1535 г. Две «московки» (0,34 г) уравняли с одной «новгородкой» (0,68 г) — и Московское государство стало первой европейской страной с десятичным денежным счётом: 1 рубль = 100 копейкам = 200 московкам. Право чеканки осталось лишь у Москвы, Новгорода и Пскова; старые монеты перечеканивали, а новые стали легче примерно на 15% — разница пошла в казну, в том числе на строительство крепостей. Торговать стало проще.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/rossiya-v-1533-1547-gg/article/rol-dieniegh-v-sobiranii-russkikh-ziemiel-rieforma-ielieny-glinskoi?content=article',
+      src:'И. Зацарин, портал «История.РФ» (РВИО)'}},
+    {t:'matq1'},
+    {f:'<b>⚖️ Выборный суд: губные старосты</b><ul><li>Раньше судили <b>наместники</b> — присланные сверху, они часто брали взятки.</li><li>Теперь разбойников судят <b>выборные губные старосты</b> — их выбрали местные жители из детей боярских.</li><li>Помогают <b>целовальники</b>: они целовали крест — клялись судить честно.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Губной староста</span><span class="dict-d">выборный представитель земской власти; ведал судом по разбойным делам. Его округ назывался «губа».</span></div><div class="dict-row"><span class="dict-w">Целовальник</span><span class="dict-d">помощник судьи; имя — от клятвы: «целую крест, буду судить честно».</span></div></div><span class="plain">Судья — больше не присланный сверху, а свой, выбранный людьми.</span>'},
+    {t:'u1q5'},
+    {t:'u1q9'},
+    {mat:{icon:'📄', title:'Статья: «Земское самоуправление в XVI веке — русская демократия»',
+      desc:'В 1539 г. первые губные грамоты получили Белозерский и Каргопольский уезды: губные старосты из местных грамотных дворян и целовальники из крестьян и посадских сами ловили и судили разбойников. С 1555 г. выборы старост шли почти во всех уездах — их называют первыми всеобщими выборами в России: участие было обязательным, за неявку дворяне могли попасть в тюрьму. Выборные заменили кормленщиков, а за злоупотребления им грозила смертная казнь.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/russkoe-obshchestvo-v-xvi-v/article/zemskoe-samoupravlenie-v-xvi-veke-russkaya-demokratiya?content=article',
+      src:'портал «История.РФ» (РВИО)'}},
+    {t:'matq6'},
+    {f:'<b>🏰 Крепости и война</b><ul><li>Крепости строили и чинили по всей стране.</li><li>В Москве вокруг посада возвели каменную стену <b>Китай-города</b> (1534, зодчий Петрок Малый: 2567 м, 12 башен).</li><li>Война с Литвой (1534–1537) — <b>без изменения границ</b>.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Посад</span><span class="dict-d">торгово-промышленное поселение вне городских стен, ставшее частью города.</span></div><div class="dict-row"><span class="dict-w">Зодчий</span><span class="dict-d">архитектор, строитель.</span></div></div>'},
+    {t:'u1q13'},
+    {f:'<b>⛓️ Опалы и казни</b><ul><li>Елена была скорой на расправу, и бояре не любили «литовку».</li><li>В темнице погибли дядья царя: <b>Юрий Дмитровский</b> и <b>Михаил Глинский</b>.</li><li>В 1537 г. поднял <b>мятеж</b> Андрей Старицкий — сдался, но погиб в тюрьме.</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Опала</span><span class="dict-d">гнев государя: отстранение, темница, потеря имущества.</span></div><div class="dict-row"><span class="dict-w">Мятеж</span><span class="dict-d">восстание, бунт против власти.</span></div></div><span class="plain">«Попал в опалу» = потерял доверие государя — и часто свободу.</span>'},
+    {t:'u1q6'},
+    {f:'<b>☠️ 1538 год: власть у бояр</b><ul><li>Елена умерла внезапно. По «Запискам о Московии» — <b>отравлена</b>; экспертиза нашла в останках много мышьяка.</li><li>Началось <b>боярское правление (1538–1547)</b>: за власть грызутся три рода — Бельские, Шуйские и Глинские.</li><li>Казну растаскивают, налоги растут, повсюду разбои. Летописец: «много мятежу и нестроения…»</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Боярское правление</span><span class="dict-d">десять лет, когда вместо государя страной управляли бояре — каждый в свою пользу.</span></div></div><span class="plain">Мальчик-князь смотрит, как взрослые делят его власть, и делает вывод: боярам верить нельзя.</span>'},
+    {t:'u1q7'},
+    {mat:{icon:'🎬', title:'Видео: «Елена Глинская: мать и регент Ивана Грозного»',
+      desc:'История княгини из литовского рода Глинских: жена Василия III, мать малолетнего Ивана IV. Пять лет власти (1533–1538): единая монета, единые меры, выборные губные старосты, новые крепости. Умерла внезапно в 1538 году — современники подозревали отравление. Её курс на централизацию продолжил сын.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/rossiya-v-1533-1547-gg/videolecture/xvi-vek-elena-glinskaya-mat-i-regent-ivana-groznogo-russkaya-istoriya-istoricheskiy-proekt?content=videomaterial',
+      src:'проект «Русская история», портал «История.РФ» (РВИО)'}},
+    {t:'matq2'},
+    {f:'<b>👦 Детство Ивана IV</b><ul><li>Рос среди интриг и казней: стал <b>подозрительным</b> и вспыльчивым.</li><li>В <b>13 лет</b> — первый смертный приговор: князя Андрея Шуйского отдали <b>псарям</b>. После этого «бояре от государя страх имети начали».</li><li>При этом учился со страстью — и стал одним из самых образованных людей своего времени.</li></ul><span class="plain">Мальчик, которого никто не защищал, решает: править надо «грозой», чтобы боялись все.</span>'},
+    {t:'u1q8'},
+    {m:'<b>Запоминалка:</b> 1533 — Василий III умер, Ивану 3 года · 1535 — родилась копейка · 1537 — мятеж Старицкого · 1538 — Елена умерла, бояре грызутся за власть · 1547 — 16-летний Иван венчан царём.'},
+    {t:'u1q11'},
+    {t:'u1q12'},
+    {t:'u1q10'}
+  ],
+  u2: [
+    {f:'<b>👑 16 января 1547 г.: Иван становится ЦАРЁМ</b><ul><li>Венчание в Успенском соборе Кремля: митрополит <b>Макарий</b> возложил <b>шапку Мономаха</b>, вручил скипетр и державу.</li><li>Смысл: русский государь — преемник Рима и Византии. Это доктрина <b>«Москва — Третий Рим»</b>.</li><li>В феврале 1547 г. царь женился на <b>Анастасии Захарьиной-Юрьевой</b>.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Царь</span><span class="dict-d">в России в 1547–1721 гг. — официальный титул главы государства.</span></div><div class="dict-row"><span class="dict-w">Регалии</span><span class="dict-d">знаки власти: венец (шапка Мономаха), скипетр (посох), держава (шар).</span></div><div class="dict-row"><span class="dict-w">«Москва — Третий Рим»</span><span class="dict-d">доктрина, учение (словарь): Рим и Византия пали — теперь Москва хранит истинную веру.</span></div></div>'},
+    {t:'u2q1'},
+    {t:'u2q2'},
+    {t:'u2q13'},
+    {mat:{icon:'📄', title:'Статья: «Государь по Высшей воле. Как Иван Грозный на царство венчался»',
+      desc:'Обряд для 16-летнего Ивана разработал митрополит Макарий: 16 января 1547 г. в Успенском соборе царю возложили на голову шапку Мономаха и бармы, помазали миром, бояре осыпали трон золотыми монетами. Титул царя ставил правителя вровень с королями и императорами: великий князь по западным меркам — «всего лишь» герцог или принц. С тех пор русские цари венчались в Успенском соборе, а в 1561 г. константинопольский патриарх грамотой подтвердил царский титул.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/nachalo-carstvovaniya-ivana-iv/article/gosudar-po-vysshey-vole-kak-ivan-groznyy-na-carstvo-venchalsya?content=article',
+      src:'портал «История.РФ» (РВИО)'}},
+    {t:'matq3'},
+    {mat:{icon:'🎬', title:'Видео: «История русских государственных регалий»',
+      desc:'Регалии — знаки царской власти. Главный венец русских государей — шапка Мономаха, которой митрополит Макарий венчал Ивана IV; с ней царь получил бармы, скипетр и державу. Видео рассказывает, как складывался этот «царский набор» и где регалии можно увидеть сегодня.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/nachalo-carstvovaniya-ivana-iv/videolecture/istoriia-russkikh-ghosudarstviennykh-rieghalii?content=videomaterial',
+      src:'портал «История.РФ» (РВИО)'}},
+    {t:'matq4'},
+    {f:'<b>🔥 Июнь 1547 г.: пожар и бунт</b><ul><li>Москва выгорела на треть. Народ шепчет: «Это Глинские подожгли!»</li><li>Толпа бунтует; Юрия Глинского забивают камнями. Царь укрывается в селе Воробьёве.</li><li>Протопоп <b>Сильвестр</b> говорит царю в глаза: правь по-божески, иначе сгоришь и в аду. Иван: «вошёл страх в душу мою и трепет в кости мои».</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Протопоп</span><span class="dict-d">высший сан белого духовенства; возглавлял группу приходов.</span></div><div class="dict-row"><span class="dict-w">Бунт</span><span class="dict-d">восстание горожан против власти.</span></div></div><span class="plain">После пожара и бунта Иван понял: по-старому править нельзя — надо менять порядок.</span>'},
+    {t:'u2q3'},
+    {f:'<b>🧭 Избранная рада — круг помощников царя</b><ul><li>Название дал Андрей Курбский. Глава — <b>Алексей Адашев</b>; в раде Курбский, Висковатый; близки Макарий и Сильвестр.</li><li>Публицист <b>Иван Пересветов</b> подсказывал идеи: «Государство без грозы, что конь без узды».</li><li>В <b>1549–1560 гг.</b> рада проводит большие реформы.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Избранная рада</span><span class="dict-d">неофициальное название ближайшего окружения царя Ивана IV в конце 1540—1550-х гг.; неформальный лидер — А. Адашев.</span></div><div class="dict-row"><span class="dict-w">Публицист</span><span class="dict-d">автор, который пишет о политике и обществе.</span></div></div>'},
+    {t:'u2q4'},
+    {t:'u2q5'},
+    {t:'u2q12'},
+    {f:'<b>🏛 1549 г.: первый Земский собор — «Собор примирения»</b><ul><li>Царь собрал представителей страны: Боярскую думу, духовенство, выборных от служилых людей.</li><li>Выступил с <b>Лобного места</b>: «забудем вражду — я сам буду судья и защита».</li><li>Так Россия стала <b>сословно-представительной монархией</b>: царь правит, но советуется с выборными от сословий.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Земские соборы</span><span class="dict-d">высшие сословно-представительные учреждения; обсуждали важнейшие государственные вопросы.</span></div><div class="dict-row"><span class="dict-w">Сословие</span><span class="dict-d">большая группа людей, чьи положение, права и обязанности наследуются.</span></div></div><span class="plain">У царя появились «представители земли», с которыми он обсуждает дела.</span>'},
+    {t:'u2q6'},
+    {t:'u2q8'},
+    {mat:{icon:'📄', title:'Статья: «Первый Земский собор»',
+      desc:'Собор 1549 г. назвали «Собором примирения»: царь публично помирился с народом после беззаконий боярского правления и обещал отныне сам быть «судия и оборона». С собора началась перестройка управления: на смену кормленщикам шли выборные губные и земские старосты. Позже Земские соборы решали вопросы войны и мира, утверждали налоги, а в 1613 г. избрали царём Михаила Романова.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/nachalo-carstvovaniya-ivana-iv/article/piervyi-ziemskii-sobor-event?content=article',
+      src:'портал «История.РФ» (РВИО)'}},
+    {t:'matq5'},
+    {f:'<b>📜 1550 г.: Судебник — новые законы</b><ul><li>Запрещена <b>волокита</b>, введены наказания за взятки.</li><li>Наместники судят вместе с выборными старостами и целовальниками.</li><li>Крестьянский <b>Юрьев день</b> подтверждён, но <b>пожилое</b> выросло: деньги обесценились («революция цен»).</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Судебник</span><span class="dict-d">сборник законов: за что и как судить.</span></div><div class="dict-row"><span class="dict-w">Волокита</span><span class="dict-d">когда дело специально тянут, не решая, — обычно ради взятки.</span></div><div class="dict-row"><span class="dict-w">Юрьев день</span><span class="dict-d">осенний день, когда крестьянин мог уйти к другому хозяину.</span></div><div class="dict-row"><span class="dict-w">Пожилое</span><span class="dict-d">платёж хозяину при уходе — «за прожитые на его земле годы».</span></div></div>'},
+    {t:'u2q7'},
+    {f:'<b>⛪ 1551 г.: Стоглавый собор</b><ul><li>Церковный собор; решения записали в <b>100 глав</b> — отсюда имя «Стоглав».</li><li>Местных святых признали <b>общерусскими</b>: вся страна молится одним святым — духовное единство.</li><li>Духовенству наказ: заботиться о нравственности людей; в монастырях — учить грамоте.</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Духовенство</span><span class="dict-d">священнослужители: попы, монахи, архиереи.</span></div></div>'},
+    {t:'u2q9'},
+    {f:'<b>🗂 Приказы — «министерства» XVI века</b><ul><li>Каждый приказ ведает своим делом: <b>Посольский</b> — чужие страны, <b>Разрядный</b> — войско, <b>Поместный</b> — земли служилым людям, <b>Челобитный</b> — жалобы, <b>Разбойный</b> — разбойники, <b>Земский</b> — порядок в Москве.</li><li>На местах — выборные губные и земские избы.</li><li><b>1556 год — отмена кормлений.</b></li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Приказы</span><span class="dict-d">центральные органы отраслевого и территориального управления; сложились при Иване Грозном.</span></div><div class="dict-row"><span class="dict-w">Дьяк</span><span class="dict-d">руководитель делопроизводства в приказе; подьячий — его помощник-писарь.</span></div><div class="dict-row"><span class="dict-w">Кормление</span><span class="dict-d">старый порядок: наместник «кормился» с населения за управление — по сути, узаконенная коррупция.</span></div></div>'},
+    {t:'u2q10'},
+    {f:'<b>🌾 Налоги: «большая соха»</b><ul><li>Налог считали с земли; единица — <b>«большая соха»</b>.</li><li>Черносошные крестьяне: соха = 400 четвертей (~200 га) — <b>платят больше всех</b>.</li><li>Монастыри: соха 600; служилые люди: 800 — у них <b>льгота</b>.</li><li>Платят общины <b>всей массой</b> — круговая порука: за не заплатившего доплачивают другие.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Черносошные крестьяне</span><span class="dict-d">лично свободные крестьяне на общинных землях; платят налоги государству.</span></div><div class="dict-row"><span class="dict-w">Круговая порука</span><span class="dict-d">отвечают все вместе: долг одного гасят остальные.</span></div></div><span class="plain">«Соха» здесь не лопата, а мерка земли, с которой берут налог.</span>'},
+    {t:'u2q14'},
+    {f:'<b>📚 Книги — печатные!</b><ul><li>Царь приказал открыть типографию: работают <b>Иван Фёдоров</b> и Пётр Мстиславец.</li><li><b>«Апостол» (1564)</b> — первая датированная печатная книга Москвы. Позже — <b>Острожская Библия</b> (1580–1581).</li><li>Митрополит Макарий собрал <b>Четьи-Минеи</b> — 12 томов житий святых; Сильвестру принадлежит <b>«Домострой»</b>.</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Типография</span><span class="dict-d">печатный двор: книги печатают станком, а не переписывают от руки.</span></div><div class="dict-row"><span class="dict-w">Житие</span><span class="dict-d">рассказ о жизни святого.</span></div></div><span class="plain">Раньше книгу переписывали от руки месяцами — теперь печатают сразу много экземпляров.</span>'},
+    {t:'u2q15'},
+    {m:'<b>Запоминака:</b> 1547 — царь + пожар + мятеж · 1549 — первый Земский собор (примирение) · 1550 — Судебник · 1551 — Стоглав (100 глав) · 1556 — конец кормлений · 1564 — «Апостол» напечатан.'},
+    {t:'u2q11'}
+  ],
+  u3: [
+    {f:'<b>🧩 Единое государство — и «дособирается»</b><ul><li>Единое Российское государство сложилось при <b>Иване III</b> (конец XV — начало XVI в.); централизацию начали Иван III и Василий III.</li><li>Объединение земель и централизация в России <b>не совпали</b>: земли собрали раньше, чем окрепла экономика.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Централизация</span><span class="dict-d">система управления, при которой местные учреждения действуют по непосредственным указаниям центральных.</span></div></div><span class="plain">Вся власть, законы и деньги — в одном центре, в Москве, а не у каждого князька свои.</span>'},
+    {f:'<b>📐 Признаки централизованного государства</b><ul><li>вся полнота законодательной, исполнительной и судебной власти — у монарха;</li><li>при монархе действуют сословно-представительные органы;</li><li>аппарат центральной власти контролирует местную;</li><li>единообразное устройство местной власти;</li><li>единое административное деление страны;</li><li>единое законодательство для всей страны;</li><li>единая система налогообложения;</li><li>войско подчинено центру и защищает границы.</li></ul>', t:'s51'},
+    {f:'<b>🗺️ Особенность российской истории</b><ul><li>Земли объединились <b>раньше</b>, чем созрела экономика, — заставила угроза Орды.</li><li>Господствовало натуральное хозяйство; горожане — малая часть населения; прочных торговых связей между землями не было.</li><li>Полные предпосылки централизации сложились лишь во <b>второй половине XVII в.</b></li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Натуральное хозяйство</span><span class="dict-d">всё нужное делается «для себя», а не покупается.</span></div></div>'},
+    {t:'u3q3'},
+    {f:'<b>👑 Сословная лестница: наверху — государь</b><ul><li>На вершине — <b>государь всея Руси</b> (с 1547 г. — царь): население почитало его наместником Бога на земле.</li><li>Ступенькой ниже — «<b>братья младшие</b>»: родные братья царя и служилые князья (пришли из Литвы). Они получали <b>уделы</b>.</li><li>Их права <b>неуклонно сокращались</b>: служилые князья растворились в титулованном боярстве.</li><li>К 1547 г. остался один удельный князь — <b>Владимир Старицкий</b>, двоюродный брат царя. В XVII в. удельных князей не осталось вовсе.</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Удел</span><span class="dict-d">земля в личное владение младшего члена княжеской семьи.</span></div><div class="dict-row"><span class="dict-w">Титулованное боярство</span><span class="dict-d">знатные роды с княжеским титулом, но без отдельной земли-государства.</span></div></div>'},
+    {t:'s53'},
+    {t:'s54'},
+    {f:'<b>🪜 Сословия: кто есть кто</b><ul><li><b>Сословие</b> — группа, у которой положение, права и обязанности <b>наследуются</b>: сын крестьянина — крестьянин, сын служилого — служилый.</li><li>В Европе сословий три («молятся — воюют — работают»), в России — <b>много мелких групп</b>.</li><li>Все светские сословия — «<b>государевы холопы</b>»: и бояре, и крестьяне — слуги государя.</li><li>Две больших группы: <b>служилые</b> (служат) и <b>тяглые</b> (платят и трудятся на государство).</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Сословия</span><span class="dict-d">большие группы людей, положение которых в обществе, обязанности и права наследуются.</span></div><div class="dict-row"><span class="dict-w">Тягло</span><span class="dict-d">совокупность государственных повинностей (натуральных и денежных) крестьян и посадских людей.</span></div><div class="dict-row"><span class="dict-w">Светские</span><span class="dict-d">не церковные — все, кроме духовенства.</span></div></div><span class="plain">Служилые отдают государю службу, тяглые — деньги и труд.</span>'},
+    {t:'u3q1'},
+    {t:'u3q2'},
+    {t:'u3q6'},
+    {f:'<b>⛪ Духовенство и схема управления церковью</b><ul><li><b>Чёрное</b> (монахи): митрополит → архиепископы и епископы → настоятели монастырей (архимандриты). Из них — руководство церкви.</li><li><b>Белое</b> (имеют семьи): попы и диаконы — служат среди мирян.</li></ul><div style="margin:6px 0; padding:8px; background:var(--muted); border-radius:8px; font-size:14px;"><b>Митрополит — глава церкви</b><br>└─ чёрное: архиепископы, епископы, архимандриты<br>└─ белое: попы и диаконы — среди мирян</div><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Протопоп</span><span class="dict-d">высший сан белого духовенства; возглавлял группу приходов.</span></div><div class="dict-row"><span class="dict-w">Архимандрит</span><span class="dict-d">настоятель крупного монастыря.</span></div></div>'},
+    {t:'u3q15'},
+    {t:'s56'},
+    {f:'<b>⚔️ Служилые люди: «по отечеству» и «по прибору»</b><ul><li><b>«По отечеству»</b> — по наследству: титулованные князья (Рюриковичи, Гедиминовичи, татарские царевичи), знатные роды (Захарьины-Юрьевы — будущие Романовы, Шереметевы, Головины), а основная масса — <b>дети боярские</b>. Их всех звали боярами, но чин боярина имел лишь немногие; второй чин Думы — <b>окольничий</b>.</li><li><b>«По прибору»</b> — по найму из простолюдинов: пищальники, стрельцы, пушкари, оружейники, городовые казаки.</li><li>За службу «по отечеству» давали <b>поместья</b>; могли быть и <b>вотчины</b>.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Служилые люди</span><span class="dict-d">люди на государственной службе; делились на «по отечеству» (бояре, дворяне, дети боярские) и «по прибору» (стрельцы, пушкари, городовые казаки).</span></div><div class="dict-row"><span class="dict-w">«По отечеству»</span><span class="dict-d">служба по наследству: отец служил — и сын обязан.</span></div><div class="dict-row"><span class="dict-w">«По прибору»</span><span class="dict-d">«прибраны» на службу, как нанимают работника.</span></div></div>'},
+    {t:'s55'},
+    {t:'u3q11'},
+    {mat:{icon:'📄', title:'Статья: «Русское дворянство в XVI–XVII веках»',
+      desc:'Дворяне — служилое сословие: с 15 лет сыновей дворян «верстали» на службу как «новиков». За службу давали поместье: после присоединения Новгорода конфискованные земли раздали служилым людям (Судебник 1497 г.), а в 1550 г. «избранная тысяча» получила поместья под Москвой. «Уложение о службе» 1555 г. уравняло дворян с боярами. Дворянская конница — главная сила войска: дворянин являлся на смотр «конно, людно и оружно». Иерархия: бояре → «дворяне московские» → «городовые дети боярские».',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/russkoe-obshchestvo-v-xvi-v/article/russkoe-dvoryanstvo-v-xvi-xvii-vekah?content=article',
+      src:'портал «История.РФ» (РВИО)'}},
+    {t:'matq7'},
+    {f:'<b>🏠 Вотчина и поместье: в чём разница</b><ul><li><b>Вотчина</b> — наследная земля: продать, заложить, разделить детям, отдать в приданое.</li><li><b>Поместье</b> — земля «за службу»: служишь — владеешь; опала — отобрали.</li><li>При опале землю забирали и у родни: род отвечал <b>всей семьёй</b>.</li></ul><div class="dict"><div class="dict-h">🆕 Разберём слова</div><div class="dict-row"><span class="dict-w">Опала</span><span class="dict-d">гнев государя: отстранение и потеря имущества, иногда свободы.</span></div></div><span class="plain">Вотчина = «наше навсегда». Поместье = «пока служишь».</span>'},
+    {t:'u3q4'},
+    {f:'<b>🏇 Дети боярские и приказные люди</b><ul><li><b>Дети боярские</b> — основная масса «по отечеству»: рядовые конные воины по уездам («служилым городам»).</li><li>Часть становилась <b>приказными людьми</b>: дьяки и подьячие в приказах и губных избах — служба «за столом», не военная.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Дьяк</span><span class="dict-d">руководитель делопроизводства в приказах и приказных избах.</span></div><div class="dict-row"><span class="dict-w">Подьячий</span><span class="dict-d">помощник дьяка — «делопроизводитель», писал документы.</span></div></div>'},
+    {f:'<b>🧑‍🌾 Тяглые люди</b><ul><li><b>Купцы</b> — торговля; <b>чёрные посадские люди</b> — горожане, несущие тягло.</li><li><b>Крестьяне</b> — более 90% страны. Черносошные — свободные на государственной земле; дворцовые — «приписаны к царскому дворцу»; частновладельческие — на земле боярина или помещика (оброк + барщина); монастырские — трудятся на монастырь.</li><li>Уход — только в <b>Юрьев день</b>, заплатив <b>пожилое</b>.</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Черносошные крестьяне</span><span class="dict-d">лично свободные крестьяне на общинных землях; платили налоги государству.</span></div><div class="dict-row"><span class="dict-w">Частновладельческие крестьяне</span><span class="dict-d">жили в вотчинах и поместьях; до конца XVI в. сохраняли право ухода в Юрьев день.</span></div><div class="dict-row"><span class="dict-w">Оброк и барщина</span><span class="dict-d">оброк — плата владельцу продуктами или деньгами; барщина — обязательная работа на него.</span></div></div>'},
+    {t:'u3q10'},
+    {t:'u3q8'},
+    {mat:{icon:'📄', title:'Статья: «Крестьянство в XVI веке»',
+      desc:'В Русском государстве жило около 5–6 млн человек, и 97% из них — крестьяне. Землю пахали трёхпольем, в основном рожью и овсом. Своей земли у крестьян не было: пользование оформляли договором — «рядом». Уходить от владельца можно было только в Юрьев день — за неделю до и после 26 ноября, рассчитавшись с хозяином. При этом лично крепостными крестьяне ещё не были: продавать их нельзя было вплоть до времён Петра I.',
+      link:'https://history.ru/teacher/istoriya-rossii-v-1533-konce-xvii-v/russkoe-obshchestvo-v-xvi-v/article/krestyanstvo-v-xvi-veke?content=article',
+      src:'портал «История.РФ» (РВИО)'}},
+    {t:'matq8'},
+    {t:'s57'},
+    {mat:{icon:'📄', title:'Материал: «Домострой: нормы семейной жизни на Руси»',
+      desc:'«Домострой» — сборник житейских наставлений, который в XVI веке собрал воедино протопоп Сильвестр, духовник Ивана Грозного. Три части: о вере и церкви, об отношении к царю, о семье и хозяйстве. Рядом с советами молиться и прощать обиды — как солить грибы и вести дела с лавочниками. Муж — добытчик, жена — «государыня дома», дети воспитывались в строгости; книга ещё три века влияла на русский быт.',
+      link:'https://www.culture.ru/materials/254777/domostroi-normy-semeinoi-zhizni-na-rusi',
+      src:'портал КУЛЬТУРА.РФ'}},
+    {t:'matq9'},
+    {f:'<b>🎭 Особые группы населения</b><ul><li><b>Холопы</b> — почти рабы: обельных (полных) можно продавать; кабальные служат за долг по грамоте-«кабале».</li><li><b>Гулящие люди</b> — ни к чему не приписаны: бурлаки, наёмные работники, нищие.</li><li><b>Ясачные люди</b> — народы Поволжья, Урала, Сибири; платят <b>ясак</b> — обычно мехами.</li><li><b>Служилые иноземцы</b> — иностранцы на русской службе: итальянцы — «фрязи», прочие западные — «немцы».</li></ul><div class="dict"><div class="dict-h">🆕 Словарь</div><div class="dict-row"><span class="dict-w">Ясак</span><span class="dict-d">подать с народов Сибири и Севера — преимущественно пушниной.</span></div><div class="dict-row"><span class="dict-w">Кабала</span><span class="dict-d">грамота о службе за долг: отрабатывал долг — был холопом.</span></div><div class="dict-row"><span class="dict-w">«Немцы»</span><span class="dict-d">так звали западных иностранцев — «немые», по-русски не говорят.</span></div></div>'},
+    {t:'u3q5'},
+    {t:'u3q7'},
+    {t:'u3q9'},
+    {m:'<b>Запоминалка:</b> служилые — служат, тяглые — платят · «по отечеству» — по рождению, «по прибору» — по найму · вотчина — «наследная», поместье — «за службу» · крестьяне — более 90% страны · ясак — мехами.'},
+    {t:'u3q12'},
+    {t:'u3q13'},
+    {t:'u3q14'},
+    {f:'<b>📌 Работаем с понятием</b><div class="dict"><div class="dict-row"><span class="dict-w">Сословие</span><span class="dict-d">большие группы людей, положение которых в обществе, обязанности и права наследуются.</span></div></div><span class="plain">Пример: сын детей боярских с 15 лет сам становился служилым — служба перешла к нему «по отечеству».</span>'},
+    {t:'s58'},
+    {f:'<b>📋 Таблица «Сословные группы в России XVI в.»</b> Собери её интерактивно: каждому признаку — своя группа.'},
+    {t:'s59'},
+    {t:'s510'},
+    {f:'<b>🖼️ Иллюстрация «Работа кузнецов и чеканщика»</b><ul><li>На переднем плане — печь с тремя поддувалами; кузнец мехами раздувает пламя.</li><li>Двое других куют металлическую доску — в руках клещи и молоты. Рядом чеканщик.</li></ul><span class="plain">Кто эти мастера по сословию — ответь на следующем шаге.</span>'},
+    {t:'s511'},
+    {t:'s512'},
+    {f:'<b>📝 Сообщение «Положение неправославных в России при Иване IV»</b> Разверни текст и перескажи своими словами.<details><summary>💬 Готовое сообщение (для устного ответа)</summary>При Иване IV в России жили и неправославные. Народы Поволжья, Урала и Сибири платили ясак и сохраняли веру и обычаи: их место в обществе зависело от прежнего положения — татарскую знать взяли на государеву службу, а сельских и городских жителей записали в тяглые люди. На русской службе состояли иноземцы: итальянцев называли «фрязями», других западноевропейцев — «немцами»; они жили в особых слободах, а их дети обычно принимали православие. Католикам и протестантам разрешали сохранять свою веру, протестантам даже разрешили построить в Москве кирху. Так власть сочетала веротерпимость с государевой службой: неправославные служили царю и платили, но полного равенства с православными у них не было.</details><div class="dict"><div class="dict-h">📚 Источники информации</div><div class="dict-row"><span class="dict-w">1.</span><span class="dict-d">Учебник, §5–6, пункт 7 «Особые категории населения»</span></div><div class="dict-row"><span class="dict-w">2.</span><span class="dict-d">Портал «История.РФ»: статья «Крестьянство в XVI веке» (ссылка выше в уроке)</span></div><div class="dict-row"><span class="dict-w">3.</span><span class="dict-d">Президентская библиотека: «Русское общество XVI века» — prlib.ru/item/1057191</span></div></div>'},
+    {t:'s513'},
+    {t:'s514'},
+    {f:'<div class="card" style="padding:8px 12px;"><b>🎓 Главный вопрос параграфа:</b> «Какие изменения социальной структуры России произошли в XVI в.?»<br><b>Ответ с аргументами:</b> старые удельные порядки уходили, общество перестраивалось под единое государство. <b>Аргумент 1:</b> удельные и служилые князья исчезли — их место заняло титулованное боярство (к 1547 г. остался один удельный князь — Владимир Старицкий). <b>Аргумент 2:</b> служилых стало больше и разнообразнее: дети боярские, приказные люди, «по прибору» — стрельцы, пушкари, городовые казаки. <b>Аргумент 3:</b> тяглый мир тоже менялся: посадские, ясачные, гулящие люди; холопы делились на обельных и кабальных. Крестьяне (более 90%) оставались главной группой, право перехода в Юрьев день ещё действовало.</div>'}
+  ]
+  };
+
+  var NEXT_TAB = { u1:'t-u2', u2:'t-u3', u3:'t-time' };
+  var stepIdx = { u1:0, u2:0, u3:0 };
+  var currentTask = {}; // sec -> {id, spot, done}
+
+  var TASKS = {};
+  Object.keys(QUIZ).forEach(function(sec){ QUIZ[sec].forEach(function(q){ TASKS[q.id] = q; }); });
+  Object.keys(NEW_TF).forEach(function(id){ TASKS[id] = NEW_TF[id]; });
+  var TASK_N = {};
+  ['u1','u2','u3'].forEach(function(sec){
+    var n = 0;
+    STEPS[sec].forEach(function(st){ if(st.t){ n++; TASK_N[st.t] = n; } });
+  });
+  function ptsOf(q){
+    if(q.type==='multi') return q.ans.length;
+    if(q.type==='match') return q.pairs.length;
+    if(q.type==='sort' || q.type==='order') return q.items.length;
+    if(q.type==='tiles') return q.words.length;
+    return 1;
+  }
+
+  function matHtml(m){
+    return '<div class="mat-head">'+m.icon+' '+m.title+'</div>' +
+      '<div class="mat-desc">'+m.desc+'</div>' +
+      '<div class="mat-row"><a class="btn btn-sm" href="'+m.link+'" target="_blank" rel="noopener">🔗 Открыть материал</a></div>' +
+      '<div class="mat-src">Источник: '+m.src+'</div>';
+  }
+
+  function updateStepbar(sec){
+    var N = STEPS[sec].length, i = Math.min(stepIdx[sec], N);
+    var line = root.querySelector('[data-stepline="'+sec+'"]');
+    var bar = root.querySelector('[data-stepbar="'+sec+'"]');
+    if(line) line.textContent = i >= N ? 'Раздел пройден!' : 'Шаг ' + (i+1) + ' из ' + N;
+    if(bar) bar.style.width = Math.round(100*i/N) + '%';
+  }
+
+  function renderSteps(sec){
+    var steps = STEPS[sec];
+    var i = Math.min(stepIdx[sec], steps.length);
+    stepIdx[sec] = i;
+    currentTask[sec] = null;
+    var host = root.querySelector('[data-steps="'+sec+'"]');
+    if(!host) return;
+    host.innerHTML = '';
+    if(i >= steps.length){
+      var done = mk('div','memo');
+      done.innerHTML = '<b>✔ Раздел пройден!</b> Все факты прочитаны, задания решены — баллы на шкале сверху. Пройденные факты остались выше: подгляди, если что-то забылось.';
+      var row = mk('div','viz-row');
+      var nb = mk('button','btn btn-primary btn-sm','▶ Следующий раздел');
+      nb.addEventListener('click', function(){ var tb = document.getElementById(NEXT_TAB[sec]); if(tb) tb.click(); });
+      var rb = mk('button','btn btn-sm','↺ Ещё раз с начала');
+      rb.addEventListener('click', function(){ stepIdx[sec] = 0; save(); renderSteps(sec); });
+      row.appendChild(nb); row.appendChild(rb); done.appendChild(row);
+      host.appendChild(done);
+      updateStepbar(sec);
+      return;
+    }
+    for(var k=0;k<i;k++){
+      if(steps[k].f){ var fo = mk('div','fact old'); fo.innerHTML = steps[k].f; host.appendChild(fo); }
+      else if(steps[k].m){ var mo = mk('div','memo old'); mo.innerHTML = steps[k].m; host.appendChild(mo); }
+      else if(steps[k].mat){ var mcO = mk('div','mat-card old'); mcO.innerHTML = matHtml(steps[k].mat); host.appendChild(mcO); }
+    }
+    var st = steps[i];
+    var tail = mk('div','viz-row'); tail.style.marginTop = '8px';
+    if(st.f || st.m || st.mat){
+      var el = mk('div', st.f ? 'fact' : (st.m ? 'memo' : 'mat-card'));
+      el.innerHTML = st.f || st.m || matHtml(st.mat);
+      host.appendChild(el);
+    }
+    if(st.t){
+      var q = TASKS[st.t];
+      var wrap = mk('div');
+      host.appendChild(wrap);
+      q.n = TASK_N[q.id];
+      RENDER[q.type](wrap, q);
+      currentTask[sec] = { id:q.id, spot:mk('div'), done:false };
+      host.appendChild(currentTask[sec].spot);
+      var skip = mk('button','btn btn-sm btn-ghost','Пропустить задание ▸');
+      skip.addEventListener('click', function(){ stepIdx[sec]++; save(); renderSteps(sec); });
+      tail.appendChild(skip);
+      host.appendChild(tail);
+    } else {
+      var b = mk('button','btn btn-primary btn-sm','▶ Дальше');
+      b.addEventListener('click', function(){ stepIdx[sec]++; save(); renderSteps(sec); });
+      tail.appendChild(b);
+      host.appendChild(tail);
+    }
+    requestAnimationFrame(function(){
+      if(tail.scrollIntoView) tail.scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+    updateStepbar(sec);
+  }
+
+  function revealNext(id){
+    ['u1','u2','u3'].forEach(function(sec){
+      var ct = currentTask[sec];
+      if(ct && ct.id === id && !ct.done){
+        ct.done = true;
+        var row = mk('div','viz-row'); row.style.marginTop = '8px';
+        var b = mk('button','btn btn-primary btn-sm','▶ Дальше');
+        b.addEventListener('click', function(){ stepIdx[sec]++; save(); renderSteps(sec); });
+        row.appendChild(b);
+        ct.spot.appendChild(row);
+      }
+    });
+  }
+
+  /* ---------- монтирование ---------- */
+  Object.keys(QUIZ).forEach(function(sec){
+    var host = root.querySelector('[data-quiz="'+sec+'"]');
+    if(!host) return;
+    QUIZ[sec].forEach(function(q, i){ q.n = i+1; var fn = RENDER[q.type]; if(fn) fn(host, q); });
+  });
+  var syllHost = document.getElementById('syll-list');
+  if(syllHost) SYLL.forEach(function(q){ renderSyll(syllHost, q); });
+
+  /* регистрируем задания пошаговых разделов заранее, чтобы шкала сверху считала всё */
+  ['u1','u2','u3'].forEach(function(sec){
+    STEPS[sec].forEach(function(st){ if(st.t){ var q = TASKS[st.t]; reg(q.id, ptsOf(q)); } });
+  });
+  /* кнопки «С начала» */
+  root.querySelectorAll('[data-restart]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sec = btn.getAttribute('data-restart');
+      stepIdx[sec] = 0; save(); renderSteps(sec);
+    });
+  });
+
+  /* ---------- восстановление прогресса ---------- */
+  try{
+    var saved = JSON.parse(localStorage.getItem(LS) || '{}');
+    if(saved._s){ ['u1','u2','u3'].forEach(function(sec){ stepIdx[sec] = Math.min(saved._s[sec] || 0, STEPS[sec].length); }); }
+    Object.keys(saved).forEach(function(id){
+      var t = tasks[id];
+      if(t){ t.got = saved[id][0] || 0; t.done = !!saved[id][1]; }
+    });
+  }catch(e){}
+  renderSteps('u1'); renderSteps('u2'); renderSteps('u3');
+  renderTop();
+})();
+</script>
+
+</div>
+</body>
+</html>
