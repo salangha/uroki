@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сольфеджио · Раздел 6. Творческие задания</title>
+<meta property="og:title" content="Сольфеджио: творческие задания">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f2ea;color:#2a251e;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.55}
+.topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #d9d2c2;box-shadow:0 2px 10px rgba(60,50,30,.08);padding:8px 14px}
+.toprow{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crumbs{font-size:14px;color:#8a8378;margin-right:auto}
+.crumbs b{color:#1c4f8f}
+.hbtn{font-size:14px;padding:7px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;white-space:nowrap}
+a.hbtn{color:#2a251e;text-decoration:none;display:inline-block}
+.hbtn.warn{border-color:#d9b84a;color:#8a6d1f;background:#fff6df}
+.hbtn:hover{background:#f0ead9}
+.wrap{max-width:1000px;margin:0 auto;padding:14px}
+h1{font-size:26px;margin:.1em 0;color:#1c4f8f}
+.sub{color:#7a7263;margin:.2em 0 .4em;font-size:16px}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.tabbtn{font-size:16px;padding:9px 14px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.tabbtn.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.card{background:#fff;border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 3px 12px rgba(60,50,30,.07)}
+.theorybox{background:#eef6ff;border-left:5px solid #5b9bd5;border-radius:10px;padding:12px 16px;margin:10px 0}
+.theorybox h3{margin:.2em 0 .4em;font-size:18px;color:#1c4f8f}
+.theorybox p{margin:.4em 0}
+.btn{font-size:16px;padding:9px 15px;border-radius:11px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;color:#2a251e}
+.btn:hover{background:#f0ead9}
+.btn.primary{background:#1c4f8f;border-color:#1c4f8f;color:#fff}
+.btn.primary:hover{background:#16406f}
+.btn.tiny{font-size:14px;padding:5px 11px;border-radius:9px}
+.btn:disabled{opacity:.45;cursor:default}
+.accbtn.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.chip.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center;justify-content:center}
+.staffbox{background:#fffef9;border:1.5px solid #e2dccd;border-radius:12px;padding:6px 10px;display:inline-block}
+svg.clickable{cursor:crosshair}
+.fb{border-radius:12px;padding:12px 16px;margin:10px 0;min-height:22px}
+.fb.empty{background:#f4f1e8;color:#6f6858}
+.fb.ok{background:#e7f6ec;border:1.5px solid #a9d8b6}
+.fb.err{background:#fdeaea;border:1.5px solid #efb9b9}
+.errcard{background:#fff;border:1.5px solid #efb9b9;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:16px}
+.errcard .row{margin:3px 0}
+.errcard .t{color:#b04a4a;font-weight:700}
+.errcard .r{color:#23843c;font-weight:700}
+.modalbg{position:fixed;inset:0;background:rgba(40,32,20,.45);display:none;z-index:90}
+.modalbg.show{display:block}
+.modal{position:fixed;z-index:95;top:4vh;left:50%;transform:translateX(-50%);width:min(680px,92vw);max-height:88vh;overflow:auto;background:#fff;border-radius:16px;padding:18px 22px;display:none;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.modal.show{display:block}
+.modal h2{margin:.1em 0 .4em;font-size:21px;color:#1c4f8f}
+.modal .closebtn{position:sticky;top:0;float:right}
+.gloss{border-bottom:1px dashed #d8d2c4;padding:7px 2px}
+.gloss b{color:#1c4f8f}
+.gloss p{margin:.2em 0}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0;justify-content:center}
+.chip{font-size:16px;padding:7px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.qwrap{text-align:center}
+.qtext{font-size:19px;margin:10px 0}
+.poem{font-style:italic;color:#544c40;margin:8px auto;max-width:560px;font-size:18px}
+.checkrow{text-align:left;max-width:420px;margin:10px auto}
+.checkrow div{padding:5px 8px;font-size:17px}
+@media (max-width:640px){body{font-size:16px}h1{font-size:23px}}
+</style>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(114071811, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:false
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</head>
+<body>
+
+<div class="topbar"><div class="toprow">
+  <div class="crumbs">🎵 Сольфеджио · <b>Раздел 6. Творческие задания</b> · раздел 6 из 6</div>
+  <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <button class="hbtn" id="btnTheory">📖 Теория</button>
+  <button class="hbtn" id="btnGloss">📚 Словарик</button>
+  <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
+</div></div>
+
+<div class="wrap">
+  <h1>Творческие задания</h1>
+  <p class="sub">Ты уже знаешь гаммы, интервалы, аккорды и ритмы — теперь сочиняем! Сначала ритм к стихам, потом мелодия-ответ и своя собственная пьеса.</p>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="tabBody"></div>
+</div>
+
+<div class="modalbg" id="modalBg"></div>
+<div class="modal" id="modalTheory">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>📖 Теория раздела</h2>
+  <div id="theoryBody"></div>
+</div>
+<div class="modal" id="modalGloss">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>📚 Словарик</h2>
+  <div id="glossBody"></div>
+</div>
+<div class="modal" id="modalErrs">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>⚠️ Мои ошибки</h2>
+  <p class="modalnote">Здесь собираются все твои ошибки с разбором. Перечитай — и дальше таких ошибок не будет!</p>
+  <div class="errlist" id="errList"></div>
+  <div style="margin-top:10px"><button class="btn tiny" id="btnErrClear">Очистить журнал</button></div>
+</div>
+
+<footer style="text-align:center;color:#8a8378;font-size:14px;padding:20px">
+  <a href="kurs-index.html" style="color:#1c4f8f">🏠 Оглавление курса</a> ·
+  <a href="kurs-razdel-5-ritm.html" style="color:#1c4f8f">← Раздел 5: Ритм и размер</a> ·
+  🎉 Это финальный раздел курса!
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+var $=function(id){return document.getElementById(id);};
+var L=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ'];
+var SEMI=[0,2,4,5,7,9,11];
+var ACCL={'-1':'♭','1':'♯'};
+function nm(n){return L[n.l]+(ACCL[n.a]||'');}
+var DUR={'qd':1.5,'q':1,'e':0.5,'s':0.25};
+
+/* ================= ЛАДА ================= */
+var MODES={
+ 'C':{lab:'До мажор', tonic:0, natural:[0,1,2,3,4,5,6]},
+ 'Am':{lab:'ля минор', tonic:5, natural:[0,1,2,3,4,5,6]}
+};
+
+/* ================= РИСОВАНИЕ СТАНА ================= */
+var S=13,TOP=52,BOT=TOP+4*S;
+function di(l,o){return o*7+l;}
+function yOf(d){return BOT-(d-30)*S/2;}
+function ledger(d,x){var s='';var rel=d-30;var e,y;
+ if(rel<=-2){var last=(rel%2===0)?rel:rel+1;for(e=-2;e>=last;e-=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ if(rel>=10){var last2=(rel%2===0)?rel:rel-1;for(e=10;e<=last2;e+=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ return s;}
+function noteSvg(n,x,color,o){o=o||{};var d=di(n.l,n.o),y=yOf(d);var s=ledger(d,x);
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="#fff" stroke="'+color+'" stroke-width="3.6" transform="rotate(-12 '+x+' '+y+')"/>';
+ if(n.a===1)s+='<text x="'+(x-19)+'" y="'+(y+11)+'" font-size="34" text-anchor="middle" fill="'+color+'">♯</text>';
+ if(n.a===-1)s+='<text x="'+(x-19)+'" y="'+(y+9)+'" font-size="34" text-anchor="middle" fill="'+color+'">♭</text>';
+ if(o.num)s+='<text x="'+x+'" y="'+(BOT+26)+'" font-size="14" font-weight="800" text-anchor="middle" fill="#b97e12">'+o.num+'</text>';
+ return s;}
+function staffSvg(w,inner,clickable){
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' 200" style="width:100%;max-width:'+w+'px;display:block"'+(clickable?' class="clickable"':'')+'>';
+ for(var i=0;i<5;i++){var y=TOP+i*S;s+='<line x1="4" y1="'+y+'" x2="'+(w-4)+'" y2="'+y+'" stroke="#40382e" stroke-width="1.3"/>';}
+ s+='<text x="8" y="'+(BOT+14)+'" font-size="58" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';
+ s+=inner+'</svg>';
+ return s;}
+
+/* ритмическая нотка (один слог) на ритм-строке */
+function rNoteSvg(k,x,y,color){
+ var s='',fill=(k==='qd')?'#fff':'#26221e';
+ var stemTop=y-34;
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="'+fill+'" stroke="'+color+'" stroke-width="3.2" transform="rotate(-12 '+x+' '+y+')"/>';
+ s+='<line x1="'+(x+7.2)+'" y1="'+(y-3)+'" x2="'+(x+7.2)+'" y2="'+stemTop+'" stroke="'+color+'" stroke-width="1.8"/>';
+ if(k==='qd')s+='<circle cx="'+(x+15)+'" cy="'+(y-4)+'" r="2.4" fill="'+color+'"/>';
+ if(k==='e'||k==='s')s+='<path d="M '+(x+7.2)+' '+(stemTop)+' q 9 6 7 15" fill="none" stroke="'+color+'" stroke-width="2"/>';
+ if(k==='s')s+='<path d="M '+(x+7.2)+' '+(stemTop+8)+' q 9 6 7 13" fill="none" stroke="'+color+'" stroke-width="2"/>';
+ return s;
+}
+
+/* ================= МОДАЛЬНЫЕ ОКНА ================= */
+var ERRS=[];
+function updErrCnt(){$('errCnt').textContent=ERRS.length;}
+function addErr(where,text){
+ ERRS.push({where:where,text:text});
+ var li=$('errList');var d=document.createElement('div');d.className='errcard';
+ d.innerHTML='<div class="row"><span class="t">Где:</span> '+where+'</div><div class="row"><span class="t">Ошибка:</span> '+text+'</div>';
+ li.appendChild(d);updErrCnt();
+}
+function openModal(id){$('modalBg').classList.add('show');$(id).classList.add('show');}
+function closeModals(){$('modalBg').classList.remove('show');
+ ['modalTheory','modalGloss','modalErrs'].forEach(function(id){$(id).classList.remove('show');});}
+$('modalBg').addEventListener('click',closeModals);
+Array.prototype.forEach.call(document.querySelectorAll('[data-close]'),function(b){b.addEventListener('click',closeModals);});
+$('btnErrClear').addEventListener('click',function(){ERRS=[];$('errList').innerHTML='';updErrCnt();});
+$('btnTheory').addEventListener('click',function(){openModal('modalTheory');});
+$('btnGloss').addEventListener('click',function(){openModal('modalGloss');});
+$('btnErrs').addEventListener('click',function(){openModal('modalErrs');});
+
+/* ================= ТЕОРИЯ ================= */
+$('theoryBody').innerHTML=
+ '<div class="theorybox"><h3>Ритм на стихи</h3>'+
+ '<p>Чтобы сочинить ритм к строчке, прохлопай её по слогам: <b>один слог — один звук</b>. Осталось подобрать длительности так, чтобы такт заполнился ровно: в 2/4 — две доли. Слова вроде «Ди-инь» можно петь одной длинной нотой, а «ко-ло-коль-чик» — короткими.</p></div>'+
+ '<div class="theorybox"><h3>Вопрос и ответ</h3>'+
+ '<p>Мелодии часто живут парами: <b>вопрос</b> (первая фраза) заканчивается на неустойчивой ступени — звучит незавершённо, «ждёт продолжения». <b>Ответ</b> (вторая фраза) заканчивается на <b>тонике</b> — звучит спокойно и окончательно.</p>'+
+ '<p>Проверь: спой вопрос и свой ответ подряд. Если после ответа хочется сказать «вот и всё!» — ты попал в тонику.</p></div>'+
+ '<div class="theorybox"><h3>Своя пьеса</h3>'+
+ '<p>Правила простой мелодии: 1) все звуки — из гаммы выбранного лада; 2) последняя нота — тоника; 3) поёт красиво, если соседние ноты не «прыгают» слишком далеко: шаги и терции звучат гладко. Сочиняй, слушай 🔊 и переделывай — композиторы тоже так делают!</p></div>';
+
+/* ================= СЛОВАРИК ================= */
+var GLOSS=[
+ {t:'Мелодия', d:'главная музыкальная мысль: звуки, выстроенные по высоте и ритму'},
+ {t:'Фраза', d:'законченный кусочек мелодии, как предложение в речи'},
+ {t:'Вопрос и ответ', d:'пара фраз: первая заканчивается неустойчиво (вопрос), вторая — тоникой (ответ)'},
+ {t:'Тоника', d:'самый главный звук лада; на тонике мелодия заканчивается'},
+ {t:'Слог', d:'часть слова с одной гласной; при пении один слог = один звук'},
+ {t:'Лад', d:'мажор или минор — «набор» звуков и настроение мелодии'}
+];
+var gh='';
+GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></div>';});
+$('glossBody').innerHTML=gh;
+
+/* ================= ВКЛАДКИ ================= */
+var TABS=[
+ {id:'rhy', t:'🥁 Ритм к стиху (упр. 1)', units:5},
+ {id:'ans', t:'🎵 Допой ответ (упр. 2)', units:3},
+ {id:'own', t:'🎹 Своя пьеса (упр. 3)', units:2}
+];
+var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
+var DONE={};
+var curTab=TABS[0].id;
+
+function doneAdd(tabId,n){
+ DONE[tabId]=(DONE[tabId]||0)+n;
+ renderTabs();
+}
+function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
+
+function renderTabs(){
+ var h='';
+ TABS.forEach(function(t){
+  var d=DONE[t.id]||0;
+  h+='<button class="tabbtn'+(t.id===curTab?' active':'')+'" data-tab="'+t.id+'">'+t.t+(d>=t.units?' ✓':'')+'</button>';
+ });
+ $('tabs').innerHTML=h;
+}
+$('tabs').addEventListener('click',function(e){
+ var b=e.target.closest('[data-tab]');if(!b)return;
+ curTab=b.getAttribute('data-tab');
+ renderTabs();
+ renderTab();
+});
+
+var tabBody=$('tabBody');
+var RENDER={};
+
+function renderTab(){
+ TABS.forEach(function(t){
+  var pid='panel_'+t.id;
+  var el=document.getElementById(pid);
+  if(!el){el=document.createElement('div');el.id=pid;el.style.display='none';tabBody.appendChild(el);}
+  el.style.display=(t.id===curTab?'block':'none');
+ });
+ var cur=document.getElementById('panel_'+curTab);
+ (RENDER[curTab]||function(){})(cur);
+}
+
+/* ================= ЗВУК ================= */
+var AC=null;
+function ensureAC(){
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+ if(AC.state==='suspended'){try{AC.resume();}catch(e){}}
+ return AC;
+}
+/* щелчок ритма */
+function clickSound(t){
+ var o=AC.createOscillator(),g=AC.createGain();
+ o.type='square';o.frequency.value=880;
+ g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.18,t+0.008);g.gain.exponentialRampToValueAtTime(0.0001,t+0.09);
+ o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+0.1);
+}
+/* нота */
+function toneSound(t,nn,len){
+ var f=440*Math.pow(2,(12+nn.o*12+SEMI[nn.l]+nn.a-69)/12);
+ if(!isFinite(f))return;
+ var o=AC.createOscillator(),g=AC.createGain();
+ o.type='triangle';o.frequency.value=f;
+ g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.22,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+len);
+ o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+len+0.05);
+}
+function playRhythmSeq(kinds){
+ if(!ensureAC())return;
+ var beat=0.42;
+ var t=AC.currentTime+0.05;
+ for(var i=0;i<kinds.length;i++){clickSound(t);t+=DUR[kinds[i]]*beat;}
+}
+function playSeq(notes,step){
+ if(!ensureAC())return;
+ if(!step)step=0.45;
+ var t=AC.currentTime+0.05;
+ for(var i=0;i<notes.length;i++){(function(nn,tt){toneSound(tt,nn,0.4);})(notes[i],t);t+=step;}
+}
+
+/* ================= ВКЛАДКА 1: РИТМ К СТИХУ ================= */
+var RHY=[
+ {poem:'Ко-ло-коль-чик', size:'2/4', syl:4, expl:'4 слога, такт 2/4 (2 доли): например ♪ ♪ ♪ ♪ или ♩ ♪♪.'},
+ {poem:'Динь-динь-динь зве-нит', size:'2/4', syl:5, expl:'5 звуков на 2 доли: например 3 восьмых + 2 шестнадцатые (½×3 + ¼×2 = 2).'},
+ {poem:'Пол-день. Сол-ныш-ко в зе-ни-те', size:'2/4', syl:8, expl:'8 слогов на 2 доли — значит, все звуки по ¼: восемь шестнадцатых ♬×8.'},
+ {poem:'На сол-неч-ной о-пуш-ке', size:'2/4', syl:7, expl:'7 звуков на 2 доли: например 6 шестнадцатых + 1 восьмая (6×¼ + ½ = 2).'},
+ {poem:'Яр-ко солн-це све-тит', size:'3/4', syl:6, expl:'6 звуков на 3 доли: например шесть восьмых ♪×6 (½ × 6 = 3).'}
+];
+var rhyState={i:0,built:{},done:{}};
+RENDER.rhy=function(el){
+ if(!RENDER.rhy._init){
+  RENDER.rhy._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Прохлопай строчку по слогам и собери её ритм: <b>один слог — один звук</b>, такт должен заполниться ровно.</p>'+
+  '<div class="poem" id="rPoem"></div>'+
+  '<div style="color:#8a8378;font-size:15px" id="rInfo"></div>'+
+  '<div class="staffbox" id="rBox"></div>'+
+  '<div class="chips" id="rPal"></div>'+
+  '<div class="controls"><button class="btn" id="rListen">🔊 Послушать</button><button class="btn primary" id="rCheck">Проверить</button><button class="btn" id="rClear">Очистить</button></div>'+
+  '<div class="fb empty" id="rFb"></div><div class="controls" id="rProg"></div></div>';
+  $('rPal').innerHTML=
+   '<button class="chip" data-k="q">♩ четверть</button>'+
+   '<button class="chip" data-k="qd">♩. с точкой</button>'+
+   '<button class="chip" data-k="e">♪ восьмая</button>'+
+   '<button class="chip" data-k="s">♬ шестнадцатая</button>';
+  $('rPal').addEventListener('click',function(e){
+   var b=e.target.closest('[data-k]');if(!b)return;
+   var key=''+rhyState.i;
+   if(rhyState.done[key])return;
+   rhyState.built[key]=rhyState.built[key]||[];
+   rhyState.built[key].push(b.getAttribute('data-k'));
+   renderRhy();
+  });
+  $('rBox').addEventListener('click',function(e){
+   var t=e.target.closest('[data-ni]');if(!t)return;
+   var key=''+rhyState.i;
+   if(rhyState.done[key])return;
+   var idx=+t.getAttribute('data-ni');
+   var arr=rhyState.built[key]||[];
+   arr.splice(idx,1);
+   renderRhy();
+  });
+  $('rListen').addEventListener('click',function(){
+   playRhythmSeq(rhyState.built[''+rhyState.i]||[]);
+  });
+  $('rCheck').addEventListener('click',rhyCheck);
+  $('rClear').addEventListener('click',function(){rhyState.built[''+rhyState.i]=[];renderRhy();});
+ }
+ function cur(){return RHY[rhyState.i];}
+ function renderRhy(){
+  var key=''+rhyState.i;
+  var it=RHY[+key];
+  var arr=rhyState.built[key]||[];
+  $('rPoem').textContent='«'+it.poem+'» — размер '+it.size;
+  var sum=0;
+  for(var i=0;i<arr.length;i++)sum+=DUR[arr[i]];
+  var W=Math.max(200,40+44*arr.length+30);
+  var s='<div style="color:#8a8378;font-size:14px">'+(arr.length?'клик по ноте убирает её':'такт пустой — кликай по палитре ниже')+'</div>';
+  if(arr.length){
+   var inner='';
+   for(var j=0;j<arr.length;j++){
+    var k=arr[j];
+    var y=104;
+    var x=40+j*44;
+    inner+='<g data-ni="'+j+'" style="cursor:pointer">'+rNoteSvg(k,x,y,'#26221e')+'</g>';
+   }
+   s+='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' 150" style="width:100%;max-width:'+W+'px;display:block">';
+   s+='<line x1="4" y1="44" x2="'+(W-4)+'" y2="44" stroke="#40382e" stroke-width="1.2"/>';
+   s+='<line x1="4" y1="104" x2="'+(W-4)+'" y2="104" stroke="#40382e" stroke-width="1.2"/>';
+   s+='<line x1="4" y1="164" x2="'+(W-4)+'" y2="164" stroke="#40382e" stroke-width="1.2"/>';
+   s+='<line x1="'+(W-8)+'" y1="44" x2="'+(W-8)+'" y2="164" stroke="#40382e" stroke-width="2.4"/>';
+   s+=inner+'</svg>';
+  }
+  $('rBox').innerHTML=s;
+  $('rInfo').textContent='звуков: '+arr.length+' (слогов: '+it.syl+') · заполнено: '+String(sum).replace('.',',')+' из '+it.size.replace('/4','')+' долей';
+ }
+ function rhyCheck(){
+  var key=''+rhyState.i;
+  var it=RHY[+key];
+  var arr=rhyState.built[key]||[];
+  var sum=0;
+  for(var i=0;i<arr.length;i++)sum+=DUR[arr[i]];
+  var need=parseInt(it.size,10);
+  if(arr.length===0){setFb($('rFb'),'err','❌ Такт пустой: собери ритм из палитры.');return;}
+  if(arr.length!==it.syl){
+   setFb($('rFb'),'err','❌ <b>Где ошибся:</b> звуков '+arr.length+', а слогов '+it.syl+'. <b>Почему:</b> один слог — один звук. Прохлопай строчку ещё раз и добавь/убери ноты.');
+   addErr('Ритм к стиху («'+it.poem+'»)','Звуков '+arr.length+' вместо '+it.syl+'.');
+   return;
+  }
+  if(Math.abs(sum-need)>0.01){
+   setFb($('rFb'),'err','❌ <b>Где ошибся:</b> в такте '+String(sum).replace('.',',')+' доли вместо '+need+'. <b>Почему:</b> такт '+it.size+' должен заполниться ровно. Подсказка: '+it.expl);
+   addErr('Ритм к стиху («'+it.poem+'»)','Сумма долей '+sum+' вместо '+need+'.');
+   return;
+  }
+  rhyState.done[key]=true;
+  playRhythmSeq(arr);
+  setFb($('rFb'),'ok','✅ Ритм сочинен! Звуков ровно по слогам, такт заполнен. Послушай 🔊 — а потом попробуй пропеть строчку со своим ритмом! Подсказка: '+it.expl);
+  if(Object.keys(rhyState.done).length===RHY.length&&!DONE.rhy)doneAdd('rhy',RHY.length);
+  renderTabs();
+  setTimeout(rhyNext,2000);
+ }
+ function rhyNext(){
+  var pending=[];for(var i=0;i<RHY.length;i++)if(!rhyState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('rPoem').textContent='';$('rBox').innerHTML='';$('rInfo').textContent='';$('rPal').innerHTML='';$('rFb').style.display='none';$('rProg').innerHTML='';
+   $('rFb').style.display='block';setFb($('rFb'),'ok','🎉 Все ритмы сочинены!');
+   return;
+  }
+  rhyState.i=pending[0];
+  if(!rhyState.built[''+rhyState.i])rhyState.built[''+rhyState.i]=[];
+  renderRhy();
+  var d=Object.keys(rhyState.done).length;
+  $('rProg').innerHTML='<span style="color:#5f584a;font-size:15px">Сочинено: '+d+' из '+RHY.length+'</span>';
+ }
+ rhyNext();
+};
+
+/* ================= ВКЛАДКА 2: ДОПОЙ ОТВЕТ ================= */
+var QA=[
+ {lab:'До мажор', mode:'C', tonic:0,
+  q:[{l:4,o:4,a:0},{l:2,o:4,a:0},{l:4,o:4,a:0},{l:2,o:4,a:0},{l:1,o:4,a:0},{l:1,o:4,a:0},{l:6,o:3,a:0},{l:6,o:3,a:0}],
+  expl:'Вопрос закончился на СИ (VII ступень) — он «ждёт» ответа. Твой ответ должен закончиться на ДО — тонике.'},
+ {lab:'Соль мажор', mode:'G', tonic:4,
+  q:[{l:2,o:4,a:0},{l:3,o:4,a:1},{l:4,o:4,a:0},{l:5,o:4,a:0},{l:4,o:4,a:0},{l:3,o:4,a:1},{l:2,o:4,a:0},{l:1,o:4,a:0}],
+  expl:'В Соль мажоре ФА — только с диезом (ключевой знак!). Вопрос закончился на РЕ (V ступень). Ответ — на СОЛЬ.'},
+ {lab:'ля минор', mode:'Am', tonic:5,
+  q:[{l:2,o:4,a:0},{l:4,o:4,a:0},{l:5,o:4,a:0},{l:4,o:4,a:0},{l:2,o:4,a:0},{l:0,o:5,a:0},{l:6,o:4,a:0},{l:6,o:4,a:0}],
+  expl:'Вопрос в ля миноре закончился на СИ (II ступень). Ответ — на ЛЯ.'}
+];
+var qaState={i:0,answer:[],acc:0,done:{}};
+RENDER.ans=function(el){
+ if(!RENDER.ans._init){
+  RENDER.ans._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Сверху — мелодия-вопрос. Сочини ответ: 8 нот, все — из лада, последняя — тоника.</p>'+
+  '<div class="staffbox" id="aQ"></div>'+
+  '<div class="controls"><button class="btn" id="aListen">🔊 Вопрос</button></div>'+
+  '<div class="staffbox" id="aA"></div>'+
+  '<div class="controls"><span style="color:#8a8378">знак:</span>'+
+  '<button class="btn accbtn" id="aNat">♮</button><button class="btn accbtn" id="aSh">♯</button><button class="btn accbtn" id="aFl">♭</button>'+
+  '<button class="btn" id="aUndo">↩ Убрать последнюю</button><button class="btn" id="aClear">Очистить</button>'+
+  '<button class="btn primary" id="aCheck">Проверить</button><button class="btn" id="aPlay">🔊 Ответ</button></div>'+
+  '<div class="fb empty" id="aFb"></div><div class="controls" id="aProg"></div></div>';
+  $('aA').addEventListener('click',function(e){
+   if(qaState.done[qaState.i])return;
+   var svg=e.target.closest('svg');if(!svg)return;
+   var rc=svg.getBoundingClientRect();
+   var y=(e.clientY-rc.top)*(200/rc.height);
+   var d=Math.round(30+(BOT-y)/(S/2));
+   if(d<25||d>44)return;
+   qaState.answer.push({l:((d%7)+7)%7,o:Math.floor(d/7),a:qaState.acc});
+   renderAns();
+  });
+  $('aNat').addEventListener('click',function(){qaState.acc=0;renderAns();});
+  $('aSh').addEventListener('click',function(){qaState.acc=1;renderAns();});
+  $('aFl').addEventListener('click',function(){qaState.acc=-1;renderAns();});
+  $('aUndo').addEventListener('click',function(){qaState.answer.pop();renderAns();});
+  $('aClear').addEventListener('click',function(){qaState.answer=[];renderAns();});
+  $('aListen').addEventListener('click',function(){playSeq(QA[qaState.i].q,0.4);});
+  $('aPlay').addEventListener('click',function(){playSeq(qaState.answer,0.4);});
+  $('aCheck').addEventListener('click',qaCheck);
+ }
+ function renderAns(){
+  var it=QA[qaState.i];
+  var inner='';
+  for(var i=0;i<it.q.length;i++)inner+=noteSvg(it.q[i],60+i*52,'#26221c',{});
+  $('aQ').innerHTML=staffSvg(500,inner,false);
+  var ans=qaState.answer;
+  var inner2='';
+  for(var j=0;j<ans.length;j++){
+   var col=(j===ans.length-1)?'#1c4f8f':'#0b6bcb';
+   inner2+=noteSvg(ans[j],60+j*52,col,{num:String(j+1)});
+  }
+  if(ans.length<8)inner2+='<text x="'+(60+ans.length*52)+'" y="'+(TOP-16)+'" font-size="22" text-anchor="middle" fill="#1c4f8f">↓</text>';
+  $('aA').innerHTML=staffSvg(500,inner2,true);
+  $('aNat').classList.toggle('active',qaState.acc===0);
+  $('aSh').classList.toggle('active',qaState.acc===1);
+  $('aFl').classList.toggle('active',qaState.acc===-1);
+  var d=Object.keys(qaState.done).length;
+  $('aProg').innerHTML='<span style="color:#5f584a;font-size:15px">Сочинено: '+d+' из '+QA.length+'</span>';
+ }
+ function qaCheck(){
+  var it=QA[qaState.i];
+  var ans=qaState.answer;
+  if(ans.length!==8){
+   setFb($('aFb'),'err','❌ В ответе должно быть 8 нот (как в вопросе). Сейчас: '+ans.length+'. Кликай по нижнему стану.');
+   return;
+  }
+  var bad=null;
+  for(var i=0;i<ans.length;i++){
+   var n=ans[i];
+   var ok=false;
+   if(it.mode==='C'||it.mode==='Am')ok=(n.a===0);
+   else if(it.mode==='G')ok=(n.a===0&&n.l!==3)||(n.l===3&&n.a===1);
+   if(!ok){bad={i:i,n:n,why:nm(n)+' не звучит в '+it.lab};break;}
+  }
+  if(bad){
+   setFb($('aFb'),'err','❌ <b>Где ошибся:</b> нота №'+(bad.i+1)+' ('+nm(bad.n)+'). <b>Почему:</b> '+bad.why+' — все звуки мелодии должны быть из гаммы ('+(it.mode==='G'?'в Соль мажоре ФА — только ♯':'в '+it.lab+' только «белые» клавиши')+')');
+   addErr('Допой ответ ('+it.lab+')','Нота вне лада: '+nm(bad.n)+'.');
+   return;
+  }
+  var last=ans[7];
+  if(last.l!==it.tonic||last.a!==0){
+   setFb($('aFb'),'err','❌ <b>Где ошибся:</b> последняя нота — '+nm(last)+', а нужно закончить на <b>тонике</b>. <b>Почему:</b> '+it.expl);
+   addErr('Допой ответ ('+it.lab+')','Финал не на тонике: '+nm(last)+' вместо '+L[it.tonic]+'.');
+   return;
+  }
+  qaState.done[qaState.i]=true;
+  playSeq(it.q.concat(ans),0.4);
+  setFb($('aFb'),'ok','✅ Отлично! Вопрос и твой ответ звучат как единая мелодия 🎉. Финал на тонике: '+nm(last)+'. Послушай всё целиком 🔊.');
+  if(Object.keys(qaState.done).length===QA.length&&!DONE.ans)doneAdd('ans',QA.length);
+  renderTabs();
+  setTimeout(ansNext,2200);
+ }
+ function ansNext(){
+  var pending=[];for(var i=0;i<QA.length;i++)if(!qaState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('aQ').innerHTML='';$('aA').innerHTML='';$('aFb').style.display='none';$('aProg').innerHTML='';
+   $('aFb').style.display='block';setFb($('aFb'),'ok','🎉 Все ответы сочинены — ты настоящий композитор!');
+   return;
+  }
+  qaState.i=pending[0];
+  qaState.answer=[];
+  qaState.acc=0;
+  renderAns();
+  var it=QA[qaState.i];
+  $('aFb').className='fb empty';$('aFb').innerHTML='Лад: '+it.lab+'. '+it.expl;
+ }
+ ansNext();
+};
+
+/* ================= ВКЛАДКА 3: СВОЯ ПЬЕСА ================= */
+var OWN=[
+ {key:'C', lab:'До мажор'},
+ {key:'Am', lab:'ля минор'}
+];
+var ownState={sel:0,notes:[],acc:0,done:{}};
+RENDER.own=function(el){
+ if(!RENDER.own._init){
+  RENDER.own._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Финальное задание: сочини собственную мелодию из 8 нот. Выбери лад — и вперёд!</p>'+
+  '<div class="chips" id="oMode"></div>'+
+  '<div class="staffbox" id="oStaff"></div>'+
+  '<div class="controls"><span style="color:#8a8378">знак:</span>'+
+  '<button class="btn accbtn" id="oNat">♮</button><button class="btn accbtn" id="oSh">♯</button><button class="btn accbtn" id="oFl">♭</button>'+
+  '<button class="btn" id="oUndo">↩</button><button class="btn" id="oClear">Очистить</button>'+
+  '<button class="btn" id="oPlay">🔊 Послушать</button><button class="btn primary" id="oCheck">Проверить</button></div>'+
+  '<div class="checkrow" id="oChecklist"></div>'+
+  '<div class="fb empty" id="oFb"></div><div class="controls" id="oProg"></div></div>';
+  $('oMode').addEventListener('click',function(e){
+   var b=e.target.closest('[data-mode]');if(!b)return;
+   ownState.sel=+b.getAttribute('data-mode');
+   ownState.notes=[];
+   renderOwn();
+  });
+  $('oStaff').addEventListener('click',function(e){
+   var it=OWN[ownState.sel];
+   if(ownState.done[it.key])return;
+   var svg=e.target.closest('svg');if(!svg)return;
+   var rc=svg.getBoundingClientRect();
+   var y=(e.clientY-rc.top)*(200/rc.height);
+   var d=Math.round(30+(BOT-y)/(S/2));
+   if(d<25||d>44)return;
+   ownState.notes.push({l:((d%7)+7)%7,o:Math.floor(d/7),a:ownState.acc});
+   renderOwn();
+  });
+  $('oNat').addEventListener('click',function(){ownState.acc=0;renderOwn();});
+  $('oSh').addEventListener('click',function(){ownState.acc=1;renderOwn();});
+  $('oFl').addEventListener('click',function(){ownState.acc=-1;renderOwn();});
+  $('oUndo').addEventListener('click',function(){ownState.notes.pop();renderOwn();});
+  $('oClear').addEventListener('click',function(){ownState.notes=[];renderOwn();});
+  $('oPlay').addEventListener('click',function(){playSeq(ownState.notes,0.4);});
+  $('oCheck').addEventListener('click',ownCheck);
+ }
+ ownState.done=ownState.done||{};
+ renderOwn();
+ function renderOwn(){
+  var it=OWN[ownState.sel];
+  var ch='';
+  OWN.forEach(function(m,i){ch+='<button class="chip'+(i===ownState.sel?' active':'')+'" data-mode="'+i+'">'+m.lab+'</button>';});
+  $('oMode').innerHTML=ch;
+  var ans=ownState.notes;
+  var inner='';
+  for(var j=0;j<ans.length;j++)inner+=noteSvg(ans[j],60+j*52,'#0b6bcb',{num:String(j+1)});
+  if(ans.length<8)inner+='<text x="'+(60+ans.length*52)+'" y="'+(TOP-16)+'" font-size="22" text-anchor="middle" fill="#1c4f8f">↓</text>';
+  $('oStaff').innerHTML=staffSvg(500,inner,true);
+  $('oNat').classList.toggle('active',ownState.acc===0);
+  $('oSh').classList.toggle('active',ownState.acc===1);
+  $('oFl').classList.toggle('active',ownState.acc===-1);
+  var d=Object.keys(ownState.done).length;
+  $('oProg').innerHTML='<span style="color:#5f584a;font-size:15px">Пьес сочинено: '+d+' из '+OWN.length+'</span>';
+ }
+ function ownCheck(){
+  var it=OWN[ownState.sel];
+  var ans=ownState.notes;
+  var okCount=ans.length===8;
+  var badNote=null;
+  for(var i=0;i<ans.length;i++){
+   var n=ans[i];
+   var ok=(it.key==='G')?((n.a===0&&n.l!==3)||(n.l===3&&n.a===1)):(n.a===0);
+   if(!ok){badNote=n;break;}
+  }
+  var okMode=!badNote;
+  var okTonic=ans.length===8&&ans[7].l===tonicOf(it.key)&&ans[7].a===0;
+  var checks=[
+   {t:'8 звуков в мелодии', ok:okCount},
+   {t:'все звуки из лада ('+it.lab+')', ok:okMode},
+   {t:'заканчивается тоникой', ok:okTonic}
+  ];
+  var html='';
+  for(var c=0;c<checks.length;c++)html+='<div>'+(checks[c].ok?'✅':'⚠️')+' '+checks[c].t+'</div>';
+  $('oChecklist').innerHTML=html;
+  if(okCount&&okMode&&okTonic){
+   ownState.done[it.key]=true;
+   playSeq(ans,0.45);
+   setFb($('oFb'),'ok','🎉 <b>Пьеса готова!</b> Все три правила соблюдены. Послушай 🔊 — и сыграй её ещё раз с начала до конца. Ты закончил весь курс сольфеджио!');
+   if(Object.keys(ownState.done).length===OWN.length&&!DONE.own)doneAdd('own',OWN.length);
+   renderTabs();
+  }else{
+   var msgs=[];
+   if(!okCount)msgs.push('нужно ровно 8 нот (сейчас '+ans.length+')');
+   if(!okMode)msgs.push('нота '+nm(badNote)+' не из лада — в '+(it.key==='G'?'Соль мажоре ФА только с ♯':''+it.lab+' только «белые» ноты'));
+   if(!okTonic)msgs.push('последняя нота должна быть тоникой'+(ans.length?' (сейчас '+nm(ans[ans.length-1])+', нужна '+L[tonicOf(it.key)]+')':''));
+   setFb($('oFb'),'err','❌ Пока не всё в порядке: '+msgs.join('; ')+'. Правь — и проверяй снова!');
+   addErr('Своя пьеса ('+it.lab+')',msgs.join('; '));
+  }
+ }
+ function tonicOf(key){return key==='C'?0:5;}
+ renderOwn();
+};
+
+/* ================= ПРОГРЕСС ================= */
+var bar=document.createElement('div');
+bar.className='card';bar.style.padding='12px 18px';
+bar.innerHTML='<div style="font-size:15px;color:#5f584a" id="kursProg">Прогресс раздела: 0 из '+TOTAL+'</div>'+
+'<div class="bar" style="height:12px;background:#e8e2d4;border-radius:8px;overflow:hidden;margin-top:6px"><div id="kursFill" style="height:100%;width:0%;background:#1c4f8f"></div></div>';
+document.querySelector('.wrap').insertBefore(bar,document.getElementById('tabs'));
+setInterval(function(){
+ var d=0;TABS.forEach(function(t){d+=(DONE[t.id]||0);});
+ $('kursProg').textContent='Прогресс раздела: '+d+' из '+TOTAL+(d===TOTAL?' — 🎉 весь курс пройден!':'');
+ $('kursFill').style.width=(d/TOTAL*100)+'%';
+},400);
+
+renderTabs();renderTab();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сольфеджио · Раздел 5. Ритм и размер</title>
+<meta property="og:title" content="Сольфеджио: ритм и размер">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f2ea;color:#2a251e;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.55}
+.topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #d9d2c2;box-shadow:0 2px 10px rgba(60,50,30,.08);padding:8px 14px}
+.toprow{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crumbs{font-size:14px;color:#8a8378;margin-right:auto}
+.crumbs b{color:#1c4f8f}
+.hbtn{font-size:14px;padding:7px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;white-space:nowrap}
+a.hbtn{color:#2a251e;text-decoration:none;display:inline-block}
+.hbtn.warn{border-color:#d9b84a;color:#8a6d1f;background:#fff6df}
+.hbtn:hover{background:#f0ead9}
+.wrap{max-width:1000px;margin:0 auto;padding:14px}
+h1{font-size:26px;margin:.1em 0;color:#1c4f8f}
+.sub{color:#7a7263;margin:.2em 0 .4em;font-size:16px}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.tabbtn{font-size:16px;padding:9px 14px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.tabbtn.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.card{background:#fff;border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 3px 12px rgba(60,50,30,.07)}
+.theorybox{background:#eef6ff;border-left:5px solid #5b9bd5;border-radius:10px;padding:12px 16px;margin:10px 0}
+.theorybox h3{margin:.2em 0 .4em;font-size:18px;color:#1c4f8f}
+.theorybox p{margin:.4em 0}
+.btn{font-size:16px;padding:9px 15px;border-radius:11px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;color:#2a251e}
+.btn:hover{background:#f0ead9}
+.btn.primary{background:#1c4f8f;border-color:#1c4f8f;color:#fff}
+.btn.primary:hover{background:#16406f}
+.btn.tiny{font-size:14px;padding:5px 11px;border-radius:9px}
+.btn:disabled{opacity:.45;cursor:default}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center;justify-content:center}
+.staffbox{background:#fffef9;border:1.5px solid #e2dccd;border-radius:12px;padding:6px 10px;display:inline-block}
+.fb{border-radius:12px;padding:12px 16px;margin:10px 0;min-height:22px}
+.fb.empty{background:#f4f1e8;color:#6f6858}
+.fb.ok{background:#e7f6ec;border:1.5px solid #a9d8b6}
+.fb.err{background:#fdeaea;border:1.5px solid #efb9b9}
+.errcard{background:#fff;border:1.5px solid #efb9b9;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:16px}
+.errcard .row{margin:3px 0}
+.errcard .t{color:#b04a4a;font-weight:700}
+.errcard .r{color:#23843c;font-weight:700}
+.modalbg{position:fixed;inset:0;background:rgba(40,32,20,.45);display:none;z-index:90}
+.modalbg.show{display:block}
+.modal{position:fixed;z-index:95;top:4vh;left:50%;transform:translateX(-50%);width:min(680px,92vw);max-height:88vh;overflow:auto;background:#fff;border-radius:16px;padding:18px 22px;display:none;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.modal.show{display:block}
+.modal h2{margin:.1em 0 .4em;font-size:21px;color:#1c4f8f}
+.modal .closebtn{position:sticky;top:0;float:right}
+.gloss{border-bottom:1px dashed #d8d2c4;padding:7px 2px}
+.gloss b{color:#1c4f8f}
+.gloss p{margin:.2em 0}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0;justify-content:center}
+.chip{font-size:16px;padding:7px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.chip.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.notesrow{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.qwrap{text-align:center}
+.qtext{font-size:19px;margin:10px 0}
+.oopts{display:flex;flex-direction:column;gap:8px;max-width:520px;margin:10px auto}
+.oop{font-size:17px;padding:11px 15px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;text-align:left}
+.oop:hover{background:#f0ead9}
+.oop.right{background:#e7f6ec;border-color:#23843c;font-weight:700}
+.oop.wrong{background:#fdeaea;border-color:#e08585}
+.optrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.optcard{background:#fffef9;border:2px solid #c9c2b2;border-radius:12px;padding:8px 12px;cursor:pointer}
+.optcard:hover{background:#f0ead9}
+.optcard.right{border-color:#23843c;background:#e7f6ec;font-weight:700}
+.optcard.wrong{border-color:#e08585;background:#fdeaea}
+.errlist{max-height:50vh;overflow:auto}
+.errlist .errcard{margin:6px 0}
+.modalnote{color:#8a8378;font-size:14px}
+.poem{font-style:italic;color:#544c40;margin:8px auto;max-width:520px;text-align:center;white-space:pre-line}
+@media (max-width:640px){body{font-size:16px}h1{font-size:23px}}
+</style>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(114071811, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:false
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</head>
+<body>
+
+<div class="topbar"><div class="toprow">
+  <div class="crumbs">🎵 Сольфеджио · <b>Раздел 5. Ритм и размер</b> · раздел 5 из 6</div>
+  <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <button class="hbtn" id="btnTheory">📖 Теория</button>
+  <button class="hbtn" id="btnGloss">📚 Словарик</button>
+  <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
+</div></div>
+
+<div class="wrap">
+  <h1>Ритм и размер</h1>
+  <p class="sub">Длительности, такты и размеры, группировка длительностей. Каждое упражнение — на своей вкладке. Теория и словарик всегда под рукой — кнопки сверху.</p>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="tabBody"></div>
+</div>
+
+<div class="modalbg" id="modalBg"></div>
+<div class="modal" id="modalTheory">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>📖 Теория раздела</h2>
+  <div id="theoryBody"></div>
+</div>
+<div class="modal" id="modalGloss">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>📚 Словарик</h2>
+  <div id="glossBody"></div>
+</div>
+<div class="modal" id="modalErrs">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>⚠️ Мои ошибки</h2>
+  <p class="modalnote">Здесь собираются все твои ошибки с разбором. Перечитай — и дальше таких ошибок не будет!</p>
+  <div class="errlist" id="errList"></div>
+  <div style="margin-top:10px"><button class="btn tiny" id="btnErrClear">Очистить журнал</button></div>
+</div>
+
+<footer style="text-align:center;color:#8a8378;font-size:14px;padding:20px">
+  <a href="kurs-index.html" style="color:#1c4f8f">🏠 Оглавление курса</a> ·
+  <a href="kurs-razdel-4-akkordy.html" style="color:#1c4f8f">← Раздел 4: Аккорды</a> ·
+  <a href="kurs-razdel-6-tvorcheskie.html" style="color:#1c4f8f">Раздел 6: Творческие задания →</a>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+var $=function(id){return document.getElementById(id);};
+
+/* ================= ДЛИТЕЛЬНОСТИ ================= */
+/* длительность в долях (доля = четверть) */
+var DUR={'w':4,'h':2,'qd':1.5,'q':1,'e':0.5,'s':0.25,'qr':1,'er':0.5};
+var DURLAB={'w':'целая','h':'половинная','qd':'четверть с точкой','q':'четверть','e':'восьмая','s':'шестнадцатая','qr':'пауза (четверть)','er':'пауза (восьмая)'};
+var SIZES={'2/4':2,'3/4':3,'4/4':4,'3/8':1.5};
+function fracNum(v){
+ if(v===4)return '4'; if(v===2)return '2'; if(v===1.5)return '1½'; if(v===1)return '1';
+ if(v===0.5)return '½'; if(v===0.25)return '¼'; return String(v);
+}
+
+/* ================= РИСОВАНИЕ РИТМА ================= */
+var SS=13,STOP=52,SBOT=STOP+4*SS;
+function syOf(d){return SBOT-(d-30)*SS/2;}
+function staffLines(x0,x1){var s='';for(var i=0;i<5;i++){var y=STOP+i*SS;s+='<line x1="'+x0+'" y1="'+y+'" x2="'+x1+'" y2="'+y+'" stroke="#40382e" stroke-width="1.3"/>';}return s;}
+function clefSvg(){return '<text x="8" y="'+(SBOT+14)+'" font-size="58" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';}
+function barLine(x){return '<line x1="'+x+'" y1="'+STOP+'" x2="'+x+'" y2="'+SBOT+'" stroke="#40382e" stroke-width="1.6"/>';}
+/* одна длительность в точке x на высоте y; stemH — высота штиля; noFlags — не рисовать флажки (ноты под ребром) */
+function durSvg(k,x,color,y,stemH,noFlags){
+ if(stemH===undefined)stemH=36;
+ var s='',fill=(k==='w'||k==='h')?'#fff':'#26221e';
+ var stemTop=y-stemH;
+ if(k==='qr'){
+  s+='<path d="M '+(x-2)+' '+(y-26)+' l 6 7 l -8 5 l 8 9 l -3 8" fill="none" stroke="'+color+'" stroke-width="2.4" stroke-linejoin="round"/>';
+  return s;
+ }
+ if(k==='er'){
+  s+='<line x1="'+(x-6)+'" y1="'+(y-30)+'" x2="'+(x+3)+'" y2="'+(y-16)+'" stroke="'+color+'" stroke-width="2.2"/>';
+  s+='<circle cx="'+(x-8)+'" cy="'+(y-29)+'" r="2.6" fill="'+color+'"/>';
+  return s;
+ }
+ if(k==='w'){
+  s+='<ellipse cx="'+x+'" cy="'+y+'" rx="10" ry="6" fill="#fff" stroke="'+color+'" stroke-width="3.4" transform="rotate(-12 '+x+' '+y+')"/>';
+  return s;
+ }
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="'+fill+'" stroke="'+color+'" stroke-width="3.4" transform="rotate(-12 '+x+' '+y+')"/>';
+ s+='<line x1="'+(x+7.2)+'" y1="'+(y-3)+'" x2="'+(x+7.2)+'" y2="'+stemTop+'" stroke="'+color+'" stroke-width="1.8"/>';
+ if(k==='qd')s+='<circle cx="'+(x+15)+'" cy="'+(y-4)+'" r="2.6" fill="'+color+'"/>';
+ if(!noFlags){
+  if(k==='e'||k==='s')s+='<path d="M '+(x+7.2)+' '+(stemTop)+' q 9 6 7 17" fill="none" stroke="'+color+'" stroke-width="2"/>';
+  if(k==='s')s+='<path d="M '+(x+7.2)+' '+(stemTop+9)+' q 9 6 7 15" fill="none" stroke="'+color+'" stroke-width="2"/>';
+ }
+ return s;
+}
+/* mes: такты; такт = массив групп; группа = {n:['e','e'],beam:1} | {n:['q']} */
+function rhythmSvg(mes,W,mini){
+ var S,TOP,BOT,H,clefSize,stem;
+ if(mini){S=8;TOP=14;BOT=TOP+4*S;H=92;clefSize=30;stem=22;}
+ else{S=SS;TOP=STOP;BOT=SBOT;H=200;clefSize=58;stem=30;}
+ function yOf(d){return BOT-(d-30)*S/2;}
+ var y=yOf(34);
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;display:block">';
+ for(var i=0;i<5;i++){var ly=TOP+i*S;s+='<line x1="4" y1="'+ly+'" x2="'+(W-4)+'" y2="'+ly+'" stroke="#40382e" stroke-width="1.2"/>';}
+ s+='<text x="8" y="'+(BOT+8)+'" font-size="'+clefSize+'" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';
+ var x=46;
+ for(var mi=0;mi<mes.length;mi++){
+  var groups=mes[mi];
+  var gstart=x;
+  for(var gi=0;gi<groups.length;gi++){
+   var g=groups[gi];
+   var gap=g.beam?26:40;
+   var stems=[];
+   for(var ni=0;ni<g.n.length;ni++){
+    var k=g.n[ni];
+    s+=durSvg(k,x,'#26221e',y,stem,!!g.beam);
+    if(g.beam&&(k==='e'||k==='s'))stems.push(x);
+    if(k==='w')x+=54;else x+=gap;
+   }
+   if(stems.length>1){
+    var sx1=stems[0]+7.2,sx2=stems[stems.length-1]+7.2;
+    var by=y-stem;
+    var th=4.2;
+    if(g.n[stems.length-1]==='s'){s+='<line x1="'+sx1+'" y1="'+by+'" x2="'+sx2+'" y2="'+by+'" stroke="#26221e" stroke-width="'+th+'"/>';by=y-stem+7;}
+    s+='<line x1="'+sx1+'" y1="'+by+'" x2="'+sx2+'" y2="'+by+'" stroke="#26221e" stroke-width="'+th+'"/>';
+   }
+  }
+  if(mi<mes.length-1){s+='<line x1="'+(x+8)+'" y1="'+TOP+'" x2="'+(x+8)+'" y2="'+BOT+'" stroke="#40382e" stroke-width="1.6"/>';x+=24;}
+ }
+ s+='<line x1="'+(W-10)+'" y1="'+TOP+'" x2="'+(W-10)+'" y2="'+BOT+'" stroke="#40382e" stroke-width="3"/>';
+ s+='<line x1="'+(W-16)+'" y1="'+TOP+'" x2="'+(W-10)+'" y2="'+BOT+'" stroke="#40382e" stroke-width="2"/>';
+ s+='</svg>';
+ return s;
+}
+/* подписи-стрелки под длительностями (для таблицы длительностей) */
+function durRowSvg(kinds,W){
+ var y=syOf(34);
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' 210" style="width:100%;max-width:'+W+'px;display:block">';
+ s+=staffLines(4,W-4)+clefSvg();
+ var x=52;
+ for(var i=0;i<kinds.length;i++){
+  var k=kinds[i];
+  if(k==='ee'){s+=durSvg('e',x,'#26221e',y,36,true);s+=durSvg('e',x+26,'#26221e',y,36,true);s+='<line x1="'+(x+7.2)+'" y1="'+(y-36)+'" x2="'+(x+33.2)+'" y2="'+(y-36)+'" stroke="#26221e" stroke-width="4.2"/>';
+   s+='<text x="'+(x+13)+'" y="'+(SBOT+38)+'" font-size="13" font-weight="700" text-anchor="middle" fill="#1c4f8f">2 восьмые</text>';x+=72;continue;}
+  if(k==='ssss'){for(var j=0;j<4;j++)s+=durSvg('s',x+j*24,'#26221e',y,36,true);
+   s+='<line x1="'+(x+7.2)+'" y1="'+(y-36)+'" x2="'+(x+79.2)+'" y2="'+(y-36)+'" stroke="#26221e" stroke-width="4.2"/><line x1="'+(x+7.2)+'" y1="'+(y-29)+'" x2="'+(x+79.2)+'" y2="'+(y-29)+'" stroke="#26221e" stroke-width="4.2"/>';
+   s+='<text x="'+(x+38)+'" y="'+(SBOT+38)+'" font-size="13" font-weight="700" text-anchor="middle" fill="#1c4f8f">4 шестнадцатые</text>';x+=104;continue;}
+  s+=durSvg(k,x,'#26221e',y);
+  s+='<text x="'+x+'" y="'+(SBOT+38)+'" font-size="13" font-weight="700" text-anchor="middle" fill="#1c4f8f">'+DURLAB[k]+'</text>';
+  x+=(k==='w')?86:70;
+ }
+ s+='</svg>';
+ return s;
+}
+
+/* ================= МОДАЛЬНЫЕ ОКНА ================= */
+var ERRS=[];
+function updErrCnt(){$('errCnt').textContent=ERRS.length;}
+function addErr(where,text){
+ ERRS.push({where:where,text:text});
+ var li=$('errList');var d=document.createElement('div');d.className='errcard';
+ d.innerHTML='<div class="row"><span class="t">Где:</span> '+where+'</div><div class="row"><span class="t">Ошибка:</span> '+text+'</div>';
+ li.appendChild(d);updErrCnt();
+}
+function openModal(id){$('modalBg').classList.add('show');$(id).classList.add('show');}
+function closeModals(){$('modalBg').classList.remove('show');
+ ['modalTheory','modalGloss','modalErrs'].forEach(function(id){$(id).classList.remove('show');});}
+$('modalBg').addEventListener('click',closeModals);
+Array.prototype.forEach.call(document.querySelectorAll('[data-close]'),function(b){b.addEventListener('click',closeModals);});
+$('btnErrClear').addEventListener('click',function(){ERRS=[];$('errList').innerHTML='';updErrCnt();});
+$('btnTheory').addEventListener('click',function(){openModal('modalTheory');});
+$('btnGloss').addEventListener('click',function(){openModal('modalGloss');});
+$('btnErrs').addEventListener('click',function(){openModal('modalErrs');});
+
+/* ================= ТЕОРИЯ ================= */
+$('theoryBody').innerHTML=
+ '<div class="theorybox"><h3>Длительности</h3>'+
+ '<p>Если четверть — «одна доля», то: целая — 4 доли, половинная — 2, четверть — 1, восьмая — ½, шестнадцатая — ¼. <b>Точка</b> увеличивает длительность на её половину: четверть с точкой — 1½ доли.</p>'+
+ '<p><b>Паузы</b> — знаки молчания той же длины: пауза четверть молчит 1 долю, пауза восьмая — ½.</p></div>'+
+ '<div class="theorybox"><h3>Такт и размер</h3>'+
+ '<p>Музыка делится тактовой чертой на <b>такты</b>. <b>Размер</b> (например, 2/4) говорит: верхняя цифра — сколько долей в такте, нижняя — какая длительность равна доле. В 2/4 — две четверти, в 3/4 — три четверти, в 4/4 — четыре, в 3/8 — три восьмых.</p>'+
+ '<p>Первая доля такта — <b>сильная</b>: она звучит подчеркнуто. Если сильная доля приходит через одну — метр двухдольный (марш), через две — трёхдольный (вальс).</p></div>'+
+ '<div class="theorybox"><h3>Группировка длительностей</h3>'+
+ '<p>Восьмые и шестнадцатые объединяют <b>ребром</b> — общей перекладинкой у штилей, по одной группе на долю: в 2/4 две восьмые — одним ребром.</p>'+
+ '<p>При пении по слогам каждую восьмую записывают отдельным <b>флажком</b> — это <b>вокальная группировка</b>. При игре на инструменте те же ноты объединяют ребром — <b>инструментальная группировка</b>. Ритм при этом не меняется!</p></div>';
+
+/* ================= СЛОВАРИК ================= */
+var GLOSS=[
+ {t:'Длительность', d:'сколько времени звучит нота'},
+ {t:'Целая', d:'длительность без штиля — 4 доли'},
+ {t:'Половинная', d:'пустая нота со штилем — 2 доли'},
+ {t:'Четверть', d:'закрашенная нота со штилем — 1 доля'},
+ {t:'Восьмая', d:'четверть с флажком — ½ доли; две восьмые = одна четверть'},
+ {t:'Шестнадцатая', d:'с двумя флажками — ¼ доли; четыре шестнадцатые = одна четверть'},
+ {t:'Точка', d:'увеличивает длительность на её половину: четверть с точкой = 1½ доли'},
+ {t:'Пауза', d:'знак молчания; длительность пауз считается как у нот'},
+ {t:'Такт', d:'отрезок между двумя тактовыми чертами'},
+ {t:'Размер', d:'цифры после ключа: сколько долей в такте и какая длительность равна доле'},
+ {t:'Доля', d:'счётная единица ритма; в 2/4, 3/4 и 4/4 доля — четверть, в 3/8 — восьмая'},
+ {t:'Сильная доля', d:'первая доля такта, звучит подчеркнуто'},
+ {t:'Ребро', d:'перекладина, объединяющая штили восьмых и шестнадцатых'},
+ {t:'Вокальная группировка', d:'каждая нота отдельным флажком — удобно петь по слогам'},
+ {t:'Двухдольный / трёхдольный метр', d:'сильные доли через одну (ТА-та) или через две (ТА-та-та)'}
+];
+var gh='';
+GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></div>';});
+$('glossBody').innerHTML=gh;
+
+/* ================= ВКЛАДКИ ================= */
+var TABS=[
+ {id:'durq', t:'🎵 Длительности и паузы (упр. 1)', units:8},
+ {id:'size', t:'📏 Определи размер (упр. 2)', units:6},
+ {id:'fill', t:'🧩 Собери такт (упр. 3)', units:6},
+ {id:'extra',t:'✂️ Лишние длительности (упр. 4)', units:3},
+ {id:'part', t:'🎼 Досочини партитуру (упр. 5)', units:2},
+ {id:'voc',  t:'🔄 Флажки → рёбра (упр. 6)', units:4},
+ {id:'poem', t:'📖 Стихи: какой метр? (упр. 7)', units:3}
+];
+var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
+var DONE={};
+var curTab=TABS[0].id;
+
+function doneAdd(tabId,n){
+ DONE[tabId]=(DONE[tabId]||0)+n;
+ renderTabs();
+}
+function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+function renderTabs(){
+ var h='';
+ TABS.forEach(function(t){
+  var d=DONE[t.id]||0;
+  h+='<button class="tabbtn'+(t.id===curTab?' active':'')+'" data-tab="'+t.id+'">'+t.t+(d>=t.units?' ✓':'')+'</button>';
+ });
+ $('tabs').innerHTML=h;
+}
+$('tabs').addEventListener('click',function(e){
+ var b=e.target.closest('[data-tab]');if(!b)return;
+ curTab=b.getAttribute('data-tab');
+ renderTabs();
+ renderTab();
+});
+
+var tabBody=$('tabBody');
+var RENDER={};
+
+function renderTab(){
+ TABS.forEach(function(t){
+  var pid='panel_'+t.id;
+  var el=document.getElementById(pid);
+  if(!el){el=document.createElement('div');el.id=pid;el.style.display='none';tabBody.appendChild(el);}
+  el.style.display=(t.id===curTab?'block':'none');
+ });
+ var cur=document.getElementById('panel_'+curTab);
+ (RENDER[curTab]||function(){})(cur);
+}
+
+/* ================= ЗВУК: ЩЕЛЧКИ РИТМА ================= */
+var AC=null;
+function playRhythm(mes){
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(AC.state==='suspended'){try{AC.resume();}catch(e){}}
+ var beat=0.42;
+ var t=AC.currentTime+0.05;
+ for(var mi=0;mi<mes.length;mi++){
+  var groups=mes[mi];
+  for(var gi=0;gi<groups.length;gi++){
+   var g=groups[gi];
+   for(var ni=0;ni<g.n.length;ni++){
+    var k=g.n[ni];
+    if(k!=='qr'&&k!=='er'){
+     (function(tt){
+      var o=AC.createOscillator(),gn=AC.createGain();
+      o.type='square';o.frequency.value=880;
+      gn.gain.setValueAtTime(0.0001,tt);gn.gain.linearRampToValueAtTime(0.18,tt+0.008);gn.gain.exponentialRampToValueAtTime(0.0001,tt+0.09);
+      o.connect(gn);gn.connect(AC.destination);o.start(tt);o.stop(tt+0.1);
+     })(t);
+    }
+    t+=DUR[k]*beat;
+   }
+  }
+  t+=beat*0.15;
+ }
+}
+
+/* ================= ФАБРИКА ВИКТОРИН ================= */
+function quizFactory(tabId, items, topHtml, hint, errWhere){
+ var st={i:0,done:{}};
+ var ids={q:'qz_q_'+tabId,o:'qz_o_'+tabId,f:'qz_f_'+tabId,p:'qz_p_'+tabId};
+ var fn=function(el){
+  if(!fn._init){
+   fn._init=true;
+   el.innerHTML=topHtml+
+    '<div class="qtext" id="'+ids.q+'"></div><div class="oopts" id="'+ids.o+'"></div>'+
+    '<div class="fb empty" id="'+ids.f+'"></div><div class="controls" id="'+ids.p+'"></div>';
+   $(ids.o).addEventListener('click',function(e){
+    var b=e.target.closest('[data-ok]');if(!b||b.getAttribute('data-ok')==='x')return;
+    var it=items[st.i];
+    var right=(typeof it.a==='number')?it.o[it.a]:it.ans;
+    var ok=(typeof it.a==='number')?(b.getAttribute('data-ok')==='1'):(b.getAttribute('data-txt')===it.ans);
+    if(ok){
+     b.classList.add('right');
+     st.done[st.i]=true;
+     setFb($(ids.f),'ok','✅ Верно! '+it.expl);
+     if(!st.counted){st.counted={};}
+     if(!st.counted[st.i]){st.counted[st.i]=true;doneAdd(tabId,1);}
+     prog();
+     setTimeout(next,1300);
+    }else{
+     b.classList.add('wrong');
+     setFb($(ids.f),'err','❌ <b>Где ошибся:</b> не тот ответ. <b>Почему:</b> '+it.expl);
+     addErr(errWhere,'Вопрос: '+it.q+' Правильный ответ: '+right+'.');
+     var all=$(ids.o).querySelectorAll('.oop');
+     for(var i=0;i<all.length;i++){
+      if(typeof it.a==='number'&&all[i].getAttribute('data-ok')==='1')all[i].classList.add('right');
+      if(typeof it.a!=='number'&&all[i].getAttribute('data-txt')===it.ans)all[i].classList.add('right');
+     }
+    }
+   });
+  }
+  next();
+  function next(){
+   var pending=[];for(var i=0;i<items.length;i++)if(!st.done[i])pending.push(i);
+   if(pending.length===0){
+    $(ids.q).textContent='🎉 Всё верно!';$(ids.o).innerHTML='';$(ids.f).style.display='none';$(ids.p).innerHTML='';return;
+   }
+   st.i=pending[0];
+   var it=items[st.i];
+   $(ids.q).innerHTML='🎹 '+it.q;
+   $(ids.o).innerHTML=shuffle(it.o).map(function(o,idx){
+    var ok=(typeof it.a==='number')?idx===it.a:o===it.ans;
+    return '<button class="oop" data-ok="'+(ok?'1':'0')+'" data-txt="'+String(o).replace(/"/g,'&quot;')+'">'+o+'</button>';
+   }).join('');
+   $(ids.f).className='fb empty';$(ids.f).innerHTML=hint;
+   prog();
+  }
+  function prog(){
+   var d=Object.keys(st.done).length;
+   $(ids.p).innerHTML='<span style="color:#5f584a;font-size:15px">Ответлено: '+d+' из '+items.length+'</span>';
+  }
+ };
+ return fn;
+}
+
+/* ================= ВКЛАДКА 1: ДЛИТЕЛЬНОСТИ И ПАУЗЫ ================= */
+var DURQ=[
+ {q:'Сколько восьмых помещается в одной четверти?', o:['две','три','четыре','одна'], a:0, expl:'Четверть — 1 доля, восьмая — ½ доли: 1 : ½ = 2 восьмые. ♪♪ = ♩.'},
+ {q:'Сколько шестнадцатых помещается в одной четверти?', o:['четыре','две','восемь','три'], a:0, expl:'Шестнадцатая — ¼ доли: 1 : ¼ = 4 шестнадцатые. ♪♪♪♪ = ♩.'},
+ {q:'Сколько долей звучит целая нота?', o:['4','2','1','8'], a:0, expl:'Целая — самая долгая длительность без штиля: 4 доли (в 4/4 — целый такт).'},
+ {q:'Чем половинная нота отличается от целой?', o:['у неё есть штиль','она закрашена','у неё флажок','ничем'], a:0, expl:'Обе «пустые», но целая — без штиля (4 доли), половинная — со штилем (2 доли).'},
+ {q:'Четверть с точкой — сколько это долей?', o:['1½','1','2','½'], a:0, expl:'Точка добавляет половину: 1 + 0,5 = 1½ доли. ♩. = ♩ + ♪.'},
+ {q:'Сколько долей молчит восьмая пауза?', o:['½','1','¼','2'], a:0, expl:'Пауза молчит столько же, сколько звучит одноимённая длительность: восьмая пауза — ½ доли.'},
+ {q:'Две восьмые под ребром — сколько долей вместе?', o:['1','½','2','¼'], a:0, expl:'Каждая восьмая — ½ доли, вместе — 1 доля (как четверть).'},
+ {q:'Сколько четвертей помещается в такте 3/4?', o:['три','две','четыре','одна'], a:0, expl:'Размер 3/4: три доли, доля — четверть. Значит, три четверти заполняют такт.'}
+];
+RENDER.durq=quizFactory('durq',DURQ,
+ '<div class="qwrap"><div class="staffbox" style="width:100%">'+durRowSvg(['w','h','qd','q','ee','ssss'],900)+'</div>'+
+ '<p style="color:#5f584a;font-size:15px">Доля = четверть (как в размерах 2/4, 3/4 и 4/4).</p>',
+ 'Вспоминай: четверть — 1 доля, восьмая — ½, шестнадцатая — ¼.',
+ 'Длительности и паузы');
+
+/* ================= ВКЛАДКА 2: ОПРЕДЕЛИ РАЗМЕР ================= */
+var SIZEEX=[
+ {mes:[[{n:['q']},{n:['q']},{n:['q']},{n:['q']}]], ans:'4/4', expl:'Четыре четверти — один такт 4/4.'},
+ {mes:[[{n:['e','e'],beam:1},{n:['q']}]], ans:'2/4', expl:'Две восьмые (1 доля) + четверть (1 доля) = 2 доли — размер 2/4.'},
+ {mes:[[{n:['h']},{n:['q']}]], ans:'3/4', expl:'Половинная (2 доли) + четверть (1 доля) = 3 доли — размер 3/4.'},
+ {mes:[[{n:['q']},{n:['q']},{n:['q']}]], ans:'3/4', expl:'Три четверти — три доли, размер 3/4.'},
+ {mes:[[{n:['e','e'],beam:1},{n:['e','e'],beam:1},{n:['e','e'],beam:1}]], ans:'3/4', expl:'Три группы по две восьмые: ½+½ трижды = 3 доли — размер 3/4.'},
+ {mes:[[{n:['e']},{n:['e']},{n:['e']}]], ans:'3/8', expl:'Здесь доля — восьмая: три восьмых в такте, размер 3/8.'}
+];
+var sizeState={i:0,done:{}};
+RENDER.size=function(el){
+ if(!RENDER.size._init){
+  RENDER.size._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Посчитай доли в такте (послушай ритм 🔊) и выбери размер:</p>'+
+  '<div class="staffbox" id="szBox"></div>'+
+  '<div class="controls"><button class="btn" id="szListen">🔊 Послушать ритм</button></div>'+
+  '<div class="optrow" id="szOpts"></div>'+
+  '<div class="fb empty" id="szFb"></div><div class="controls" id="szProg"></div></div>';
+  $('szOpts').addEventListener('click',function(e){
+   var b=e.target.closest('[data-size]');if(!b)return;
+   var it=SIZEEX[sizeState.i];
+   if(sizeState.done[sizeState.i])return;
+   if(b.getAttribute('data-size')===it.ans){
+    b.classList.add('right');
+    sizeState.done[sizeState.i]=true;
+    setFb($('szFb'),'ok','✅ Верно! '+it.expl);
+    if(Object.keys(sizeState.done).length===SIZEEX.length&&!DONE.size)doneAdd('size',SIZEEX.length);
+    setTimeout(sizeNext,1400);
+   }else{
+    b.classList.add('wrong');
+    setFb($('szFb'),'err','❌ <b>Где ошибся:</b> не тот размер. <b>Почему:</b> сложи длительности в долях ('+it.expl+')');
+    addErr('Определи размер','В примере размер '+it.ans+'. '+it.expl);
+   }
+  });
+  $('szListen').addEventListener('click',function(){playRhythm(SIZEEX[sizeState.i].mes);});
+ }
+ function sizeNext(){
+  var pending=[];for(var i=0;i<SIZEEX.length;i++)if(!sizeState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('szBox').innerHTML='';$('szOpts').innerHTML='';$('szFb').style.display='none';$('szProg').innerHTML='';
+   $('szFb').style.display='block';setFb($('szFb'),'ok','🎉 Все размеры определены!');
+   return;
+  }
+  sizeState.i=pending[0];
+  var it=SIZEEX[sizeState.i];
+  $('szBox').innerHTML=rhythmSvg(it.mes,320);
+  $('szFb').className='fb empty';$('szFb').innerHTML='Сложи длительности всех нот такта в долях.';
+  $('szOpts').innerHTML=['2/4','3/4','4/4','3/8'].map(function(sz){
+   return '<button class="chip" data-size="'+sz+'">'+sz+'</button>';
+  }).join('');
+  var d=Object.keys(sizeState.done).length;
+  $('szProg').innerHTML='<span style="color:#5f584a;font-size:15px">Определено: '+d+' из '+SIZEEX.length+'</span>';
+ }
+ sizeNext();
+};
+
+/* ================= ВКЛАДКА 3: СОБЕРИ ТАКТ ================= */
+var FILLS=[
+ {size:'2/4', given:[{n:['qd']}], opts:[[{n:['e']}],[{n:['q']}],[{n:['e','e'],beam:1}],[{n:['s','s','s','s'],beam:1}]], ans:0, expl:'Четверть с точкой занимает 1½ доли из 2 — осталось ½ доли, это одна восьмая.'},
+ {size:'3/4', given:[{n:['q']},{n:['q']}], opts:[[{n:['qd']}],[{n:['q']}],[{n:['s','s','s','s'],beam:1}],[{n:['e']}]], ans:1, expl:'Две четверти — 2 доли из 3. Осталась 1 доля — четверть.'},
+ {size:'3/4', given:[{n:['e','e'],beam:1}], opts:[[{n:['h']}],[{n:['qd']}],[{n:['e','e'],beam:1}],[{n:['e']}]], ans:0, expl:'Две восьмые — 1 доля из 3. Осталось 2 доли — половинная.'},
+ {size:'4/4', given:[{n:['h']}], opts:[[{n:['qd']},{n:['e']}],[{n:['e','e'],beam:1}],[{n:['q']}],[{n:['s','s','s','s'],beam:1}]], ans:0, expl:'Половинная — 2 доли из 4. Осталось 2 доли: четверть с точкой + восьмая (1½+½).'},
+ {size:'2/4', given:[{n:['s','s','s','s'],beam:1}], opts:[[{n:['e','e'],beam:1}],[{n:['qd']}],[{n:['e']}],[{n:['s','s'],beam:1}]], ans:0, expl:'Четыре шестнадцатые — 1 доля из 2. Осталась 1 доля — две восьмые (или четверть, но из вариантов — восьмые).'},
+ {size:'3/8', given:[{n:['e']}], opts:[[{n:['e']}],[{n:['q']}],[{n:['s','s','s','s'],beam:1}],[{n:['qd']}]], ans:0, expl:'В 3/8 доля — восьмая, в такте 1½ четверти = 3 восьмые. Одна восьмая уже есть — осталось ещё 2 восьмые.'}
+];
+var fillState={i:0,done:{}};
+RENDER.fill=function(el){
+ if(!RENDER.fill._init){
+  RENDER.fill._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Такт заполнен не до конца. Какая ритмическая группа дополнит его до целого такта?</p>'+
+  '<div class="staffbox" id="fBox"></div>'+
+  '<div class="optrow" id="fOpts"></div>'+
+  '<div class="fb empty" id="fFb"></div><div class="controls" id="fProg"></div></div>';
+  $('fOpts').addEventListener('click',function(e){
+   var b=e.target.closest('[data-idx]');if(!b)return;
+   var it=FILLS[fillState.i];
+   if(fillState.done[fillState.i])return;
+   var idx=+b.getAttribute('data-idx');
+   if(idx===it.ans){
+    b.classList.add('right');
+    fillState.done[fillState.i]=true;
+    setFb($('fFb'),'ok','✅ Верно! '+it.expl);
+    if(Object.keys(fillState.done).length===FILLS.length&&!DONE.fill)doneAdd('fill',FILLS.length);
+    setTimeout(fillNext,1500);
+   }else{
+    b.classList.add('wrong');
+    setFb($('fFb'),'err','❌ <b>Где ошибся:</b> эта группа не заполняет такт ровно. <b>Почему:</b> '+it.expl);
+    addErr('Собери такт ('+it.size+')','Правильный ответ — группа №'+(it.ans+1)+'. '+it.expl);
+   }
+  });
+ }
+ function fillNext(){
+  var pending=[];for(var i=0;i<FILLS.length;i++)if(!fillState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('fBox').innerHTML='';$('fOpts').innerHTML='';$('fFb').style.display='none';$('fProg').innerHTML='';
+   $('fFb').style.display='block';setFb($('fFb'),'ok','🎉 Все такты собраны!');
+   return;
+  }
+  fillState.i=pending[0];
+  var it=FILLS[fillState.i];
+  $('fBox').innerHTML='<div style="font-size:14px;color:#8a8378">размер '+it.size+'</div>'+rhythmSvg([it.given],300);
+  $('fFb').className='fb empty';$('fFb').innerHTML='Сосчитай, сколько долей уже стоит, и сколько не хватает.';
+  $('fOpts').innerHTML=it.opts.map(function(g,idx){
+   return '<button class="optcard" data-idx="'+idx+'">'+rhythmSvg([g],120,true)+'</button>';
+  }).join('');
+  var d=Object.keys(fillState.done).length;
+  $('fProg').innerHTML='<span style="color:#5f584a;font-size:15px">Собрано: '+d+' из '+FILLS.length+'</span>';
+ }
+ fillNext();
+};
+
+/* ================= ВКЛАДКА 4: ЛИШНИЕ ДЛИТЕЛЬНОСТИ ================= */
+var EXTRAS=[
+ {size:'2/4', notes:[{k:'q'},{k:'q'},{k:'q'}], rem:2, expl:'В 2/4 — две доли: две четверти. Третья четверть — лишняя.'},
+ {size:'3/4', notes:[{k:'e'},{k:'e'},{k:'q'},{k:'q'},{k:'q'}], rem:3, expl:'В 3/4 — три доли: две восьмые (½+½) + две четверти (1+1) = 3. Третья четверть — лишняя.'},
+ {size:'3/8', notes:[{k:'e'},{k:'e'},{k:'e'},{k:'e'}], rem:3, expl:'В 3/8 — три восьмых. Четвёртая восьмая — лишняя.'}
+];
+var exState={i:0,crossed:{},done:{}};
+RENDER.extra=function(el){
+ if(!RENDER.extra._init){
+  RENDER.extra._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">В такте есть лишние длительности. Кликни по лишней ноте — она зачеркнётся. Когда в такте останется ровно нужное число долей — жми «Проверить».</p>'+
+  '<div class="staffbox" id="exBox"></div>'+
+  '<div style="color:#8a8378;font-size:15px" id="exSum"></div>'+
+  '<div class="controls"><button class="btn primary" id="exCheck">Проверить</button><button class="btn" id="exReset">Вернуть всё</button></div>'+
+  '<div class="fb empty" id="exFb"></div><div class="controls" id="exProg"></div></div>';
+  $('exBox').addEventListener('click',function(e){
+   var t=e.target.closest('[data-ni]');
+   if(!t)return;
+   var host=t.closest('[data-host]');
+   var idx=+t.getAttribute('data-ni');
+   var key=host.getAttribute('data-host');
+   if(exState.done[key])return;
+   if(exState.crossed[key][idx])delete exState.crossed[key][idx];
+   else exState.crossed[key][idx]=true;
+   renderEx();
+  });
+  $('exCheck').addEventListener('click',exCheck);
+  $('exReset').addEventListener('click',function(){var key=''+exState.i;exState.crossed[key]={};renderEx();});
+ }
+ function renderEx(){
+  var key=''+exState.i;
+  var it=EXTRAS[key];
+  var y=syOf(34);
+  var W=360;
+  var s='<div data-host="'+key+'"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' 200" style="width:100%;max-width:'+W+'px;display:block">';
+  s+=staffLines(4,W-4)+clefSvg()+'<text x="'+(W-70)+'" y="40" font-size="24" font-weight="700" fill="#1c4f8f">'+it.size+'</text>';
+  var x=60;
+  for(var i=0;i<it.notes.length;i++){
+   var k=it.notes[i].k;
+   var crossed=!!exState.crossed[key][i];
+   var col=crossed?'#b04a4a':'#26221e';
+   s+='<g data-ni="'+i+'" style="cursor:pointer">';
+   s+=durSvg(k,x,col,y);
+   if(crossed)s+='<line x1="'+(x-16)+'" y1="'+(y-30)+'" x2="'+(x+16)+'" y2="'+(y+8)+'" stroke="#c43d3d" stroke-width="3"/>';
+   s+='</g>';
+   x+=42;
+  }
+  s+=barLine(W-14)+'</svg></div>';
+  $('exBox').innerHTML=s;
+  var sum=0;
+  for(var j=0;j<it.notes.length;j++)if(!exState.crossed[key][j])sum+=DUR[it.notes[j].k];
+  $('exSum').textContent='Осталось в такте: '+fracNum(sum)+' (нужно '+fracNum(SIZES[it.size])+')';
+ }
+ function exCheck(){
+  var key=''+exState.i;
+  var it=EXTRAS[key];
+  var sum=0;
+  for(var j=0;j<it.notes.length;j++)if(!exState.crossed[key][j])sum+=DUR[it.notes[j].k];
+  if(Math.abs(sum-SIZES[it.size])<0.01){
+   exState.done[key]=true;
+   setFb($('exFb'),'ok','✅ Верно! '+it.expl);
+   if(Object.keys(exState.done).length===EXTRAS.length&&!DONE.extra)doneAdd('extra',EXTRAS.length);
+   setTimeout(extraNext,1500);
+  }else{
+   setFb($('exFb'),'err','❌ <b>Где ошибся:</b> в такте сейчас '+fracNum(sum)+' вместо '+fracNum(SIZES[it.size])+'. Зачеркни ровно лишние длительности!');
+   addErr('Лишние длительности ('+it.size+')',it.expl);
+  }
+ }
+ function extraNext(){
+  var pending=[];for(var i=0;i<EXTRAS.length;i++)if(!exState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('exBox').innerHTML='';$('exSum').textContent='';$('exFb').style.display='none';$('exProg').innerHTML='';
+   $('exFb').style.display='block';setFb($('exFb'),'ok','🎉 Все лишние длительности найдены!');
+   return;
+  }
+  exState.i=pending[0];
+  if(!exState.crossed[''+exState.i])exState.crossed[''+exState.i]={};
+  renderEx();
+  var d=Object.keys(exState.done).length;
+  $('exProg').innerHTML='<span style="color:#5f584a;font-size:15px">Разобрано: '+d+' из '+EXTRAS.length+'</span>';
+ }
+ extraNext();
+};
+
+/* ================= ВКЛАДКА 5: ДОСОЧИНИ ПАРТИТУРУ ================= */
+var PARTS=[
+ {size:'2/4', need:2, given:[[{n:['e','e'],beam:1},{n:['q']}]], pal:['q','ee','eeee','e'], palSvg:[[ {n:['q']} ],[ {n:['e','e'],beam:1} ],[ {n:['s','s','s','s'],beam:1} ],[ {n:['e']} ]], palLab:['♩ четверть','♪♪ две восьмые','4 шестнадцатые','♪ восьмая']},
+ {size:'3/4', need:3, given:[[{n:['q']},{n:['q']},{n:['q']}]], pal:['q','ee','eeee','e'], palSvg:[[ {n:['q']} ],[ {n:['e','e'],beam:1} ],[ {n:['s','s','s','s'],beam:1} ],[ {n:['e']} ]], palLab:['♩ четверть','♪♪ две восьмые','4 шестнадцатые','♪ восьмая']}
+];
+var partState={i:0,built:{},done:{}};
+RENDER.part=function(el){
+ if(!RENDER.part._init){
+  RENDER.part._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Первый такт композитор сочинил, а второй — пустой. Досочини второй такт: кликай по ритмическим группам, чтобы заполнить его ровно. Любой подходящий ритм — уже музыка!</p>'+
+  '<div class="staffbox" id="pBox"></div>'+
+  '<div style="color:#8a8378;font-size:15px" id="pSum"></div>'+
+  '<div class="chips" id="pPal"></div>'+
+  '<div class="controls"><button class="btn primary" id="pCheck">Проверить</button><button class="btn" id="pClear">Очистить такт</button></div>'+
+  '<div class="fb empty" id="pFb"></div><div class="controls" id="pProg"></div></div>';
+  $('pPal').addEventListener('click',function(e){
+   var b=e.target.closest('[data-pal]');if(!b)return;
+   var key=''+partState.i;
+   if(partState.done[key])return;
+   var it=PARTS[partState.i];
+   var gi=+b.getAttribute('data-pal');
+   var GROUPS={'q':[{n:['q']}],'ee':[{n:['e','e'],beam:1}],'eeee':[{n:['s','s','s','s'],beam:1}],'e':[{n:['e']}]};
+   partState.built[key]=partState.built[key]||[];
+   partState.built[key]=partState.built[key].concat(GROUPS[it.pal[gi]]);
+   renderPart();
+  });
+  $('pCheck').addEventListener('click',partCheck);
+  $('pClear').addEventListener('click',function(){partState.built[''+partState.i]=[];renderPart();});
+ }
+ function renderPart(){
+  var key=''+partState.i;
+  var it=PARTS[+key];
+  var built=partState.built[key]||[];
+  var mes=built.length?[it.given[0],built]:[it.given[0]];
+  $('pBox').innerHTML='<div style="font-size:14px;color:#8a8378">размер '+it.size+' · второй такт — твой</div>'+
+   rhythmSvg(mes,built.length?620:340);
+  var sum=0;
+  for(var gi=0;gi<built.length;gi++)for(var ni=0;ni<built[gi].n.length;ni++)sum+=DUR[built[gi].n[ni]];
+  $('pSum').textContent='Во втором такте: '+fracNum(sum)+' из '+fracNum(SIZES[it.size]);
+  var pal='';
+  it.palSvg.forEach(function(g,i){
+   pal+='<button class="chip" data-pal="'+i+'">'+it.palLab[i]+'</button>';
+  });
+  $('pPal').innerHTML=pal;
+ }
+ function partCheck(){
+  var key=''+partState.i;
+  var it=PARTS[key];
+  var built=partState.built[key]||[];
+  var sum=0;
+  for(var gi=0;gi<built.length;gi++)for(var ni=0;ni<built[gi].n.length;ni++)sum+=DUR[built[gi].n[ni]];
+  if(built.length===0){setFb($('pFb'),'err','❌ Второй такт пуст: кликай по ритмическим группам в палитре.');return;}
+  if(Math.abs(sum-SIZES[it.size])<0.01){
+   partState.done[key]=true;
+   playRhythm([it.given[0],built]);
+   setFb($('pFb'),'ok','✅ Партитура досочинена! Такт заполнен ровно — '+fracNum(sum)+'. Послушай 🔊.');
+   if(Object.keys(partState.done).length===PARTS.length&&!DONE.part)doneAdd('part',PARTS.length);
+   setTimeout(partNext,1600);
+  }else{
+   setFb($('pFb'),'err','❌ <b>Где ошибся:</b> в такте сейчас '+fracNum(sum)+' вместо '+fracNum(SIZES[it.size])+'. Убери лишнее или добавь недостающее (кнопка «Очистить такт» начинает заново).');
+   addErr('Досочини партитуру ('+it.size+')','В такте '+fracNum(sum)+' вместо '+fracNum(SIZES[it.size])+'.');
+  }
+ }
+ function partNext(){
+  var pending=[];for(var i=0;i<PARTS.length;i++)if(!partState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('pBox').innerHTML='';$('pPal').innerHTML='';$('pSum').textContent='';$('pFb').style.display='none';$('pProg').innerHTML='';
+   $('pFb').style.display='block';setFb($('pFb'),'ok','🎉 Обе партитуры досочинены!');
+   return;
+  }
+  partState.i=pending[0];
+  if(!partState.built[''+partState.i])partState.built[''+partState.i]=[];
+  renderPart();
+  var d=Object.keys(partState.done).length;
+  $('pProg').innerHTML='<span style="color:#5f584a;font-size:15px">Сочинено: '+d+' из '+PARTS.length+'</span>';
+ }
+ partNext();
+};
+
+/* ================= ВКЛАДКА 6: ФЛАЖКИ → РЁБРА ================= */
+var VOCS=[
+ {voc:[{n:['e','e'],flags:1}], opts:[{n:['e','e'],beam:1},{n:['q']},{n:['s','s'],beam:1}], ans:0, expl:'Две восьмые с флажками = две восьмые под одним ребром. Ритм тот же, запись — инструментальная.'},
+ {voc:[{n:['e','e','e','e'],flags:1}], opts:[{n:['e','e'],beam:1},{n:['s','s','s','s'],beam:1},{n:['e','e','e','e'],flags:1}], ans:1, expl:'Четыре ноты с одним флажком — это четыре ВОСЬМЫХ, а не шестнадцатые. Под ребром они остаются восьмыми.'},
+ {voc:[{n:['s','s','s','s'],flags:2}], opts:[{n:['s','s','s','s'],beam:1},{n:['e','e','e','e'],beam:1},{n:['q']}], ans:0, expl:'У каждой ноты ДВА флажка — значит, это шестнадцатые. Под ребром у шестнадцатых — два ребра.'},
+ {voc:[{n:['e','e'],flags:1},{n:['q']}], opts:[{n:['e','e'],beam:1},{n:['q']},{n:['e','e'],beam:1},{n:['q']}], ans:[0,2], expl:'Вокальная группа ♪♪ + ♩ переходит в инструментальную без изменений ритма: ♪♪ (ребро) + ♩. Подходят оба варианта с такой записью.'}
+];
+var vocState={i:0,done:{}};
+RENDER.voc=function(el){
+ if(!RENDER.voc._init){
+  RENDER.voc._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Сверху — вокальная запись (флажки: удобно петь по слогам). Выбери ту же ритмическую группу в инструментальной записи (рёбра):</p>'+
+  '<div class="staffbox" id="vBox"></div>'+
+  '<div class="optrow" id="vOpts"></div>'+
+  '<div class="fb empty" id="vFb"></div><div class="controls" id="vProg"></div></div>';
+  $('vOpts').addEventListener('click',function(e){
+   var b=e.target.closest('[data-idx]');if(!b)return;
+   var it=VOCS[vocState.i];
+   if(vocState.done[vocState.i])return;
+   var idx=+b.getAttribute('data-idx');
+   var ok=(it.ans instanceof Array)?(it.ans.indexOf(idx)>=0):(idx===it.ans);
+   if(ok){
+    b.classList.add('right');
+    vocState.done[vocState.i]=true;
+    setFb($('vFb'),'ok','✅ Верно! '+it.expl);
+    if(Object.keys(vocState.done).length===VOCS.length&&!DONE.voc)doneAdd('voc',VOCS.length);
+    setTimeout(vocNext,1600);
+   }else{
+    b.classList.add('wrong');
+    setFb($('vFb'),'err','❌ <b>Где ошибся:</b> у этой записи другой ритм. <b>Почему:</b> '+it.expl);
+    addErr('Флажки → рёбра',it.expl);
+   }
+  });
+ }
+ function vocDraw(groups,miniFlag){
+  var y=syOf(34);
+  var W=260;
+  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' 200" style="width:100%;max-width:'+W+'px;display:block">';
+  s+=staffLines(4,W-4)+clefSvg();
+  var x=52;
+  for(var gi=0;gi<groups.length;gi++){
+   var g=groups[gi];
+   for(var ni=0;ni<g.n.length;ni++){
+    var k=g.n[ni];
+    var stemTop=y-36;
+    var fill=(k==='w'||k==='h')?'#fff':'#26221e';
+    s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="'+fill+'" stroke="#26221e" stroke-width="3.4" transform="rotate(-12 '+x+' '+y+')"/>';
+    s+='<line x1="'+(x+7.2)+'" y1="'+(y-3)+'" x2="'+(x+7.2)+'" y2="'+stemTop+'" stroke="#26221e" stroke-width="1.8"/>';
+    for(var f=0;f<g.flags;f++)s+='<path d="M '+(x+7.2)+' '+(stemTop+f*9)+' q 9 6 7 15" fill="none" stroke="#26221e" stroke-width="2"/>';
+    x+=34;
+   }
+  }
+  s+='</svg>';
+  return s;
+ }
+ function vocNext(){
+  var pending=[];for(var i=0;i<VOCS.length;i++)if(!vocState.done[i])pending.push(i);
+  if(pending.length===0){
+   $('vBox').innerHTML='';$('vOpts').innerHTML='';$('vFb').style.display='none';$('vProg').innerHTML='';
+   $('vFb').style.display='block';setFb($('vFb'),'ok','🎉 Все группировки переведены!');
+   return;
+  }
+  vocState.i=pending[0];
+  var it=VOCS[vocState.i];
+  $('vBox').innerHTML=vocDraw(it.voc);
+  $('vFb').className='fb empty';$('vFb').innerHTML='Считай флажки: один — восьмая, два — шестнадцатая. Ритм не меняется — меняется только запись.';
+  $('vOpts').innerHTML=it.opts.map(function(g,idx){
+   return '<button class="optcard" data-idx="'+idx+'">'+rhythmSvg([g],120,true)+'</button>';
+  }).join('');
+  var d=Object.keys(vocState.done).length;
+  $('vProg').innerHTML='<span style="color:#5f584a;font-size:15px">Переведено: '+d+' из '+VOCS.length+'</span>';
+ }
+ vocNext();
+};
+
+/* ================= ВКЛАДКА 7: СТИХИ ================= */
+var POEMS=[
+ {q:'«На солнце тёмный лес задел,\nВ долине пар белеет тонкий…»\n(В. Жуковский) — какой метр?', ans:'двухдольный', o:['двухдольный','трёхдольный'], expl:'Прохлопай слоги: сильный слог падает через один (ТА-та ТА-та) — это двухдольный метр, как марш.'},
+ {q:'«Пестреет цветами опушка,\nПлывет облако належке…»\n(Т. Белозёров) — какой метр?', ans:'трёхдольный', o:['двухдольный','трёхдольный'], expl:'Слоги ложатся на ТА-та-та (сильный слог через два) — трёхдольный метр, как вальс.'},
+ {q:'«Робко журча и дрожа от зноя,\nВ роще, разбуженной криком грачей…»\n(Т. Белозёров) — какой метр?', ans:'трёхдольный', o:['двухдольный','трёхдольный'], expl:'Здесь плавное покачивание на три: сильный слог через два слога — трёхдольный метр.'}
+];
+RENDER.poem=quizFactory('poem',POEMS,
+ '<div class="qwrap"><p class="qtext">Прохлопай стихи по слогам и послушай, как часто падает сильный слог.</p>',
+ 'Произнеси строку ритмично: сильный слог через один — двухдольный, через два — трёхдольный.',
+ 'Метр стихов');
+
+/* ================= ПРОГРЕСС ================= */
+var bar=document.createElement('div');
+bar.className='card';bar.style.padding='12px 18px';
+bar.innerHTML='<div style="font-size:15px;color:#5f584a" id="kursProg">Прогресс раздела: 0 из '+TOTAL+'</div>'+
+'<div class="bar" style="height:12px;background:#e8e2d4;border-radius:8px;overflow:hidden;margin-top:6px"><div id="kursFill" style="height:100%;width:0%;background:#1c4f8f"></div></div>';
+document.querySelector('.wrap').insertBefore(bar,document.getElementById('tabs'));
+setInterval(function(){
+ var d=0;TABS.forEach(function(t){d+=(DONE[t.id]||0);});
+ $('kursProg').textContent='Прогресс раздела: '+d+' из '+TOTAL+(d===TOTAL?' — 🎉 раздел пройден!':'');
+ $('kursFill').style.width=(d/TOTAL*100)+'%';
+},400);
+
+renderTabs();renderTab();
+})();
+</script>
+</body>
+</html>
