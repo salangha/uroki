@@ -4,10 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>День покупок: магазин, кафе, парк и зоопарк — считаем в пределах 100</title>
-<meta property="og:title" content="Магазин и кафе — считаем в пределах 100">
-<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
-<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
-<meta property="og:type" content="website">
 <meta name="description" content="Интерактивная игра-урок по математике, 2 класс: считаем в пределах 100 — магазин игрушек, кафе, парк аттракционов и зоопарк. Сложение и вычитание с переходом через десяток.">
 <meta property="og:title" content="День покупок: магазин, кафе, парк и зоопарк">
 <meta property="og:description" content="Считаем в пределах 100: выбираем игрушки, заказываем обед, катаемся на аттракционах и кормим зверей. 2 класс.">
@@ -16,10 +12,17 @@
 - СТАРТ: игрок выбирает конверт — сколько денег взять на день (100 / 150 / 200 р.).
 - МАГАЗИН ИГРУШЕК: 12 игрушек, цены двузначные «неровные», все разные. Клик по игрушке ->
   вопрос кассира-мишки: сколько сдачи? Покупать можно несколько, пока хватает денег.
-- КАФЕ «Сладкоежка»: 1 напиток + НЕСКОЛЬКО (хотя бы две) вкусняшки. При оплате сумма
-  считается по порядку: напиток + первая вкусняшка, + вторая... каждое сложение — задача
-  со звёздочкой. Потом сдача. Если денег не хватает — мама просит посчитать, на сколько.
-- КАРТА: после кафе игрок сам выбирает маршрут — парк, зоопарк или домой (свобода выбора).
+- КАФЕ «Сладкоежка»: хотя бы ОДИН напиток (можно несколько) + хотя бы ОДНА вкусняшка
+  (можно больше). При оплате сумма считается по порядку: напиток(и) + вкусняшки,
+  каждое сложение — задача со звёздочкой. Потом сдача. Если денег не хватает —
+  мама просит посчитать, на сколько.
+- КАРТА: после кафе игрок сам выбирает маршрут — кафе, парк, зоопарк или домой.
+  В кафе можно вернуться и из парка, и из зоопарка.
+- МАМА: в любой локации (магазин, кафе, парк, зоопарк, карта) можно попросить ещё
+  денег — мама даст купюру, но сначала задачка: сколько станет всего?
+- МИНИ-МУЛЬТИКИ: покупка игрушки/билета и кормление зверёнка сопровождаются
+  короткой живой анимацией (2-3 сек, тапом пропускается); карточки аттракционов,
+  напитков и зверята «дышат». Всё на CSS — офлайн, без внешних гифок.
 - ПАРК АТТРАКЦИОНОВ: 8 аттракционов, билет = задача на сдачу. Кататься можно многократно.
 - ЗООПАРК: 8 зверят, у каждого угощение (у некоторых — два: сначала сумма, потом оплата).
   Накормил — зверёнок счастлив, сердечки.
@@ -252,6 +255,99 @@ button.mapBtn:active{transform:translateY(2px)}
   border:none;border-radius:14px;background:#2f8fff;color:#fff;cursor:pointer;box-shadow:0 4px 0 #1f66b3}
 #backBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #1f66b3}
 
+/* ---- живые эмодзи и мини-мультики ---- */
+.big.pink{background:#ff5da2;box-shadow:0 5px 0 #c23a78}
+.mapMomRow{display:flex;justify-content:center;margin-top:16px}
+.mascot{animation:bob 2.6s ease-in-out infinite}
+button.env .em{animation:softBounce 2.2s ease-in-out infinite}
+button.mapBtn .em{animation:softBounce 2.6s ease-in-out infinite}
+.mapBtns .mapBtn:nth-child(2) .em{animation-delay:.35s}
+.mapBtns .mapBtn:nth-child(3) .em{animation-delay:.7s}
+.mapBtns .mapBtn:nth-child(4) .em{animation-delay:1.05s}
+.em.alive{animation:bob 3s ease-in-out infinite}
+.em.spin-slow{animation:spinZ 7s linear infinite}
+.em.spin{animation:spinZ 3.2s linear infinite}
+.em.rock{animation:rockA 2.6s ease-in-out infinite}
+.em.bounce-soft{animation:softBounce 2s ease-in-out infinite}
+.em.drive-wig{animation:wiggleX 1.8s ease-in-out infinite}
+.em.hover-up{animation:hoverY 2.4s ease-in-out infinite}
+.em.pulse-soft{animation:pulseS 1.6s ease-in-out infinite}
+@keyframes spinZ{to{transform:rotate(360deg)}}
+@keyframes rockA{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes softBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes wiggleX{0%,100%{transform:rotate(-7deg) translateX(-4px)}50%{transform:rotate(7deg) translateX(4px)}}
+@keyframes hoverY{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
+@keyframes pulseS{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+#show{position:absolute;inset:0;z-index:118;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;overflow:hidden;cursor:pointer;
+  background:rgba(30,40,70,.25)}
+#show.sky{background:linear-gradient(#8ed0ff,#e8f6ff)}
+#show.night{background:linear-gradient(#23306b,#5a6bd8)}
+#show.sea{background:linear-gradient(#9be2ff 52%,#2f8fff)}
+#show.lawn{background:linear-gradient(#a8e0ff 8%,#d7f5cf 60%)}
+#show.cafe-bg{background:linear-gradient(#fff0f6,#ffdfe9)}
+#show.party{background:linear-gradient(#fff3d6,#ffd9ec)}
+.sh-wrap{position:relative;width:min(90vw,560px);height:min(56vh,340px);
+  display:flex;align-items:center;justify-content:center}
+.sh-big{font-size:clamp(88px,17vw,140px);line-height:1;will-change:transform}
+.sh-note{position:absolute;font-size:clamp(26px,5vw,40px);line-height:1;
+  animation:floatUp 1.9s ease-out infinite}
+.sh-tag{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);
+  font-size:clamp(20px,3.4vw,27px);font-weight:bold;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.35);
+  background:rgba(0,0,0,.20);border-radius:999px;padding:8px 22px;white-space:nowrap;
+  animation:popIn .4s ease}
+.sh-skip{position:absolute;top:14px;right:16px;color:#fff;font-size:15px;font-weight:bold;
+  background:rgba(0,0,0,.22);border-radius:999px;padding:5px 14px}
+.sh-ground{position:absolute;bottom:7%;left:-4%;right:-4%;height:12px;border-radius:999px;
+  background:rgba(40,90,40,.28)}
+.sh-puff{position:absolute;bottom:3%;left:50%;font-size:clamp(30px,6vw,46px);line-height:1;
+  animation:puffUp 1.3s ease-out infinite}
+.sh-tramp{position:absolute;bottom:9%;left:50%;transform:translateX(-50%);
+  width:min(52vw,270px);height:28px;background:#2f8fff;border-radius:50%;
+  border-bottom:9px solid #1c4a7a;box-shadow:0 12px 0 rgba(0,0,0,.12)}
+.sh-jump{position:absolute;bottom:calc(9% + 22px);left:50%;font-size:clamp(76px,15vw,124px);
+  line-height:1;animation:jumpBig 2.2s ease-in-out infinite}
+.sh-dart{position:absolute;left:50%;top:50%;font-size:clamp(30px,6vw,46px);line-height:1;
+  margin-left:-.5em;margin-top:-.5em;animation:dartFly 2.1s ease-in infinite}
+.sh-wave{position:absolute;bottom:-10%;left:-30%;width:160%;height:34%;z-index:1;
+  background:rgba(20,64,110,.55);border-radius:50% 50% 0 0/100% 100% 0 0;
+  animation:waveMove 2.2s ease-in-out infinite}
+.sh-wave.w2{bottom:-16%;background:rgba(13,44,78,.75);animation-duration:1.6s;animation-direction:reverse}
+@keyframes floatUp{0%{transform:translateY(0);opacity:0}15%{opacity:1}
+  100%{transform:translateY(-150px);opacity:0}}
+@keyframes popIn{from{transform:translateX(-50%) scale(.4);opacity:0}}
+@keyframes trainGo{0%{transform:translateX(-42vw)}100%{transform:translateX(42vw)}}
+@keyframes zigZag{0%{transform:translate(-40vw,14px) rotate(3deg)}
+  25%{transform:translate(-20vw,-24px) rotate(-5deg)}
+  50%{transform:translate(0,14px) rotate(4deg)}
+  75%{transform:translate(20vw,-24px) rotate(-5deg)}
+  100%{transform:translate(40vw,10px) rotate(3deg)}}
+@keyframes rocketUp{0%{transform:translateY(44vh) scale(.9);opacity:0}
+  12%{opacity:1}85%{opacity:1}
+  100%{transform:translateY(-62vh) scale(1.05);opacity:0}}
+@keyframes puffUp{0%{transform:translateY(0) scale(.5);opacity:.9}
+  100%{transform:translateY(-80px) scale(1.7);opacity:0}}
+@keyframes dartFly{0%{transform:translate(-36vw,24vh) rotate(-24deg);opacity:0}
+  8%{opacity:1}
+  55%,100%{transform:translate(-4px,-4px) rotate(4deg)}}
+@keyframes happyHop{0%,100%{transform:translateY(0) rotate(0)}
+  12%{transform:translateY(-64px) rotate(-9deg)}
+  24%{transform:translateY(0)}
+  36%{transform:translateY(-46px) rotate(9deg)}
+  48%{transform:translateY(0)}
+  62%{transform:translateY(-72px)}
+  78%{transform:translateY(0)}}
+@keyframes jumpBig{
+  0%,100%{transform:translate(-50%,0) scale(1.04,.92)}
+  14%{transform:translate(-50%,-150px) scale(1,1.05)}
+  28%{transform:translate(-50%,0) scale(1.08,.88)}
+  42%{transform:translate(-50%,-104px) scale(1,1.03)}
+  56%{transform:translate(-50%,0) scale(1.08,.88)}
+  72%{transform:translate(-50%,-140px) scale(1,1.05)}
+  86%{transform:translate(-50%,0) scale(1.08,.88)}}
+@keyframes waveMove{0%,100%{transform:translateX(-6%)}50%{transform:translateX(6%)}}
+
 /* ---- подтверждение ---- */
 #confirmBox{position:absolute;inset:0;z-index:140;display:flex;align-items:center;justify-content:center;
   padding:14px;background:rgba(59,40,10,.45)}
@@ -264,23 +360,6 @@ button.mapBtn:active{transform:translateY(2px)}
 #cfNo{background:#2f8fff;box-shadow:0 5px 0 #1f66b3}
 .ccard button:active{transform:translateY(3px);box-shadow:none}
 </style>
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-   ym(114071811, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:false
-   });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
-<!-- /Yandex.Metrika counter -->
 </head>
 <body>
 <div id="stage">
@@ -311,6 +390,7 @@ button.mapBtn:active{transform:translateY(2px)}
     <div class="grid" id="toyGrid"></div>
     <div id="shopBottom">
       <div id="bagBar">🛍 Покупки: <span id="bagItems">—</span></div>
+      <button id="shopMomBtn" class="big pink">👩 Попросить у мамы ещё денег</button>
       <button id="cafeBtn" class="big hidden">Идти в кафе ☕ →</button>
     </div>
   </section>
@@ -319,9 +399,9 @@ button.mapBtn:active{transform:translateY(2px)}
   <section id="cafeScene" class="scene hidden">
     <div class="awning cafe"><span>☕ КАФЕ «СЛАДКОЕЖКА» ☕</span></div>
     <div class="mascotRow"><div class="mascot">🦊</div><div class="said" id="foxSaid"></div></div>
-    <div class="secHead">🥤 Напитки — выбери один:</div>
+    <div class="secHead">🥤 Напитки — выбери хотя бы один (можно несколько!):</div>
     <div class="grid" id="drinkGrid"></div>
-    <div class="secHead">🧁 Вкусняшки — выбери сколько хочешь (хотя бы две!):</div>
+    <div class="secHead">🧁 Вкусняшки — выбери сколько хочешь (хотя бы одну!):</div>
     <div class="grid" id="treatGrid"></div>
     <div id="cartBar">
       <div id="cartInfo"></div>
@@ -337,8 +417,10 @@ button.mapBtn:active{transform:translateY(2px)}
     <div class="mapBtns">
       <button id="goPark" class="mapBtn" style="--c:#2f8fff"><div class="em">🎡</div><div class="tt">Парк аттракционов</div><div class="cnt" id="parkCnt">катаний пока нет</div></button>
       <button id="goZoo" class="mapBtn" style="--c:#2fbf71"><div class="em">🦁</div><div class="tt">Зоопарк</div><div class="cnt" id="zooCnt">зверята ждут угощения</div></button>
+      <button id="goCafe" class="mapBtn" style="--c:#ff5da2"><div class="em">☕</div><div class="tt">Кафе «Сладкоежка»</div><div class="cnt">что-нибудь вкусненькое</div></button>
       <button id="goHome" class="mapBtn home"><div class="em">🏠</div><div class="tt">Домой</div><div class="cnt">подвести итоги дня</div></button>
     </div>
+    <div class="mapMomRow"><button id="mapMomBtn" class="big pink">👩 Попросить у мамы ещё денег</button></div>
   </section>
 
   <!-- ПАРК -->
@@ -348,6 +430,8 @@ button.mapBtn:active{transform:translateY(2px)}
     <div class="grid4" id="rideGrid"></div>
     <div class="bottomBar">
       <div class="infobar">🎟 Билеты: <span id="ticketCnt">0</span></div>
+      <button id="parkMomBtn" class="big pink">👩 Ещё денег у мамы</button>
+      <button id="parkCafeBtn" class="big pink">☕ В кафе</button>
       <button id="parkMapBtn" class="big blue">🗺 Куда дальше?</button>
     </div>
   </section>
@@ -359,11 +443,15 @@ button.mapBtn:active{transform:translateY(2px)}
     <div class="grid4" id="zooGrid"></div>
     <div class="bottomBar">
       <div class="infobar">❤️ Накормлено: <span id="fedCnt">0</span></div>
+      <button id="zooMomBtn" class="big pink">👩 Ещё денег у мамы</button>
+      <button id="zooCafeBtn" class="big pink">☕ В кафе</button>
       <button id="zooMapBtn" class="big blue">🗺 Куда дальше?</button>
     </div>
   </section>
 
   <canvas id="fx"></canvas>
+
+  <div id="show" class="hidden"></div>
 
   <div id="overlay" class="hidden">
     <div id="qcard">
@@ -402,20 +490,23 @@ button.mapBtn:active{transform:translateY(2px)}
 <script>
 'use strict';
 /* ================= данные ================= */
-var DKEY='shop-day-v2';
+var DKEY='shop-day-v3';
 var PAL=['#7c5cff','#2f8fff','#ff9f1c','#ff5da2','#12b5cb','#97b900'];
 var PRAISE=['Молодец! 🎉','Отлично! ⭐','Супер! 💪','Здорово! 🌟','Умница! 🏆','В точку! ✨',
  'Ты считаешь как настоящий кассир! 💼','Голова-математик! 🧠','Мама гордится! 👩','Отличный устный счёт! 🎓'];
 var ENC=['Подумай ещё! 🤔','Почти-почти! 💫','Попробуй снова! 🙂','Ещё разок, внимательно! 🔍'];
 var BUY_THANKS=['Носи на здоровье!','Отличный выбор!','Спасибо за покупку!','Прекрасная игрушка!'];
+var MOM_GIVE=['Умница! Держи','Ладно, только это — на вкусняшки! Держи','Считаешь отлично — держи','Я всегда рядом! Держи'];
 var BEAR_DEF='Здравствуйте! Выбирайте игрушку! 🧸';
-var FOX_DEF='Выбери напиток и хотя бы две вкусняшки! ☕🧁';
+var FOX_DEF='Выбери хотя бы один напиток и хотя бы одну вкусняшку! ☕🧁';
+var FOX_CAFE_AGAIN='Снова заглянули в кафе! Добавь чего-нибудь вкусненького! 🧁';
 var MOM_MAP_DEF='Куда пойдём дальше? Я рядом! 👩';
 var MOM_AFTER_CAFE='Сытно получилось! Куда теперь: на карусели или к зверятам?';
 var MOM_START_DEF='Вот деньги на весь день! Выбери конверт — и отправимся в путь! 💌';
 var MON_DEF='Привет! Бери билет — и вперёд, на аттракцион! 🎟';
 var KES_DEF='Попугай Кеша на связи! Зверята голодные — покорми их! 🦜';
 var MAX_TREATS=6;
+var MAX_DRINKS=4;
 var TOYS=[{e:'🧸',n:'Мишка'},{e:'🪆',n:'Матрёшка'},{e:'🚂',n:'Паровозик'},{e:'🦄',n:'Единорог'},
  {e:'🚗',n:'Машинка'},{e:'🐰',n:'Зайка'},{e:'🎨',n:'Краски'},{e:'🪀',n:'Йо-йо'},
  {e:'⚽',n:'Мяч'},{e:'🧩',n:'Пазл'},{e:'🪁',n:'Воздушный змей'},{e:'🎀',n:'Заколки'}];
@@ -427,6 +518,7 @@ var TREATS=[{e:'🧁',n:'Капкейк'},{e:'🍩',n:'Пончик'},{e:'🍪',
 var RIDES=[{e:'🎡',n:'Колесо обозрения'},{e:'🎠',n:'Карусель'},{e:'🚂',n:'Паровозик'},{e:'🚗',n:'Автодром'},
  {e:'🚀',n:'Ракетка'},{e:'🤸',n:'Батут'},{e:'🎯',n:'Тир'},{e:'🚤',n:'Лодочки'}];
 var RIDE_FUN=['Уииии!','Вжух!','Как здорово!','Ещё-ещё!','Обалдеть!','Класс!'];
+var RIDE_ANIM=['spin-slow','spin','drive-wig','drive-wig','hover-up','bounce-soft','pulse-soft','rock'];
 var ANIMALS=[{e:'🐒',n:'Обезьяна',v:'Обезьяну',f:'🍌',fn:'банан',w:'довольна'},
  {e:'🐘',n:'Слон',v:'Слона',f:'🍎',fn:'яблоко',w:'доволен'},
  {e:'🦒',n:'Жираф',v:'Жирафа',f:'🌿',fn:'листья',w:'доволен'},
@@ -494,7 +586,7 @@ function newState(){
     }
     zoo.push({e:ANIMALS[i].e,n:ANIMALS[i].n,v:ANIMALS[i].v,w:ANIMALS[i].w,foods:foods,fed:false});
   }
-  return {scene:'start',money:null,startMoney:0,toys:toys,bag:[],drinks:drinks,drink:-1,
+  return {scene:'start',money:null,startMoney:0,toys:toys,bag:[],drinks:drinks,dsel:[],
     treats:treats,tsel:[],total:0,totalKnown:false,momGiven:0,rides:rides,zoo:zoo,
     stars:0,streak:0,bestStreak:0,solved:0,muted:false};
 }
@@ -524,7 +616,8 @@ function loadState(){
     if(typeof j.total!=='number')j.total=0;
     j.totalKnown=!!j.totalKnown;
     if(typeof j.momGiven!=='number')j.momGiven=0;
-    if(typeof j.drink!=='number'||j.drink<-1||j.drink>5)j.drink=-1;
+    if(!Array.isArray(j.dsel))j.dsel=[];
+    j.dsel=j.dsel.filter(function(i){return typeof i==='number'&&i>=0&&i<6;});
     if(!Array.isArray(j.tsel))j.tsel=[];
     j.tsel=j.tsel.filter(function(i){return typeof i==='number'&&i>=0&&i<12;});
     return j;
@@ -636,13 +729,100 @@ function fxLoop(){
   requestAnimationFrame(fxLoop);
 }
 
+/* ================= мини-мультики (2-3 сек, тапом пропускается) ================= */
+var showEl=document.getElementById('show'),showTimer=null;
+function playShow(bg,inner,tag,ms){
+  showEl.className=bg;
+  showEl.innerHTML='<div class="sh-wrap">'+inner+'</div>'+
+    (tag?'<div class="sh-tag">'+tag+'</div>':'')+
+    '<div class="sh-skip">тап — пропустить ✋</div>';
+  showEl.classList.remove('hidden');
+  clearTimeout(showTimer);
+  showTimer=setTimeout(hideShow,ms||2300);
+}
+function hideShow(){
+  clearTimeout(showTimer);showTimer=null;
+  showEl.classList.add('hidden');showEl.innerHTML='';
+}
+showEl.addEventListener('click',hideShow);
+function shFloat(em,left,top,delay){
+  return '<div class="sh-note" style="left:'+left+';top:'+top+';animation-delay:'+(delay||0)+'s">'+em+'</div>';
+}
+function showToy(t){
+  playShow('party',
+    '<div class="sh-big" style="animation:softBounce 1.5s ease-in-out infinite">'+t.e+'</div>'+
+    shFloat('✨','10%','16%',0)+shFloat('⭐','82%','20%',.35),
+    '«'+t.n+'» — теперь твоё! 🎉',1500);
+}
+function showRide(i){
+  var inner='',bg='sky',tag=pick(RIDE_FUN);
+  if(i===0){ /* колесо обозрения */
+    inner='<div class="sh-big" style="animation:spinZ 2.3s linear infinite">🎡</div>'+
+      shFloat('☁️','6%','12%',0)+shFloat('☁️','74%','20%',.4)+shFloat('☁️','16%','55%',1.1);
+  }else if(i===1){ /* карусель */
+    bg='party';
+    inner='<div class="sh-big" style="animation:spinZ 1.5s linear infinite">🎠</div>'+
+      shFloat('🎵','10%','30%',0)+shFloat('🎶','78%','24%',.5)+shFloat('🎵','50%','8%',1);
+  }else if(i===2){ /* паровозик */
+    bg='lawn';
+    inner='<div class="sh-ground"></div>'+
+      '<div class="sh-big" style="animation:trainGo 2.3s ease-in-out infinite">🚂</div>'+
+      shFloat('💨','30%','56%',0)+shFloat('💨','26%','66%',.35)+shFloat('💨','22%','76%',.7);
+  }else if(i===3){ /* автодром */
+    bg='lawn';
+    inner='<div class="sh-big" style="animation:zigZag 2.2s ease-in-out infinite">🚗</div>'+
+      shFloat('💨','12%','62%',0)+shFloat('🏁','82%','16%',0);
+  }else if(i===4){ /* ракетка */
+    bg='night';
+    inner='<div class="sh-big" style="animation:rocketUp 2.3s ease-in infinite">🚀</div>'+
+      shFloat('⭐','14%','16%',0)+shFloat('⭐','80%','26%',.5)+shFloat('✨','24%','44%',.9)+
+      '<div class="sh-puff">💨</div><div class="sh-puff" style="animation-delay:.4s">💨</div>'+
+      '<div class="sh-puff" style="animation-delay:.8s">💨</div>';
+  }else if(i===5){ /* батут */
+    bg='lawn';
+    inner='<div class="sh-tramp"></div>'+
+      '<div class="sh-jump">🤸</div>'+
+      shFloat('✨','8%','20%',0)+shFloat('✨','84%','30%',.6);
+  }else if(i===6){ /* тир */
+    bg='lawn';
+    inner='<div class="sh-big" style="animation:pulseS 1.1s ease-in-out infinite">🎯</div>'+
+      '<div class="sh-dart">📍</div><div class="sh-dart" style="animation-delay:.35s">📍</div>'+
+      '<div class="sh-dart" style="animation-delay:.7s">📍</div>';
+    tag='10 очков! 🎯';
+  }else{ /* лодочки */
+    bg='sea';
+    inner='<div class="sh-wave"></div><div class="sh-wave w2"></div>'+
+      '<div class="sh-big" style="animation:rockA 1.1s ease-in-out infinite;position:relative;z-index:2">🚤</div>'+
+      shFloat('☀️','78%','10%',0);
+  }
+  playShow(bg,inner,tag,2300);
+}
+function showFeed(i){
+  var z=S.zoo[i];
+  playShow('lawn',
+    '<div class="sh-big" style="animation:happyHop 1.9s ease-in-out infinite">'+z.e+'</div>'+
+    shFloat('❤️','12%','18%',0)+shFloat('💕','80%','14%',.3)+shFloat('❤️','64%','46%',.7),
+    'Ням-ням! '+z.n+' очень '+z.w+'! '+z.e,2000);
+}
+function showCafe(){
+  var ems=[];
+  S.dsel.slice(0,2).forEach(function(i){ems.push(S.drinks[i].e);});
+  S.tsel.slice(0,2).forEach(function(i){ems.push(S.treats[i].e);});
+  if(!ems.length)ems.push('🧁');
+  playShow('cafe-bg',
+    ems.map(function(e,k){
+      return '<div class="sh-big" style="animation:softBounce 1.4s ease-in-out '+(k*0.16)+'s infinite;margin:0 8px">'+e+'</div>';
+    }).join(''),
+    'Вкусно! Идём дальше! 🎉',2000);
+}
+
 /* ================= построение витрин ================= */
 var toyEls=[],drinkEls=[],treatEls=[],rideEls=[],zooEls=[];
-function makeCard(t,small,idx,onClick){
+function makeCard(t,small,idx,onClick,anim){
   var d=document.createElement('div');
   d.className='item'+(small?' small':'');
   d.style.setProperty('--c',PAL[idx%PAL.length]);
-  var em=document.createElement('div');em.className='em';em.textContent=t.e;
+  var em=document.createElement('div');em.className='em'+(anim?' '+anim:'');em.textContent=t.e;
   var nm=document.createElement('div');nm.className='nm';nm.textContent=t.n;
   var tg=document.createElement('div');tg.className='tag';tg.textContent=t.p+' р.';
   d.appendChild(em);d.appendChild(nm);d.appendChild(tg);
@@ -659,8 +839,9 @@ function buildShop(){
 function buildCafe(){
   var gd=document.getElementById('drinkGrid');gd.innerHTML='';drinkEls=[];
   S.drinks.forEach(function(t,i){
-    var d=makeCard(t,true,i,function(){selectDrink(i);});
+    var d=makeCard(t,true,i,function(){selectDrink(i);},'alive');
     gd.appendChild(d);drinkEls.push(d);
+    d.querySelector('.em').style.animationDelay=(i*0.17)+'s';
   });
   var gx=document.getElementById('treatGrid');gx.innerHTML='';treatEls=[];
   S.treats.forEach(function(t,i){
@@ -675,7 +856,7 @@ function buildPark(){
     d.className='item small';
     d.style.setProperty('--c',PAL[i%PAL.length]);
     var bd=document.createElement('div');bd.className='badge hidden';
-    var em=document.createElement('div');em.className='em';em.textContent=r.e;
+    var em=document.createElement('div');em.className='em '+RIDE_ANIM[i];em.textContent=r.e;
     var nm=document.createElement('div');nm.className='nm';nm.textContent=r.n;
     var tg=document.createElement('div');tg.className='tag';tg.textContent=r.p+' р.';
     d.appendChild(bd);d.appendChild(em);d.appendChild(nm);d.appendChild(tg);
@@ -689,7 +870,8 @@ function buildZoo(){
     var d=document.createElement('div');
     d.className='item small';
     d.style.setProperty('--c',PAL[(i+2)%PAL.length]);
-    var em=document.createElement('div');em.className='em';em.textContent=z.e;
+    var em=document.createElement('div');em.className='em alive';
+    em.style.animationDelay=((i%4)*0.25)+'s';em.textContent=z.e;
     var nm=document.createElement('div');nm.className='nm';nm.textContent=z.n;
     var tg=document.createElement('div');tg.className='tag';
     tg.textContent=z.foods.map(function(f){return f.e+' '+f.p+' р.';}).join(' + ');
@@ -731,7 +913,7 @@ function renderAll(){
   fireCnt.textContent=S.streak;
   firePill.classList.toggle('hidden',S.streak<2);
   S.toys.forEach(function(t,i){toyEls[i].classList.toggle('sold',t.sold);});
-  S.drinks.forEach(function(t,i){drinkEls[i].classList.toggle('sel',S.drink===i);});
+  S.drinks.forEach(function(t,i){drinkEls[i].classList.toggle('sel',S.dsel.indexOf(i)>=0);});
   S.treats.forEach(function(t,i){treatEls[i].classList.toggle('sel',S.tsel.indexOf(i)>=0);});
   S.rides.forEach(function(r,i){
     rideEls[i].badge.classList.toggle('hidden',r.cnt===0);
@@ -756,13 +938,13 @@ function renderAll(){
     fedCount()>0?('накормлено: '+fedCount()):'зверята ждут угощения';
   var payBtn=document.getElementById('payBtn'),momBtn=document.getElementById('momBtn'),
       ci=document.getElementById('cartInfo');
-  if(S.drink<0||S.tsel.length<2){
-    ci.textContent='🛒 Выбери напиток и хотя бы две вкусняшки — и жми «Оплатить»';
+  if(S.dsel.length<1||S.tsel.length<1){
+    ci.textContent='🛒 Выбери хотя бы один напиток и одну вкусняшку — и жми «Оплатить»';
     payBtn.classList.add('dim');momBtn.classList.remove('pulseBtn');
   }else{
     payBtn.classList.remove('dim');
     var parts=[];
-    parts.push(S.drinks[S.drink].e+' '+S.drinks[S.drink].p+' р.');
+    S.dsel.forEach(function(i){var d=S.drinks[i];parts.push(d.e+' '+d.p+' р.');});
     S.tsel.forEach(function(i){parts.push(S.treats[i].e+' '+S.treats[i].p+' р.');});
     var txt='🛒 '+parts.join(' + ')+' = '+(S.totalKnown?S.total+' р.':'?');
     if(S.totalKnown&&S.money<S.total){txt+=' — не хватает! 👩';momBtn.classList.add('pulseBtn');}
@@ -913,6 +1095,23 @@ function momAsk(total,onDone){
       }});
   }
 }
+function momTopUp(say){
+  /* в любой локации можно просто попросить у мамы ещё денег */
+  var X=(typeof S.money==='number')?S.money:0;
+  var cands=[10,15,20,25,30,40,50].filter(function(y){return X+y<=100;});
+  var Y=cands.length?pick(cands):10;
+  openQ({num:'👩 Мама помогает',mascot:'👩',
+    prompt:'У тебя '+X+' р. Мама даст ещё '+Y+' р. Сколько станет всего?',
+    a:X,op:1,b:Y,
+    hintFn:function(){return hintAdd(X,Y);},
+    onOk:function(s){
+      S.money=s;S.momGiven+=Y;
+      save();renderAll();
+      burstAtEl(document.getElementById('moneyPill'),30,.9);
+      sCoins();
+      say(pick(MOM_GIVE)+' '+Y+' р.! 😊');
+    }});
+}
 
 /* ================= магазин ================= */
 function buyToy(i){
@@ -938,6 +1137,7 @@ function buyToy(i){
       burstAtEl(document.getElementById('moneyPill'),24,.8);
       if(!cafeAffordable())bearSay('На остальные игрушки не хватает — самое время в кафе! ☕');
       else bearSay(pick(BUY_THANKS)+' '+t.e);
+      showToy(t);
       save();renderAll();
     }});
 }
@@ -946,7 +1146,15 @@ function buyToy(i){
 function resetCafeTotal(){S.total=0;S.totalKnown=false;}
 function selectDrink(i){
   sClick();
-  S.drink=(S.drink===i?-1:i);
+  var k=S.dsel.indexOf(i);
+  if(k>=0){S.dsel.splice(k,1);}
+  else{
+    if(S.dsel.length>=MAX_DRINKS){
+      foxSay('Ух! Больше '+MAX_DRINKS+' напитков — животик скажет «спасибо, не надо»! 😄');
+      return;
+    }
+    S.dsel.push(i);
+  }
   resetCafeTotal();
   save();renderAll();
 }
@@ -966,12 +1174,12 @@ function selectTreat(i){
 }
 function startPay(viaMom){
   if(S.scene!=='cafe')return;
-  if(S.drink<0||S.tsel.length<2){
-    foxSay('Сначала выбери напиток и хотя бы две вкусняшки! 🙂');
+  if(S.dsel.length<1||S.tsel.length<1){
+    foxSay('Сначала выбери хотя бы один напиток и одну вкусняшку! 🙂');
     sWrong();return;
   }
   if(!S.totalKnown){
-    var prices=[S.drinks[S.drink].p];
+    var prices=S.dsel.map(function(i){return S.drinks[i].p;});
     S.tsel.forEach(function(i){prices.push(S.treats[i].p);});
     var run=prices[0],idx=1;
     function step(){
@@ -1005,6 +1213,7 @@ function finishCafe(){
   burst(fx.width/2,fx.height*0.35,50,1.1);
   sCoins();
   momSay(MOM_AFTER_CAFE);
+  showCafe();
 }
 
 /* ================= парк ================= */
@@ -1025,6 +1234,7 @@ function doRide(i){
   burstAtEl(document.getElementById('moneyPill'),18,.7);
   sCoins();
   monSay(pick(RIDE_FUN)+' '+r.e+' Билетик за '+r.p+' р. — в чек!');
+  showRide(i);
 }
 
 /* ================= зоопарк ================= */
@@ -1056,6 +1266,7 @@ function doFeed(i,total){
   burstAtEl(document.getElementById('moneyPill'),18,.7);
   sCoins();
   kesSay('Ням-ням! '+z.e+' '+z.n+' очень '+z.w+'! Угощение за '+total+' р. ❤️');
+  showFeed(i);
 }
 
 /* ================= финал: чек ================= */
@@ -1064,7 +1275,7 @@ function rhead(t){return '<div class="rhead">'+t+'</div>';}
 function showBanner(){
   var bemo=document.getElementById('bemo'),receipt=document.getElementById('receipt');
   var emos=S.bag.map(function(b){return b.e;}).join(' ');
-  if(S.drink>=0)emos+=' '+S.drinks[S.drink].e;
+  S.dsel.forEach(function(i){emos+=' '+S.drinks[i].e;});
   S.tsel.forEach(function(i){emos+=' '+S.treats[i].e;});
   var tr=totalRides(),fd=fedCount();
   if(tr>0)emos+=' 🎟';
@@ -1076,9 +1287,9 @@ function showBanner(){
     h+=rhead('🛍 МАГАЗИН');
     S.bag.forEach(function(b){h+=rline(b.e+' '+b.n,b.p+' р.');});
   }
-  if(S.drink>=0||S.tsel.length>0){
+  if(S.dsel.length>0||S.tsel.length>0){
     h+=rhead('☕ КАФЕ');
-    if(S.drink>=0)h+=rline(S.drinks[S.drink].e+' '+S.drinks[S.drink].n,S.drinks[S.drink].p+' р.');
+    S.dsel.forEach(function(i){var d=S.drinks[i];h+=rline(d.e+' '+d.n,d.p+' р.');});
     S.tsel.forEach(function(i){h+=rline(S.treats[i].e+' '+S.treats[i].n,S.treats[i].p+' р.');});
   }
   if(tr>0){
@@ -1162,8 +1373,8 @@ document.getElementById('payBtn').addEventListener('click',function(){
 });
 document.getElementById('momBtn').addEventListener('click',function(){
   sClick();
-  if(S.drink<0||S.tsel.length<2){
-    foxSay('Сначала выбери напиток и две вкусняшки, потом попросим у мамы! 🙂');
+  if(S.dsel.length<1||S.tsel.length<1){
+    momTopUp(foxSay); /* пока ничего не выбрано — мама просто добавит денег */
     return;
   }
   startPay(true); /* сначала посчитаем сумму, потом мама */
@@ -1196,8 +1407,30 @@ document.getElementById('zooMapBtn').addEventListener('click',function(){
   momSay(MOM_MAP_DEF);
   save();renderAll();
 });
+function goCafeNow(){
+  sClick();
+  S.scene='cafe';
+  foxSay(FOX_CAFE_AGAIN);
+  save();renderAll();
+}
+document.getElementById('shopMomBtn').addEventListener('click',function(){
+  sClick();momTopUp(bearSay);
+});
+document.getElementById('mapMomBtn').addEventListener('click',function(){
+  sClick();momTopUp(momSay);
+});
+document.getElementById('parkMomBtn').addEventListener('click',function(){
+  sClick();momTopUp(monSay);
+});
+document.getElementById('zooMomBtn').addEventListener('click',function(){
+  sClick();momTopUp(kesSay);
+});
+document.getElementById('parkCafeBtn').addEventListener('click',goCafeNow);
+document.getElementById('zooCafeBtn').addEventListener('click',goCafeNow);
+document.getElementById('goCafe').addEventListener('click',goCafeNow);
 function newGame(){
   document.getElementById('banner').classList.add('hidden');
+  hideShow();
   parts.length=0;confettiUntil=0;
   S=newState();
   save();
@@ -1223,7 +1456,7 @@ document.getElementById('momSaid').textContent=MOM_MAP_DEF;
 document.getElementById('monSaid').textContent=MON_DEF;
 document.getElementById('kesSaid').textContent=KES_DEF;
 renderAll();
+requestAnimationFrame(fxLoop);
 </script>
-<a href="index.html" title="Вернуться к списку уроков" style="position:fixed;right:14px;bottom:14px;z-index:9999;padding:10px 18px;border-radius:999px;background:#7c3aed;color:#fff;font-size:16px;font-weight:bold;font-family:Verdana,Arial,sans-serif;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.35);">🏠 Все уроки</a>
 </body>
 </html>
