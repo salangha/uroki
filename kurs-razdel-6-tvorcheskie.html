@@ -89,6 +89,7 @@ svg.clickable{cursor:crosshair}
 <div class="topbar"><div class="toprow">
   <div class="crumbs">🎵 Сольфеджио · <b>Раздел 6. Творческие задания</b> · раздел 6 из 6</div>
   <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <a class="hbtn" href="kurs-progress.html">🏅 Мой прогресс</a>
   <button class="hbtn" id="btnTheory">📖 Теория</button>
   <button class="hbtn" id="btnGloss">📚 Словарик</button>
   <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
@@ -220,6 +221,27 @@ GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></
 $('glossBody').innerHTML=gh;
 
 /* ================= ВКЛАДКИ ================= */
+/* ================= ПРОГРЕСС (localStorage) ================= */
+var SKEY='r6';
+var PROG=(function(){
+ var KEY='solf_kurs_v1';
+ function read(){try{var d=JSON.parse(localStorage.getItem(KEY)||'{}');return (d&&typeof d==='object')?d:{};}catch(e){return {};}}
+ function write(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+ function add(tabId,key){
+  var d=read();var s=d[SKEY]=d[SKEY]||{tabs:{},ts:0};s.tabs=s.tabs||{};
+  var arr=s.tabs[tabId]||[];
+  key=String(key);
+  if(arr.indexOf(key)<0)arr.push(key);
+  s.tabs[tabId]=arr;s.ts=Date.now();write(d);
+  return arr;
+ }
+ function solved(tabId){
+  var d=read();var s=d[SKEY];
+  return (s&&s.tabs&&s.tabs[tabId])?s.tabs[tabId].slice():[];
+ }
+ return {add:add,solved:solved};
+})();
+
 var TABS=[
  {id:'rhy', t:'🥁 Ритм к стиху (упр. 1)', units:5},
  {id:'ans', t:'🎵 Допой ответ (упр. 2)', units:3},
@@ -229,8 +251,8 @@ var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
 var DONE={};
 var curTab=TABS[0].id;
 
-function doneAdd(tabId,n){
- DONE[tabId]=(DONE[tabId]||0)+n;
+function doneAdd(tabId,key){
+ DONE[tabId]=PROG.add(tabId,key).length;
  renderTabs();
 }
 function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
@@ -394,9 +416,9 @@ RENDER.rhy=function(el){
    return;
   }
   rhyState.done[key]=true;
+  doneAdd('rhy',key);
   playRhythmSeq(arr);
   setFb($('rFb'),'ok','✅ Ритм сочинен! Звуков ровно по слогам, такт заполнен. Послушай 🔊 — а потом попробуй пропеть строчку со своим ритмом! Подсказка: '+it.expl);
-  if(Object.keys(rhyState.done).length===RHY.length&&!DONE.rhy)doneAdd('rhy',RHY.length);
   renderTabs();
   setTimeout(rhyNext,2000);
  }
@@ -506,9 +528,9 @@ RENDER.ans=function(el){
    return;
   }
   qaState.done[qaState.i]=true;
+  doneAdd('ans',String(qaState.i));
   playSeq(it.q.concat(ans),0.4);
   setFb($('aFb'),'ok','✅ Отлично! Вопрос и твой ответ звучат как единая мелодия 🎉. Финал на тонике: '+nm(last)+'. Послушай всё целиком 🔊.');
-  if(Object.keys(qaState.done).length===QA.length&&!DONE.ans)doneAdd('ans',QA.length);
   renderTabs();
   setTimeout(ansNext,2200);
  }
@@ -612,9 +634,9 @@ RENDER.own=function(el){
   $('oChecklist').innerHTML=html;
   if(okCount&&okMode&&okTonic){
    ownState.done[it.key]=true;
+   doneAdd('own',it.key);
    playSeq(ans,0.45);
    setFb($('oFb'),'ok','🎉 <b>Пьеса готова!</b> Все три правила соблюдены. Послушай 🔊 — и сыграй её ещё раз с начала до конца. Ты закончил весь курс сольфеджио!');
-   if(Object.keys(ownState.done).length===OWN.length&&!DONE.own)doneAdd('own',OWN.length);
    renderTabs();
   }else{
    var msgs=[];
@@ -641,7 +663,16 @@ setInterval(function(){
  $('kursFill').style.width=(d/TOTAL*100)+'%';
 },400);
 
-renderTabs();renderTab();
+var RESTORE={};
+RESTORE.rhy=function(keys){keys.forEach(function(k){rhyState.done[+k]=true;});};
+RESTORE.ans=function(keys){keys.forEach(function(k){qaState.done[+k]=true;});};
+RESTORE.own=function(keys){keys.forEach(function(k){ownState.done[k]=true;});};
+(function(){
+ var mh=(location.hash||'').match(/tab=([A-Za-z0-9_-]+)/);
+ if(mh){for(var i=0;i<TABS.length;i++)if(TABS[i].id===mh[1]){curTab=mh[1];break;}}
+ TABS.forEach(function(t){var ks=PROG.solved(t.id);DONE[t.id]=ks.length;if(RESTORE[t.id])RESTORE[t.id](ks);});
+ renderTabs();renderTab();
+})();
 })();
 </script>
 </body>

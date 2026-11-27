@@ -99,6 +99,7 @@ table.simple th{background:#f2ede1}
 <div class="topbar"><div class="toprow">
   <div class="crumbs">🎵 Сольфеджио · <b>Раздел 4. Аккорды</b> · раздел 4 из 6</div>
   <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <a class="hbtn" href="kurs-progress.html">🏅 Мой прогресс</a>
   <button class="hbtn" id="btnTheory">📖 Теория</button>
   <button class="hbtn" id="btnGloss">📚 Словарик</button>
   <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
@@ -245,6 +246,27 @@ GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></
 $('glossBody').innerHTML=gh;
 
 /* ================= ВКЛАДКИ ================= */
+/* ================= ПРОГРЕСС (localStorage) ================= */
+var SKEY='r4';
+var PROG=(function(){
+ var KEY='solf_kurs_v1';
+ function read(){try{var d=JSON.parse(localStorage.getItem(KEY)||'{}');return (d&&typeof d==='object')?d:{};}catch(e){return {};}}
+ function write(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+ function add(tabId,key){
+  var d=read();var s=d[SKEY]=d[SKEY]||{tabs:{},ts:0};s.tabs=s.tabs||{};
+  var arr=s.tabs[tabId]||[];
+  key=String(key);
+  if(arr.indexOf(key)<0)arr.push(key);
+  s.tabs[tabId]=arr;s.ts=Date.now();write(d);
+  return arr;
+ }
+ function solved(tabId){
+  var d=read();var s=d[SKEY];
+  return (s&&s.tabs&&s.tabs[tabId])?s.tabs[tabId].slice():[];
+ }
+ return {add:add,solved:solved};
+})();
+
 var TABS=[
  {id:'build',t:'🏛 Строим обращения (упр. 1)', units:18},
  {id:'degs', t:'🔢 Ступени аккордов (упр. 2)', units:6},
@@ -256,8 +278,8 @@ var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
 var DONE={};
 var curTab=TABS[0].id;
 
-function doneAdd(tabId,n){
- DONE[tabId]=(DONE[tabId]||0)+n;
+function doneAdd(tabId,key){
+ DONE[tabId]=PROG.add(tabId,key).length;
  renderTabs();
 }
 function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
@@ -325,8 +347,7 @@ function quizFactory(tabId, items, topHtml, hint, errWhere){
      b.classList.add('right');
      st.done[st.i]=true;
      setFb($(ids.f),'ok','✅ Верно! '+it.expl);
-     if(!st.counted){st.counted={};}
-     if(!st.counted[st.i]){st.counted[st.i]=true;doneAdd(tabId,1);}
+     doneAdd(tabId,String(st.i));
      prog();
      setTimeout(next,1300);
     }else{
@@ -337,6 +358,7 @@ function quizFactory(tabId, items, topHtml, hint, errWhere){
      for(var i=0;i<all.length;i++)if(all[i].getAttribute('data-val')===it.ans)all[i].classList.add('right');
     }
    });
+   PROG.solved(tabId).forEach(function(k){st.done[+k]=true;});
   }
   next();
   function next(){
@@ -497,10 +519,10 @@ RENDER.build=function(el){
    return;
   }
   bState.solved[solvedKey]=true;
+  doneAdd('build',solvedKey);
   setFb($('bFb'),'ok','✅ <b>Верно!</b> '+nm(soln[0])+'–'+nm(soln[1])+'–'+nm(soln[2])+' — '+cd.lab+' ('+cd.word+') в '+TONS[t].inc+'. Бас — '+ROMAN[bassDeg(cd.root,cd.inv)]+' ступень.');
   playChord(soln);
   renderB();
-  if(Object.keys(bState.solved).length===TKEYS.length*CHDEFS.length&&!DONE.build)doneAdd('build',TKEYS.length*CHDEFS.length);
  }
 };
 
@@ -560,9 +582,9 @@ RENDER.kind=function(el){
    if(b.getAttribute('data-val')===it.ans){
     b.classList.add('right');
     kindState.done[kindState.i]=true;
+    doneAdd('kind',String(kindState.i));
     setFb($('kFb'),'ok','✅ Верно! '+it.expl);
     playChord(it.notes);
-    if(Object.keys(kindState.done).length===KINDCH.length&&!DONE.kind)doneAdd('kind',KINDCH.length);
     setTimeout(kindNext,1400);
    }else{
     b.classList.add('wrong');
@@ -621,9 +643,9 @@ RENDER.which=function(el){
    if(b.getAttribute('data-val')===it.ans){
     b.classList.add('active');
     whichState.done[whichState.i]=true;
+    doneAdd('which',String(whichState.i));
     setFb($('wFb'),'ok','✅ Верно! '+it.expl);
     playChord(it.notes);
-    if(Object.keys(whichState.done).length===WHICH.length&&!DONE.which)doneAdd('which',WHICH.length);
     setTimeout(whichNext,1400);
    }else{
     b.classList.add('active');
@@ -667,7 +689,16 @@ setInterval(function(){
  $('kursFill').style.width=(d/TOTAL*100)+'%';
 },400);
 
-renderTabs();renderTab();
+var RESTORE={};
+RESTORE.build=function(keys){keys.forEach(function(k){bState.solved[k]=true;});};
+RESTORE.kind=function(keys){keys.forEach(function(k){kindState.done[+k]=true;});};
+RESTORE.which=function(keys){keys.forEach(function(k){whichState.done[+k]=true;});};
+(function(){
+ var mh=(location.hash||'').match(/tab=([A-Za-z0-9_-]+)/);
+ if(mh){for(var i=0;i<TABS.length;i++)if(TABS[i].id===mh[1]){curTab=mh[1];break;}}
+ TABS.forEach(function(t){var ks=PROG.solved(t.id);DONE[t.id]=ks.length;if(RESTORE[t.id])RESTORE[t.id](ks);});
+ renderTabs();renderTab();
+})();
 })();
 </script>
 </body>

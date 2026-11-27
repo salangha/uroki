@@ -99,6 +99,7 @@ h1{font-size:26px;margin:.1em 0;color:#1c4f8f}
 <div class="topbar"><div class="toprow">
   <div class="crumbs">🎵 Сольфеджио · <b>Раздел 5. Ритм и размер</b> · раздел 5 из 6</div>
   <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <a class="hbtn" href="kurs-progress.html">🏅 Мой прогресс</a>
   <button class="hbtn" id="btnTheory">📖 Теория</button>
   <button class="hbtn" id="btnGloss">📚 Словарик</button>
   <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
@@ -300,6 +301,27 @@ GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></
 $('glossBody').innerHTML=gh;
 
 /* ================= ВКЛАДКИ ================= */
+/* ================= ПРОГРЕСС (localStorage) ================= */
+var SKEY='r5';
+var PROG=(function(){
+ var KEY='solf_kurs_v1';
+ function read(){try{var d=JSON.parse(localStorage.getItem(KEY)||'{}');return (d&&typeof d==='object')?d:{};}catch(e){return {};}}
+ function write(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+ function add(tabId,key){
+  var d=read();var s=d[SKEY]=d[SKEY]||{tabs:{},ts:0};s.tabs=s.tabs||{};
+  var arr=s.tabs[tabId]||[];
+  key=String(key);
+  if(arr.indexOf(key)<0)arr.push(key);
+  s.tabs[tabId]=arr;s.ts=Date.now();write(d);
+  return arr;
+ }
+ function solved(tabId){
+  var d=read();var s=d[SKEY];
+  return (s&&s.tabs&&s.tabs[tabId])?s.tabs[tabId].slice():[];
+ }
+ return {add:add,solved:solved};
+})();
+
 var TABS=[
  {id:'durq', t:'🎵 Длительности и паузы (упр. 1)', units:8},
  {id:'size', t:'📏 Определи размер (упр. 2)', units:6},
@@ -313,8 +335,8 @@ var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
 var DONE={};
 var curTab=TABS[0].id;
 
-function doneAdd(tabId,n){
- DONE[tabId]=(DONE[tabId]||0)+n;
+function doneAdd(tabId,key){
+ DONE[tabId]=PROG.add(tabId,key).length;
  renderTabs();
 }
 function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
@@ -396,8 +418,7 @@ function quizFactory(tabId, items, topHtml, hint, errWhere){
      b.classList.add('right');
      st.done[st.i]=true;
      setFb($(ids.f),'ok','✅ Верно! '+it.expl);
-     if(!st.counted){st.counted={};}
-     if(!st.counted[st.i]){st.counted[st.i]=true;doneAdd(tabId,1);}
+     doneAdd(tabId,String(st.i));
      prog();
      setTimeout(next,1300);
     }else{
@@ -411,6 +432,7 @@ function quizFactory(tabId, items, topHtml, hint, errWhere){
      }
     }
    });
+   PROG.solved(tabId).forEach(function(k){st.done[+k]=true;});
   }
   next();
   function next(){
@@ -478,8 +500,8 @@ RENDER.size=function(el){
    if(b.getAttribute('data-size')===it.ans){
     b.classList.add('right');
     sizeState.done[sizeState.i]=true;
+    doneAdd('size',String(sizeState.i));
     setFb($('szFb'),'ok','✅ Верно! '+it.expl);
-    if(Object.keys(sizeState.done).length===SIZEEX.length&&!DONE.size)doneAdd('size',SIZEEX.length);
     setTimeout(sizeNext,1400);
    }else{
     b.classList.add('wrong');
@@ -534,8 +556,8 @@ RENDER.fill=function(el){
    if(idx===it.ans){
     b.classList.add('right');
     fillState.done[fillState.i]=true;
+    doneAdd('fill',String(fillState.i));
     setFb($('fFb'),'ok','✅ Верно! '+it.expl);
-    if(Object.keys(fillState.done).length===FILLS.length&&!DONE.fill)doneAdd('fill',FILLS.length);
     setTimeout(fillNext,1500);
    }else{
     b.classList.add('wrong');
@@ -624,8 +646,8 @@ RENDER.extra=function(el){
   for(var j=0;j<it.notes.length;j++)if(!exState.crossed[key][j])sum+=DUR[it.notes[j].k];
   if(Math.abs(sum-SIZES[it.size])<0.01){
    exState.done[key]=true;
+   doneAdd('extra',key);
    setFb($('exFb'),'ok','✅ Верно! '+it.expl);
-   if(Object.keys(exState.done).length===EXTRAS.length&&!DONE.extra)doneAdd('extra',EXTRAS.length);
    setTimeout(extraNext,1500);
   }else{
    setFb($('exFb'),'err','❌ <b>Где ошибся:</b> в такте сейчас '+fracNum(sum)+' вместо '+fracNum(SIZES[it.size])+'. Зачеркни ровно лишние длительности!');
@@ -702,9 +724,9 @@ RENDER.part=function(el){
   if(built.length===0){setFb($('pFb'),'err','❌ Второй такт пуст: кликай по ритмическим группам в палитре.');return;}
   if(Math.abs(sum-SIZES[it.size])<0.01){
    partState.done[key]=true;
+   doneAdd('part',key);
    playRhythm([it.given[0],built]);
    setFb($('pFb'),'ok','✅ Партитура досочинена! Такт заполнен ровно — '+fracNum(sum)+'. Послушай 🔊.');
-   if(Object.keys(partState.done).length===PARTS.length&&!DONE.part)doneAdd('part',PARTS.length);
    setTimeout(partNext,1600);
   }else{
    setFb($('pFb'),'err','❌ <b>Где ошибся:</b> в такте сейчас '+fracNum(sum)+' вместо '+fracNum(SIZES[it.size])+'. Убери лишнее или добавь недостающее (кнопка «Очистить такт» начинает заново).');
@@ -751,8 +773,8 @@ RENDER.voc=function(el){
    if(ok){
     b.classList.add('right');
     vocState.done[vocState.i]=true;
+    doneAdd('voc',String(vocState.i));
     setFb($('vFb'),'ok','✅ Верно! '+it.expl);
-    if(Object.keys(vocState.done).length===VOCS.length&&!DONE.voc)doneAdd('voc',VOCS.length);
     setTimeout(vocNext,1600);
    }else{
     b.classList.add('wrong');
@@ -825,7 +847,18 @@ setInterval(function(){
  $('kursFill').style.width=(d/TOTAL*100)+'%';
 },400);
 
-renderTabs();renderTab();
+var RESTORE={};
+RESTORE.size=function(keys){keys.forEach(function(k){sizeState.done[+k]=true;});};
+RESTORE.fill=function(keys){keys.forEach(function(k){fillState.done[+k]=true;});};
+RESTORE.extra=function(keys){keys.forEach(function(k){exState.done[+k]=true;});};
+RESTORE.part=function(keys){keys.forEach(function(k){partState.done[+k]=true;});};
+RESTORE.voc=function(keys){keys.forEach(function(k){vocState.done[+k]=true;});};
+(function(){
+ var mh=(location.hash||'').match(/tab=([A-Za-z0-9_-]+)/);
+ if(mh){for(var i=0;i<TABS.length;i++)if(TABS[i].id===mh[1]){curTab=mh[1];break;}}
+ TABS.forEach(function(t){var ks=PROG.solved(t.id);DONE[t.id]=ks.length;if(RESTORE[t.id])RESTORE[t.id](ks);});
+ renderTabs();renderTab();
+})();
 })();
 </script>
 </body>

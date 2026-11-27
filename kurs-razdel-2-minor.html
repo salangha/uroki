@@ -103,6 +103,7 @@ table.simple th{background:#f2ede1}
 <div class="topbar"><div class="toprow">
   <div class="crumbs">🎵 Сольфеджио · <b>Раздел 2. Минорные тональности</b> · раздел 2 из 6</div>
   <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <a class="hbtn" href="kurs-progress.html">🏅 Мой прогресс</a>
   <button class="hbtn" id="btnTheory">📖 Теория</button>
   <button class="hbtn" id="btnGloss">📚 Словарик</button>
   <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
@@ -246,6 +247,27 @@ GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></
 $('glossBody').innerHTML=gh;
 
 /* ================= ВКЛАДКИ ================= */
+/* ================= ПРОГРЕСС (localStorage) ================= */
+var SKEY='r2';
+var PROG=(function(){
+ var KEY='solf_kurs_v1';
+ function read(){try{var d=JSON.parse(localStorage.getItem(KEY)||'{}');return (d&&typeof d==='object')?d:{};}catch(e){return {};}}
+ function write(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+ function add(tabId,key){
+  var d=read();var s=d[SKEY]=d[SKEY]||{tabs:{},ts:0};s.tabs=s.tabs||{};
+  var arr=s.tabs[tabId]||[];
+  key=String(key);
+  if(arr.indexOf(key)<0)arr.push(key);
+  s.tabs[tabId]=arr;s.ts=Date.now();write(d);
+  return arr;
+ }
+ function solved(tabId){
+  var d=read();var s=d[SKEY];
+  return (s&&s.tabs&&s.tabs[tabId])?s.tabs[tabId].slice():[];
+ }
+ return {add:add,solved:solved};
+})();
+
 var TABS=[
  {id:'gamma', t:'🎼 Гаммы минора (упр. 1)', units:9},
  {id:'paral', t:'🔑 Параллельные и одноимённые (упр. 2)', units:9},
@@ -257,8 +279,8 @@ var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
 var DONE={};
 var curTab=TABS[0].id;
 
-function doneAdd(tabId,n){
- DONE[tabId]=(DONE[tabId]||0)+n;
+function doneAdd(tabId,key){
+ DONE[tabId]=PROG.add(tabId,key).length;
  renderTabs();
 }
 function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
@@ -332,13 +354,11 @@ RENDER.gamma=function(el){
   $('gTon').addEventListener('click',function(e){
    var b=e.target.closest('[data-ton]');if(!b)return;
    gamma.ton=+b.getAttribute('data-ton');
-   gamma.solved[G_TABS[gamma.ton]+'|'+VIDS[gamma.vid].id]=undefined;
    gammaReset();
   });
   $('gVid').addEventListener('click',function(e){
    var b=e.target.closest('[data-vid]');if(!b)return;
    gamma.vid=+b.getAttribute('data-vid');
-   gamma.solved[G_TABS[gamma.ton]+'|'+VIDS[gamma.vid].id]=undefined;
    gammaReset();
   });
   $('gStaff').addEventListener('click',function(e){
@@ -441,7 +461,7 @@ RENDER.gamma=function(el){
   gamma.solved[t+'|'+vid]=true;
   setFb($('gFb'),'ok','✅ Гамма '+TON[t].lab+' ('+VIDS[gamma.vid].t+') построена верно! 🎉 Послушай 🔊.');
   playNotes(exp);
-  if(first)doneAdd('gamma',1);
+  doneAdd('gamma',t+'|'+vid);
   renderGammaStaff();
  }
 };
@@ -471,9 +491,9 @@ RENDER.paral=function(el){
    if(b.getAttribute('data-ok')==='1'){
     b.classList.add('right');
     parState.done[parState.i]=true;
+    doneAdd('paral',String(parState.i));
     setFb($('pFb'),'ok','✅ Верно! '+it.expl);
     renderParProg();
-    if(Object.keys(parState.done).length===PAIRS.length&&!DONE.paral)doneAdd('paral',PAIRS.length);
     setTimeout(parNext,1200);
    }else{
     b.classList.add('wrong');
@@ -545,7 +565,7 @@ RENDER.steps=function(el){
    if(picked.length===0){setFb($('stFb'),'err','❌ Отметь ноты: нажми на те, что считаешь устойчивыми (тоника уже отмечена за тебя).');return;}
    if(ok){
     setFb($('stFb'),'ok','✅ Верно! Устойчивые ступени — I, III и V: '+degName(ton,0)+', '+degName(ton,2)+', '+degName(ton,4)+'. Из них складывается трезвучие t⁵₃.');
-    if(!stabState.solved[ton]){stabState.solved[ton]=true;doneAdd('steps',1);}
+    stabState.solved[ton]=true;doneAdd('steps','st:'+ton);
     renderStable();
    }else{
     var wrongs=[];
@@ -564,9 +584,9 @@ RENDER.steps=function(el){
    if(b.getAttribute('data-ok')==='1'){
     b.classList.add('right');
     stepB.done[stepB.i]=true;
+    doneAdd('steps','q'+stepB.i);
     setFb($('sbFb'),'ok','✅ Верно! '+it.expl);
     renderSbProg();
-    if(Object.keys(stepB.done).length===STEPSQ.length&&!DONE.sbq)doneAdd('sbq',STEPSQ.length);
     setTimeout(sbNext,1200);
    }else{
     b.classList.add('wrong');
@@ -744,10 +764,10 @@ RENDER.chords=function(el){
    return;
   }
   chState.solved[solvedKey]=true;
+  doneAdd('chords',solvedKey);
   setFb($('chFb'),'ok','✅ <b>Верно!</b> '+nm(soln[0])+'–'+nm(soln[1])+'–'+nm(soln[2])+' — '+c.lab+' ('+c.word+') в '+TON[t].inc+'.');
   playChord(soln);
   renderCh();
-  if(Object.keys(chState.solved).length===CH_TONS.length*CHORDS.length&&!DONE.chords)doneAdd('chords',CH_TONS.length*CHORDS.length);
  }
 };
 function playChord(seq){
@@ -786,9 +806,9 @@ RENDER.kind=function(el){
    if(b.getAttribute('data-ok')==='1'){
     b.classList.add('right');
     kindState.done[kindState.i]=true;
+    doneAdd('kind',String(kindState.i));
     setFb($('kdFb'),'ok','✅ Верно! '+it.expl);
     renderKindProg();
-    if(Object.keys(kindState.done).length===MELS.length&&!DONE.kind)doneAdd('kind',MELS.length);
     setTimeout(kindNext,1400);
    }else{
     b.classList.add('wrong');
@@ -839,7 +859,18 @@ setInterval(function(){
  $('kursFill').style.width=(d/TOTAL*100)+'%';
 },400);
 
-renderTabs();renderTab();
+var RESTORE={};
+RESTORE.gamma=function(keys){keys.forEach(function(k){gamma.solved[k]=true;});};
+RESTORE.paral=function(keys){keys.forEach(function(k){parState.done[+k]=true;});};
+RESTORE.steps=function(keys){keys.forEach(function(k){if(k.indexOf('st:')===0)stabState.solved[k.slice(3)]=true;else stepB.done[+k.slice(1)]=true;});};
+RESTORE.chords=function(keys){keys.forEach(function(k){chState.solved[k]=true;});};
+RESTORE.kind=function(keys){keys.forEach(function(k){kindState.done[+k]=true;});};
+(function(){
+ var mh=(location.hash||'').match(/tab=([A-Za-z0-9_-]+)/);
+ if(mh){for(var i=0;i<TABS.length;i++)if(TABS[i].id===mh[1]){curTab=mh[1];break;}}
+ TABS.forEach(function(t){var ks=PROG.solved(t.id);DONE[t.id]=ks.length;if(RESTORE[t.id])RESTORE[t.id](ks);});
+ renderTabs();renderTab();
+})();
 })();
 </script>
 </body>

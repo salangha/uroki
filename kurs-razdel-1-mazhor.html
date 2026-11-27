@@ -100,6 +100,7 @@ table.simple th{background:#f2ede1}
 <div class="topbar"><div class="toprow">
   <div class="crumbs">🎵 Сольфеджио · <b>Раздел 1. Мажорные тональности</b> · раздел 1 из 6</div>
   <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <a class="hbtn" href="kurs-progress.html">🏅 Мой прогресс</a>
   <button class="hbtn" id="btnTheory">📖 Теория</button>
   <button class="hbtn" id="btnGloss">📚 Словарик</button>
   <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
@@ -240,6 +241,27 @@ GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></
 $('glossBody').innerHTML=gh;
 
 /* ================= ГЛАВНЫЙ ТРЕНАЖЁР: ВКЛАДКИ ================= */
+/* ================= ПРОГРЕСС (localStorage) ================= */
+var SKEY='r1';
+var PROG=(function(){
+ var KEY='solf_kurs_v1';
+ function read(){try{var d=JSON.parse(localStorage.getItem(KEY)||'{}');return (d&&typeof d==='object')?d:{};}catch(e){return {};}}
+ function write(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+ function add(tabId,key){
+  var d=read();var s=d[SKEY]=d[SKEY]||{tabs:{},ts:0};s.tabs=s.tabs||{};
+  var arr=s.tabs[tabId]||[];
+  key=String(key);
+  if(arr.indexOf(key)<0)arr.push(key);
+  s.tabs[tabId]=arr;s.ts=Date.now();write(d);
+  return arr;
+ }
+ function solved(tabId){
+  var d=read();var s=d[SKEY];
+  return (s&&s.tabs&&s.tabs[tabId])?s.tabs[tabId].slice():[];
+ }
+ return {add:add,solved:solved};
+})();
+
 var TABS=[
  {id:'gamma', t:'🎼 Гаммы (упр. 1)', units:3},
  {id:'keys',  t:'🔑 Ключевые знаки (упр. 2)', units:6},
@@ -255,8 +277,8 @@ var ERRJOURNAL=null;
 function updTop(){
  var d=0;TABS.forEach(function(t){d+=DONE[t.id]||0;});
 }
-function doneAdd(tabId,n){
- DONE[tabId]=(DONE[tabId]||0)+n;
+function doneAdd(tabId,key){
+ DONE[tabId]=PROG.add(tabId,key).length;
  renderTabs();
 }
 function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
@@ -311,7 +333,7 @@ RENDER.gamma=function(el){
   el.innerHTML=givenHtml;
   $('gTon').addEventListener('click',function(e){
    var b=e.target.closest('[data-ton]');if(!b)return;
-   gamma.ton=+b.getAttribute('data-ton');gamma.solved[G_TABS[gamma.ton]]=undefined;gammaReset();
+   gamma.ton=+b.getAttribute('data-ton');gammaReset();
   });
   $('gStaff').addEventListener('click',function(e){
    if(gamma.solved[G_TABS[gamma.ton]])return;
@@ -396,7 +418,7 @@ RENDER.gamma=function(el){
   gamma.__gDone=gamma.__gDone||{};gamma.__gDone[G_TABS[gamma.ton]]=true;
   setFb($('gFb'),'ok','✅ Гамма '+TON[G_TABS[gamma.ton]].lab+' построена верно! 🎉 Послушай 🔊.');
   gammaListen();
-  if(!wasOk)doneAdd('gamma',1);
+  doneAdd('gamma',G_TABS[gamma.ton]);
   renderGammaStaff();
  }
  function gammaListen(){
@@ -440,6 +462,7 @@ RENDER.keys=function(el){
    if(okk){
     b.classList.add('right');
     keyState.done[keyState.i]=true;
+    doneAdd('keys',String(keyState.i));
     setFb($('kFb'),'ok','✅ Верно! '+it.sig+' — это <b>'+it.ans+'</b>. Правило: 1♯ — Соль мажор, 2♯ — Ре мажор, 3♯ — Ми мажор; 1♭ — Фа мажор, 2♭ — Си♭ мажор, 3♭ — Ми♭ мажор.');
     renderKeysProg();
     setTimeout(keyNext,900);
@@ -472,7 +495,6 @@ RENDER.keys=function(el){
  function renderKeysProg(){
   var d=Object.keys(keyState.done).length;
   $('kProg').innerHTML='<span style="color:#5f584a;font-size:15px">Определено: '+d+' из '+KEYS.length+'</span>';
-  if(d===KEYS.length&&!DONE.keys)doneAdd('keys',KEYS.length);
  }
  keyNext();
 };
@@ -502,9 +524,9 @@ RENDER.steps=function(el){
    if(okk){
     b.classList.add('right');
     stepState.done[stepState.i]=true;
+    doneAdd('steps',String(stepState.i));
     setFb($('sFb'),'ok','✅ Верно! '+it.expl);
     renderStepsProg();
-    if(Object.keys(stepState.done).length===STEPS.length&&!DONE.steps)doneAdd('steps',STEPS.length);
     setTimeout(stepNext,900);
    }else{
     b.classList.add('wrong');
@@ -566,7 +588,7 @@ RENDER.stable=function(el){
    if(picked.length===0){setFb($('stFb'),'err','❌ Отметь ноты: нажми на те, что считаешь устойчивыми (это не тоника — она уже дана на стане).');return;}
    if(ok){
     setFb($('stFb'),'ok','✅ Верно! Устойчивые ступени — I, III и V: '+ROMAN[0]+', '+ROMAN[2]+', '+ROMAN[4]+' — ноты '+degName(ton,0)+', '+degName(ton,2)+', '+degName(ton,4)+'. Из них складывается тоническое трезвучие.');
-    if(!stabState.solved[ton]){stabState.solved[ton]=true;doneAdd('stable',1);}
+    stabState.solved[ton]=true;doneAdd('stable',ton);
     renderStable();
    }else{
     var wrongs=[];
@@ -704,10 +726,10 @@ RENDER.chords=function(el){
    return;
   }
   chState.solved[c.root]=true;
+  doneAdd('chords',String(c.root));
   setFb($('chFb'),'ok','✅ <b>Верно!</b> '+nameOf(soln.bass)+'–'+nameOf(soln.mid)+'–'+nameOf(soln.top)+' — это '+FNWORD[c.lab]+' ('+c.lab+'). '+c.expl+'.');
   playCh([soln.bass,soln.mid,soln.top]);
   renderCh();
-  if(Object.keys(chState.solved).length===CHORDS.length&&!DONE.chords)doneAdd('chords',CHORDS.length);
  }
 };
 var FNWORD={'T⁵₃':'тоника','S⁵₃':'субдоминанта','D⁵₃':'доминанта'};
@@ -739,7 +761,18 @@ setInterval(function(){
  $('kursFill').style.width=(d/TOTAL*100)+'%';
 },400);
 
-renderTabs();renderTab();
+var RESTORE={};
+RESTORE.gamma=function(keys){keys.forEach(function(k){gamma.solved[k]=true;gamma.__gDone=gamma.__gDone||{};gamma.__gDone[k]=true;});};
+RESTORE.keys=function(keys){keys.forEach(function(k){keyState.done[+k]=true;});};
+RESTORE.steps=function(keys){keys.forEach(function(k){stepState.done[+k]=true;});};
+RESTORE.stable=function(keys){keys.forEach(function(k){stabState.solved[k]=true;});};
+RESTORE.chords=function(keys){keys.forEach(function(k){chState.solved[+k]=true;});};
+(function(){
+ var mh=(location.hash||'').match(/tab=([A-Za-z0-9_-]+)/);
+ if(mh){for(var i=0;i<TABS.length;i++)if(TABS[i].id===mh[1]){curTab=mh[1];break;}}
+ TABS.forEach(function(t){var ks=PROG.solved(t.id);DONE[t.id]=ks.length;if(RESTORE[t.id])RESTORE[t.id](ks);});
+ renderTabs();renderTab();
+})();
 })();
 </script>
 </body>

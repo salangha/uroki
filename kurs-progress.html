@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мой прогресс — Курс сольфеджио</title>
+<meta property="og:title" content="Мой прогресс по курсу сольфеджио">
+<meta property="og:description" content="Интерактивный курс от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f5f2ea;color:#2a251e;line-height:1.55;padding:24px 16px 48px;font-size:17px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-size:28px;margin:8px 0;color:#1c4f8f}
+.sub{color:#7a7263;margin-bottom:20px}
+.back{display:inline-block;margin-bottom:14px;color:#7a7263;text-decoration:none;font-size:14px}
+.back:hover{color:#2a251e}
+.card{background:#fff;border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 2px 10px rgba(60,50,30,.08);border:1px solid #e6dfd0}
+.summrow{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.summrow .big{font-size:34px;font-weight:800;color:#1c4f8f}
+.summrow .rest{color:#5f584a;font-size:15px}
+.bar{height:14px;background:#e8e2d4;border-radius:8px;overflow:hidden;margin:10px 0 4px}
+.bar>div{height:100%;background:#1c4f8f;transition:width .4s}
+.sechead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sechead .em{font-size:26px}
+.sechead h3{font-size:18px;color:#1c4f8f;margin-right:auto}
+.sechead .cnt{font-weight:800;color:#1c4f8f}
+.openrow{margin:6px 0 2px}
+.openrow a{font-size:14px;color:#1c4f8f;text-decoration:none;font-weight:700}
+.openrow a:hover{text-decoration:underline}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 2px}
+.chip{font-size:14px;padding:6px 11px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;color:#2a251e;text-decoration:none}
+.chip:hover{background:#f0ead9}
+.chip.done{border-color:#23843c;background:#e7f6ec}
+.chip .n{color:#8a8378;font-size:12px}
+.note{color:#8a8378;font-size:14px;margin:6px 0 0}
+.rowbtn{margin-top:14px}
+button.danger{font-size:15px;padding:8px 14px;border-radius:10px;border:2px solid #d98c8c;background:#fff5f5;color:#a33;cursor:pointer}
+button.danger:hover{background:#fdeaea}
+@media (max-width:640px){body{font-size:16px}h1{font-size:24px}}
+</style>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(114071811, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:false
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="kurs-index.html">← К оглавлению курса</a>
+  <h1>🏅 Мой прогресс</h1>
+  <p class="sub">Разделы можно проходить в любом порядке — выбирай тему, которую хочешь подтянуть. Прогресс хранится в этом браузере и никуда не пропадёт между занятиями.</p>
+
+  <div class="card">
+    <div class="summrow"><span class="big" id="bigPct">0%</span><span class="rest" id="sumText">решено 0 из 181 упражнения</span></div>
+    <div class="bar"><div id="bigFill" style="width:0%"></div></div>
+    <div class="note" id="lastTs"></div>
+    <div class="rowbtn"><button class="danger" id="btnReset">Начать заново (сбросить прогресс)</button></div>
+  </div>
+
+  <div id="sections"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var KEY='solf_kurs_v1';
+var R=[
+ {id:'r1',file:'kurs-razdel-1-mazhor.html',em:'🏛',lab:'Раздел 1. Мажорные тональности',total:23,tabs:[
+   ['gamma','Гаммы',3],['keys','Ключевые знаки',6],['steps','Ступени',8],['stable','Устойчивые ступени',3],['chords','Главные трезвучия',3]]},
+ {id:'r2',file:'kurs-razdel-2-minor.html',em:'🌙',lab:'Раздел 2. Минорные тональности',total:34,tabs:[
+   ['gamma','Гаммы минора',9],['paral','Параллельные и одноимённые',9],['steps','Устойчивые и вводные ступени',6],['chords','Трезвучия t⁵₃ s⁵₃ D⁵₃',6],['kind','Определи вид минора',4]]},
+ {id:'r3',file:'kurs-razdel-3-intervaly.html',em:'📏',lab:'Раздел 3. Интервалы',total:40,tabs:[
+   ['cipher','Чтение шифровок',8],['up','Строим вверх',13],['down','Строим вниз',5],['cons','Консонансы и диссонансы',2],['math','Музыкальная математика',6],['degs','Интервалы на ступенях',6]]},
+ {id:'r4',file:'kurs-razdel-4-akkordy.html',em:'🎼',lab:'Раздел 4. Аккорды',total:42,tabs:[
+   ['build','Обращения трезвучий',18],['degs','Ступени аккордов',6],['scheme','Схемы строения',6],['kind','Виды трезвучий',6],['which','Определи аккорд',6]]},
+ {id:'r5',file:'kurs-razdel-5-ritm.html',em:'⏱',lab:'Раздел 5. Ритм и размер',total:32,tabs:[
+   ['durq','Длительности и паузы',8],['size','Определи размер',6],['fill','Собери такт',6],['extra','Лишние длительности',3],['part','Досочини партитуру',2],['voc','Флажки → рёбра',4],['poem','Стихи: какой метр?',3]]},
+ {id:'r6',file:'kurs-razdel-6-tvorcheskie.html',em:'✏️',lab:'Раздел 6. Творческие задания',total:10,tabs:[
+   ['rhy','Ритм к стиху',5],['ans','Допой ответ',3],['own','Своя пьеса',2]]}
+];
+function read(){
+ var d={};
+ try{d=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){d={};}
+ return (d&&typeof d==='object')?d:{};
+}
+function sectionDone(s){
+ var n=0,tabs=(s&&s.tabs)||{};
+ for(var t in tabs)n+=tabs[t].length;
+ return n;
+}
+var d=read();
+var done=0,total=0,lastTs=0;
+var host=document.getElementById('sections');
+var html='';
+R.forEach(function(r){
+ var s=d[r.id]||{};
+ var tabs=s.tabs||{};
+ var n=sectionDone(s);
+ if(n>r.total)n=r.total;
+ done+=n;total+=r.total;
+ if(s.ts&&s.ts>lastTs)lastTs=s.ts;
+ var pct=Math.round(n/r.total*100);
+ html+='<div class="card"><div class="sechead"><span class="em">'+r.em+'</span><h3>'+r.lab+'</h3><span class="cnt">'+n+' / '+r.total+'</span></div>';
+ html+='<div class="bar"><div style="width:'+pct+'%"></div></div>';
+ html+='<div class="openrow"><a href="'+r.file+'">Открыть раздел →</a></div>';
+ html+='<div class="chips">';
+ r.tabs.forEach(function(t){
+  var tn=(tabs[t[0]]||[]).length;
+  var full=tn>=t[2];
+  html+='<a class="chip'+(full?' done':'')+'" href="'+r.file+'#tab='+t[0]+'" title="Открыть эту тему">'+(full?'✓ ':'')+t[1]+' <span class="n">'+Math.min(tn,t[2])+'/'+t[2]+'</span></a>';
+ });
+ html+='</div>';
+ html+='<p class="note">Любую тему можно открыть сразу — без предыдущих разделов.</p>';
+ html+='</div>';
+});
+host.innerHTML=html;
+var pct=total?Math.round(done/total*100):0;
+document.getElementById('bigPct').textContent=pct+'%';
+document.getElementById('bigFill').style.width=pct+'%';
+document.getElementById('sumText').textContent='решено '+done+' из '+total+' упражнений';
+var lt='';
+if(lastTs){
+ var dt=new Date(lastTs);
+ var M=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+ lt='Последнее занятие: '+dt.getDate()+' '+M[dt.getMonth()]+', '+('0'+dt.getHours()).slice(-2)+':'+('0'+dt.getMinutes()).slice(-2);
+}else{
+ lt='Пока ни одного упражнения — начни с любого раздела!';
+}
+document.getElementById('lastTs').textContent=lt;
+document.getElementById('btnReset').addEventListener('click',function(){
+ if(!window.confirm('Сбросить весь прогресс? Это действие нельзя отменить.'))return;
+ try{localStorage.removeItem(KEY);}catch(e){}
+ location.reload();
+});
+})();
+</script>
+</body>
+</html>
