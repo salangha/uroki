@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сольфеджио · Раздел 3. Интервалы</title>
+<meta property="og:title" content="Сольфеджио: интервалы">
+<meta property="og:description" content="Интерактивный урок от репетитора Ивановой — открывается прямо в браузере, на телефоне или компьютере.">
+<meta property="og:image" content="https://salangha.github.io/uroki/logo.jpg">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f2ea;color:#2a251e;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.55}
+.topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #d9d2c2;box-shadow:0 2px 10px rgba(60,50,30,.08);padding:8px 14px}
+.toprow{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crumbs{font-size:14px;color:#8a8378;margin-right:auto}
+.crumbs b{color:#1c4f8f}
+.hbtn{font-size:14px;padding:7px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;white-space:nowrap}
+a.hbtn{color:#2a251e;text-decoration:none;display:inline-block}
+.hbtn.warn{border-color:#d9b84a;color:#8a6d1f;background:#fff6df}
+.hbtn:hover{background:#f0ead9}
+.wrap{max-width:1000px;margin:0 auto;padding:14px}
+h1{font-size:26px;margin:.1em 0;color:#1c4f8f}
+.sub{color:#7a7263;margin:.2em 0 .4em;font-size:16px}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.tabbtn{font-size:16px;padding:9px 14px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.tabbtn.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.card{background:#fff;border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 3px 12px rgba(60,50,30,.07)}
+.theorybox{background:#eef6ff;border-left:5px solid #5b9bd5;border-radius:10px;padding:12px 16px;margin:10px 0}
+.theorybox h3{margin:.2em 0 .4em;font-size:18px;color:#1c4f8f}
+.theorybox p{margin:.4em 0}
+.btn{font-size:16px;padding:9px 15px;border-radius:11px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;color:#2a251e}
+.btn:hover{background:#f0ead9}
+.btn.primary{background:#1c4f8f;border-color:#1c4f8f;color:#fff}
+.btn.primary:hover{background:#16406f}
+.btn.tiny{font-size:14px;padding:5px 11px;border-radius:9px}
+.btn:disabled{opacity:.45;cursor:default}
+.accbtn.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center;justify-content:center}
+.staffbox{background:#fffef9;border:1.5px solid #e2dccd;border-radius:12px;padding:6px 10px;display:inline-block}
+svg.clickable{cursor:crosshair}
+.fb{border-radius:12px;padding:12px 16px;margin:10px 0;min-height:22px}
+.fb.empty{background:#f4f1e8;color:#6f6858}
+.fb.ok{background:#e7f6ec;border:1.5px solid #a9d8b6}
+.fb.err{background:#fdeaea;border:1.5px solid #efb9b9}
+.errcard{background:#fff;border:1.5px solid #efb9b9;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:16px}
+.errcard .row{margin:3px 0}
+.errcard .t{color:#b04a4a;font-weight:700}
+.errcard .r{color:#23843c;font-weight:700}
+.modalbg{position:fixed;inset:0;background:rgba(40,32,20,.45);display:none;z-index:90}
+.modalbg.show{display:block}
+.modal{position:fixed;z-index:95;top:4vh;left:50%;transform:translateX(-50%);width:min(680px,92vw);max-height:88vh;overflow:auto;background:#fff;border-radius:16px;padding:18px 22px;display:none;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.modal.show{display:block}
+.modal h2{margin:.1em 0 .4em;font-size:21px;color:#1c4f8f}
+.modal .closebtn{position:sticky;top:0;float:right}
+.gloss{border-bottom:1px dashed #d8d2c4;padding:7px 2px}
+.gloss b{color:#1c4f8f}
+.gloss p{margin:.2em 0}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0;justify-content:center}
+.chip{font-size:15px;padding:7px 12px;border-radius:10px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.chip.active{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.notesrow{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.notebtn{font-size:17px;font-weight:700;padding:10px 14px;border-radius:11px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer}
+.notebtn.picked{background:#1c4f8f;color:#fff;border-color:#1c4f8f}
+.notebtn.given{background:#e8e2d4;border-color:#b9b2a0;color:#6f6858;cursor:default}
+.qwrap{text-align:center}
+.qtext{font-size:19px;margin:10px 0}
+.oopts{display:flex;flex-direction:column;gap:8px;max-width:520px;margin:10px auto}
+.oop{font-size:17px;padding:11px 15px;border-radius:12px;border:2px solid #c9c2b2;background:#faf7ee;cursor:pointer;text-align:left}
+.oop:hover{background:#f0ead9}
+.oop.right{background:#e7f6ec;border-color:#23843c;font-weight:700}
+.oop.wrong{background:#fdeaea;border-color:#e08585}
+.errlist{max-height:50vh;overflow:auto}
+.errlist .errcard{margin:6px 0}
+.modalnote{color:#8a8378;font-size:14px}
+table.simple{border-collapse:collapse;margin:8px auto}
+table.simple th,table.simple td{border:1.5px solid #d8d2c4;padding:5px 10px;text-align:center;font-size:15px}
+table.simple th{background:#f2ede1}
+@media (max-width:640px){body{font-size:16px}h1{font-size:23px}}
+</style>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(114071811, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:false
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114071811" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</head>
+<body>
+
+<div class="topbar"><div class="toprow">
+  <div class="crumbs">🎵 Сольфеджио · <b>Раздел 3. Интервалы</b> · раздел 3 из 6</div>
+  <a class="hbtn" href="kurs-index.html">🏠 Курс</a>
+  <button class="hbtn" id="btnTheory">📖 Теория</button>
+  <button class="hbtn" id="btnGloss">📚 Словарик</button>
+  <button class="hbtn warn" id="btnErrs">⚠️ Мои ошибки (<span id="errCnt">0</span>)</button>
+</div></div>
+
+<div class="wrap">
+  <h1>Интервалы</h1>
+  <p class="sub">Читаем шифровки, строим интервалы вверх и вниз, ищем консонансы и диссонансы. Каждое упражнение — на своей вкладке. Теория и словарик всегда под рукой — кнопки сверху.</p>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="tabBody"></div>
+</div>
+
+<div class="modalbg" id="modalBg"></div>
+<div class="modal" id="modalTheory">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>📖 Теория раздела</h2>
+  <div id="theoryBody"></div>
+</div>
+<div class="modal" id="modalGloss">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>📚 Словарик</h2>
+  <div id="glossBody"></div>
+</div>
+<div class="modal" id="modalErrs">
+  <button class="btn tiny closebtn" data-close>✕ Закрыть</button>
+  <h2>⚠️ Мои ошибки</h2>
+  <p class="modalnote">Здесь собираются все твои ошибки с разбором. Перечитай — и дальше таких ошибок не будет!</p>
+  <div class="errlist" id="errList"></div>
+  <div style="margin-top:10px"><button class="btn tiny" id="btnErrClear">Очистить журнал</button></div>
+</div>
+
+<footer style="text-align:center;color:#8a8378;font-size:14px;padding:20px">
+  <a href="kurs-index.html" style="color:#1c4f8f">🏠 Оглавление курса</a> ·
+  <a href="kurs-razdel-2-minor.html" style="color:#1c4f8f">← Раздел 2: Минорные тональности</a> ·
+  <a href="kurs-razdel-4-akkordy.html" style="color:#1c4f8f">Раздел 4: Аккорды →</a>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+var $=function(id){return document.getElementById(id);};
+var L=['ДО','РЕ','МИ','ФА','СОЛЬ','ЛЯ','СИ'];
+var SEMI=[0,2,4,5,7,9,11];
+var ROMAN=['I','II','III','IV','V','VI','VII'];
+var ACCL={'-1':'♭','1':'♯'};
+function nm(n){return L[n.l]+(ACCL[n.a]||'');}
+
+/* ================= ИНТЕРВАЛЫ: ДАННЫЕ ================= */
+var QSEM={'ч1':0,'м2':1,'б2':2,'м3':3,'б3':4,'ч4':5,'ч5':7,'м6':8,'б6':9,'м7':10,'б7':11,'ч8':12};
+var IVNAME={1:'прима',2:'секунда',3:'терция',4:'кварта',5:'квинта',6:'секста',7:'септима',8:'октава'};
+/* куда попадает верхний/нижний звук и какой знак нужен */
+function ivTarget(b,cs,dir){
+ var num=+cs.slice(1);
+ var idx=dir==='up'? b.l+num-1 : b.l-(num-1);
+ var l=((idx%7)+7)%7;
+ var o=b.o+Math.floor(idx/7);
+ var s0=12*(o-b.o)+SEMI[l]-SEMI[b.l]-b.a;
+ var need=dir==='up'?QSEM[cs]:-QSEM[cs];
+ var a=need-s0;
+ if(a<-1||a>1)return null;
+ return {l:l,o:o,a:a};
+}
+
+/* ================= РИСОВАНИЕ СТАНА ================= */
+var S=13,TOP=52,BOT=TOP+4*S;
+function di(l,o){return o*7+l;}
+function yOf(d){return BOT-(d-30)*S/2;}
+function ledger(d,x){var s='';var rel=d-30;var e,y;
+ if(rel<=-2){var last=(rel%2===0)?rel:rel+1;for(e=-2;e>=last;e-=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ if(rel>=10){var last2=(rel%2===0)?rel:rel-1;for(e=10;e<=last2;e+=2){y=yOf(30+e);s+='<line x1="'+(x-19)+'" y1="'+y+'" x2="'+(x+19)+'" y2="'+y+'" stroke="#666" stroke-width="1.5"/>';}}
+ return s;}
+function noteSvg(n,x,color,o){o=o||{};var d=di(n.l,n.o),y=yOf(d);var s=ledger(d,x);
+ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="7.6" ry="5.6" fill="#fff" stroke="'+color+'" stroke-width="'+(o.thin?2.8:3.6)+'" transform="rotate(-12 '+x+' '+y+')"/>';
+ if(n.a===1)s+='<text x="'+(x-19)+'" y="'+(y+11)+'" font-size="34" text-anchor="middle" fill="'+color+'">♯</text>';
+ if(n.a===-1)s+='<text x="'+(x-19)+'" y="'+(y+9)+'" font-size="34" text-anchor="middle" fill="'+color+'">♭</text>';
+ if(o.label)s+='<text x="'+x+'" y="'+(BOT+34)+'" font-size="13" font-weight="700" text-anchor="middle" fill="'+(o.labelColor||color)+'">'+o.label+'</text>';
+ return s;}
+function staffSvg(w,inner,clickable){
+ var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' 200" style="width:100%;max-width:'+w+'px;display:block"'+(clickable?' class="clickable"':'')+'>';
+ for(var i=0;i<5;i++){var y=TOP+i*S;s+='<line x1="4" y1="'+y+'" x2="'+(w-4)+'" y2="'+y+'" stroke="#40382e" stroke-width="1.3"/>';}
+ s+='<text x="8" y="'+(BOT+14)+'" font-size="58" fill="#2a251e" font-family="Segoe UI Symbol,Noto Music,sans-serif">𝄞</text>';
+ s+=inner+'</svg>';
+ return s;}
+
+/* ================= МОДАЛЬНЫЕ ОКНА ================= */
+var ERRS=[];
+function updErrCnt(){$('errCnt').textContent=ERRS.length;}
+function addErr(where,text){
+ ERRS.push({where:where,text:text});
+ var li=$('errList');var d=document.createElement('div');d.className='errcard';
+ d.innerHTML='<div class="row"><span class="t">Где:</span> '+where+'</div><div class="row"><span class="t">Ошибка:</span> '+text+'</div>';
+ li.appendChild(d);updErrCnt();
+}
+function openModal(id){$('modalBg').classList.add('show');$(id).classList.add('show');}
+function closeModals(){$('modalBg').classList.remove('show');
+ ['modalTheory','modalGloss','modalErrs'].forEach(function(id){$(id).classList.remove('show');});}
+$('modalBg').addEventListener('click',closeModals);
+Array.prototype.forEach.call(document.querySelectorAll('[data-close]'),function(b){b.addEventListener('click',closeModals);});
+$('btnErrClear').addEventListener('click',function(){ERRS=[];$('errList').innerHTML='';updErrCnt();});
+$('btnTheory').addEventListener('click',function(){openModal('modalTheory');});
+$('btnGloss').addEventListener('click',function(){openModal('modalGloss');});
+$('btnErrs').addEventListener('click',function(){openModal('modalErrs');});
+
+/* ================= ТЕОРИЯ ================= */
+$('theoryBody').innerHTML=
+ '<div class="theorybox"><h3>Что такое интервал</h3>'+
+ '<p><b>Интервал</b> — расстояние между двумя звуками. Число в шифровке говорит, сколько <b>ступенек</b> охватывает интервал (считаются обе крайние ноты!): ДО–МИ — это 3 ступеньки (ДО, РЕ, МИ) — терция.</p>'+
+ '<p>Названия по числам: 1 — прима, 2 — секунда, 3 — терция, 4 — кварта, 5 — квинта, 6 — секста, 7 — септима, 8 — октава.</p></div>'+
+ '<div class="theorybox"><h3>Качество: ч, б, м</h3>'+
+ '<p>Буква в шифровке — <b>качество</b>: <b>ч</b> — чистый (ч.1, ч.4, ч.5, ч.8), <b>б</b> — большой и <b>м</b> — малый (секунды, терции, сексты, септимы бывают большими и малыми). Качество зависит от числа <b>полутонов</b>: м.3 — 3 полутона, б.3 — 4 полутона, ч.5 — 7 полутонов.</p></div>'+
+ '<div class="theorybox"><h3>Как строить интервал вверх</h3>'+
+ '<p>1. От данного звука сосчитай ступеньки вверх (данный звук — первая). 2. Поставь ноту на нужной ступеньке. 3. Проверь полутоны и, если нужно, поставь знак ♯ или ♭: например, от СОЛЬ малая терция — СИ♭ (3 полутона), а большая — СИ (4 полутона).</p></div>'+
+ '<div class="theorybox"><h3>Как строить интервал вниз</h3>'+
+ '<p>Всё то же самое, только ступеньки считаем <b>вниз</b> от данного звука: от ДО вниз чистая квинта — ФА (ДО–СИ–ЛЯ–СОЛЬ–ФА). Не забывай про знаки: от ЛЯ вниз малая секунда — СОЛЬ♯.</p></div>'+
+ '<div class="theorybox"><h3>Консонанс и диссонанс</h3>'+
+ '<p><b>Консонансы</b> звучат мягко, устойчиво: прима, терции, кварта, квинта, сексты, октава. <b>Диссонансы</b> звучат напряжённо, «требуют движения»: секунды и септимы.</p></div>';
+
+/* ================= СЛОВАРИК ================= */
+var GLOSS=[
+ {t:'Интервал', d:'расстояние между двумя звуками; записывается шифровкой: буква качества + число ступенек'},
+ {t:'Прима (ч.1)', d:'интервал из одного звука, повторенного дважды: ДО–ДО'},
+ {t:'Секунда (м.2, б.2)', d:'2 ступеньки; м.2 — полутон, б.2 — тон'},
+ {t:'Терция (м.3, б.3)', d:'3 ступеньки; м.3 — 3 полутона, б.3 — 4 полутона'},
+ {t:'Кварта (ч.4)', d:'4 ступеньки, 5 полутонов'},
+ {t:'Квинта (ч.5)', d:'5 ступенек, 7 полутонов'},
+ {t:'Секста (м.6, б.6)', d:'6 ступенек; м.6 — 8 полутонов, б.6 — 9 полутонов'},
+ {t:'Септима (м.7, б.7)', d:'7 ступенек; м.7 — 10 полутонов, б.7 — 11 полутонов'},
+ {t:'Октава (ч.8)', d:'8 ступенек, 12 полутонов'},
+ {t:'Консонанс', d:'мягкое, устойчивое звучание: прима, терции, кварта, квинта, сексты, октава'},
+ {t:'Диссонанс', d:'напряжённое звучание: секунды и септимы; требует движения в консонанс'}
+];
+var gh='';
+GLOSS.forEach(function(g){gh+='<div class="gloss"><b>'+g.t+'</b><p>'+g.d+'</p></div>';});
+$('glossBody').innerHTML=gh;
+
+/* ================= ВКЛАДКИ ================= */
+var TABS=[
+ {id:'cipher',t:'🔤 Чтение шифровок (упр. 1)', units:8},
+ {id:'up',    t:'🎹 Строим вверх (упр. 2)', units:13},
+ {id:'down',  t:'⬇️ Строим вниз (упр. 3)', units:5},
+ {id:'cons',  t:'🎨 Консонансы и диссонансы (упр. 4)', units:2},
+ {id:'math',  t:'➕➖ Музыкальная математика (упр. 5)', units:6},
+ {id:'degs',  t:'🔢 Интервалы на ступенях (упр. 6)', units:6}
+];
+var TOTAL=TABS.reduce(function(a,t){return a+t.units;},0);
+var DONE={};
+var curTab=TABS[0].id;
+
+function doneAdd(tabId,n){
+ DONE[tabId]=(DONE[tabId]||0)+n;
+ renderTabs();
+}
+function setFb(el,cls,html){el.className='fb '+cls;el.innerHTML=html;}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+function renderTabs(){
+ var h='';
+ TABS.forEach(function(t){
+  var d=DONE[t.id]||0;
+  h+='<button class="tabbtn'+(t.id===curTab?' active':'')+'" data-tab="'+t.id+'">'+t.t+(d>=t.units?' ✓':'')+'</button>';
+ });
+ $('tabs').innerHTML=h;
+}
+$('tabs').addEventListener('click',function(e){
+ var b=e.target.closest('[data-tab]');if(!b)return;
+ curTab=b.getAttribute('data-tab');
+ renderTabs();
+ renderTab();
+});
+
+var tabBody=$('tabBody');
+var RENDER={};
+
+function renderTab(){
+ TABS.forEach(function(t){
+  var pid='panel_'+t.id;
+  var el=document.getElementById(pid);
+  if(!el){el=document.createElement('div');el.id=pid;el.style.display='none';tabBody.appendChild(el);}
+  el.style.display=(t.id===curTab?'block':'none');
+ });
+ var cur=document.getElementById('panel_'+curTab);
+ (RENDER[curTab]||function(){})(cur);
+}
+
+/* ================= ЗВУК ================= */
+var AC=null;
+function playNotes(seq,step){
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(AC.state==='suspended'){try{AC.resume();}catch(e){}}
+ if(!step)step=0.4;
+ var t=AC.currentTime+0.03;
+ for(var i=0;i<seq.length;i++){(function(nn,tt){
+  var f=440*Math.pow(2,(12+nn.o*12+SEMI[nn.l]+nn.a-69)/12);
+  if(!isFinite(f))return;
+  var o=AC.createOscillator(),g=AC.createGain();
+  o.type='triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,tt);g.gain.linearRampToValueAtTime(0.22,tt+0.02);g.gain.exponentialRampToValueAtTime(0.0001,tt+0.5);
+  o.connect(g);g.connect(AC.destination);o.start(tt);o.stop(tt+0.55);
+ })(seq[i],t);t+=step;}
+}
+
+/* ================= ФАБРИКА ВИКТОРИН (общая для тестовых вкладок) ================= */
+function quizFactory(tabId, items, topHtml, hint, errWhere){
+ var st={i:0,done:{}};
+ var ids={q:'qz_q_'+tabId,o:'qz_o_'+tabId,f:'qz_f_'+tabId,p:'qz_p_'+tabId};
+ var fn=function(el){
+  if(!fn._init){
+   fn._init=true;
+   el.innerHTML=topHtml+
+    '<div class="qtext" id="'+ids.q+'"></div><div class="oopts" id="'+ids.o+'"></div>'+
+    '<div class="fb empty" id="'+ids.f+'"></div><div class="controls" id="'+ids.p+'"></div>';
+   $(ids.o).addEventListener('click',function(e){
+    var b=e.target.closest('[data-ok]');if(!b||b.getAttribute('data-ok')==='x')return;
+    var it=items[st.i];
+    if(b.getAttribute('data-ok')==='1'){
+     b.classList.add('right');
+     st.done[st.i]=true;
+     setFb($(ids.f),'ok','✅ Верно! '+it.expl);
+     if(!st.counted){st.counted={};}
+     if(!st.counted[st.i]){st.counted[st.i]=true;doneAdd(tabId,1);}
+     prog();
+     setTimeout(next,1300);
+    }else{
+     b.classList.add('wrong');
+     setFb($(ids.f),'err','❌ <b>Где ошибся:</b> не тот ответ. <b>Почему:</b> '+it.expl);
+     addErr(errWhere,'Вопрос: '+it.q+' Правильный ответ: '+it.o[it.a]+'.');
+     var all=$(ids.o).querySelectorAll('.oop');
+     for(var i=0;i<all.length;i++)if(all[i].getAttribute('data-ok')==='1')all[i].classList.add('right');
+    }
+   });
+  }
+  next();
+  function next(){
+   var pending=[];for(var i=0;i<items.length;i++)if(!st.done[i])pending.push(i);
+   if(pending.length===0){
+    $(ids.q).textContent='🎉 Всё верно!';$(ids.o).innerHTML='';$(ids.f).style.display='none';$(ids.p).innerHTML='';return;
+   }
+   st.i=pending[0];
+   var it=items[st.i];
+   $(ids.q).innerHTML='🎹 '+it.q;
+   $(ids.o).innerHTML=shuffle(it.o).map(function(o){var ok=o===it.o[it.a];return '<button class="oop" data-ok="'+(ok?'1':'0')+'">'+o+'</button>';}).join('');
+   $(ids.f).className='fb empty';$(ids.f).innerHTML=hint;
+   prog();
+  }
+  function prog(){
+   var d=Object.keys(st.done).length;
+   $(ids.p).innerHTML='<span style="color:#5f584a;font-size:15px">Ответлено: '+d+' из '+items.length+'</span>';
+  }
+ };
+ return fn;
+}
+
+/* ================= ВКЛАДКА 1: ЧТЕНИЕ ШИФРОВОК ================= */
+var CIPHERS=[
+ {q:'м.3 — что это?', o:['малая терция','большая терция','чистая терция','малая секста'], a:0, expl:'строчная буква — качество (малая), цифра — число ступенек: 3 — терция.'},
+ {q:'ч.5 — что это?', o:['чистая квинта','чистая кварта','большая квинта','малая квинта'], a:0, expl:'ч — чистая, 5 — квинта.'},
+ {q:'б.6 — что это?', o:['большая секста','малая секста','большая септима','чистая квинта'], a:0, expl:'б — большая, 6 — секста.'},
+ {q:'«чистая октава» — какая шифровка?', o:['ч.8','ч.4','б.8','м.8'], a:0, expl:'октава — 8 ступенек, качество чистое: ч.8.'},
+ {q:'«большая секунда» — какая шифровка?', o:['б.2','м.2','б.7','ч.2'], a:0, expl:'б — большая, 2 — секунда.'},
+ {q:'м.7 — что это?', o:['малая септима','большая септима','чистая септима','малая секста'], a:0, expl:'м — малая, 7 — септима.'},
+ {q:'«чистая прима» — какая шифровка?', o:['ч.1','м.1','п.1','б.1'], a:0, expl:'прима — 1 ступенька (звук повторяется), качество чистое: ч.1.'},
+ {q:'ч.4 — что это?', o:['чистая кварта','чистая квинта','большая кварта','малая кварта'], a:0, expl:'ч — чистая, 4 — кварта.'}
+];
+RENDER.cipher=quizFactory('cipher',CIPHERS,
+ '<div class="qwrap"><p class="qtext">«Лестница» интервалов — число = количество ступенек (обе ноты считаются!):</p>'+
+ '<table class="simple"><tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>'+
+ '<tr><td>прима</td><td>секунда</td><td>терция</td><td>кварта</td><td>квинта</td><td>секста</td><td>септима</td><td>октава</td></tr></table>'+
+ '<p style="color:#5f584a;font-size:15px">Качество: ч — чистые (1, 4, 5, 8); б и м — большие и малые (2, 3, 6, 7).</p>',
+ 'Разберись: строчная буква — качество, цифра — число ступенек.',
+ 'Чтение шифровок');
+
+/* ================= ВКЛАДКА 2: СТРОИМ ВВЕРХ ================= */
+var UPS=[
+ {lab:'от ДО', bot:{l:0,o:4,a:0}, items:[
+  {cs:'б2', expl:'ДО–РЕ: 2-я ступенька вверх, 2 полутона (тон) — большая секунда.'},
+  {cs:'б3', expl:'ДО–МИ: 3-я ступенька вверх (терция), 4 полутона — большая терция.'},
+  {cs:'ч4', expl:'ДО–ФА: 4-я ступенька вверх (кварта), 5 полутонов — чистая кварта.'},
+  {cs:'ч5', expl:'ДО–СОЛЬ: 5-я ступенька вверх (квинта), 7 полутонов — чистая квинта.'}]},
+ {lab:'от СОЛЬ', bot:{l:4,o:4,a:0}, items:[
+  {cs:'м2', expl:'СОЛЬ–ЛЯ♭: 2-я ступенька, 1 полутон — малая секунда. Здесь нужен знак ♭!'},
+  {cs:'м3', expl:'СОЛЬ–СИ♭: 3-я ступенька (терция), 3 полутона — малая терция. Нужен ♭.'},
+  {cs:'б3', expl:'СОЛЬ–СИ: 3-я ступенька (терция), 4 полутона — большая терция (без знака).'},
+  {cs:'ч5', expl:'СОЛЬ–РЕ: 5-я ступенька (квинта), 7 полутонов — чистая квинта.'},
+  {cs:'ч8', expl:'СОЛЬ–СОЛЬ: 8-я ступенька (октава), 12 полутонов — чистая октава.'}]},
+ {lab:'от РЕ', bot:{l:1,o:4,a:0}, items:[
+  {cs:'м3', expl:'РЕ–ФА: 3-я ступенька (терция), 3 полутона — малая терция.'},
+  {cs:'б3', expl:'РЕ–ФА♯: 3-я ступенька (терция), 4 полутона — большая терция. Нужен знак ♯: без него терция малая!'},
+  {cs:'ч4', expl:'РЕ–СОЛЬ: 4-я ступенька (кварта), 5 полутонов — чистая кварта.'},
+  {cs:'ч5', expl:'РЕ–ЛЯ: 5-я ступенька (квинта), 7 полутонов — чистая квинта.'}]}
+];
+var upSt={placed:null,acc:0,solved:{}};
+RENDER.up=function(el){
+ if(!RENDER.up._init){
+  RENDER.up._init=true;
+  el.innerHTML='<div class="qwrap">'+
+   '<p class="qtext" id="uTask"></p>'+
+   '<div class="staffbox" id="uStaff"></div>'+
+   '<div class="controls"><span style="color:#8a8378">знак:</span>'+
+   '<button class="btn accbtn" id="uNat">♮</button><button class="btn accbtn" id="uSh">♯</button><button class="btn accbtn" id="uFl">♭</button>'+
+   '<button class="btn primary" id="uCheck">Проверить</button><button class="btn" id="uListen">🔊</button></div>'+
+   '<div class="fb empty" id="uFb"></div><div class="controls" id="uProg"></div></div>';
+  $('uStaff').addEventListener('click',function(e){
+   var it=curItem();
+   if(!it||upSt.solved[it.key])return;
+   var svg=e.target.closest('svg');if(!svg)return;
+   var rc=svg.getBoundingClientRect();
+   var y=(e.clientY-rc.top)*(200/rc.height);
+   var rel=Math.round((BOT-y)/(S/2))-(di(it.bot.l,it.bot.o)-30);
+   if(rel<1||rel>12)return;
+   upSt.placed={l:((it.bot.l+rel)%7+7)%7,o:it.bot.o+Math.floor((it.bot.l+rel)/7),a:upSt.acc};
+   renderUp();
+  });
+  $('uNat').addEventListener('click',function(){upSt.acc=0;renderUp();});
+  $('uSh').addEventListener('click',function(){upSt.acc=1;renderUp();});
+  $('uFl').addEventListener('click',function(){upSt.acc=-1;renderUp();});
+  $('uCheck').addEventListener('click',upCheck);
+  $('uListen').addEventListener('click',function(){
+   var it=curItem();
+   if(it)playNotes([it.bot,ivTarget(it.bot,it.cs,'up')]);
+  });
+ }
+ function curItem(){
+  for(var g=0;g<UPS.length;g++){
+   for(var i=0;i<UPS[g].items.length;i++){
+    var key=g+'-'+i;
+    if(!upSt.solved[key]){
+     var it=UPS[g].items[i];
+     it.key=key;it.bot=UPS[g].bot;
+     return it;
+    }
+   }
+  }
+  return null;
+ }
+ var TOTAL_UP=UPS.reduce(function(a,g){return a+g.items.length;},0);
+ if(!upSt.solved)upSt.solved={};
+ renderUp();
+ function renderUp(){
+  var it=curItem();
+  if(!it){$('uTask').textContent='🎉 Все интервалы вверх построены!';$('uStaff').innerHTML='';$('uProg').innerHTML='';return;}
+  var num=+it.cs.slice(1);
+  var solved=upSt.solved[it.key];
+  var target=ivTarget(it.bot,it.cs,'up');
+  var inner=noteSvg(it.bot,150,'#26221c',{});
+  var px=num===2?208:166;
+  var pcol=solved?'#23843c':'#0b6bcb';
+  if(upSt.placed)inner+=noteSvg(upSt.placed,px,pcol,{});
+  else inner+='<text x="'+px+'" y="'+(TOP-16)+'" font-size="22" text-anchor="middle" fill="#1c4f8f">↓</text>';
+  $('uStaff').innerHTML=staffSvg(300,inner,true);
+  $('uTask').innerHTML='🎹 Построй от <b>'+nm(it.bot)+'</b> вверх <b>'+it.cs+'</b> ('+IVNAME[num]+'): это '+num+'-я ступенька вверх. Кликни по стану, знак — кнопкой.';
+  $('uNat').classList.toggle('active',upSt.acc===0);
+  $('uSh').classList.toggle('active',upSt.acc===1);
+  $('uFl').classList.toggle('active',upSt.acc===-1);
+  var d=Object.keys(upSt.solved).length;
+  $('uProg').innerHTML='<span style="color:#5f584a;font-size:15px">Построено: '+d+' из '+TOTAL_UP+'</span>';
+  $('uFb').className=solved?'fb ok':'fb empty';
+  $('uFb').innerHTML=solved?'✅ '+nm(it.bot)+'–'+nm(target)+' — '+it.cs+' ('+it.expl+')':'Данный звук уже на стане. Считай ступеньки вверх от него.';
+ }
+ function upCheck(){
+  var it=curItem();
+  if(!it)return;
+  if(!upSt.placed){setFb($('uFb'),'err','❌ Сначала поставь верхний звук: кликни по нотному стану.');return;}
+  var target=ivTarget(it.bot,it.cs,'up');
+  var p=upSt.placed;
+  if(p.l!==target.l||p.o!==target.o){
+   setFb($('uFb'),'err','❌ <b>Где ошибся:</b> верхний звук не тот (сейчас '+nm(p)+', нужен <b>'+nm(target)+'</b>). <b>Почему:</b> '+it.expl+' Ошибочная нота убрана — попробуй снова.');
+   addErr('Интервал вверх '+it.cs+' от '+nm(it.bot),nm(p)+' вместо '+nm(target)+'. '+it.expl);
+   upSt.placed=null;renderUp();
+   return;
+  }
+  if(p.a!==target.a){
+   setFb($('uFb'),'err','❌ <b>Где ошибся:</b> знак не тот: нужна нота <b>'+nm(target)+'</b>. <b>Почему:</b> '+it.expl);
+   addErr('Интервал вверх '+it.cs+' от '+nm(it.bot),'Знак: '+nm(p)+' вместо '+nm(target)+'.');
+   upSt.placed=null;renderUp();
+   return;
+  }
+  upSt.solved[it.key]=true;
+  setFb($('uFb'),'ok','✅ <b>Верно!</b> '+nm(it.bot)+'–'+nm(target)+' — это '+it.cs+'. '+it.expl);
+  playNotes([it.bot,target]);
+  doneAdd('up',1);
+  upSt.placed=null;
+  renderUp();
+ }
+};
+
+/* ================= ВКЛАДКА 3: СТРОИМ ВНИЗ ================= */
+var DOWNS=[
+ {bot:{l:4,o:4,a:0}, cs:'м3', expl:'СОЛЬ вниз на терцию — МИ: 3-я ступенька вниз, 3 полутона — малая терция.'},
+ {bot:{l:0,o:5,a:0}, cs:'ч5', expl:'ДО вниз на квинту — ФА: 5-я ступенька вниз (ДО–СИ–ЛЯ–СОЛЬ–ФА), 7 полутонов.'},
+ {bot:{l:1,o:5,a:0}, cs:'ч5', expl:'РЕ вниз на квинту — СОЛЬ: 5-я ступенька вниз, 7 полутонов.'},
+ {bot:{l:5,o:4,a:0}, cs:'м2', expl:'ЛЯ вниз на секунду — СОЛЬ♯: 2-я ступенька вниз, 1 полутон. Нужен ♯: без него получится большая секунда!'},
+ {bot:{l:6,o:4,a:0}, cs:'б2', expl:'СИ вниз на секунду — ЛЯ: 2-я ступенька вниз, 2 полутона (тон) — большая секунда.'}
+];
+var dnSt={i:0,placed:null,acc:0,solved:{}};
+RENDER.down=function(el){
+ if(!RENDER.down._init){
+  RENDER.down._init=true;
+  el.innerHTML='<div class="qwrap">'+
+   '<p class="qtext" id="dTask"></p>'+
+   '<div class="staffbox" id="dStaff"></div>'+
+   '<div class="controls"><span style="color:#8a8378">знак:</span>'+
+   '<button class="btn accbtn" id="dNat">♮</button><button class="btn accbtn" id="dSh">♯</button><button class="btn accbtn" id="dFl">♭</button>'+
+   '<button class="btn primary" id="dCheck">Проверить</button><button class="btn" id="dListen">🔊</button></div>'+
+   '<div class="fb empty" id="dFb"></div><div class="controls" id="dProg"></div></div>';
+  $('dStaff').addEventListener('click',function(e){
+   var it=DOWNS[dnSt.i];
+   if(!it||dnSt.solved[dnSt.i])return;
+   var svg=e.target.closest('svg');if(!svg)return;
+   var rc=svg.getBoundingClientRect();
+   var y=(e.clientY-rc.top)*(200/rc.height);
+   var rel=Math.round((BOT-y)/(S/2))-(di(it.bot.l,it.bot.o)-30);
+   if(rel>-1||rel<-12)return;
+   dnSt.placed={l:((it.bot.l+rel)%7+7)%7,o:it.bot.o+Math.floor((it.bot.l+rel)/7),a:dnSt.acc};
+   renderDn();
+  });
+  $('dNat').addEventListener('click',function(){dnSt.acc=0;renderDn();});
+  $('dSh').addEventListener('click',function(){dnSt.acc=1;renderDn();});
+  $('dFl').addEventListener('click',function(){dnSt.acc=-1;renderDn();});
+  $('dCheck').addEventListener('click',dnCheck);
+  $('dListen').addEventListener('click',function(){
+   var it=DOWNS[dnSt.i];
+   if(it)playNotes([ivTarget(it.bot,it.cs,'down'),it.bot]);
+  });
+ }
+ if(!dnSt.solved)dnSt.solved={};
+ renderDn();
+ function renderDn(){
+  var it=DOWNS[dnSt.i];
+  if(!it){$('dTask').textContent='🎉 Все интервалы вниз построены!';$('dStaff').innerHTML='';$('dProg').innerHTML='';return;}
+  var num=+it.cs.slice(1);
+  var solved=dnSt.solved[dnSt.i];
+  var target=ivTarget(it.bot,it.cs,'down');
+  var inner=noteSvg(it.bot,170,'#26221c',{});
+  var px=num===2?112:160;
+  var pcol=solved?'#23843c':'#0b6bcb';
+  if(dnSt.placed)inner+=noteSvg(dnSt.placed,px,pcol,{});
+  else inner+='<text x="'+px+'" y="'+(BOT+26)+'" font-size="22" text-anchor="middle" fill="#1c4f8f">↑</text>';
+  $('dStaff').innerHTML=staffSvg(300,inner,true);
+  $('dTask').innerHTML='🎹 Построй от <b>'+nm(it.bot)+'</b> вниз <b>'+it.cs+'</b> ('+IVNAME[num]+'): это '+num+'-я ступенька вниз. Кликни по стану ниже данной ноты.';
+  $('dNat').classList.toggle('active',dnSt.acc===0);
+  $('dSh').classList.toggle('active',dnSt.acc===1);
+  $('dFl').classList.toggle('active',dnSt.acc===-1);
+  var d=Object.keys(dnSt.solved).length;
+  $('dProg').innerHTML='<span style="color:#5f584a;font-size:15px">Построено: '+d+' из '+DOWNS.length+'</span>';
+  $('dFb').className=solved?'fb ok':'fb empty';
+  $('dFb').innerHTML=solved?'✅ '+nm(target)+'–'+nm(it.bot)+' — '+it.cs+' ('+it.expl+')':'Данный звук уже на стане (верхний). Ставь нижний — считай ступеньки вниз.';
+ }
+ function dnCheck(){
+  var it=DOWNS[dnSt.i];
+  if(!dnSt.placed){setFb($('dFb'),'err','❌ Сначала поставь нижний звук: кликни по нотному стану ниже данной ноты.');return;}
+  var target=ivTarget(it.bot,it.cs,'down');
+  var p=dnSt.placed;
+  if(p.l!==target.l||p.o!==target.o){
+   setFb($('dFb'),'err','❌ <b>Где ошибся:</b> нижний звук не тот (сейчас '+nm(p)+', нужен <b>'+nm(target)+'</b>). <b>Почему:</b> '+it.expl+' Ошибочная нота убрана — попробуй снова.');
+   addErr('Интервал вниз '+it.cs+' от '+nm(it.bot),nm(p)+' вместо '+nm(target)+'. '+it.expl);
+   dnSt.placed=null;renderDn();
+   return;
+  }
+  if(p.a!==target.a){
+   setFb($('dFb'),'err','❌ <b>Где ошибся:</b> знак не тот: нужна нота <b>'+nm(target)+'</b>. <b>Почему:</b> '+it.expl);
+   addErr('Интервал вниз '+it.cs+' от '+nm(it.bot),'Знак: '+nm(p)+' вместо '+nm(target)+'.');
+   dnSt.placed=null;renderDn();
+   return;
+  }
+  dnSt.solved[dnSt.i]=true;
+  setFb($('dFb'),'ok','✅ <b>Верно!</b> '+nm(target)+'–'+nm(it.bot)+' — это '+it.cs+'. '+it.expl);
+  playNotes([target,it.bot]);
+  doneAdd('down',1);
+  dnSt.placed=null;
+  advanceDn();
+  renderDn();
+ }
+ function advanceDn(){
+  for(var i=0;i<DOWNS.length;i++)if(!dnSt.solved[i]){dnSt.i=i;return;}
+  dnSt.i=DOWNS.length;
+ }
+};
+
+/* ================= ВКЛАДКА 4: КОНСОНАНСЫ И ДИССОНАНСЫ ================= */
+var CONSSETS=[
+ {items:['м.2','б.3','ч.4','б.7','ч.5','б.2'], want:{'м.2':1,'б.7':1,'б.2':1}},
+ {items:['ч.1','м.7','б.3','м.2','ч.8'], want:{'м.7':1,'м.2':1}}
+];
+var FULLNAME={'м.2':'м.2 (секунда)','б.2':'б.2 (секунда)','м.3':'м.3 (терция)','б.3':'б.3 (терция)','ч.4':'ч.4 (кварта)','ч.5':'ч.5 (квинта)','м.6':'м.6 (секста)','б.6':'б.6 (секста)','м.7':'м.7 (септима)','б.7':'б.7 (септима)','ч.1':'ч.1 (прима)','ч.8':'ч.8 (октава)'};
+var consSt={set:0,picked:{},done:{}};
+RENDER.cons=function(el){
+ if(!RENDER.cons._init){
+  RENDER.cons._init=true;
+  el.innerHTML='<div class="qwrap"><p class="qtext">Отметь <b>все диссонансы</b> (напряжённые интервалы — секунды и септимы):</p>'+
+  '<div class="notesrow" id="cNotes"></div>'+
+  '<div class="controls"><button class="btn primary" id="cCheck">Проверить</button><button class="btn" id="cClear">Очистить</button></div>'+
+  '<div class="fb empty" id="cFb"></div><div class="controls" id="cProg"></div></div>';
+  $('cNotes').addEventListener('click',function(e){
+   var b=e.target.closest('[data-cs]');if(!b)return;
+   var cs=b.getAttribute('data-cs');
+   if(consSt.picked[cs])delete consSt.picked[cs];else consSt.picked[cs]=true;
+   renderCons();
+  });
+  $('cCheck').addEventListener('click',function(){
+   var set=CONSSETS[consSt.set];
+   var picked=Object.keys(consSt.picked);
+   var ok=true;
+   for(var k=0;k<picked.length;k++)if(!set.want[picked[k]])ok=false;
+   for(var w in set.want)if(!consSt.picked[w])ok=false;
+   if(picked.length===0){setFb($('cFb'),'err','❌ Отметь интервалы, которые считаешь диссонансами.');return;}
+   if(ok){
+    consSt.done[consSt.set]=true;
+    setFb($('cFb'),'ok','✅ Верно! Диссонансы — секунды и септимы: они звучат напряжённо. Консонансы (терции, кварта, квинта, сексты, прима, октава) звучат мягко и устойчиво.');
+    doneAdd('cons',1);
+    if(consSt.set<CONSSETS.length-1&&consSt.done[consSt.set]){consSt.set++;consSt.picked={};}
+    renderCons();
+   }else{
+    var wrongs=[],missed=[];
+    for(var pk=0;pk<picked.length;pk++)if(!set.want[picked[pk]])wrongs.push(picked[pk]);
+    for(var wn in set.want)if(!consSt.picked[wn])missed.push(wn);
+    setFb($('cFb'),'err','❌ <b>Где ошибся:</b> '+(wrongs.length?'отмечены консонансы ('+wrongs.join(', ')+'). ':'')+(missed.length?'Пропущены диссонансы: '+missed.join(', ')+'.':'')+' <b>Почему:</b> диссонансы — только секунды (2) и септимы (7).');
+    addErr('Консонансы и диссонансы','Диссонансы — секунды и септимы. В наборе: дисс. — '+Object.keys(set.want).join(', ')+'.');
+
+    renderCons();
+   }
+  });
+  $('cClear').addEventListener('click',function(){consSt.picked={};renderCons();});
+ }
+ renderCons();
+ function renderCons(){
+  var set=CONSSETS[consSt.set];
+  if(!set){$('cNotes').innerHTML='';$('cFb').style.display='none';$('cProg').innerHTML='';return;}
+  var h='';
+  for(var i=0;i<set.items.length;i++){
+   var cs=set.items[i];
+   var cls='notebtn'+(consSt.picked[cs]?' picked':'');
+   h+='<button class="'+cls+'" data-cs="'+cs+'">'+FULLNAME[cs]+'</button>';
+  }
+  $('cNotes').innerHTML=h;
+  var d=Object.keys(consSt.done).length;
+  $('cProg').innerHTML='<span style="color:#5f584a;font-size:15px">Наборов разобрано: '+d+' из '+CONSSETS.length+'</span>';
+ }
+};
+
+/* ================= ВКЛАДКА 5: МУЗЫКАЛЬНАЯ МАТЕМАТИКА ================= */
+var MATHS=[
+ {q:'м.3 + б.3 = ?', o:['ч.5','б.3','м.6','ч.4'], a:0, expl:'Терции складываются в квинту: ДО–МИ + МИ–СОЛЬ = ДО–СОЛЬ. 3+3−1 = 5 ступенька, 3+4 = 7 полутонов.'},
+ {q:'б.3 + м.3 = ?', o:['ч.5','м.6','ув.4','б.3'], a:0, expl:'Порядок терций не важен: РЕ–ФА♯ + ФА♯–ЛЯ = РЕ–ЛЯ, чистая квинта.'},
+ {q:'ч.4 + ч.5 = ?', o:['ч.8','ч.9','б.6'], a:0, expl:'ДО–ФА + ФА–ДО = ДО–ДО (октава). 4+5−1 = 8 ступенька.'},
+ {q:'ч.5 + м.2 = ?', o:['м.6','ч.6','б.6'], a:0, expl:'ДО–СОЛЬ + СОЛЬ–ЛЯ♭ = ДО–ЛЯ♭: 6 ступенька, 8 полутонов — малая секста.'},
+ {q:'ч.8 − б.7 = ?', o:['м.2','б.2','ч.1'], a:0, expl:'ДО–ДО (октава) без ДО–СИ (б.7) остаётся СИ–ДО — малая секунда.'},
+ {q:'ч.5 − б.3 = ?', o:['м.3','б.3','ч.4'], a:0, expl:'ДО–СОЛЬ без ДО–МИ остаётся МИ–СОЛЬ — малая терция.'}
+];
+RENDER.math=quizFactory('math',MATHS,
+ '<div class="qwrap"><p class="qtext">Складываем и вычитаем интервалы: числа ступенек складываются «с перекрытием» (3+3−1), полутоны просто складываются.</p>',
+ 'Складывай ступеньки (минус 1 за общую ноту) и полутоны.',
+ 'Музыкальная математика');
+
+/* ================= ВКЛАДКА 6: ИНТЕРВАЛЫ НА СТУПЕНЯХ МАЖОРА ================= */
+var DEGS=[
+ {q:'На каких ступенях мажорной гаммы строятся чистые квинты (ч.5)?', o:['на всех, кроме VII','на всех, кроме IV','только на I и V'], a:0, expl:'Единственное исключение — VII ступень: квинта от неё (VII–IV, например ФА♯–ДО в Соль мажоре) получается уменьшенной и звучит как тритон.'},
+ {q:'На каких ступенях мажора строятся чистые кварты (ч.4)?', o:['на всех, кроме IV','на всех, кроме VII','на всех'], a:0, expl:'Исключение — IV ступень: между IV и VII ступенями интервал увеличенный (тритон).'},
+ {q:'Большие терции (б.3) в мажоре строятся на ступенях…', o:['I, IV и V','II, III и VI','только на I'], a:0, expl:'Проверь в До мажоре: ДО–МИ (I), ФА–ЛЯ (IV), СОЛЬ–СИ (V) — большие; остальные терции малые.'},
+ {q:'Малые секунды (м.2) в мажоре строятся на ступенях…', o:['III и VII','I и IV','II и VI'], a:0, expl:'В До мажоре: МИ–ФА (III) и СИ–ДО (VII) — полутоны; остальные секунды большие.'},
+ {q:'Какой интервал образуют ступени I и V в Соль мажоре (СОЛЬ–РЕ)?', o:['ч.5','ч.4','б.3'], a:0, expl:'СОЛЬ–РЕ: 5 ступенек, 7 полутонов — чистая квинта.'},
+ {q:'Какой интервал образуют ступени III и VI в Фа мажоре (ЛЯ–РЕ)?', o:['ч.4','б.3','м.6'], a:0, expl:'ЛЯ–РЕ: 4 ступеньки, 5 полутонов — чистая кварта.'}
+];
+RENDER.degs=quizFactory('degs',DEGS,
+ '<div class="qwrap"><p class="qtext">Проверь ответы по гамме: выпиши ступеньки от данной до данной и сосчитай полутоны.</p>',
+ 'Считай ступеньки и полутоны в гамме.',
+ 'Интервалы на ступенях');
+
+/* ================= ПРОГРЕСС ================= */
+var bar=document.createElement('div');
+bar.className='card';bar.style.padding='12px 18px';
+bar.innerHTML='<div style="font-size:15px;color:#5f584a" id="kursProg">Прогресс раздела: 0 из '+TOTAL+'</div>'+
+'<div class="bar" style="height:12px;background:#e8e2d4;border-radius:8px;overflow:hidden;margin-top:6px"><div id="kursFill" style="height:100%;width:0%;background:#1c4f8f"></div></div>';
+document.querySelector('.wrap').insertBefore(bar,document.getElementById('tabs'));
+setInterval(function(){
+ var d=0;TABS.forEach(function(t){d+=(DONE[t.id]||0);});
+ $('kursProg').textContent='Прогресс раздела: '+d+' из '+TOTAL+(d===TOTAL?' — 🎉 раздел пройден!':'');
+ $('kursFill').style.width=(d/TOTAL*100)+'%';
+},400);
+
+renderTabs();renderTab();
+})();
+</script>
+</body>
+</html>
